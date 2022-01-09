@@ -14,8 +14,7 @@
         android:layout_height="260dp"
         android:clickable="true"
         android:focusable="true"
-        android:transitionName="song_list"
-        android:background="@drawable/rounded_rectangle_background">
+        android:transitionName="song_list">
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,11 +25,11 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginStart="5dp"
             android:id="@+id/playlists_recycler"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_rectangle_background"
             />
 
     </FrameLayout>
