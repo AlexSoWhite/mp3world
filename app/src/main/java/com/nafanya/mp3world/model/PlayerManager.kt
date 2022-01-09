@@ -27,9 +27,11 @@ object PlayerManager {
         mediaPlayer.setOnCompletionListener {
             idx++
             currSong = songList[idx]
+            it.reset()
             it.setDataSource(context,
                 ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currSong.id)
             )
+            it.prepare()
             it.start()
         }
     }
