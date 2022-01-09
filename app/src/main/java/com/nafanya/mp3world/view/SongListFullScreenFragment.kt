@@ -36,16 +36,19 @@ class SongListFullScreenFragment : Fragment(R.layout.fragment_song_list_full_scr
         )
         binding.songsRecycler.layoutManager = LinearLayoutManager(activity)
         binding.songCount = SongListManager.getSongList().size
-//        OnSwipeTouchListener(activity!!, binding.songsList) {
-//            closeFragment()
-//        }
+        OnSwipeTouchListener(activity!!, binding.songsList) {
+            closeFragment()
+        }
+        OnSwipeTouchListener(activity!!, activity?.findViewById(R.id.songs_list_container)!!) {
+            closeFragment()
+        }
         OnSwipeTouchListener(activity!!, binding.songsRecycler) {
             closeFragment()
         }
         return binding.root
     }
 
-    public fun closeFragment() {
+    private fun closeFragment() {
         val fragment = SongListPreviewFragment()
         fragment.sharedElementEnterTransition = MaterialContainerTransform()
         parentFragmentManager.beginTransaction().apply {
