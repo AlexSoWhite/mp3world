@@ -2,4 +2,7 @@
     <string name="app_name">mp3world</string>
     <string name="my_songs">Мои песни</string>
     <string name="my_playlists">Мои плейлисты</string>
+    <string name="recycler_behavior">com.google.android.material.transition.MaterialContainerTransform</string>
+    <string name="playlists">плейлисты</string>
+    <string name="songs">песни</string>
 </resources>
