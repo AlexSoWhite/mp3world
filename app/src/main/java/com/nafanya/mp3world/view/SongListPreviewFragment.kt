@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.transition.Hold
 import com.google.android.material.transition.MaterialContainerTransform
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.FragmentSongListPreviewBinding
@@ -26,11 +25,20 @@ class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_song_list_preview, container, false)
-        binding.songsRecycler.adapter = SongListAdapter(activity!!, SongListManager.getSongList(), preview = true)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_song_list_preview,
+            container,
+            false
+        )
+        binding.songsRecycler.adapter = SongListAdapter(
+            activity!!,
+            SongListManager.getSongList(),
+            preview = true
+        )
         binding.songsRecycler.layoutManager = LinearLayoutManager(activity)
         binding.songCount = SongListManager.getSongList().size
-        exitTransition = Hold()
+        // exitTransition = Hold()
         return binding.root
     }
 

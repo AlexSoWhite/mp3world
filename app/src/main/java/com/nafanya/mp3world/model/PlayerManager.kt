@@ -23,5 +23,4 @@ object PlayerManager {
         mediaPlayer.prepare()
         mediaPlayer.start()
     }
-
 }

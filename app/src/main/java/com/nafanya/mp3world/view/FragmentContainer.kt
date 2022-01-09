@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ContainerBinding
-import com.nafanya.mp3world.databinding.FragmentSongListFullScreenBinding
 
 class FragmentContainer : Fragment(R.layout.container) {
 

@@ -1,5 +1,8 @@
 package com.nafanya.mp3world.view
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -15,13 +18,36 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        SongListManager.initializeSongList(this)
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.container, FragmentContainer())
-            commit()
+        checkPermissions()
+    }
+
+    private fun checkPermissions() {
+        val permission = Manifest.permission.READ_EXTERNAL_STORAGE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(permission), 0)
+            } else {
+                SongListManager.initializeSongList(this)
+                supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.container, FragmentContainer())
+                    commit()
+                }
+            }
         }
-//        binding.songsRecycler.adapter = SongListAdapter(this, SongListManager.getSongList())
-//        binding.songsRecycler.layoutManager = LinearLayoutManager(this)
-//        binding.songCount = SongListManager.getSongList().size
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            SongListManager.initializeSongList(this)
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.container, FragmentContainer())
+                commit()
+            }
+        }
     }
 }

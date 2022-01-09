@@ -28,14 +28,13 @@ class SongListAdapter(
     }
 
     override fun getItemCount(): Int {
-//        if (preview) {
-//            return 5
-//        } else {
-            return list.size
-//        }
+        return list.size
     }
 
-    class SongViewHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
+    class SongViewHolder(
+        itemView: View,
+        private val context: Context
+    ) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = SongListItemBinding.bind(itemView)
 
@@ -44,6 +43,11 @@ class SongListAdapter(
             binding.songListItem.setOnClickListener {
                 PlayerManager.play(context, song)
             }
+//            OnSwipeTouchListener(context, binding.songListItem) {
+//                SongListFullScreenFragment
+//            }
+//            OnSwipeTouchListener(context, binding.title)
+//            OnSwipeTouchListener(context, binding.artist)
         }
     }
 }
