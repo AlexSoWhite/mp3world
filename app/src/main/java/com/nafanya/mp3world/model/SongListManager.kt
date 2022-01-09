@@ -46,8 +46,6 @@ object SongListManager {
                     val thisTitle = cursor.getString(titleColumn)
                     val thisArtist = cursor.getString(artistColumn)
                     val thisDate = cursor.getInt(dateColumn)
-
-                    // val uri = MediaStore.Audio.Media.getContentUri()
                     songList.add(
                         Song(
                             thisId,

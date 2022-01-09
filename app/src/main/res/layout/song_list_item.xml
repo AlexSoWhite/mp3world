@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="@{song.title}"
             tools:text="название"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:ellipsize="end"
             android:maxLines="1"

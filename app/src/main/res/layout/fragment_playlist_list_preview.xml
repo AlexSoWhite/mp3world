@@ -14,16 +14,19 @@
         android:layout_height="260dp"
         android:clickable="true"
         android:focusable="true"
-        android:transitionName="song_list">
+        android:transitionName="song_list"
+        android:background="@drawable/rounded_rectangle_background">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{@string/my_playlists + ' ' + '(' + playlistCount + ')'}"
             tools:text="Мои плейлисты (15)"
+            android:textSize="20sp"
             />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginStart="5dp"
             android:id="@+id/playlists_recycler"
             android:layout_marginTop="25dp"
             android:layout_width="match_parent"
