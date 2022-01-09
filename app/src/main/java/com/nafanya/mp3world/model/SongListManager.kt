@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.model
 
+import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
@@ -75,4 +76,9 @@ object SongListManager {
     fun getSongList(): ArrayList<Song> {
         return songList
     }
+
+    fun startPlaying(context: Context, song: Song) {
+        PlayerManager.play(context, song, songList)
+    }
+
 }

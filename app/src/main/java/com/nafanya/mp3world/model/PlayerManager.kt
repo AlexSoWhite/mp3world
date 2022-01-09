@@ -10,17 +10,35 @@ object PlayerManager {
     private var mediaPlayer = MediaPlayer()
     private var isPlaying = false
 
-    fun play(context: Context, song: Song) {
+    fun play(context: Context, song: Song, songList: ArrayList<Song>) {
         if (isPlaying) {
             mediaPlayer.reset()
             isPlaying = false
         }
         isPlaying = true
+        var idx = songList.indexOf(song)
+        var currSong = songList[idx]
         mediaPlayer.setDataSource(
             context,
-            ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, song.id)
+            ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currSong.id)
         )
         mediaPlayer.prepare()
+        mediaPlayer.start()
+        mediaPlayer.setOnCompletionListener {
+            idx++
+            currSong = songList[idx]
+            it.setDataSource(context,
+                ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, currSong.id)
+            )
+            it.start()
+        }
+    }
+
+    fun pause() {
+        mediaPlayer.pause()
+    }
+
+    fun resume() {
         mediaPlayer.start()
     }
 }

@@ -9,6 +9,7 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.PlayerManager
 import com.nafanya.mp3world.model.Song
+import com.nafanya.mp3world.model.SongListManager
 
 class SongListAdapter(
     private val context: Context,
@@ -46,7 +47,7 @@ class SongListAdapter(
         fun bind(song: Song) {
             binding.song = song
             binding.songListItem.setOnClickListener {
-                PlayerManager.play(context, song)
+                SongListManager.startPlaying(context, song)
             }
         }
     }
