@@ -6,7 +6,7 @@
             type="com.nafanya.mp3world.model.Song"
         />
     </data>
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/song_list_item"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,6 +20,19 @@
         android:focusable="true">
 
         <TextView
+            android:layout_marginTop="15dp"
+            android:id="@+id/date_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{song.date}"
+            tools:text="15 октября 2021"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/title"
+            />
+
+
+        <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,16 +42,20 @@
             android:textStyle="bold"
             android:ellipsize="end"
             android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@id/date_holder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/artist"
             />
 
         <TextView
             android:id="@+id/artist"
-            android:layout_marginTop="28dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{song.artist}"
             tools:text="исполнитель"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
-
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -30,8 +30,7 @@ class PlaylistListPreviewFragment : Fragment(R.layout.fragment_playlist_list_pre
         binding.playlistCount = 10
         binding.playlistsRecycler.adapter = SongListAdapter(
             activity!!,
-            SongListManager.getSongList(),
-            true
+            SongListManager.getSongList()
         )
         binding.playlistsRecycler.layoutManager = LinearLayoutManager(activity)
         return binding.root
