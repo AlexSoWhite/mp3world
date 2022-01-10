@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.model
 
+import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
-import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.collections.ArrayList
@@ -13,7 +13,7 @@ object SongListManager {
     private var isInitialized = false
     private const val multiplier = 1000L
 
-    fun initializeSongList(activity: AppCompatActivity) {
+    fun initializeSongList(context: Context) {
         if (!isInitialized) {
             val projection = null
             var selection: String? = MediaStore.Audio.Media.IS_MUSIC + "!=0"
@@ -27,7 +27,7 @@ object SongListManager {
             }
             val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
 
-            activity.contentResolver.query(
+            context.contentResolver.query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 projection,
                 selection,

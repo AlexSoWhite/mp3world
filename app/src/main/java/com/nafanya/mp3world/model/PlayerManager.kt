@@ -42,5 +42,4 @@ object PlayerManager {
     fun pause() {
         player.pause()
     }
-
 }

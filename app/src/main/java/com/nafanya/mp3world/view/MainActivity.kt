@@ -6,10 +6,11 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
-import com.nafanya.mp3world.model.PlayerManager
 import com.nafanya.mp3world.model.SongListManager
+import com.nafanya.mp3world.viewmodel.InitializingViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,8 +29,9 @@ class MainActivity : AppCompatActivity() {
             if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(permission), 0)
             } else {
-                SongListManager.initializeSongList(this)
-                PlayerManager.initPlayer(this)
+                val initializingViewModel =
+                    ViewModelProvider(this)[InitializingViewModel::class.java]
+                initializingViewModel.initialize(this)
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.container, FragmentContainer())
                     commit()
