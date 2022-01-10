@@ -57,26 +57,10 @@ object SongListManager {
                 }
             }
             isInitialized = true
-//            if (songList.isEmpty()) {
-//                repeat(100) {
-//                    songList.add(
-//                        Song(
-//                            123,
-//                            "samplename",
-//                            "sampleArtist",
-//                            "09.01.2022"
-//                        )
-//                    )
-//                }
-//            }
         }
     }
 
     fun getSongList(): ArrayList<Song> {
         return songList
-    }
-
-    fun startPlaying(song: Song) {
-        PlayerManager.play(song, songList)
     }
 }

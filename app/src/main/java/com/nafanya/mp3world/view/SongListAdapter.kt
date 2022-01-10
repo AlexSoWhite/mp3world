@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.model.Song
-import com.nafanya.mp3world.model.SongListManager
+import com.nafanya.mp3world.model.*
 
 class SongListAdapter(
     private val list: ArrayList<Song>
@@ -42,7 +41,14 @@ class SongListAdapter(
         fun bind(song: Song) {
             binding.song = song
             binding.songListItem.setOnClickListener {
-                SongListManager.startPlaying(song)
+                PlayerManager.setPlaylist(
+                    Playlist(
+                        SongListManager.getSongList(),
+                        Modes.CONSISTENT
+                    )
+                )
+                PlayerManager.moveToSong(song)
+                PlayerManager.play()
             }
         }
     }
