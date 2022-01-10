@@ -8,30 +8,38 @@ import com.google.android.exoplayer2.MediaItem
 
 object PlayerManager {
 
-    private var isPlaying = false
-    private lateinit var exoPlayer: ExoPlayer
+    private lateinit var player: ExoPlayer
+    private lateinit var playlist: Playlist
 
     fun initPlayer(context: Context) {
-        exoPlayer = ExoPlayer.Builder(context).build()
+        player = ExoPlayer.Builder(context).build()
     }
 
-    fun play(song: Song, songList: ArrayList<Song>) {
-        val mediaItem = MediaItem.fromUri(
-            ContentUris.withAppendedId(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                song.id
+    fun setPlaylist(playlist: Playlist) {
+        this.playlist = playlist
+        playlist.songList.forEach {
+            player.addMediaItem(
+                MediaItem.fromUri(
+                    ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        it.id
+                    )
+                )
             )
-        )
-        exoPlayer.setMediaItem(mediaItem)
-        exoPlayer.prepare()
-        exoPlayer.play()
+        }
+        player.prepare()
+    }
+
+    fun moveToSong(song: Song) {
+        val idx = playlist.songList.indexOf(song)
+        player.seekToDefaultPosition(idx)
+    }
+
+    fun play() {
+        player.play()
     }
 
     fun pause() {
-        exoPlayer.pause()
-    }
-
-    fun resume() {
-        exoPlayer.play()
+        player.pause()
     }
 }
