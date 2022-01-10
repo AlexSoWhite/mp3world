@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
+import com.nafanya.mp3world.model.PlayerManager
 import com.nafanya.mp3world.model.SongListManager
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
                 requestPermissions(arrayOf(permission), 0)
             } else {
                 SongListManager.initializeSongList(this)
+                PlayerManager.initPlayer(this)
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.container, FragmentContainer())
                     commit()

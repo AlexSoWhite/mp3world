@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import java.lang.Exception
 import kotlin.math.abs
 
 class OnSwipeTouchListener internal constructor(
@@ -12,54 +11,49 @@ class OnSwipeTouchListener internal constructor(
     mainView: View,
     private val callback: () -> Unit
 ) : View.OnTouchListener {
+
     private val gestureDetector: GestureDetector
-    var context: Context
+    private var context: Context
+
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         return gestureDetector.onTouchEvent(event)
     }
 
     inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
+
         override fun onDown(e: MotionEvent): Boolean {
             return true
         }
 
         override fun onFling(
-            e1: MotionEvent?,
-            e2: MotionEvent?,
+            e1: MotionEvent,
+            e2: MotionEvent,
             velocityX: Float,
             velocityY: Float
         ): Boolean {
             var result = false
-            if (e1 != null && e2 != null) {
-                try {
-                    val diffY = e2.y - e1.y
-                    val diffX = e2.x - e1.x
-                    if (abs(diffX) > abs(diffY)) {
-                        if (
-                            abs(diffX) > SWIPE_THRESHOLD &&
-                            abs(velocityX) > SWIPE_VELOCITY_THRESHOLD
-                        ) {
-                            if (diffX > 0) {
-                                onSwipeRight()
-                            } else {
-                                onSwipeLeft()
-                            }
-                            result = true
-                        }
-                    } else if (
-                        abs(diffY) > SWIPE_THRESHOLD &&
-                        abs(velocityY) > SWIPE_VELOCITY_THRESHOLD
-                    ) {
-                        if (diffY > 0) {
-                            onSwipeBottom()
-                        } else {
-                            onSwipeTop()
-                        }
-                        result = true
-                    }
-                } catch (exception: Exception) {
-                    exception.printStackTrace()
+            val diffY = e2.y - e1.y
+            val diffX = e2.x - e1.x
+            if (abs(diffX) > abs(diffY) &&
+                abs(diffX) > SWIPE_THRESHOLD &&
+                abs(velocityX) > SWIPE_VELOCITY_THRESHOLD
+            ) {
+                if (diffX > 0) {
+                    onSwipeRight()
+                } else {
+                    onSwipeLeft()
                 }
+                result = true
+            } else if (
+                abs(diffY) > SWIPE_THRESHOLD &&
+                abs(velocityY) > SWIPE_VELOCITY_THRESHOLD
+            ) {
+                if (diffY > 0) {
+                    onSwipeBottom()
+                } else {
+                    onSwipeTop()
+                }
+                result = true
             }
             return result
         }

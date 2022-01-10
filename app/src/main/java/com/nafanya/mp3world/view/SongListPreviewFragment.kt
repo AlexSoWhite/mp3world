@@ -32,7 +32,6 @@ class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
             false
         )
         binding.songsRecycler.adapter = SongListAdapter(
-            activity!!,
             SongListManager.getSongList()
         )
         binding.songsRecycler.layoutManager = LinearLayoutManager(activity)
