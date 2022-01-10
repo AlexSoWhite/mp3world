@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.model.PlayerManager
 import com.nafanya.mp3world.model.Song
+import com.nafanya.mp3world.model.SongListManager
 
 class SongListAdapter(
     private val context: Context,
@@ -21,7 +21,7 @@ class SongListAdapter(
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.song_list_item, parent, false)
-        return SongViewHolder(itemView, context, lastDate)
+        return SongViewHolder(itemView, context)
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
@@ -37,16 +37,22 @@ class SongListAdapter(
 
     class SongViewHolder(
         itemView: View,
-        private val context: Context,
-        private val lastDate: String?
+        private val context: Context
     ) : RecyclerView.ViewHolder(itemView) {
+
+        companion object {
+            private var usedSongBinding: SongListItemBinding? = null
+        }
 
         private val binding = SongListItemBinding.bind(itemView)
 
         fun bind(song: Song) {
             binding.song = song
             binding.songListItem.setOnClickListener {
-                PlayerManager.play(context, song)
+                SongListManager.startPlaying(context, song)
+                binding.root.alpha = 0.80F
+                usedSongBinding?.root?.alpha = 1F
+                usedSongBinding = binding
             }
         }
     }
