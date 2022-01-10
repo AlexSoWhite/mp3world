@@ -5,14 +5,18 @@ import android.content.Context
 import android.provider.MediaStore
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ui.StyledPlayerControlView
 
 object PlayerManager {
 
     private lateinit var player: ExoPlayer
     private lateinit var playlist: Playlist
+    public var currentIdx: Int = 0
 
-    fun initPlayer(context: Context) {
+    fun initPlayer(context: Context, playerView: StyledPlayerControlView) {
         player = ExoPlayer.Builder(context).build()
+        player.addListener(Listener)
+        playerView.player = player
     }
 
     fun setPlaylist(playlist: Playlist) {
@@ -30,9 +34,16 @@ object PlayerManager {
         player.prepare()
     }
 
+    fun getSong(): Song {
+        if (currentIdx == playlist.songList.size) {
+            currentIdx = 0
+        }
+        return playlist.songList[currentIdx]
+    }
+
     fun moveToSong(song: Song) {
-        val idx = playlist.songList.indexOf(song)
-        player.seekToDefaultPosition(idx)
+        currentIdx = playlist.songList.indexOf(song)
+        player.seekToDefaultPosition(currentIdx)
     }
 
     fun play() {

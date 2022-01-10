@@ -30,13 +30,14 @@
         android:id="@+id/container"
         />
 
-    <androidx.fragment.app.FragmentContainerView
+    <com.google.android.exoplayer2.ui.StyledPlayerControlView
+        android:layout_marginTop="50dp"
+        android:id="@+id/player_control_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/track_container"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
