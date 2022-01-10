@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.view
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,19 +37,12 @@ class SongListAdapter(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 
-        companion object {
-            private var usedSongBinding: SongListItemBinding? = null
-        }
-
         private val binding = SongListItemBinding.bind(itemView)
 
         fun bind(song: Song) {
             binding.song = song
             binding.songListItem.setOnClickListener {
                 SongListManager.startPlaying(song)
-                binding.root.alpha = 0.80F
-                usedSongBinding?.root?.alpha = 1F
-                usedSongBinding = binding
             }
         }
     }

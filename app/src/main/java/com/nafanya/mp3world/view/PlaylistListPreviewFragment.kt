@@ -27,11 +27,15 @@ class PlaylistListPreviewFragment : Fragment(R.layout.fragment_playlist_list_pre
             container,
             false
         )
-        binding.playlistCount = 10
+        binding.playlistCount = initPlaylistCount
         binding.playlistsRecycler.adapter = SongListAdapter(
             SongListManager.getSongList()
         )
         binding.playlistsRecycler.layoutManager = LinearLayoutManager(activity)
         return binding.root
+    }
+
+    companion object {
+        private const val initPlaylistCount = 10
     }
 }
