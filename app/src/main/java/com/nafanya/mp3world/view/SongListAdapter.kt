@@ -11,7 +11,6 @@ import com.nafanya.mp3world.model.Song
 import com.nafanya.mp3world.model.SongListManager
 
 class SongListAdapter(
-    private val context: Context,
     private val list: ArrayList<Song>
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {
 
@@ -21,7 +20,7 @@ class SongListAdapter(
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.song_list_item, parent, false)
-        return SongViewHolder(itemView, context)
+        return SongViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
@@ -36,8 +35,7 @@ class SongListAdapter(
     }
 
     class SongViewHolder(
-        itemView: View,
-        private val context: Context
+        itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 
         companion object {
@@ -49,7 +47,7 @@ class SongListAdapter(
         fun bind(song: Song) {
             binding.song = song
             binding.songListItem.setOnClickListener {
-                SongListManager.startPlaying(context, song)
+                SongListManager.startPlaying(song)
                 binding.root.alpha = 0.80F
                 usedSongBinding?.root?.alpha = 1F
                 usedSongBinding = binding

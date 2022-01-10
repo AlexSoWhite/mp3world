@@ -31,7 +31,6 @@ class SongListFullScreenFragment : Fragment(R.layout.fragment_song_list_full_scr
             false
         )
         binding.songsRecycler.adapter = SongListAdapter(
-            activity!!,
             SongListManager.getSongList()
         )
         binding.songsRecycler.layoutManager = LinearLayoutManager(activity)
