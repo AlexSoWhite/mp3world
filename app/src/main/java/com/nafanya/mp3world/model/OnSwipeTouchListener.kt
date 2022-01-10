@@ -5,6 +5,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import java.lang.Exception
+import kotlin.math.abs
 
 class OnSwipeTouchListener internal constructor(
     ctx: Context,
@@ -33,10 +34,10 @@ class OnSwipeTouchListener internal constructor(
                 try {
                     val diffY = e2.y - e1.y
                     val diffX = e2.x - e1.x
-                    if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (abs(diffX) > abs(diffY)) {
                         if (
-                            Math.abs(diffX) > SWIPE_THRESHOLD &&
-                            Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD
+                            abs(diffX) > SWIPE_THRESHOLD &&
+                            abs(velocityX) > SWIPE_VELOCITY_THRESHOLD
                         ) {
                             if (diffX > 0) {
                                 onSwipeRight()
@@ -46,8 +47,8 @@ class OnSwipeTouchListener internal constructor(
                             result = true
                         }
                     } else if (
-                        Math.abs(diffY) > SWIPE_THRESHOLD &&
-                        Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD
+                        abs(diffY) > SWIPE_THRESHOLD &&
+                        abs(velocityY) > SWIPE_VELOCITY_THRESHOLD
                     ) {
                         if (diffY > 0) {
                             onSwipeBottom()

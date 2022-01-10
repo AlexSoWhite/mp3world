@@ -80,5 +80,4 @@ object SongListManager {
     fun startPlaying(context: Context, song: Song) {
         PlayerManager.play(context, song, songList)
     }
-
 }
