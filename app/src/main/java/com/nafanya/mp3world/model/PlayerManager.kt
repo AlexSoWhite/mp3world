@@ -11,7 +11,7 @@ object PlayerManager {
 
     private lateinit var player: ExoPlayer
     private lateinit var playlist: Playlist
-    public var currentIdx: Int = 0
+    var currentIdx: Int = 0
 
     fun initPlayer(context: Context, playerView: StyledPlayerControlView) {
         player = ExoPlayer.Builder(context).build()
@@ -48,9 +48,5 @@ object PlayerManager {
 
     fun play() {
         player.play()
-    }
-
-    fun pause() {
-        player.pause()
     }
 }
