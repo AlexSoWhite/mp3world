@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialContainerTransform
 import com.nafanya.mp3world.R
@@ -34,14 +35,20 @@ class SongListFullScreenFragment : Fragment(R.layout.fragment_song_list_full_scr
             SongListManager.getSongList()
         )
         binding.songsRecycler.layoutManager = LinearLayoutManager(activity)
+        binding.songsRecycler.addItemDecoration(
+            DividerItemDecoration(
+                activity,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         binding.songCount = SongListManager.getSongList().size
-        OnSwipeTouchListener(activity!!, binding.songsList) {
+        OnSwipeTouchListener(requireActivity(), binding.songsList) {
             closeFragment()
         }
-        OnSwipeTouchListener(activity!!, activity?.findViewById(R.id.songs_list_container)!!) {
+        OnSwipeTouchListener(requireActivity(), activity?.findViewById(R.id.songs_list_container)!!) {
             closeFragment()
         }
-        OnSwipeTouchListener(activity!!, binding.songsRecycler) {
+        OnSwipeTouchListener(requireActivity(), binding.songsRecycler) {
             closeFragment()
         }
         return binding.root

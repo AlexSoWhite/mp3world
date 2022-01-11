@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.transition.MaterialContainerTransform
@@ -35,8 +36,13 @@ class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
             SongListManager.getSongList()
         )
         binding.songsRecycler.layoutManager = LinearLayoutManager(activity)
+        binding.songsRecycler.addItemDecoration(
+            DividerItemDecoration(
+                activity,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         binding.songCount = SongListManager.getSongList().size
-        // exitTransition = Hold()
         return binding.root
     }
 
