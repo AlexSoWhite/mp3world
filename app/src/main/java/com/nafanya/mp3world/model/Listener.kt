@@ -14,8 +14,12 @@ object Listener : Player.Listener {
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         super.onMediaItemTransition(mediaItem, reason)
-        val song = PlayerManager.getSong()
-        PlayerManager.currentIdx++
+        val song = Song(
+            0,
+            mediaItem?.mediaMetadata?.title as String?,
+            mediaItem?.mediaMetadata?.artist as String?,
+            ""
+        )
         mainActivityViewModel.currentSong.value = song
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.provider.MediaStore
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.MediaMetadata
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 
 object PlayerManager {
@@ -22,23 +23,23 @@ object PlayerManager {
     fun setPlaylist(playlist: Playlist) {
         this.playlist = playlist
         playlist.songList.forEach {
-            player.addMediaItem(
-                MediaItem.fromUri(
+            val mediaItem = MediaItem.Builder()
+                .setUri(
                     ContentUris.withAppendedId(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                         it.id
                     )
-                )
+                ).setMediaMetadata(
+                    MediaMetadata.Builder()
+                        .setTitle(it.title as CharSequence)
+                        .setArtist(it.artist as CharSequence)
+                        .build()
+                ).build()
+            player.addMediaItem(
+                mediaItem
             )
         }
         player.prepare()
-    }
-
-    fun getSong(): Song {
-        if (currentIdx == playlist.songList.size) {
-            currentIdx = 0
-        }
-        return playlist.songList[currentIdx]
     }
 
     fun moveToSong(song: Song) {

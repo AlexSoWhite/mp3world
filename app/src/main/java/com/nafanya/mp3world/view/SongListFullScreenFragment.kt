@@ -42,10 +42,16 @@ class SongListFullScreenFragment : Fragment(R.layout.fragment_song_list_full_scr
             )
         )
         binding.songCount = SongListManager.getSongList().size
-        OnSwipeTouchListener(requireActivity(), binding.songsList) {
+        OnSwipeTouchListener(
+            requireActivity(),
+            binding.songsList
+        ) {
             closeFragment()
         }
-        OnSwipeTouchListener(requireActivity(), activity?.findViewById(R.id.songs_list_container)!!) {
+        OnSwipeTouchListener(
+            requireActivity(),
+            activity?.findViewById(R.id.songs_list_container)!!
+        ) {
             closeFragment()
         }
         OnSwipeTouchListener(requireActivity(), binding.songsRecycler) {
