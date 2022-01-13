@@ -10,17 +10,21 @@ import android.view.WindowManager
 import androidx.core.transition.doOnEnd
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.FragmentSongListPreviewBinding
+import com.nafanya.mp3world.model.Listener
 import com.nafanya.mp3world.model.OnSwipeTouchListener
 import com.nafanya.mp3world.model.SongListManager
+import com.nafanya.mp3world.viewmodel.SongListViewModel
 
 class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
 
     private lateinit var binding: FragmentSongListPreviewBinding
+    private lateinit var songListViewModel: SongListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,8 +38,12 @@ class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
             container,
             false
         )
+        songListViewModel = ViewModelProvider(this)[SongListViewModel::class.java]
+        Listener.setSongListViewModel(songListViewModel)
         binding.songsRecycler.adapter = SongListAdapter(
-            SongListManager.getSongList()
+            SongListManager.getSongList(),
+            songListViewModel,
+            this
         )
         binding.songsRecycler.layoutManager = LinearLayoutManager(activity)
         binding.songsRecycler.addItemDecoration(
