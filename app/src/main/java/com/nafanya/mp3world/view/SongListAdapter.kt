@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.view
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +16,9 @@ import kotlin.collections.ArrayList
 
 class SongListAdapter(
     private val list: ArrayList<Song>,
+    private val context: Context,
     private val songListViewModel: SongListViewModel? = null,
-    private val context: LifecycleOwner? = null
+    private val lifecycleOwner: LifecycleOwner? = null
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {
 
     private var lastDate: String? = null
@@ -25,7 +27,7 @@ class SongListAdapter(
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.song_list_item, parent, false)
-        return SongViewHolder(itemView, songListViewModel, context)
+        return SongViewHolder(itemView, context, songListViewModel, lifecycleOwner)
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
@@ -41,8 +43,9 @@ class SongListAdapter(
 
     class SongViewHolder(
         itemView: View,
+        private val context: Context,
         private val songListViewModel: SongListViewModel?,
-        private val context: LifecycleOwner?
+        private val lifecycleOwner: LifecycleOwner?
     ) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = SongListItemBinding.bind(itemView)
@@ -51,7 +54,7 @@ class SongListAdapter(
             song: Song
         ) {
             binding.song = song
-            context?.let { context ->
+            lifecycleOwner?.let { lifecycleOwner ->
                 val observer = Observer<Song> {
                     if (it.id == song.id) {
                         binding.songListItem.setBackgroundResource(
@@ -64,7 +67,7 @@ class SongListAdapter(
                     }
                 }
                 songListViewModel!!.currentSong.observe(
-                    context,
+                    lifecycleOwner,
                     observer
                 )
             }
@@ -72,6 +75,12 @@ class SongListAdapter(
                 PlayerManager.moveToSong(song)
                 PlayerManager.play()
             }
+//            OnSwipeTouchListener(
+//                context,
+//                binding.songListItem
+//            ) {
+//                SongListPreviewFragment.shrink()
+//            }
         }
     }
 }

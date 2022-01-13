@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.FragmentSongListPreviewBinding
 import com.nafanya.mp3world.model.Listener
-import com.nafanya.mp3world.model.OnSwipeTouchListener
+import com.nafanya.mp3world.model.OnSwipeListener
 import com.nafanya.mp3world.model.SongListManager
 import com.nafanya.mp3world.viewmodel.SongListViewModel
 
@@ -42,6 +42,7 @@ class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
         Listener.setSongListViewModel(songListViewModel)
         binding.songsRecycler.adapter = SongListAdapter(
             SongListManager.getSongList(),
+            requireActivity().applicationContext,
             songListViewModel,
             this
         )
@@ -52,10 +53,7 @@ class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
                 DividerItemDecoration.VERTICAL
             )
         )
-        OnSwipeTouchListener(
-            requireActivity(),
-            binding.songsRecycler
-        ) {
+        OnSwipeListener(binding.songsRecycler) {
             shrink()
         }
         binding.songCount = SongListManager.getSongList().size
