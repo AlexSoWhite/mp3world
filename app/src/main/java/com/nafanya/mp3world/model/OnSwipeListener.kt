@@ -15,11 +15,11 @@ class OnSwipeListener(view: View, private val callback: () -> Unit) : View.OnTou
         val result = false
         view?.performClick()
         event?.let {
-            if(event.action == MotionEvent.ACTION_UP) {
+            if (event.action == MotionEvent.ACTION_UP) {
                 val diffX = lastX - event.x
                 val diffY = lastY - event.y
                 // Log.d("touch", "$diffX $diffY")
-                if (abs(diffX) > 2*abs(diffY)) {
+                if (abs(diffX) > 2 * abs(diffY)) {
                     Log.d("touch", "swipe detected")
                     callback()
                 }

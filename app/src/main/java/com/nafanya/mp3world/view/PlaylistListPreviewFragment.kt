@@ -38,8 +38,7 @@ class PlaylistListPreviewFragment : Fragment(R.layout.fragment_playlist_list_pre
             false
         )
         binding.playlistsRecycler.adapter = SongListAdapter(
-            SongListManager.getSongList(),
-            requireActivity()
+            SongListManager.getSongList()
         )
         binding.playlistsRecycler.layoutManager = LinearLayoutManager(activity)
         binding.playlistsRecycler.addItemDecoration(

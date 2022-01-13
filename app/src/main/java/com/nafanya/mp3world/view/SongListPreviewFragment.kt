@@ -42,7 +42,6 @@ class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
         Listener.setSongListViewModel(songListViewModel)
         binding.songsRecycler.adapter = SongListAdapter(
             SongListManager.getSongList(),
-            requireActivity().applicationContext,
             songListViewModel,
             this
         )
