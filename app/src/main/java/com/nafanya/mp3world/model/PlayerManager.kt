@@ -2,6 +2,7 @@ package com.nafanya.mp3world.model
 
 import android.content.ContentUris
 import android.content.Context
+import android.os.Bundle
 import android.provider.MediaStore
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -13,6 +14,7 @@ object PlayerManager {
     private lateinit var player: ExoPlayer
     private lateinit var playlist: Playlist
     var currentIdx: Int = 0
+    lateinit var selectedSong: Song
 
     fun initPlayer(context: Context, playerView: StyledPlayerControlView) {
         player = ExoPlayer.Builder(context).build()
@@ -23,6 +25,8 @@ object PlayerManager {
     fun setPlaylist(playlist: Playlist) {
         this.playlist = playlist
         playlist.songList.forEach {
+            val extras = Bundle()
+            extras.putLong("id", it.id)
             val mediaItem = MediaItem.Builder()
                 .setUri(
                     ContentUris.withAppendedId(
@@ -31,6 +35,7 @@ object PlayerManager {
                     )
                 ).setMediaMetadata(
                     MediaMetadata.Builder()
+                        .setExtras(extras)
                         .setTitle(it.title as CharSequence)
                         .setArtist(it.artist as CharSequence)
                         .build()
@@ -44,6 +49,7 @@ object PlayerManager {
 
     fun moveToSong(song: Song) {
         currentIdx = playlist.songList.indexOf(song)
+        selectedSong = song
         player.seekToDefaultPosition(currentIdx)
     }
 

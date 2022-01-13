@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 val mainActivityViewModel =
                     ViewModelProvider(this)[MainActivityViewModel::class.java]
-                Listener.setViewModel(mainActivityViewModel)
+                Listener.setMainActivityViewModel(mainActivityViewModel)
                 mainActivityViewModel.initialize(this, playerView)
                 val songObserver = Observer<Song> {
                     playerView.findViewById<TextView>(R.id.track_title).text = it.title
