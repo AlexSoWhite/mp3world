@@ -39,7 +39,9 @@ class SongListAdapter(
 
         private val binding = SongListItemBinding.bind(itemView)
 
-        fun bind(song: Song) {
+        fun bind(
+            song: Song
+        ) {
             binding.song = song
             binding.songListItem.setOnClickListener {
                 PlayerManager.moveToSong(song)
