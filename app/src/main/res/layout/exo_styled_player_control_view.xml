@@ -13,34 +13,37 @@
     <TextView
         android:id="@+id/track_title"
         android:layout_width="wrap_content"
+        android:maxWidth="200dp"
         android:layout_height="wrap_content"
-        tools:text="название"
-        android:textSize="18sp"
-        android:textStyle="bold"
         android:ellipsize="end"
         android:maxLines="1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/track_artist"
-        />
+        app:layout_constraintEnd_toStartOf="@+id/exo_prev"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="название" />
 
     <TextView
         android:id="@+id/track_artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="исполнитель"
-        app:layout_constraintTop_toBottomOf="@id/track_title"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/exo_progress"
-        />
+        app:layout_constraintEnd_toStartOf="@+id/exo_prev"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/track_title"
+        tools:text="исполнитель" />
 
     <ImageButton
         android:id="@+id/exo_prev"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@id/exo_play_pause"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/exo_progress"
+        app:layout_constraintEnd_toStartOf="@id/exo_play_pause"
         />
 
     <ImageButton
