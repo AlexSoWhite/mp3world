@@ -15,4 +15,7 @@
         <item name="android:background">@color/white</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="listBackground">
+        <item name="color">@color/black</item>
+    </style>
 </resources>
