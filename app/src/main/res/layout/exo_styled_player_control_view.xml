@@ -13,15 +13,13 @@
     <TextView
         android:id="@+id/track_title"
         android:layout_width="wrap_content"
-        android:maxWidth="200dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
+        android:maxWidth="200dp"
         android:maxLines="1"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/track_artist"
-        app:layout_constraintEnd_toStartOf="@+id/exo_prev"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="название" />
@@ -31,40 +29,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/exo_progress"
-        app:layout_constraintEnd_toStartOf="@+id/exo_prev"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/track_title"
         tools:text="исполнитель" />
 
-    <ImageButton
-        android:id="@+id/exo_prev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/exo_progress"
-        app:layout_constraintEnd_toStartOf="@id/exo_play_pause"
-        app:layout_constraintTop_toTopOf="parent" /> 
-
-    <ImageButton
-        android:id="@id/exo_play_pause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/exo_progress"
-        app:layout_constraintEnd_toStartOf="@id/exo_next"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/exo_next"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/exo_progress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/exo_prev"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:src="@drawable/skip_previous"
+            app:layout_constraintBottom_toTopOf="@id/exo_progress"
+            app:layout_constraintEnd_toStartOf="@id/exo_play_pause"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@id/exo_play_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            tools:src="@drawable/play_arrow" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/exo_next"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:src="@drawable/skip_next" />
+
+    </LinearLayout>
 
     <com.google.android.exoplayer2.ui.DefaultTimeBar
         android:id="@+id/exo_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

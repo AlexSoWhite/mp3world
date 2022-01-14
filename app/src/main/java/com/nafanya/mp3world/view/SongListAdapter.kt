@@ -10,12 +10,10 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.Song
 import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
-import com.nafanya.mp3world.viewmodel.SongListViewModel
 import kotlin.collections.ArrayList
 
 class SongListAdapter(
     private val list: ArrayList<Song>,
-    private val songListViewModel: SongListViewModel? = null,
     private val context: LifecycleOwner? = null
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {
 
@@ -25,7 +23,7 @@ class SongListAdapter(
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.song_list_item, parent, false)
-        return SongViewHolder(itemView, songListViewModel, context)
+        return SongViewHolder(itemView, context)
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
@@ -41,7 +39,6 @@ class SongListAdapter(
 
     class SongViewHolder(
         itemView: View,
-        private val songListViewModel: SongListViewModel?,
         private val context: LifecycleOwner?
     ) : RecyclerView.ViewHolder(itemView) {
 
@@ -54,13 +51,13 @@ class SongListAdapter(
             context?.let { context ->
                 val observer = Observer<Song> {
                     if (it.id == song.id) {
-                        binding.songListItem.setBackgroundResource(
-                            R.drawable.rounded_rectangle_background
-                        )
+                        binding.title.alpha = maxAlpha
+                        binding.artist.alpha = maxAlpha
+                        binding.dateHolder.alpha = maxAlpha
                     } else {
-                        binding.songListItem.setBackgroundResource(
-                            R.drawable.empty_background
-                        )
+                        binding.title.alpha = minAlpha
+                        binding.artist.alpha = minAlpha
+                        binding.dateHolder.alpha = minAlpha
                     }
                 }
                 ForegroundServiceLiveDataProvider.currentSong.observe(
@@ -72,5 +69,10 @@ class SongListAdapter(
                 ForegroundServiceLiveDataProvider.currentSong.value = song
             }
         }
+    }
+
+    companion object {
+        const val minAlpha = 0.8F
+        const val maxAlpha = 1.0F
     }
 }

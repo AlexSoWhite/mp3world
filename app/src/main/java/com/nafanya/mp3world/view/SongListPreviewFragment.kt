@@ -10,6 +10,7 @@ import android.view.WindowManager
 import androidx.core.transition.doOnEnd
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.nafanya.mp3world.databinding.FragmentSongListPreviewBinding
 import com.nafanya.mp3world.model.Listener
 import com.nafanya.mp3world.model.OnSwipeListener
 import com.nafanya.mp3world.model.SongListManager
+import com.nafanya.mp3world.viewmodel.FragmentTransactionDataProvider
 import com.nafanya.mp3world.viewmodel.SongListViewModel
 
 class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
@@ -42,7 +44,6 @@ class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
         Listener.setSongListViewModel(songListViewModel)
         binding.songsRecycler.adapter = SongListAdapter(
             SongListManager.getSongList(),
-            songListViewModel,
             this
         )
         binding.songsRecycler.layoutManager = LinearLayoutManager(activity)
@@ -55,6 +56,17 @@ class SongListPreviewFragment : Fragment(R.layout.fragment_song_list_preview) {
         OnSwipeListener(binding.songsRecycler) {
             shrink()
         }
+        val fullScreenObserver = Observer<Int> {
+            if (it == -1) {
+                binding.songsList.animate().alpha(1.0f).duration = toFullScreenAnimationDuration
+            } else if (it != R.layout.fragment_song_list_preview) {
+                binding.songsList.animate().alpha(0.0f).duration = toFullScreenAnimationDuration
+            }
+        }
+        FragmentTransactionDataProvider.fullScreenFragment.observe(
+            viewLifecycleOwner,
+            fullScreenObserver
+        )
         binding.songCount = SongListManager.getSongList().size
         return binding.root
     }

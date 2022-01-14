@@ -20,6 +20,7 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.FragmentPlaylistListPreviewBinding
 import com.nafanya.mp3world.model.OnSwipeListener
 import com.nafanya.mp3world.model.SongListManager
+import com.nafanya.mp3world.viewmodel.FragmentTransactionDataProvider
 
 class PlaylistListPreviewFragment : Fragment(R.layout.fragment_playlist_list_preview) {
 
@@ -90,6 +91,8 @@ class PlaylistListPreviewFragment : Fragment(R.layout.fragment_playlist_list_pre
                 constraintSet.clone(mainView)
                 val transition = AutoTransition()
                 transition.duration = toFullScreenAnimationDuration
+                FragmentTransactionDataProvider.fullScreenFragment.value =
+                    R.layout.fragment_playlist_list_preview
                 transition.doOnEnd {
                     binding.playlistsRecycler.background.alpha = 0
                     isFullScreen = true
@@ -119,6 +122,7 @@ class PlaylistListPreviewFragment : Fragment(R.layout.fragment_playlist_list_pre
                 transition.doOnEnd {
                     binding.playlistsRecycler.background.alpha = maxAlpha
                     isFullScreen = false
+                    FragmentTransactionDataProvider.fullScreenFragment.value = -1
                 }
                 TransitionManager.beginDelayedTransition(mainView, transition)
                 constraintSet.clone(mainView)
