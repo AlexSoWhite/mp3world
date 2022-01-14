@@ -16,7 +16,7 @@ import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.ForegroundService
 import com.nafanya.mp3world.model.Listener
 import com.nafanya.mp3world.model.Song
-import com.nafanya.mp3world.model.SongListManager
+import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -42,15 +42,25 @@ class MainActivity : AppCompatActivity() {
             } else {
                 mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
                 Listener.setMainActivityViewModel(mainActivityViewModel)
-                mainActivityViewModel.initialize(this, playerView)
-                val songObserver = Observer<Song> {
-                    playerView.findViewById<TextView>(R.id.track_title).text = it.title
-                    playerView.findViewById<TextView>(R.id.track_artist).text = it.artist
-                }
-                mainActivityViewModel.currentSong.observe(this, songObserver)
+                mainActivityViewModel.initialize(this)
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.container, FragmentContainer())
                     commit()
+                }
+                val observerSong = Observer<Song> {
+                    findViewById<TextView>(R.id.track_title).text = it.title
+                    findViewById<TextView>(R.id.track_artist).text = it.artist
+                }
+                ForegroundServiceLiveDataProvider.currentSong.observe(this, observerSong)
+                val observerPlayer = Observer<Boolean> {
+                    if (it) {
+                        playerView.player = ForegroundServiceLiveDataProvider.getPlayer()
+                    }
+                }
+                ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(this, observerPlayer)
+                val intent = Intent(applicationContext, ForegroundService::class.java)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent)
                 }
             }
         }
@@ -62,13 +72,6 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            mainActivityViewModel.initialize(this, playerView)
-            SongListManager.initializeSongList(this)
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.container, FragmentContainer())
-                commit()
-            }
-        }
+        checkPermissions()
     }
 }

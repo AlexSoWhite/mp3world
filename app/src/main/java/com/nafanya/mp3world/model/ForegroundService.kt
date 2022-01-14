@@ -1,21 +1,33 @@
 package com.nafanya.mp3world.model
 
+import android.app.Notification
+import android.app.PendingIntent
 import android.content.ContentUris
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.IllegalSeekPositionException
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.MediaMetadata
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataHolder
+import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH
+import com.google.android.exoplayer2.util.NotificationUtil.createNotificationChannel
+import com.nafanya.mp3world.R
+import com.nafanya.mp3world.view.MainActivity
+import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
 
 class ForegroundService : LifecycleService() {
 
-    private lateinit var player: ExoPlayer
+    private var player: ExoPlayer? = null
     private lateinit var playlist: Playlist
     private lateinit var playerNotificationManager: PlayerNotificationManager
     var currentIdx: Int = 0
@@ -26,13 +38,76 @@ class ForegroundService : LifecycleService() {
         player = ExoPlayer.Builder(context).build()
         subscribePlaylist()
         subscribeSong()
-        player.addListener(Listener)
-        playerNotificationManager = PlayerNotificationManager.Builder(
-            context,
-            5,
-            ""
-        ).build()
+        player?.addListener(Listener)
+        createNotificationChannel(
+            this,
+            "playback_channel",
+            R.string.name,
+            R.string.description,
+            IMPORTANCE_HIGH
+        )
+        playerNotificationManager = PlayerNotificationManager
+            .Builder(this, 1, "playback_channel")
+            .setChannelImportance(IMPORTANCE_HIGH)
+            .setMediaDescriptionAdapter(Adapter(this))
+            .setNotificationListener(NotificationListener())
+            .build()
         playerNotificationManager.setPlayer(player)
+        ForegroundServiceLiveDataProvider.setPlayer(player)
+    }
+
+    inner class Adapter(private val context: Context) :
+        PlayerNotificationManager.MediaDescriptionAdapter {
+        override fun getCurrentContentTitle(player: Player): CharSequence {
+            return playlist.songList[player.currentMediaItemIndex].title as CharSequence
+        }
+
+        override fun createCurrentContentIntent(player: Player): PendingIntent? {
+            val intentToMain = Intent(context, MainActivity::class.java)
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.getActivity(
+                    context,
+                    0,
+                    intentToMain,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            } else {
+                PendingIntent.getActivity(
+                    context,
+                    0,
+                    intentToMain,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            }
+        }
+
+        override fun getCurrentContentText(player: Player): CharSequence? {
+            return playlist.songList[player.currentMediaItemIndex].artist as CharSequence
+        }
+
+        override fun getCurrentLargeIcon(
+            player: Player,
+            callback: PlayerNotificationManager.BitmapCallback
+        ): Bitmap? {
+            return null
+        }
+    }
+
+    inner class NotificationListener : PlayerNotificationManager.NotificationListener {
+
+        override fun onNotificationPosted(
+            notificationId: Int,
+            notification: Notification,
+            ongoing: Boolean
+        ) {
+            super.onNotificationPosted(notificationId, notification, ongoing)
+            startForeground(notificationId, notification)
+        }
+
+        override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
+            super.onNotificationCancelled(notificationId, dismissedByUser)
+            stopSelf()
+        }
     }
 
     private fun subscribePlaylist() {
@@ -54,22 +129,26 @@ class ForegroundService : LifecycleService() {
                             .setArtist(song.artist as CharSequence)
                             .build()
                     ).build()
-                player.addMediaItem(
+                player?.addMediaItem(
                     mediaItem
                 )
             }
-            player.prepare()
+            player?.prepare()
         }
-        ForegroundServiceLiveDataHolder.currentPlaylist.observe(this, observer)
+        ForegroundServiceLiveDataProvider.currentPlaylist.observe(this, observer)
     }
 
-    fun subscribeSong() {
+    private fun subscribeSong() {
         val observer = Observer<Song> {
             currentIdx = playlist.songList.indexOf(it)
-            player.seekToDefaultPosition(currentIdx)
-            player.play()
+            try {
+                player?.seekToDefaultPosition(currentIdx)
+                player?.play()
+            } catch (e: IllegalSeekPositionException) {
+                Log.d("subscribe", currentIdx.toString())
+            }
         }
-        ForegroundServiceLiveDataHolder.currentSong.observe(this, observer)
+        ForegroundServiceLiveDataProvider.currentSong.observe(this, observer)
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -80,5 +159,12 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         return START_STICKY
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        playerNotificationManager.setPlayer(null)
+        player?.release()
+        player = null
     }
 }
