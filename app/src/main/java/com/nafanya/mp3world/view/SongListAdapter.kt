@@ -1,24 +1,22 @@
 package com.nafanya.mp3world.view
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.model.PlayerManager
 import com.nafanya.mp3world.model.Song
+import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.viewmodel.SongListViewModel
 import kotlin.collections.ArrayList
 
 class SongListAdapter(
     private val list: ArrayList<Song>,
     private val songListViewModel: SongListViewModel? = null,
-    private val lifecycleOwner: LifecycleOwner? = null
+    private val context: LifecycleOwner? = null
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {
 
     private var lastDate: String? = null
@@ -27,7 +25,7 @@ class SongListAdapter(
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.song_list_item, parent, false)
-        return SongViewHolder(itemView, songListViewModel, lifecycleOwner)
+        return SongViewHolder(itemView, songListViewModel, context)
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
@@ -44,7 +42,7 @@ class SongListAdapter(
     class SongViewHolder(
         itemView: View,
         private val songListViewModel: SongListViewModel?,
-        private val lifecycleOwner: LifecycleOwner?
+        private val context: LifecycleOwner?
     ) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = SongListItemBinding.bind(itemView)
@@ -53,30 +51,25 @@ class SongListAdapter(
             song: Song
         ) {
             binding.song = song
-//            val layoutParams = binding.songListItem.layoutParams
-//            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-//            binding.songListItem.layoutParams = layoutParams
-            Log.d("adapter", song.title!!)
-            lifecycleOwner?.let { lifecycleOwner ->
+            context?.let { context ->
                 val observer = Observer<Song> {
-//                    if (it.id == song.id) {
-//                        Glide.with(binding.songListItem)
-//                            .load(R.drawable.equalizer)
-//                            .into(binding.playingMusic)
-//                    } else {
-//                        Glide.with(binding.songListItem)
-//                            .load(null)
-//                            .into(binding.playingMusic)
-//                    }
+                    if (it.id == song.id) {
+                        binding.songListItem.setBackgroundResource(
+                            R.drawable.rounded_rectangle_background
+                        )
+                    } else {
+                        binding.songListItem.setBackgroundResource(
+                            R.drawable.empty_background
+                        )
+                    }
                 }
-                songListViewModel!!.currentSong.observe(
-                    lifecycleOwner,
+                ForegroundServiceLiveDataProvider.currentSong.observe(
+                    context,
                     observer
                 )
             }
             binding.songListItem.setOnClickListener {
-                PlayerManager.moveToSong(song)
-                PlayerManager.play()
+                ForegroundServiceLiveDataProvider.currentSong.value = song
             }
         }
     }
