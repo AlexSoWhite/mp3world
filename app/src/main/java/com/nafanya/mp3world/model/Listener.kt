@@ -2,12 +2,13 @@ package com.nafanya.mp3world.model
 
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
+import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataHolder
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 import com.nafanya.mp3world.viewmodel.SongListViewModel
 
 object Listener : Player.Listener {
 
-    private lateinit var mainActivityViewModel: MainActivityViewModel
+    private var mainActivityViewModel: MainActivityViewModel? = null
     private var songListViewModel: SongListViewModel? = null
 
     fun setMainActivityViewModel(mainActivityViewModel: MainActivityViewModel) {
@@ -27,7 +28,7 @@ object Listener : Player.Listener {
                 it.mediaMetadata.artist as String?,
                 ""
             )
-            mainActivityViewModel.currentSong.value = song
+            mainActivityViewModel?.currentSong?.value = song
             songListViewModel?.currentSong?.value = song
         }
     }

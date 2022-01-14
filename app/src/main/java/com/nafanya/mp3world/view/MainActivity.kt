@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.view
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
+import com.nafanya.mp3world.model.ForegroundService
 import com.nafanya.mp3world.model.Listener
 import com.nafanya.mp3world.model.Song
 import com.nafanya.mp3world.model.SongListManager
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var playerView: StyledPlayerControlView
+    private lateinit var mainActivityViewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +40,7 @@ class MainActivity : AppCompatActivity() {
             if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(permission), 0)
             } else {
-                val mainActivityViewModel =
-                    ViewModelProvider(this)[MainActivityViewModel::class.java]
+                mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
                 Listener.setMainActivityViewModel(mainActivityViewModel)
                 mainActivityViewModel.initialize(this, playerView)
                 val songObserver = Observer<Song> {
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            mainActivityViewModel.initialize(this, playerView)
             SongListManager.initializeSongList(this)
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.container, FragmentContainer())

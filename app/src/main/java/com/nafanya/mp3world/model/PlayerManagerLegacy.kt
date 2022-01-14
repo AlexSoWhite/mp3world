@@ -9,7 +9,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.MediaMetadata
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 
-object PlayerManager {
+object PlayerManagerLegacy {
 
     private lateinit var player: ExoPlayer
     private lateinit var playlist: Playlist

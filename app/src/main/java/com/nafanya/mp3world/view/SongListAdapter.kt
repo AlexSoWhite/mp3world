@@ -8,8 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.model.PlayerManager
 import com.nafanya.mp3world.model.Song
+import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataHolder
 import com.nafanya.mp3world.viewmodel.SongListViewModel
 import kotlin.collections.ArrayList
 
@@ -63,14 +63,13 @@ class SongListAdapter(
                         )
                     }
                 }
-                songListViewModel!!.currentSong.observe(
+                ForegroundServiceLiveDataHolder.currentSong.observe(
                     context,
                     observer
                 )
             }
             binding.songListItem.setOnClickListener {
-                PlayerManager.moveToSong(song)
-                PlayerManager.play()
+                ForegroundServiceLiveDataHolder.currentSong.value = song
             }
         }
     }
