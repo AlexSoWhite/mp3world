@@ -49,7 +49,7 @@
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="@{fragmentDescription + ' ' + '(' + itexmCount + ')'}"
+            android:text="@{fragmentDescription + ' ' + '(' + itemCount + ')'}"
             tools:text="Мои плейлисты (15)"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
