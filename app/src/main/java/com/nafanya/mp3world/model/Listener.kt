@@ -4,19 +4,13 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
-import com.nafanya.mp3world.viewmodel.SongListViewModel
 
 object Listener : Player.Listener {
 
     private var mainActivityViewModel: MainActivityViewModel? = null
-    private var songListViewModel: SongListViewModel? = null
 
     fun setMainActivityViewModel(mainActivityViewModel: MainActivityViewModel) {
         this.mainActivityViewModel = mainActivityViewModel
-    }
-
-    fun setSongListViewModel(songListViewModel: SongListViewModel) {
-        this.songListViewModel = songListViewModel
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {

@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         playerView = findViewById(R.id.player_control_view)
         playerView.showTimeoutMs = 0
+        playerView.isNestedScrollingEnabled = false
         checkPermissions()
     }
 
