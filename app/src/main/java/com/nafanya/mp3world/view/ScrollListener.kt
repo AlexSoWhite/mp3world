@@ -2,75 +2,101 @@ package com.nafanya.mp3world.view
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
-import android.graphics.drawable.Drawable
-import android.transition.AutoTransition
-import android.transition.TransitionManager
-import android.view.WindowManager
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.transition.doOnEnd
+import androidx.core.animation.doOnEnd
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.nafanya.mp3world.R
+import com.nafanya.mp3world.databinding.RecyclerHolderFragmentBinding
 import com.nafanya.mp3world.viewmodel.PagerStateController
 
 class ScrollListener(
     private val activity: FragmentActivity,
-    private val shrinkableRecyclerView: RecyclerView,
-    private val alphaAnimated: Drawable? = null
+    private val binding: RecyclerHolderFragmentBinding
 ) : RecyclerView.OnScrollListener() {
 
     private var isFullScreen = false
-    private var rememberedHeight: Int = 0
-
-    init {
-        rememberedHeight = shrinkableRecyclerView.layoutParams.height
-    }
+    private var isResizing = false
+    private var rememberedLayoutParams = binding.recycler.layoutParams
+    private val scale = activity.resources.displayMetrics.density
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
-        if (!isFullScreen && dy > 0) {
+        if (!isResizing && !isFullScreen && dy > 0) {
             PagerStateController.isPagingEnabled.value = false
-            val layoutParams = recyclerView.layoutParams
-            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-            recyclerView.layoutParams = layoutParams
-            val transition = AutoTransition()
-            transition.duration = animationDuration
-            transition.doOnEnd {
+            isResizing = true
+            // resize animation
+            val paddingAnimation = ValueAnimator.ofObject(
+                ArgbEvaluator(),
+                previewRawVerticalPadding,
+                fullRawVerticalPadding
+            )
+            paddingAnimation.duration = animationDuration
+            paddingAnimation.addUpdateListener {
+                binding.list.setPadding(
+                    dp(rawHorizontalPadding),
+                    dp(it.animatedValue as Int),
+                    dp(rawHorizontalPadding),
+                    dp(it.animatedValue as Int)
+                )
+            }
+            paddingAnimation.doOnEnd {
                 isFullScreen = true
+                isResizing = false
             }
+            // background animation
             val alphaAnimation = ValueAnimator.ofObject(ArgbEvaluator(), maxAlpha, 0)
+            alphaAnimation.duration = animationDuration
             alphaAnimation.addUpdateListener {
-                alphaAnimated?.alpha = it.animatedValue as Int
+                binding.recycler.background.alpha = it.animatedValue as Int
             }
+            paddingAnimation.start()
             alphaAnimation.start()
-            val mainView = activity.findViewById<ConstraintLayout>(R.id.recyclers_container)
-            TransitionManager.beginDelayedTransition(mainView, transition)
         }
     }
 
     fun shrink() {
-        if (isFullScreen) {
-            val layoutParams = shrinkableRecyclerView.layoutParams
-            layoutParams.height = rememberedHeight
-            shrinkableRecyclerView.layoutParams = layoutParams
-            val transition = AutoTransition()
-            transition.duration = animationDuration
-            transition.doOnEnd {
+        if (isFullScreen && !isResizing) {
+            binding.recycler.layoutParams = rememberedLayoutParams
+            isResizing = true
+            // resize animation
+            val paddingAnimation = ValueAnimator.ofObject(
+                ArgbEvaluator(),
+                fullRawVerticalPadding,
+                previewRawVerticalPadding
+            )
+            paddingAnimation.duration = animationDuration
+            paddingAnimation.addUpdateListener {
+                binding.list.setPadding(
+                    dp(rawHorizontalPadding),
+                    dp(it.animatedValue as Int),
+                    dp(rawHorizontalPadding),
+                    dp(it.animatedValue as Int)
+                )
+            }
+            paddingAnimation.doOnEnd {
                 isFullScreen = false
+                isResizing = false
                 PagerStateController.isPagingEnabled.value = true
             }
+            // background animation
             val alphaAnimation = ValueAnimator.ofObject(ArgbEvaluator(), 0, maxAlpha)
             alphaAnimation.addUpdateListener {
-                alphaAnimated?.alpha = it.animatedValue as Int
+                binding.recycler.background.alpha = it.animatedValue as Int
             }
+            paddingAnimation.start()
             alphaAnimation.start()
-            val mainView = activity.findViewById<ConstraintLayout>(R.id.recyclers_container)
-            TransitionManager.beginDelayedTransition(mainView, transition)
         }
+    }
+
+    private fun dp(arg: Int): Int {
+        return (arg * scale + scaleAdjuster).toInt()
     }
 
     companion object {
         private const val animationDuration = 300L
         private const val maxAlpha = 255
+        private const val rawHorizontalPadding = 30
+        private const val previewRawVerticalPadding = 200
+        private const val fullRawVerticalPadding = 100
+        private const val scaleAdjuster = 0.5F
     }
 }

@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.databinding.RecycleHolderFragmentBinding
+import com.nafanya.mp3world.databinding.RecyclerHolderFragmentBinding
 import com.nafanya.mp3world.model.OnSwipeListener
 
-abstract class RecyclerHolderFragment : Fragment(R.layout.recycle_holder_fragment) {
+abstract class RecyclerHolderFragment : Fragment(R.layout.recycler_holder_fragment) {
 
-    protected lateinit var binding: RecycleHolderFragmentBinding
+    protected lateinit var binding: RecyclerHolderFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,7 +24,7 @@ abstract class RecyclerHolderFragment : Fragment(R.layout.recycle_holder_fragmen
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.recycle_holder_fragment,
+            R.layout.recycler_holder_fragment,
             container,
             false
         )
@@ -45,8 +45,7 @@ abstract class RecyclerHolderFragment : Fragment(R.layout.recycle_holder_fragmen
         super.onViewCreated(view, savedInstanceState)
         val scrollListener = ScrollListener(
             requireActivity(),
-            binding.recycler,
-            binding.recycler.background
+            binding
         )
         OnSwipeListener(binding.recycler) { scrollListener.shrink() }
         binding.recycler.addOnScrollListener(scrollListener)

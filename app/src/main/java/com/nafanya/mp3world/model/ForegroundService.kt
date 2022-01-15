@@ -19,7 +19,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.MediaMetadata
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH
+import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_DEFAULT
 import com.google.android.exoplayer2.util.NotificationUtil.createNotificationChannel
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.view.MainActivity
@@ -44,11 +44,11 @@ class ForegroundService : LifecycleService() {
             "playback_channel",
             R.string.name,
             R.string.description,
-            IMPORTANCE_HIGH
+            IMPORTANCE_DEFAULT
         )
         playerNotificationManager = PlayerNotificationManager
             .Builder(this, 1, "playback_channel")
-            .setChannelImportance(IMPORTANCE_HIGH)
+            .setChannelImportance(IMPORTANCE_DEFAULT)
             .setMediaDescriptionAdapter(Adapter(this))
             .setNotificationListener(NotificationListener())
             .build()
