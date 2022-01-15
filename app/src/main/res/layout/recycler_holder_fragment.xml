@@ -23,7 +23,7 @@
 
         <FrameLayout
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:id="@+id/go_back"
             app:layout_constraintBottom_toBottomOf="@+id/header"
             app:layout_constraintEnd_toStartOf="@+id/header"
@@ -34,20 +34,22 @@
             android:focusable="true">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_gravity="end"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="5dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginEnd="15dp"
             android:src="@drawable/arrow_back_ios"
             android:background="@android:color/transparent"/>
+
         </FrameLayout>
 
         <TextView
             android:layout_marginBottom="10dp"
             android:id="@+id/header"
-            android:layout_width="wrap_content"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:text="@{fragmentDescription + ' ' + '(' + itemCount + ')'}"
+            android:textAlignment="center"
+            android:text="@{fragmentDescription + ' ' + '(' + itexmCount + ')'}"
             tools:text="Мои плейлисты (15)"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,10 +64,8 @@
             android:minHeight="400dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.266"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.57" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
