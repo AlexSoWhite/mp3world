@@ -112,6 +112,7 @@ class ForegroundService : LifecycleService() {
 
     private fun subscribePlaylist() {
         val observer = Observer<Playlist> {
+            player?.clearMediaItems()
             this.playlist = it
             playlist.songList.forEach { song ->
                 val extras = Bundle()

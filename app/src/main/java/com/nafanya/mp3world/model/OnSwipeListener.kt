@@ -5,7 +5,7 @@ import android.view.MotionEvent
 import android.view.View
 import kotlin.math.abs
 
-class OnSwipeListener(view: View, private val callback: () -> Unit) : View.OnTouchListener {
+class OnSwipeListener(view: View, var callback: () -> Unit) : View.OnTouchListener {
 
     private var lastX: Float = 0F
     private var lastY: Float = 0F

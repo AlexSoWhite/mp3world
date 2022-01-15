@@ -33,7 +33,7 @@ class FragmentContainer : Fragment(R.layout.fragment_container) {
     }
 
     private inner class PagerAdapter(fm: FragmentManager) :
-        FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        FragmentStatePagerAdapter(fm) {
 
         override fun getCount(): Int {
             return 3
