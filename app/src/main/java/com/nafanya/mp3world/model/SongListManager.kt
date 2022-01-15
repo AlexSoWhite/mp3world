@@ -10,6 +10,7 @@ import kotlin.collections.ArrayList
 object SongListManager {
 
     private val songList: ArrayList<Song> = ArrayList()
+
     private var isInitialized = false
     private const val multiplier = 1000L
 
@@ -37,6 +38,7 @@ object SongListManager {
                 val titleColumn = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
                 val idColumn = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
                 val artistColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
+                val artistIdColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)
                 val dateColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED)
                 val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
                 while (cursor.moveToNext()) {
@@ -46,14 +48,19 @@ object SongListManager {
                     val thisTitle = cursor.getString(titleColumn)
                     val thisArtist = cursor.getString(artistColumn)
                     val thisDate = cursor.getInt(dateColumn)
-                    songList.add(
-                        Song(
-                            thisId,
-                            thisTitle,
-                            thisArtist,
-                            simpleDateFormat.format(thisDate * multiplier)
-                        )
+                    val thisArtistId = cursor.getLong(artistIdColumn)
+                    val song = Song(
+                        thisId,
+                        thisTitle,
+                        thisArtist,
+                        simpleDateFormat.format(thisDate * multiplier)
                     )
+                    songList.add(song)
+                    val artist = Artist(
+                        thisArtist,
+                        thisArtistId
+                    )
+                    ArtistListManager.add(artist, song)
                 }
             }
             isInitialized = true

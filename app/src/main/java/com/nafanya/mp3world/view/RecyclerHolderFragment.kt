@@ -15,6 +15,8 @@ import com.nafanya.mp3world.model.OnSwipeListener
 abstract class RecyclerHolderFragment : Fragment(R.layout.recycler_holder_fragment) {
 
     protected lateinit var binding: RecyclerHolderFragmentBinding
+    protected lateinit var onSwipeListener: OnSwipeListener
+    protected lateinit var onScrollListener: ScrollListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,18 +40,21 @@ abstract class RecyclerHolderFragment : Fragment(R.layout.recycler_holder_fragme
         )
         binding.itemCount = getItemCount()
         binding.fragmentDescription = getFragmentDescription()
+        addCustomBehavior()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val scrollListener = ScrollListener(
+        onScrollListener = ScrollListener(
             requireActivity(),
             binding
         )
-        OnSwipeListener(binding.recycler) { scrollListener.shrink() }
-        binding.recycler.addOnScrollListener(scrollListener)
+        onSwipeListener = OnSwipeListener(binding.recycler) { onScrollListener.shrink() }
+        binding.recycler.addOnScrollListener(onScrollListener)
     }
+
+    abstract fun addCustomBehavior()
 
     abstract fun setAdapter()
 

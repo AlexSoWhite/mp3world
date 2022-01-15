@@ -10,9 +10,13 @@ import com.nafanya.mp3world.viewmodel.PagerStateController
 
 class CustomViewPager : ViewPager {
 
-    constructor(context: Context) : super(context)
+    constructor(context: Context) : super(context) {
+        offscreenPageLimit = keepPages
+    }
 
-    constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
+    constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet) {
+        offscreenPageLimit = keepPages
+    }
 
     private var isPagingEnabled = true
 
@@ -29,5 +33,9 @@ class CustomViewPager : ViewPager {
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return this.isPagingEnabled && super.onInterceptTouchEvent(ev)
+    }
+
+    companion object {
+        private const val keepPages = 10
     }
 }

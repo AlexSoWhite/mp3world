@@ -14,7 +14,8 @@ import kotlin.collections.ArrayList
 
 class SongListAdapter(
     private val list: ArrayList<Song>,
-    private val context: LifecycleOwner? = null
+    private val context: LifecycleOwner? = null,
+    private val callback: () -> Unit
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {
 
     private var lastDate: String? = null
@@ -27,7 +28,7 @@ class SongListAdapter(
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list[position], callback)
         if (list[position].date != lastDate) {
             lastDate = list[position].date
         }
@@ -45,7 +46,8 @@ class SongListAdapter(
         private val binding = SongListItemBinding.bind(itemView)
 
         fun bind(
-            song: Song
+            song: Song,
+            callback: () -> Unit
         ) {
             binding.song = song
             context?.let { context ->
@@ -66,6 +68,7 @@ class SongListAdapter(
                 )
             }
             binding.songListItem.setOnClickListener {
+                callback()
                 ForegroundServiceLiveDataProvider.currentSong.value = song
             }
         }
