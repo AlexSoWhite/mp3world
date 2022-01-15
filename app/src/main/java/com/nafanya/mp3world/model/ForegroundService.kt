@@ -35,25 +35,27 @@ class ForegroundService : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
         val context = this
-        player = ExoPlayer.Builder(context).build()
-        subscribePlaylist()
-        subscribeSong()
-        player?.addListener(Listener)
-        createNotificationChannel(
-            this,
-            "playback_channel",
-            R.string.name,
-            R.string.description,
-            IMPORTANCE_DEFAULT
-        )
-        playerNotificationManager = PlayerNotificationManager
-            .Builder(this, 1, "playback_channel")
-            .setChannelImportance(IMPORTANCE_DEFAULT)
-            .setMediaDescriptionAdapter(Adapter(this))
-            .setNotificationListener(NotificationListener())
-            .build()
-        playerNotificationManager.setPlayer(player)
-        ForegroundServiceLiveDataProvider.setPlayer(player)
+        if (player == null) {
+            player = ExoPlayer.Builder(context).build()
+            subscribePlaylist()
+            subscribeSong()
+            player?.addListener(Listener)
+            createNotificationChannel(
+                this,
+                "playback_channel",
+                R.string.name,
+                R.string.description,
+                IMPORTANCE_DEFAULT
+            )
+            playerNotificationManager = PlayerNotificationManager
+                .Builder(this, 1, "playback_channel")
+                .setChannelImportance(IMPORTANCE_DEFAULT)
+                .setMediaDescriptionAdapter(Adapter(this))
+                .setNotificationListener(NotificationListener())
+                .build()
+            playerNotificationManager.setPlayer(player)
+            ForegroundServiceLiveDataProvider.setPlayer(player)
+        }
     }
 
     inner class Adapter(private val context: Context) :
@@ -69,14 +71,14 @@ class ForegroundService : LifecycleService() {
                     context,
                     0,
                     intentToMain,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_IMMUTABLE
                 )
             } else {
                 PendingIntent.getActivity(
                     context,
                     0,
                     intentToMain,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_IMMUTABLE
                 )
             }
         }
