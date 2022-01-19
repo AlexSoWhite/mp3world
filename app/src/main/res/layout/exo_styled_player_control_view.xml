@@ -34,7 +34,16 @@
         app:layout_constraintTop_toBottomOf="@id/track_title"
         tools:text="исполнитель" />
 
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintEnd_toStartOf="@id/controls"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/exo_progress"
+        android:id="@+id/exo_repeat_toggle"/>
+
     <LinearLayout
+        android:id="@+id/controls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/exo_progress"
