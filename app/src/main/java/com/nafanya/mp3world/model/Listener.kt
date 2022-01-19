@@ -18,8 +18,4 @@ object Listener : Player.Listener {
             ForegroundServiceLiveDataProvider.currentSong.value = song
         }
     }
-
-    override fun onAudioSessionIdChanged(audioSessionId: Int) {
-        super.onAudioSessionIdChanged(audioSessionId)
-    }
 }

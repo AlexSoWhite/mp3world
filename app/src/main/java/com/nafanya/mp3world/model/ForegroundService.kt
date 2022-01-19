@@ -13,11 +13,8 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.IllegalSeekPositionException
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.MediaMetadata
-import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_DEFAULT
 import com.google.android.exoplayer2.util.NotificationUtil.createNotificationChannel
@@ -36,11 +33,22 @@ class ForegroundService : LifecycleService() {
         super.onCreate()
         val context = this
         if (player == null) {
+            // init player
             player = ExoPlayer.Builder(context).build()
+            // start playlist and current song observers
             subscribePlaylist()
             subscribeSong()
-            player?.addListener(Listener)
-            player?.setHandleAudioBecomingNoisy(true)
+            // add listener that trigger observers to sinc player state with classes throughout the app
+            player!!.addListener(Listener)
+            // add headphones unplugging handler
+            player!!.setHandleAudioBecomingNoisy(true)
+            // add audio focus change handler
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(C.USAGE_MEDIA)
+                .setContentType(C.CONTENT_TYPE_MUSIC)
+                .build()
+            player!!.setAudioAttributes(audioAttributes,true)
+            // create player notification
             createNotificationChannel(
                 this,
                 "playback_channel",
@@ -55,6 +63,7 @@ class ForegroundService : LifecycleService() {
                 .setNotificationListener(NotificationListener())
                 .build()
             playerNotificationManager.setPlayer(player)
+            // provide player data to set it into the player controller in the app
             ForegroundServiceLiveDataProvider.setPlayer(player)
         }
     }
