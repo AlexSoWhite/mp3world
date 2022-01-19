@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
+import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.ForegroundService
@@ -54,6 +55,8 @@ class MainActivity : AppCompatActivity() {
                 val observerPlayer = Observer<Boolean> {
                     if (it) {
                         playerView.player = ForegroundServiceLiveDataProvider.getPlayer()
+                        playerView.repeatToggleModes =
+                            RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
                     }
                 }
                 ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(this, observerPlayer)
