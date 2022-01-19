@@ -40,6 +40,7 @@ class ForegroundService : LifecycleService() {
             subscribePlaylist()
             subscribeSong()
             player?.addListener(Listener)
+            player?.setHandleAudioBecomingNoisy(true)
             createNotificationChannel(
                 this,
                 "playback_channel",

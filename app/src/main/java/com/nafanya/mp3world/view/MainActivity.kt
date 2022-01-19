@@ -14,7 +14,6 @@ import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.ForegroundService
-import com.nafanya.mp3world.model.Listener
 import com.nafanya.mp3world.model.Song
 import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
@@ -42,7 +41,6 @@ class MainActivity : AppCompatActivity() {
                 requestPermissions(arrayOf(permission), 0)
             } else {
                 mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
-                Listener.setMainActivityViewModel(mainActivityViewModel)
                 mainActivityViewModel.initialize(this)
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.container, FragmentContainer())

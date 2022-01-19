@@ -3,15 +3,8 @@ package com.nafanya.mp3world.model
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
-import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 
 object Listener : Player.Listener {
-
-    private var mainActivityViewModel: MainActivityViewModel? = null
-
-    fun setMainActivityViewModel(mainActivityViewModel: MainActivityViewModel) {
-        this.mainActivityViewModel = mainActivityViewModel
-    }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         super.onMediaItemTransition(mediaItem, reason)
@@ -24,5 +17,9 @@ object Listener : Player.Listener {
             )
             ForegroundServiceLiveDataProvider.currentSong.value = song
         }
+    }
+
+    override fun onAudioSessionIdChanged(audioSessionId: Int) {
+        super.onAudioSessionIdChanged(audioSessionId)
     }
 }
