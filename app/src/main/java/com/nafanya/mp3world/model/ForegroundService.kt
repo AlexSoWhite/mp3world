@@ -24,7 +24,6 @@ import com.google.android.exoplayer2.MediaMetadata
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_DEFAULT
 import com.google.android.exoplayer2.util.NotificationUtil.createNotificationChannel
 import com.nafanya.mp3world.R
