@@ -16,6 +16,7 @@ import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
+import com.nafanya.mp3world.model.Downloader
 import com.nafanya.mp3world.model.ForegroundService
 import com.nafanya.mp3world.model.Song
 import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
@@ -88,7 +89,15 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    mainActivityViewModel.download(query)
+                    Downloader.download(query) { playlist ->
+                        playlist?.let {
+                            supportFragmentManager.beginTransaction().apply {
+                                replace(R.id.container, SearchFragment.newInstance(it))
+                                commit()
+                            }
+                            return@let
+                        }
+                    }
                     return false
                 }
                 override fun onQueryTextChange(newText: String): Boolean {
@@ -97,5 +106,10 @@ class MainActivity : AppCompatActivity() {
             }
         )
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        applicationContext.stopService(Intent(this, ForegroundService::class.java))
     }
 }
