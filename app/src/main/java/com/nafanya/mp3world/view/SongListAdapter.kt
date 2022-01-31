@@ -73,9 +73,7 @@ class SongListAdapter(
             }
             if (song.url != null) {
                 binding.download.visibility = View.VISIBLE
-                binding.download.setOnClickListener {
-
-                }
+                binding.download.setOnClickListener {}
             }
         }
     }

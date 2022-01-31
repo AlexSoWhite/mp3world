@@ -6,10 +6,10 @@ import java.io.BufferedInputStream
 import java.net.URL
 import kotlin.io.path.toPath
 
-class DownloadAudioFromUrl(val context: Context): AsyncTask<String, String, String>() {
+class DownloadAudioFromUrl(val context: Context) : AsyncTask<String, String, String>() {
 
     override fun doInBackground(vararg p0: String?): String {
-        val url  = URL(p0[0])
+        val url = URL(p0[0])
         val connection = url.openConnection()
         connection.connect()
         val inputStream = BufferedInputStream(url.openStream())
