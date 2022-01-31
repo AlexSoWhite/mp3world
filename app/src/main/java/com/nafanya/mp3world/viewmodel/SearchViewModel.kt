@@ -10,7 +10,7 @@ class SearchViewModel : ViewModel() {
 
     fun download(name: String, callback: (Playlist) -> Unit) {
         viewModelScope.launch {
-            Downloader.download(name) {
+            Downloader.preLoad(name) {
                 it?.let { playlist ->
                     callback(playlist)
                 }

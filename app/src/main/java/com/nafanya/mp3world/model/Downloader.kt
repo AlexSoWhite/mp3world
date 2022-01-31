@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.model
 
+import android.content.Context
 import java.io.IOException
 import okhttp3.Call
 import okhttp3.Callback
@@ -13,7 +14,7 @@ object Downloader {
     private val client = OkHttpClient()
     private const val prefix = "https://ru.hitmotop.com/search?q="
 
-    fun download(name: String, callback: (Playlist?) -> Unit?) {
+    fun preLoad(name: String, callback: (Playlist?) -> Unit?) {
         val url = prefix + name
         val request = Request.Builder()
             .url(url)
@@ -52,6 +53,23 @@ object Downloader {
                             callback(Playlist(songList))
                         }
                     }
+                }
+            }
+        )
+    }
+
+    fun downLoad(url: String, context: Context, song: Song) {
+        val request = Request.Builder()
+            .url(url)
+            .build()
+        client.newCall(request).enqueue(
+            object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    DownloadAudioFromUrl(context).execute()
                 }
             }
         )

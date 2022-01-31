@@ -17,14 +17,4 @@ class MainActivityViewModel : ViewModel() {
                 Playlist(SongListManager.getSongList())
         }
     }
-
-    fun download(name: String) {
-        viewModelScope.launch {
-            Downloader.download(name) {
-                it?.let { playlist ->
-                    ForegroundServiceLiveDataProvider.currentPlaylist.postValue(playlist)
-                }
-            }
-        }
-    }
 }

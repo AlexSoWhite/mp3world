@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    Downloader.download(query) { playlist ->
+                    Downloader.preLoad(query) { playlist ->
                         playlist?.let {
                             supportFragmentManager.beginTransaction().apply {
                                 replace(R.id.container, SearchFragment.newInstance(it))
@@ -101,6 +101,12 @@ class MainActivity : AppCompatActivity() {
                     return false
                 }
                 override fun onQueryTextChange(newText: String): Boolean {
+                    if (newText.isEmpty() || newText.isBlank()) {
+                        supportFragmentManager.beginTransaction().apply {
+                            replace(R.id.container, FragmentContainer())
+                            commit()
+                        }
+                    }
                     return false
                 }
             }
