@@ -71,6 +71,12 @@ class SongListAdapter(
                 callback()
                 ForegroundServiceLiveDataProvider.currentSong.value = song
             }
+            if (song.url != null) {
+                binding.download.visibility = View.VISIBLE
+                binding.download.setOnClickListener {
+
+                }
+            }
         }
     }
 
