@@ -50,10 +50,11 @@ object SongListManager {
                     val thisDate = cursor.getInt(dateColumn)
                     val thisArtistId = cursor.getLong(artistIdColumn)
                     val song = Song(
-                        thisId,
-                        thisTitle,
-                        thisArtist,
-                        simpleDateFormat.format(thisDate * multiplier)
+                        id = thisId,
+                        title = thisTitle,
+                        artist = thisArtist,
+                        date = simpleDateFormat.format(thisDate * multiplier),
+                        url = null
                     )
                     songList.add(song)
                     val artist = Artist(

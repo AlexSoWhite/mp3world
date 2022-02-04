@@ -7,11 +7,13 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.MediaStore
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.C
@@ -136,19 +138,22 @@ class ForegroundService : LifecycleService() {
             playlist.songList.forEach { song ->
                 val extras = Bundle()
                 extras.putLong("id", song.id)
-                val mediaItem = MediaItem.Builder()
-                    .setUri(
-                        ContentUris.withAppendedId(
+                val uri: Uri =
+                    song.url?.toUri()
+                        ?: ContentUris.withAppendedId(
                             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                             song.id
                         )
-                    ).setMediaMetadata(
+                val mediaItem = MediaItem.Builder()
+                    .setUri(uri)
+                    .setMediaMetadata(
                         MediaMetadata.Builder()
                             .setExtras(extras)
                             .setTitle(song.title as CharSequence)
                             .setArtist(song.artist as CharSequence)
                             .build()
                     ).build()
+
                 player?.addMediaItem(
                     mediaItem
                 )
