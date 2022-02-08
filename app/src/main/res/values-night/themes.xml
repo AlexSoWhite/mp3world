@@ -26,5 +26,9 @@
         <!-- Support library compatibility -->
         <item name="background">@null</item>
     </style>
+    <style name="loader">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
+    </style>
 
 </resources>
