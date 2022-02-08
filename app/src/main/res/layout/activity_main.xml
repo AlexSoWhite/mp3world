@@ -35,6 +35,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/player_control_view"/>
 
+    <include
+        android:id="@+id/loader"
+        layout="@layout/loader"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"/>
+
     <com.google.android.exoplayer2.ui.StyledPlayerControlView
         android:id="@+id/player_control_view"
         android:layout_width="match_parent"

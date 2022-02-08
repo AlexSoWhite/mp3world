@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -89,8 +90,14 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
+                    binding.loader.loader.visibility = View.VISIBLE
+                    binding.container.visibility = View.INVISIBLE
                     Downloader.preLoad(query) { playlist ->
                         playlist?.let {
+                            runOnUiThread {
+                                binding.loader.loader.visibility = View.INVISIBLE
+                                binding.container.visibility = View.VISIBLE
+                            }
                             supportFragmentManager.beginTransaction().apply {
                                 replace(R.id.container, SearchFragment.newInstance(it))
                                 commit()
