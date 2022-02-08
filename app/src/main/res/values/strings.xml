@@ -8,4 +8,5 @@
     <string name="songs">песни</string>
     <string name="name">mp3world</string>
     <string name="description">mp3world</string>
+    <string name="loading">загрузка</string>
 </resources>
