@@ -52,15 +52,15 @@ class SongListAdapter(
             binding.song = song
             context?.let { context ->
                 val observer = Observer<Song> {
-                    if (it.id == song.id) {
-                        binding.title.alpha = maxAlpha
-                        binding.artist.alpha = maxAlpha
-                        binding.dateHolder.alpha = maxAlpha
-                    } else {
-                        binding.title.alpha = minAlpha
-                        binding.artist.alpha = minAlpha
-                        binding.dateHolder.alpha = minAlpha
-                    }
+//                    if (it.id == song.id) {
+//                        binding.title.alpha = maxAlpha
+//                        binding.artist.alpha = maxAlpha
+//                        binding.dateHolder.alpha = maxAlpha
+//                    } else {
+//                        binding.title.alpha = minAlpha
+//                        binding.artist.alpha = minAlpha
+//                        binding.dateHolder.alpha = minAlpha
+//                    }
                 }
                 ForegroundServiceLiveDataProvider.currentSong.observe(
                     context,
