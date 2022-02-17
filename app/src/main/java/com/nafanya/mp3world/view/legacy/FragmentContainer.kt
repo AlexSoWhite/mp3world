@@ -11,7 +11,9 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.LegacyFragmentContainerBinding
 
-@Deprecated(message = "Since project switched to multiple activities model, this class is no longer needed")
+@Deprecated(
+    message = "Since project switched to multiple activities model, this class is no longer needed"
+)
 class FragmentContainer : Fragment(R.layout.legacy_fragment_container) {
 
     private lateinit var binding: LegacyFragmentContainerBinding
