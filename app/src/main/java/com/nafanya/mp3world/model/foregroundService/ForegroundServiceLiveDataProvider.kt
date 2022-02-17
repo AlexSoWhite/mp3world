@@ -1,9 +1,9 @@
-package com.nafanya.mp3world.viewmodel
+package com.nafanya.mp3world.model.foregroundService
 
 import androidx.lifecycle.MutableLiveData
 import com.google.android.exoplayer2.ExoPlayer
-import com.nafanya.mp3world.model.Playlist
-import com.nafanya.mp3world.model.Song
+import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.wrappers.Song
 
 object ForegroundServiceLiveDataProvider {
 
@@ -22,7 +22,7 @@ object ForegroundServiceLiveDataProvider {
     private var player: ExoPlayer? = null
 
     fun setPlayer(player: ExoPlayer?) {
-        this.player = player
+        ForegroundServiceLiveDataProvider.player = player
         isPlayerInitialized.value = true
     }
 

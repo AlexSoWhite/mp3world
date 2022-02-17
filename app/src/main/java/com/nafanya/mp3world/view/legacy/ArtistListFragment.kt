@@ -1,10 +1,10 @@
 package com.nafanya.mp3world.view.legacy
 
 import android.view.View
-import com.nafanya.mp3world.model.ArtistListManager
-import com.nafanya.mp3world.view.ArtistListAdapter
-import com.nafanya.mp3world.view.SongListAdapter
-import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.listManagers.ArtistListManager
+import com.nafanya.mp3world.view.listActivities.artists.ArtistListAdapter
+import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
+import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 
 @Deprecated(message = "Use ArtistListActivity instead")
 class ArtistListFragment : RecyclerHolderFragment() {

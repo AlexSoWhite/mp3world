@@ -6,7 +6,7 @@ import android.view.MotionEvent
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
-import com.nafanya.mp3world.viewmodel.PagerStateController
+import com.nafanya.mp3world.viewmodel.legacy.PagerStateController
 
 class CustomViewPager : ViewPager {
 

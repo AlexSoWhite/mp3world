@@ -1,6 +1,8 @@
-package com.nafanya.mp3world.model
+package com.nafanya.mp3world.model.network
 
 import android.content.Context
+import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
 import okhttp3.Call
 import okhttp3.Callback

@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.viewmodel
+package com.nafanya.mp3world.viewmodel.legacy
 
 import androidx.lifecycle.MutableLiveData
 

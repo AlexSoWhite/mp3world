@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.model
+package com.nafanya.mp3world.model.network
 
 import android.content.Context
 import android.os.AsyncTask

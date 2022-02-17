@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.LegacyRecyclerHolderFragmentBinding
-import com.nafanya.mp3world.model.OnSwipeListener
+import com.nafanya.mp3world.view.OnSwipeListener
 
 @Deprecated(message = "Use RecyclerHolderActivity instead")
 abstract class RecyclerHolderFragment : Fragment(R.layout.legacy_recycler_holder_fragment) {

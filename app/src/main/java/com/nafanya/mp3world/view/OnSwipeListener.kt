@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.model
+package com.nafanya.mp3world.view
 
 import android.util.Log
 import android.view.MotionEvent

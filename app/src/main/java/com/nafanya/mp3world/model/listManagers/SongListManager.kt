@@ -1,8 +1,10 @@
-package com.nafanya.mp3world.model
+package com.nafanya.mp3world.model.listManagers
 
 import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
+import com.nafanya.mp3world.model.wrappers.Artist
+import com.nafanya.mp3world.model.wrappers.Song
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.collections.ArrayList

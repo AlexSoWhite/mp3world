@@ -30,12 +30,12 @@
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name=".view.SongListActivity"
+        <activity android:name=".view.listActivities.songs.SongListActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.PlaylistListActivity"
+        <activity android:name=".view.listActivities.playlists.PlaylistListActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.ArtistListActivity"
+        <activity android:name=".view.listActivities.artists.ArtistListActivity"
             android:screenOrientation="portrait"/>
-        <service android:name=".model.ForegroundService" />
+        <service android:name=".model.foregroundService.ForegroundService" />
     </application>
 </manifest>

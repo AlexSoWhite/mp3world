@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.view
+package com.nafanya.mp3world.view.listActivities
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -13,9 +13,9 @@ import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.RecyclerHolderActivityBinding
-import com.nafanya.mp3world.model.OnSwipeListener
-import com.nafanya.mp3world.model.Song
-import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.view.OnSwipeListener
+import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 
 abstract class RecyclerHolderActivity : AppCompatActivity() {
 

@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.LegacySearchFragmentBinding
-import com.nafanya.mp3world.model.Playlist
-import com.nafanya.mp3world.view.SongListAdapter
-import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
-import com.nafanya.mp3world.viewmodel.SearchViewModel
+import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
+import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.viewmodel.legacy.SearchViewModel
 
 @Deprecated(message = "Use SongListActivity with search results instead")
 class SearchFragment : Fragment(R.layout.legacy_search_fragment) {

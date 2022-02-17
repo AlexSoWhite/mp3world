@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.view
+package com.nafanya.mp3world.view.listActivities.songs
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.model.Song
-import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import kotlin.collections.ArrayList
 
 class SongListAdapter(

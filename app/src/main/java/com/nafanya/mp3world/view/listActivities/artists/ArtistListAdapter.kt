@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.view
+package com.nafanya.mp3world.view.listActivities.artists
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ArtistListItemBinding
-import com.nafanya.mp3world.model.Artist
+import com.nafanya.mp3world.model.wrappers.Artist
 
 class ArtistListAdapter(
     private val list: ArrayList<Artist>,

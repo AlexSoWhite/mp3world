@@ -5,7 +5,7 @@ import android.animation.ValueAnimator
 import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.databinding.LegacyRecyclerHolderFragmentBinding
-import com.nafanya.mp3world.viewmodel.PagerStateController
+import com.nafanya.mp3world.viewmodel.legacy.PagerStateController
 
 class ScrollListener(
     private val scale: Float,

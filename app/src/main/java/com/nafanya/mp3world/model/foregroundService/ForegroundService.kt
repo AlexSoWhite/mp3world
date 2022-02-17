@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.model
+package com.nafanya.mp3world.model.foregroundService
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -27,8 +27,9 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_DEFAULT
 import com.google.android.exoplayer2.util.NotificationUtil.createNotificationChannel
 import com.nafanya.mp3world.R
+import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.MainActivity
-import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
 
 class ForegroundService : LifecycleService() {
 

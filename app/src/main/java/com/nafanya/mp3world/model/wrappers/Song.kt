@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.model
+package com.nafanya.mp3world.model.wrappers
 
 data class Song(
     val id: Long = 0,

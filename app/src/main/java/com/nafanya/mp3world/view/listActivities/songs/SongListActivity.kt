@@ -1,8 +1,9 @@
-package com.nafanya.mp3world.view
+package com.nafanya.mp3world.view.listActivities.songs
 
-import com.nafanya.mp3world.model.Playlist
-import com.nafanya.mp3world.model.Song
-import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 
 class SongListActivity : RecyclerHolderActivity() {
 
@@ -29,8 +30,8 @@ class SongListActivity : RecyclerHolderActivity() {
             songList: ArrayList<Song>,
             description: String
         ) {
-            this.songList = songList
-            this.description = description
+            Companion.songList = songList
+            Companion.description = description
         }
     }
 }

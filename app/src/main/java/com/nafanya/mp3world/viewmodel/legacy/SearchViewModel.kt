@@ -1,9 +1,9 @@
-package com.nafanya.mp3world.viewmodel
+package com.nafanya.mp3world.viewmodel.legacy
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.model.Downloader
-import com.nafanya.mp3world.model.Playlist
+import com.nafanya.mp3world.model.network.Downloader
+import com.nafanya.mp3world.model.wrappers.Playlist
 import kotlinx.coroutines.launch
 
 class SearchViewModel : ViewModel() {

@@ -3,7 +3,7 @@
     <data>
         <variable
             name="artist"
-            type="com.nafanya.mp3world.model.Artist" />
+            type="com.nafanya.mp3world.model.wrappers.Artist" />
         <variable
             name="tracksCount"
             type="String" />
