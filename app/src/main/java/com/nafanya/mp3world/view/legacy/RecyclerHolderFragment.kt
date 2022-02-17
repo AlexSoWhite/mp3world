@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.view
+package com.nafanya.mp3world.view.legacy
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,12 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.databinding.RecyclerHolderFragmentBinding
+import com.nafanya.mp3world.databinding.LegacyRecyclerHolderFragmentBinding
 import com.nafanya.mp3world.model.OnSwipeListener
 
-abstract class RecyclerHolderFragment : Fragment(R.layout.recycler_holder_fragment) {
+@Deprecated(message = "Use RecyclerHolderActivity instead")
+abstract class RecyclerHolderFragment : Fragment(R.layout.legacy_recycler_holder_fragment) {
 
-    protected lateinit var binding: RecyclerHolderFragmentBinding
+    protected lateinit var binding: LegacyRecyclerHolderFragmentBinding
     protected lateinit var onSwipeListener: OnSwipeListener
     protected lateinit var onScrollListener: ScrollListener
 
@@ -26,7 +27,7 @@ abstract class RecyclerHolderFragment : Fragment(R.layout.recycler_holder_fragme
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.recycler_holder_fragment,
+            R.layout.legacy_recycler_holder_fragment,
             container,
             false
         )
@@ -47,7 +48,7 @@ abstract class RecyclerHolderFragment : Fragment(R.layout.recycler_holder_fragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onScrollListener = ScrollListener(
-            requireActivity(),
+            requireActivity().resources.displayMetrics.density,
             binding
         )
         onSwipeListener = OnSwipeListener(binding.recycler) { onScrollListener.shrink() }

@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.view
+package com.nafanya.mp3world.view.legacy
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,14 +10,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.databinding.SearchFragmentBinding
+import com.nafanya.mp3world.databinding.LegacySearchFragmentBinding
 import com.nafanya.mp3world.model.Playlist
+import com.nafanya.mp3world.view.SongListAdapter
 import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.viewmodel.SearchViewModel
 
-class SearchFragment : Fragment(R.layout.search_fragment) {
+@Deprecated(message = "Use SongListActivity with search results instead")
+class SearchFragment : Fragment(R.layout.legacy_search_fragment) {
 
-    private lateinit var binding: SearchFragmentBinding
+    private lateinit var binding: LegacySearchFragmentBinding
     private lateinit var viewModel: SearchViewModel
 
     override fun onCreateView(
@@ -28,14 +30,14 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.search_fragment,
+            R.layout.legacy_search_fragment,
             container,
             false
         )
         viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
-        binding.recyclerSearch.adapter = SongListAdapter(query.songList, activity) {
+        binding.recyclerSearch.adapter = SongListAdapter(playlist.songList, activity) {
             ForegroundServiceLiveDataProvider.currentPlaylist.value =
-                query
+                playlist
         }
         binding.recyclerSearch.layoutManager = LinearLayoutManager(activity)
         binding.recyclerSearch.addItemDecoration(
@@ -49,10 +51,10 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
 
     companion object {
 
-        private lateinit var query: Playlist
+        private lateinit var playlist: Playlist
 
         fun newInstance(query: Playlist): SearchFragment {
-            this.query = query
+            Companion.playlist = query
             return SearchFragment()
         }
     }

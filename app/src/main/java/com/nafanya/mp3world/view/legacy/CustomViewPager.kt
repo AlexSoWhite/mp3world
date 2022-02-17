@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.view
+package com.nafanya.mp3world.view.legacy
 
 import android.content.Context
 import android.util.AttributeSet

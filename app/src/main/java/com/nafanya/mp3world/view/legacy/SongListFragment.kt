@@ -1,10 +1,12 @@
-package com.nafanya.mp3world.view
+package com.nafanya.mp3world.view.legacy
 
 import android.util.Log
 import com.nafanya.mp3world.model.Playlist
 import com.nafanya.mp3world.model.SongListManager
+import com.nafanya.mp3world.view.SongListAdapter
 import com.nafanya.mp3world.viewmodel.ForegroundServiceLiveDataProvider
 
+@Deprecated(message = "Use SongListActivity instead")
 class SongListFragment : RecyclerHolderFragment() {
 
     override fun setAdapter() {

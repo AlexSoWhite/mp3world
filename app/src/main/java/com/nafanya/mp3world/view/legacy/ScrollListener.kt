@@ -1,22 +1,20 @@
-package com.nafanya.mp3world.view
+package com.nafanya.mp3world.view.legacy
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import androidx.core.animation.doOnEnd
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.nafanya.mp3world.databinding.RecyclerHolderFragmentBinding
+import com.nafanya.mp3world.databinding.LegacyRecyclerHolderFragmentBinding
 import com.nafanya.mp3world.viewmodel.PagerStateController
 
 class ScrollListener(
-    private val activity: FragmentActivity,
-    private val binding: RecyclerHolderFragmentBinding
+    private val scale: Float,
+    private val binding: LegacyRecyclerHolderFragmentBinding
 ) : RecyclerView.OnScrollListener() {
 
     private var isFullScreen = false
     private var isResizing = false
     private var rememberedLayoutParams = binding.recycler.layoutParams
-    private val scale = activity.resources.displayMetrics.density
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
