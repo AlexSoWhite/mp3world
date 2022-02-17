@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.view.listActivities.songs
 
+import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 
 class SongListActivity : RecyclerHolderActivity() {
