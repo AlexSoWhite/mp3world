@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
@@ -72,8 +73,9 @@ class SongListAdapter(
                 ForegroundServiceLiveDataProvider.currentSong.value = song
             }
             if (song.url != null) {
-                binding.download.visibility = View.VISIBLE
-                binding.download.setOnClickListener {}
+                binding.action.visibility = View.VISIBLE
+                binding.action.setOnClickListener {}
+                Glide.with(itemView).load(R.drawable.download_icon).into(binding.action)
             }
         }
     }

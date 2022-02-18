@@ -3,19 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient">
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/recycler_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="50dp"
         android:paddingBottom="100dp"
         android:paddingHorizontal="30dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            layout="@layout/add_playlist_button"
+            android:id="@+id/add_playlist"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
@@ -23,7 +32,7 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"/>
 
-    </FrameLayout>
+    </LinearLayout>
 
     <com.google.android.exoplayer2.ui.StyledPlayerControlView
         android:id="@+id/player_control_view"
