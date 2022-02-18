@@ -19,14 +19,16 @@ object SongListManager {
     fun initializeSongList(context: Context) {
         if (!isInitialized) {
             val projection = null
-            var selection: String? = MediaStore.Audio.Media.IS_MUSIC + "!=0"
+            var selection: String? = MediaStore.Audio.Media.IS_ALARM + "=0 AND " +
+                    MediaStore.Audio.Media.IS_NOTIFICATION + "=0 AND " +
+                    MediaStore.Audio.Media.IS_RINGTONE + "=0"
             val selectionArgs = null
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 selection =
-                    MediaStore.Audio.Media.IS_MUSIC +
-                    "!=0 AND " +
-                    MediaStore.Audio.Media.IS_RECORDING +
-                    "=0"
+                    MediaStore.Audio.Media.IS_ALARM + "=0 AND " +
+                    MediaStore.Audio.Media.IS_NOTIFICATION + "=0 AND " +
+                    MediaStore.Audio.Media.IS_RINGTONE + "=0 AND " +
+                    MediaStore.Audio.Media.IS_RECORDING + "=0"
             }
             val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
 
@@ -51,19 +53,21 @@ object SongListManager {
                     val thisArtist = cursor.getString(artistColumn)
                     val thisDate = cursor.getInt(dateColumn)
                     val thisArtistId = cursor.getLong(artistIdColumn)
-                    val song = Song(
-                        id = thisId,
-                        title = thisTitle,
-                        artist = thisArtist,
-                        date = simpleDateFormat.format(thisDate * multiplier),
-                        url = null
-                    )
-                    songList.add(song)
-                    val artist = Artist(
-                        thisArtist,
-                        thisArtistId
-                    )
-                    ArtistListManager.add(artist, song)
+                    if (thisArtist != "<unknown>") {
+                        val song = Song(
+                            id = thisId,
+                            title = thisTitle,
+                            artist = thisArtist,
+                            date = simpleDateFormat.format(thisDate * multiplier),
+                            url = null
+                        )
+                        songList.add(song)
+                        val artist = Artist(
+                            thisArtist,
+                            thisArtistId
+                        )
+                        ArtistListManager.add(artist, song)
+                    }
                 }
             }
             isInitialized = true
