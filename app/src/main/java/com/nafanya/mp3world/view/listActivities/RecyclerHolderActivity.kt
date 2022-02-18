@@ -2,6 +2,7 @@ package com.nafanya.mp3world.view.listActivities
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -67,6 +68,12 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
 
         // custom options
         addCustomBehavior()
+
+        // animate elements arrive in list
+        val alphaAnimation = AlphaAnimation(0.0f, 1.0f)
+        alphaAnimation.duration = duration
+        alphaAnimation.startOffset = startOffset
+        binding.recycler.startAnimation(alphaAnimation)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -86,4 +93,9 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
     abstract fun getItemCount(): Int
 
     abstract fun getFragmentDescription(): String
+
+    companion object {
+        private const val duration = 500L
+        private const val startOffset = 350L
+    }
 }
