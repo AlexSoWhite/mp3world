@@ -51,19 +51,21 @@ object SongListManager {
                     val thisArtist = cursor.getString(artistColumn)
                     val thisDate = cursor.getInt(dateColumn)
                     val thisArtistId = cursor.getLong(artistIdColumn)
-                    val song = Song(
-                        id = thisId,
-                        title = thisTitle,
-                        artist = thisArtist,
-                        date = simpleDateFormat.format(thisDate * multiplier),
-                        url = null
-                    )
-                    songList.add(song)
-                    val artist = Artist(
-                        thisArtist,
-                        thisArtistId
-                    )
-                    ArtistListManager.add(artist, song)
+                    if (thisArtist != "<unknown>") {
+                        val song = Song(
+                            id = thisId,
+                            title = thisTitle,
+                            artist = thisArtist,
+                            date = simpleDateFormat.format(thisDate * multiplier),
+                            url = null
+                        )
+                        songList.add(song)
+                        val artist = Artist(
+                            thisArtist,
+                            thisArtistId
+                        )
+                        ArtistListManager.add(artist, song)
+                    }
                 }
             }
             isInitialized = true
