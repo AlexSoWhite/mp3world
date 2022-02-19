@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.app.AppCompatActivity
@@ -22,8 +21,8 @@ import com.nafanya.mp3world.model.foregroundService.ForegroundService
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.ArtistListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
+import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 import com.nafanya.mp3world.model.listManagers.SongListManager
-import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
