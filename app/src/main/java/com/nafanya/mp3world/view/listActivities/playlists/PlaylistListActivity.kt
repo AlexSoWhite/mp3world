@@ -2,11 +2,12 @@ package com.nafanya.mp3world.view.listActivities.playlists
 
 import android.content.Intent
 import android.view.View
+import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
-import com.nafanya.mp3world.viewmodel.PageState
+import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class PlaylistListActivity : RecyclerHolderActivity() {
@@ -16,16 +17,15 @@ class PlaylistListActivity : RecyclerHolderActivity() {
             PlaylistListManager.playlists
         ) {
             val intent = Intent(this, SongListActivity::class.java)
-            SongListActivity.newInstance(
-                it.songList,
-                it.name
-            )
+            SongListViewModel.newInstanceWithPlaylist(it)
             startActivity(intent)
         }
     }
 
-    override fun getActivityDescription(): String {
-        return "Мои плейлисты (${PlaylistListManager.playlists.size})"
+    override fun setTitle() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.displayOptions = DISPLAY_SHOW_TITLE
+        supportActionBar?.title = "Мои плейлисты (${PlaylistListManager.playlists.size})"
     }
 
     override fun addCustomBehavior() {

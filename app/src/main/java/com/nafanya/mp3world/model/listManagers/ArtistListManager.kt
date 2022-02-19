@@ -13,7 +13,11 @@ object ArtistListManager {
             artists[artists.indexOf(element)]
                 .playlist?.songList?.add(song)
         } else {
-            element.playlist = Playlist(arrayListOf(song))
+            element.playlist = Playlist(
+                arrayListOf(song),
+                id = 0,
+                name = element.name!!
+            )
             artists.add(element)
         }
     }

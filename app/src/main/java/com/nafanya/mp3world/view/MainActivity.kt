@@ -22,11 +22,13 @@ import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataPro
 import com.nafanya.mp3world.model.listManagers.ArtistListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
+import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -104,9 +106,12 @@ class MainActivity : AppCompatActivity() {
     private fun initMainMenu() {
         binding.allSongs.item.setOnClickListener {
             val songListIntent = Intent(this, SongListActivity::class.java)
-            SongListActivity.newInstance(
-                SongListManager.songList,
-                "Мои песни"
+            SongListViewModel.newInstanceWithPlaylist(
+                Playlist(
+                    SongListManager.songList,
+                    id = 0,
+                    name = "Мои песни"
+                )
             )
             startActivity(songListIntent)
         }
@@ -139,11 +144,7 @@ class MainActivity : AppCompatActivity() {
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     val intent = Intent(this@MainActivity, SongListActivity::class.java)
-                    SongListActivity.newInstance(
-                        arrayListOf(),
-                        query,
-                        query
-                    )
+                    SongListViewModel.newInstanceWithQuery(query)
                     startActivity(intent)
                     return false
                 }

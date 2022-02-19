@@ -1,57 +1,36 @@
 package com.nafanya.mp3world.view.listActivities.songs
 
+import androidx.appcompat.app.ActionBar
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
-import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
-import com.nafanya.mp3world.viewmodel.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class SongListActivity : RecyclerHolderActivity() {
 
+    private var playlist: Playlist? = null
+
     override fun setViewModel() {
         viewModel = ViewModelProvider(this)[SongListViewModel::class.java]
-        if (query != null) {
-            (viewModel as SongListViewModel).startLoading(query!!) {
-                songList = it.songList
-                runOnUiThread {
-                    this.supportActionBar?.title = "$description (${songList.size})"
-                }
-            }
-        } else {
-            viewModel.pageState.value = PageState.IS_LOADED
+        (viewModel as SongListViewModel).getData() {
+            this.playlist = it
         }
     }
 
     override fun setAdapter() {
-        binding.recycler.adapter = SongListAdapter(songList) {
-            ForegroundServiceLiveDataProvider.currentPlaylist.value = Playlist(songList)
+        binding.recycler.adapter = SongListAdapter(playlist!!.songList) {
+            ForegroundServiceLiveDataProvider.currentPlaylist.value = playlist
         }
     }
 
-    override fun getActivityDescription(): String {
-        return if (query == null) {
-            "$description (${songList.size})"
-        } else {
-            description
+    override fun setTitle() {
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
+        val observer = Observer<String> {
+            supportActionBar?.title = it
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
-    }
-
-    companion object {
-
-        private lateinit var songList: ArrayList<Song>
-        private lateinit var description: String
-        private var query: String? = null
-
-        fun newInstance(
-            songList: ArrayList<Song>,
-            description: String,
-            query: String? = null
-        ) {
-            this.songList = songList
-            this.description = description
-            this.query = query
-        }
+        (viewModel as SongListViewModel).title.observe(this, observer)
     }
 }

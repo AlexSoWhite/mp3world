@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.view.listActivities.playlists
 
+import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -10,7 +11,7 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
-import com.nafanya.mp3world.viewmodel.PageState
+import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class AddSongToListActivity : RecyclerHolderActivity() {
@@ -19,8 +20,10 @@ class AddSongToListActivity : RecyclerHolderActivity() {
         binding.recycler.adapter = AddToPlaylistAdapter(SongListManager.songList) {}
     }
 
-    override fun getActivityDescription(): String {
-        return playlist!!.name
+    override fun setTitle() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
+        supportActionBar?.title = playlist!!.name
     }
 
     override fun addCustomBehavior() {

@@ -18,8 +18,8 @@ import com.nafanya.mp3world.databinding.RecyclerHolderActivityBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.OnSwipeListener
-import com.nafanya.mp3world.viewmodel.ListViewModelInterface
-import com.nafanya.mp3world.viewmodel.PageState
+import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
+import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 
 abstract class RecyclerHolderActivity : AppCompatActivity() {
 
@@ -31,14 +31,10 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.recycler_holder_activity)
 
-        // top bar appearance and behavior
-        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
-        supportActionBar?.title = getActivityDescription()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         // subscribing to viewModel
         setViewModel()
         subscribeToViewModel()
+        setTitle()
     }
 
     private fun subscribeToViewModel() {
@@ -135,7 +131,7 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
     // requires child activity to set binding.recycler.adapter
     abstract fun setAdapter()
 
-    abstract fun getActivityDescription(): String
+    abstract fun setTitle()
 
     companion object {
         private const val duration = 500L
