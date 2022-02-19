@@ -108,8 +108,8 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
                 playerView?.player = ForegroundServiceLiveDataProvider.getPlayer()
                 playerView?.repeatToggleModes =
                     RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
-                            RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
-                            RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
+                    RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
+                    RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
             }
         }
         ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(

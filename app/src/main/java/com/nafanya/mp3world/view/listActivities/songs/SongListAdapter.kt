@@ -35,7 +35,7 @@ open class SongListAdapter(
     override fun getItemCount(): Int {
         return list.size
     }
-    
+
     open fun decorateItem(
         binding: SongListItemBinding,
         song: Song

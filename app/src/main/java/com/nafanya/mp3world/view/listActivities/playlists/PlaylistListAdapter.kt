@@ -31,7 +31,7 @@ class PlaylistListAdapter(
     class PlaylistViewHolder(
         itemView: View,
         private val callback: (playlist: Playlist) -> Unit
-    ): RecyclerView.ViewHolder(itemView) {
+    ) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = PlaylistListItemBinding.bind(itemView)
 

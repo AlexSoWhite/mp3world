@@ -21,7 +21,6 @@ import com.nafanya.mp3world.model.foregroundService.ForegroundService
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.ArtistListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
-import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
@@ -75,8 +74,8 @@ class MainActivity : AppCompatActivity() {
                 playerView?.player = ForegroundServiceLiveDataProvider.getPlayer()
                 playerView?.repeatToggleModes =
                     RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
-                            RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
-                            RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
+                    RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
+                    RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
             }
         }
         ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(

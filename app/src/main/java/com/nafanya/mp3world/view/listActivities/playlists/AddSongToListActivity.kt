@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
@@ -15,10 +14,9 @@ import com.nafanya.mp3world.viewmodel.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class AddSongToListActivity : RecyclerHolderActivity() {
-    override fun setAdapter() {
-        binding.recycler.adapter = AddToPlaylistAdapter(SongListManager.songList) {
 
-        }
+    override fun setAdapter() {
+        binding.recycler.adapter = AddToPlaylistAdapter(SongListManager.songList) {}
     }
 
     override fun getActivityDescription(): String {
@@ -27,7 +25,6 @@ class AddSongToListActivity : RecyclerHolderActivity() {
 
     override fun addCustomBehavior() {
         super.addCustomBehavior()
-
     }
 
     override fun setViewModel() {
