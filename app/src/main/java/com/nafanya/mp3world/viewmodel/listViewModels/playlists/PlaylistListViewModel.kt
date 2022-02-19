@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.viewmodel
+package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,15 +8,17 @@ import kotlinx.coroutines.launch
 
 class PlaylistListViewModel : ViewModel() {
 
-    fun addEmptyPlaylistWithName(name: String) {
+    fun addEmptyPlaylistWithName(name: String, callback: (Playlist) -> Unit) {
         viewModelScope.launch {
-            PlaylistListManager.addPlaylist(
-                Playlist(
-                    ArrayList(),
-                    PlaylistListManager.playlists.size,
-                    name
-                )
+            val playlist = Playlist(
+                ArrayList(),
+                PlaylistListManager.playlists.size,
+                name
             )
+            PlaylistListManager.addPlaylist(
+                playlist
+            )
+            callback(playlist)
         }
     }
 }

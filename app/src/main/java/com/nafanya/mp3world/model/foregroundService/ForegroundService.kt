@@ -47,7 +47,7 @@ class ForegroundService : LifecycleService() {
             // start playlist and current song observers
             subscribePlaylist()
             subscribeSong()
-            // add listener that trigger observers to sinc player state with classes throughout the app
+            // add listener that trigger observers to sync player state with classes throughout the app
             player!!.addListener(Listener)
             // add headphones unplugging handler
             player!!.setHandleAudioBecomingNoisy(true)

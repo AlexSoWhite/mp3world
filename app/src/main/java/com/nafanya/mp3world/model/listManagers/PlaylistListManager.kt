@@ -21,4 +21,11 @@ object PlaylistListManager {
         // playlistDao.insert(playlist)
         playlists.add(playlist)
     }
+
+    fun getPlaylistBuName(name: String): Playlist? {
+        playlists.forEach {
+            if (it.name == name) return it
+        }
+        return null
+    }
 }

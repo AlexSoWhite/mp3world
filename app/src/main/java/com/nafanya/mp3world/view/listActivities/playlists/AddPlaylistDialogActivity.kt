@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.AddPlaylistDialogBinding
-import com.nafanya.mp3world.viewmodel.PlaylistListViewModel
+import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
 
 class AddPlaylistDialogActivity : AppCompatActivity() {
 
@@ -31,8 +31,12 @@ class AddPlaylistDialogActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        viewModel.addEmptyPlaylistWithName(text)
-                        finish()
+                        viewModel.addEmptyPlaylistWithName(text) {
+                            val intent = Intent(this, AddSongToListActivity::class.java)
+                            AddSongToListActivity.newInstance(it)
+                            startActivity(intent)
+                            finish()
+                        }
                     }
                     return@OnKeyListener true
                 }

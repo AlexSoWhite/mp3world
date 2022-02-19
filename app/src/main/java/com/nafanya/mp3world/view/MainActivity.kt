@@ -21,6 +21,7 @@ import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.ArtistListManager
+import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Song
@@ -32,61 +33,81 @@ import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var playerView: StyledPlayerControlView
     private lateinit var mainActivityViewModel: MainActivityViewModel
+    private var playerView: StyledPlayerControlView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.displayOptions = DISPLAY_SHOW_TITLE
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        playerView = findViewById(R.id.player_control_view)
-        playerView.showTimeoutMs = 0
-        playerView.isNestedScrollingEnabled = false
         mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
         checkPermissions()
     }
 
+    // part of onCreate
     private fun checkPermissions() {
         val permission = Manifest.permission.READ_EXTERNAL_STORAGE
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(permission), 0)
+                requestPermissions(arrayOf(permission), 0) // triggers onPermissionResult
             } else {
-                mainActivityViewModel.initialize(this)
+                mainActivityViewModel.initializeLists(this)
                 initMainMenu()
-                val observerSong = Observer<Song> {
-                    findViewById<TextView>(R.id.track_title).text = it.title
-                    findViewById<TextView>(R.id.track_artist).text = it.artist
-                }
-                ForegroundServiceLiveDataProvider.currentSong.observe(this, observerSong)
-                val observerPlayer = Observer<Boolean> {
-                    if (it) {
-                        playerView.player = ForegroundServiceLiveDataProvider.getPlayer()
-                        playerView.repeatToggleModes =
-                            RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
-                            RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
-                            RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
-                    }
-                }
-                ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(this, observerPlayer)
-                val intent = Intent(applicationContext, ForegroundService::class.java)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent)
-                }
-                binding.songCount = SongListManager.getSongList().size
-                binding.playlistCount = 0
-                binding.artistCount = ArtistListManager.artists.size
-                binding.albumCount = 0
-                binding.favoriteCount = 0
+                subscribeToPlayerState()
+                initService()
             }
         }
+    }
+
+    private fun subscribeToPlayerState() {
+        // setting view
+        playerView = findViewById(R.id.player_control_view)
+        playerView?.showTimeoutMs = 0
+        playerView?.isNestedScrollingEnabled = false
+        // observe current song state
+        val observerSong = Observer<Song> {
+            findViewById<TextView>(R.id.track_title).text = it.title
+            findViewById<TextView>(R.id.track_artist).text = it.artist
+        }
+        ForegroundServiceLiveDataProvider.currentSong.observe(this, observerSong)
+        // observe player state
+        val observerPlayer = Observer<Boolean> {
+            if (it) {
+                playerView?.player = ForegroundServiceLiveDataProvider.getPlayer()
+                playerView?.repeatToggleModes =
+                    RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
+                            RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
+                            RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
+            }
+        }
+        ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(
+            this,
+            observerPlayer
+        )
+    }
+
+    private fun initService() {
+        // init service
+        val intent = Intent(applicationContext, ForegroundService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.songCount = SongListManager.songList.size
+        binding.playlistCount = PlaylistListManager.playlists.size
+        binding.artistCount = ArtistListManager.artists.size
+        binding.albumCount = 0
+        binding.favoriteCount = 0
     }
 
     private fun initMainMenu() {
         binding.allSongs.item.setOnClickListener {
             val songListIntent = Intent(this, SongListActivity::class.java)
             SongListActivity.newInstance(
-                SongListManager.getSongList(),
+                SongListManager.songList,
                 "Мои песни"
             )
             startActivity(songListIntent)
@@ -111,29 +132,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // setting appBar search view
         menuInflater.inflate(R.menu.search_menu, menu)
         val searchItem = menu?.findItem(R.id.search)
         val searchView: SearchView = searchItem?.actionView as SearchView
+        // setting search dispatcher
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    binding.loader.loader.visibility = View.VISIBLE
-                    binding.mainMenu.visibility = View.INVISIBLE
-                    Downloader.preLoad(query) { playlist ->
-                        playlist?.let {
-                            runOnUiThread {
-                                binding.loader.loader.visibility = View.INVISIBLE
-                                binding.mainMenu.visibility = View.VISIBLE
-                            }
-                            val intent = Intent(this@MainActivity, SongListActivity::class.java)
-                            SongListActivity.newInstance(
-                                it.songList,
-                                query
-                            )
-                            startActivity(intent)
-                            return@let
-                        }
-                    }
+                    val intent = Intent(this@MainActivity, SongListActivity::class.java)
+                    SongListActivity.newInstance(
+                        arrayListOf(),
+                        query,
+                        query
+                    )
+                    startActivity(intent)
                     return false
                 }
                 override fun onQueryTextChange(newText: String): Boolean {

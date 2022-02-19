@@ -11,7 +11,7 @@ import kotlin.collections.ArrayList
 
 object SongListManager {
 
-    private val songList: ArrayList<Song> = ArrayList()
+    var songList: ArrayList<Song> = ArrayList()
 
     private var isInitialized = false
     private const val multiplier = 1000L
@@ -72,9 +72,5 @@ object SongListManager {
             }
             isInitialized = true
         }
-    }
-
-    fun getSongList(): ArrayList<Song> {
-        return songList
     }
 }

@@ -13,35 +13,47 @@ import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataPro
 import com.nafanya.mp3world.model.wrappers.Song
 import kotlin.collections.ArrayList
 
-class SongListAdapter(
+open class SongListAdapter(
     private val list: ArrayList<Song>,
     private val context: LifecycleOwner? = null,
     private val callback: () -> Unit
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {
 
-    private var lastDate: String? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.song_list_item, parent, false)
-        return SongViewHolder(itemView, context)
+        return SongViewHolder(itemView, context) { binding, song ->
+            decorateItem(binding, song)
+        }
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         holder.bind(list[position], callback)
-        if (list[position].date != lastDate) {
-            lastDate = list[position].date
-        }
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
+    
+    open fun decorateItem(
+        binding: SongListItemBinding,
+        song: Song
+    ) {
+        if (song.url != null) {
+            binding.action.visibility = View.VISIBLE
+            binding.action.setOnClickListener {}
+            Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
+        }
+    }
 
     class SongViewHolder(
         itemView: View,
-        private val context: LifecycleOwner?
+        private val context: LifecycleOwner?,
+        private val decorateItem: (
+            binding: SongListItemBinding,
+            song: Song
+        ) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = SongListItemBinding.bind(itemView)
@@ -72,11 +84,10 @@ class SongListAdapter(
                 callback()
                 ForegroundServiceLiveDataProvider.currentSong.value = song
             }
-            if (song.url != null) {
-                binding.action.visibility = View.VISIBLE
-                binding.action.setOnClickListener {}
-                Glide.with(itemView).load(R.drawable.download_icon).into(binding.action)
-            }
+            decorateItem(
+                binding,
+                song
+            )
         }
     }
 

@@ -13,15 +13,15 @@ import kotlin.concurrent.thread
 
 class MainActivityViewModel : ViewModel() {
 
-    fun initialize(context: Context) {
+    fun initializeLists(context: Context) {
         viewModelScope.launch {
             SongListManager.initializeSongList(context)
+            ForegroundServiceLiveDataProvider.currentPlaylist.value =
+                Playlist(SongListManager.songList)
             thread {
                 DatabaseInitializer.init(context)
                 PlaylistListManager.initialize()
-            }
-            ForegroundServiceLiveDataProvider.currentPlaylist.value =
-                Playlist(SongListManager.getSongList())
+            }.join()
         }
     }
 }
