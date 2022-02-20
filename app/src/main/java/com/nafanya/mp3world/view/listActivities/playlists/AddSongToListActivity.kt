@@ -21,7 +21,7 @@ class AddSongToListActivity : RecyclerHolderActivity() {
 
     override fun setAdapter() {
         val observer = Observer<Playlist> {
-            binding.recycler.adapter = AddToPlaylistAdapter(it.songList) {
+            binding.recycler.adapter = AddToPlaylistAdapter(it.songList, this) {
                 ForegroundServiceLiveDataProvider.currentPlaylist.value = it
             }
         }
@@ -40,7 +40,7 @@ class AddSongToListActivity : RecyclerHolderActivity() {
 
     class AddToPlaylistAdapter(
         list: MutableList<Song>,
-        context: LifecycleOwner? = null,
+        context: LifecycleOwner,
         callback: () -> Unit
     ) : SongListAdapter(list, context, callback) {
 

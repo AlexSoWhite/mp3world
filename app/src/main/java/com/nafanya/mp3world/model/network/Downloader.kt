@@ -16,8 +16,8 @@ object Downloader {
     private val client = OkHttpClient()
     private const val prefix = "https://ru.hitmotop.com/search?q="
 
-    fun preLoad(name: String, callback: (Playlist?) -> Unit?) {
-        val url = prefix + name
+    fun preLoad(query: String, callback: (Playlist?) -> Unit?) {
+        val url = prefix + query
         val request = Request.Builder()
             .url(url)
             .build()
@@ -52,7 +52,7 @@ object Downloader {
                         if (songList.isEmpty()) {
                             callback(null)
                         } else {
-                            callback(Playlist(songList))
+                            callback(Playlist(songList, id = 0, name = query))
                         }
                     }
                 }

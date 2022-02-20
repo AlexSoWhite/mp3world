@@ -16,7 +16,7 @@ class SongListActivity : RecyclerHolderActivity() {
 
     override fun setAdapter() {
         val observer = Observer<Playlist> {
-            binding.recycler.adapter = SongListAdapter(it.songList) {
+            binding.recycler.adapter = SongListAdapter(it.songList, this) {
                 ForegroundServiceLiveDataProvider.currentPlaylist.value = it
             }
         }

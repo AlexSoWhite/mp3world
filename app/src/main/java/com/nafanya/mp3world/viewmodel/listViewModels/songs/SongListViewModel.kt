@@ -26,7 +26,6 @@ class SongListViewModel : ListViewModelInterface() {
             query != null -> {
                 title.postValue(query)
                 startLoading(query!!) {
-                    it.name = query!! // TODO: this should be done in Downloader
                     playlist.postValue(it)
                     pageState.postValue(PageState.IS_LOADED)
                 }
@@ -43,7 +42,9 @@ class SongListViewModel : ListViewModelInterface() {
     }
 
     override fun onLoaded() {
-        title.postValue("${playlist.value!!.name} ${'('+playlist.value!!.songList.size.toString()+')'}")
+        title.postValue(
+            "${playlist.value!!.name} ${'(' + playlist.value!!.songList.size.toString() + ')'}"
+        )
     }
 
     companion object {

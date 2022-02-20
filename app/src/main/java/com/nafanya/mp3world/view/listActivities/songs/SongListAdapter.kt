@@ -11,11 +11,10 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.wrappers.Song
-import kotlin.collections.ArrayList
 
 open class SongListAdapter(
     private val list: MutableList<Song>,
-    private val context: LifecycleOwner? = null,
+    private val context: LifecycleOwner,
     private val callback: () -> Unit
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {
 
