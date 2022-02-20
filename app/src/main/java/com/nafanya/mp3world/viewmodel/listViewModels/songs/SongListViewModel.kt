@@ -1,11 +1,17 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.songs
 
+import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
+import java.lang.RuntimeException
 
 class SongListViewModel : ListViewModelInterface() {
+
+    val playlist: MutableLiveData<Playlist> by lazy {
+        MutableLiveData<Playlist>()
+    }
 
     private fun startLoading(query: String, callback: (Playlist) -> Unit) {
         Downloader.preLoad(query) { playlist ->
@@ -15,46 +21,47 @@ class SongListViewModel : ListViewModelInterface() {
         }
     }
 
-    fun getData(callback: (Playlist) -> Unit) {
+    override fun onLoading() {
         when {
             query != null -> {
-                pageState.value = PageState.IS_LOADING
-                title.value = query
+                title.postValue(query)
                 startLoading(query!!) {
-                    it.name = query!!
-                    title.postValue("${it.name} (${it.songList.size})")
+                    it.name = query!! // TODO: this should be done in Downloader
+                    playlist.postValue(it)
                     pageState.postValue(PageState.IS_LOADED)
-                    callback(it)
                 }
             }
-            playlist != null -> {
+            initializingPlaylist != null -> {
+                title.postValue(initializingPlaylist!!.name)
+                playlist.postValue(initializingPlaylist!!)
                 pageState.postValue(PageState.IS_LOADED)
-                title.value = "${playlist!!.name} (${playlist!!.songList.size})"
-                callback(playlist!!)
             }
             else -> {
-                throw(Exception("song list must be initialized with query ot playlist"))
+                throw(RuntimeException("song list must be initialized with query or playlist"))
             }
         }
     }
 
+    override fun onLoaded() {
+        title.postValue("${playlist.value!!.name} ${'('+playlist.value!!.songList.size.toString()+')'}")
+    }
+
     companion object {
 
-        private var playlist: Playlist? = null
+        private var initializingPlaylist: Playlist? = null
         private var query: String? = null
 
         fun newInstanceWithPlaylist(
             playlist: Playlist? = null
         ) {
-            this.playlist = playlist
+            this.initializingPlaylist = playlist
             this.query = null
         }
-
         fun newInstanceWithQuery(
             query: String? = null
         ) {
             this.query = query
-            this.playlist = null
+            this.initializingPlaylist = null
         }
     }
 }

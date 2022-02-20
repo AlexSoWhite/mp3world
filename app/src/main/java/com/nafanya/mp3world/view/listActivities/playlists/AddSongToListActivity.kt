@@ -2,10 +2,12 @@ package com.nafanya.mp3world.view.listActivities.playlists
 
 import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
+import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
@@ -16,8 +18,18 @@ import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class AddSongToListActivity : RecyclerHolderActivity() {
 
+    override fun setViewModel() {
+        viewModel = ViewModelProvider(this)[SongListViewModel::class.java]
+        viewModel.pageState.value = PageState.IS_LOADED
+    }
+
     override fun setAdapter() {
-        binding.recycler.adapter = AddToPlaylistAdapter(SongListManager.songList) {}
+        val observer = Observer<Playlist> {
+            binding.recycler.adapter = AddToPlaylistAdapter(it.songList) {
+                ForegroundServiceLiveDataProvider.currentPlaylist.value = it
+            }
+        }
+        (viewModel as SongListViewModel).playlist.observe(this, observer)
     }
 
     override fun setTitle() {
@@ -30,15 +42,10 @@ class AddSongToListActivity : RecyclerHolderActivity() {
         super.addCustomBehavior()
     }
 
-    override fun setViewModel() {
-        viewModel = ViewModelProvider(this)[SongListViewModel::class.java]
-        viewModel.pageState.value = PageState.IS_LOADED
-    }
-
     class AddToPlaylistAdapter(
-        private val list: ArrayList<Song>,
-        private val context: LifecycleOwner? = null,
-        private val callback: () -> Unit
+        list: MutableList<Song>,
+        context: LifecycleOwner? = null,
+        callback: () -> Unit
     ) : SongListAdapter(list, context, callback) {
 
         override fun decorateItem(binding: SongListItemBinding, song: Song) {

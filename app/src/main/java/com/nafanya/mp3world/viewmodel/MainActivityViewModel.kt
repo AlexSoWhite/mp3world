@@ -16,9 +16,11 @@ class MainActivityViewModel : ViewModel() {
 
     fun initializeLists(context: Context) {
         viewModelScope.launch {
+            // initialize songList
             MediaStoreReader.initializeSongList(context)
+            // use initialized songList to initialize player state
             ForegroundServiceLiveDataProvider.currentPlaylist.value =
-                Playlist(SongListManager.songList)
+                Playlist(SongListManager.songList.value!!)
             thread {
                 DatabaseInitializer.init(context)
                 PlaylistListManager.initialize()

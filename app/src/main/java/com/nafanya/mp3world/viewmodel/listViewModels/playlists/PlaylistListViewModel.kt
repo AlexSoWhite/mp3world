@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
@@ -9,6 +10,10 @@ import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import kotlinx.coroutines.launch
 
 class PlaylistListViewModel : ListViewModelInterface() {
+
+    val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
+        MutableLiveData<MutableList<Playlist>>()
+    }
 
     fun addEmptyPlaylistWithName(name: String, callback: (Playlist) -> Unit) {
         viewModelScope.launch {
@@ -38,6 +43,16 @@ class PlaylistListViewModel : ListViewModelInterface() {
     }
 
     private fun triggerTitle() {
+        title.value = "Мои плейлисты (${PlaylistListManager.playlists.value?.size})"
+    }
+
+    override fun onLoading() {
+        title.postValue("Мои плейлисты")
+        playlists.postValue(PlaylistListManager.playlists.value)
+        pageState.postValue(PageState.IS_LOADED)
+    }
+
+    override fun onLoaded() {
         title.value = "Мои плейлисты (${PlaylistListManager.playlists.value?.size})"
     }
 }

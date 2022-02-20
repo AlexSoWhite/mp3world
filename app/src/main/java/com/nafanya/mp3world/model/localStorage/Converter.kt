@@ -9,8 +9,8 @@ class Converter {
     fun jsonToList(value: String) = Gson().fromJson(
         value,
         Array<Song>::class.java
-    ).toList() as ArrayList<Song>
+    ).toList() as MutableList<Song>
 
     @TypeConverter
-    fun listToJson(value: ArrayList<Song>) = Gson().toJson(value)
+    fun listToJson(value: MutableList<Song>) = Gson().toJson(value)
 }

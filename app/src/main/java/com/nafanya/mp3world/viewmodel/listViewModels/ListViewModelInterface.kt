@@ -11,10 +11,14 @@ enum class PageState {
 abstract class ListViewModelInterface : ViewModel() {
 
     val pageState: MutableLiveData<PageState> by lazy {
-        MutableLiveData<PageState>()
+        MutableLiveData<PageState>(PageState.IS_LOADING)
     }
 
     val title: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+
+    abstract fun onLoading()
+
+    abstract fun onLoaded()
 }

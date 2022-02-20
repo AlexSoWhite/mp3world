@@ -14,7 +14,7 @@ import com.nafanya.mp3world.model.wrappers.Song
 import kotlin.collections.ArrayList
 
 open class SongListAdapter(
-    private val list: ArrayList<Song>,
+    private val list: MutableList<Song>,
     private val context: LifecycleOwner? = null,
     private val callback: () -> Unit
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {

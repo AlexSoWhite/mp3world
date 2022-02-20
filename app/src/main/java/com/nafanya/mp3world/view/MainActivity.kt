@@ -22,6 +22,7 @@ import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataPro
 import com.nafanya.mp3world.model.listManagers.ArtistListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
@@ -96,41 +97,47 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        binding.songCount = SongListManager.songList.size
-        binding.artistCount = ArtistListManager.artists.size
         binding.albumCount = 0
         binding.favoriteCount = 0
     }
 
     private fun initMainMenu() {
         // all songs
-        binding.allSongs.item.setOnClickListener {
-            val songListIntent = Intent(this, SongListActivity::class.java)
-            SongListViewModel.newInstanceWithPlaylist(
-                Playlist(
-                    SongListManager.songList,
-                    id = 0,
-                    name = "Мои песни"
+        val songListObserver = Observer<MutableList<Song>> { songList ->
+            binding.songCount = songList.size
+            binding.allSongs.item.setOnClickListener {
+                val songListIntent = Intent(this, SongListActivity::class.java)
+                SongListViewModel.newInstanceWithPlaylist(
+                    Playlist(
+                        songList,
+                        id = 0,
+                        name = "Мои песни"
+                    )
                 )
-            )
-            startActivity(songListIntent)
+                startActivity(songListIntent)
+            }
         }
+        SongListManager.songList.observe(this, songListObserver)
 
         // playlists
-        val observer = Observer<List<Playlist>> {
+        val playlistsObserver = Observer<MutableList<Playlist>> {
             binding.playlistCount = it.size
+            binding.playlists.item.setOnClickListener {
+                val playlistIntent = Intent(this, PlaylistListActivity::class.java)
+                startActivity(playlistIntent)
+            }
         }
-        PlaylistListManager.playlists.observe(this, observer)
-        binding.playlists.item.setOnClickListener {
-            val playlistIntent = Intent(this, PlaylistListActivity::class.java)
-            startActivity(playlistIntent)
-        }
+        PlaylistListManager.playlists.observe(this, playlistsObserver)
 
         // artists
-        binding.artists.item.setOnClickListener {
-            val artistsIntent = Intent(this, ArtistListActivity::class.java)
-            startActivity(artistsIntent)
+        val artistObserver = Observer<MutableList<Artist>> {
+            binding.artistCount = it.size
+            binding.artists.item.setOnClickListener {
+                val artistsIntent = Intent(this, ArtistListActivity::class.java)
+                startActivity(artistsIntent)
+            }
         }
+        ArtistListManager.artists.observe(this, artistObserver)
     }
 
     override fun onRequestPermissionsResult(

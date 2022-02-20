@@ -11,7 +11,7 @@ object PlaylistListManager {
     private lateinit var db: AppDatabase
     private lateinit var playlistDao: PlaylistDao
     val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
-        MutableLiveData<MutableList<Playlist>>()
+        MutableLiveData<MutableList<Playlist>>(mutableListOf())
     }
 
     fun initialize() {

@@ -10,19 +10,17 @@ import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class SongListActivity : RecyclerHolderActivity() {
 
-    private var playlist: Playlist? = null
-
     override fun setViewModel() {
         viewModel = ViewModelProvider(this)[SongListViewModel::class.java]
-        (viewModel as SongListViewModel).getData() {
-            this.playlist = it
-        }
     }
 
     override fun setAdapter() {
-        binding.recycler.adapter = SongListAdapter(playlist!!.songList) {
-            ForegroundServiceLiveDataProvider.currentPlaylist.value = playlist
+        val observer = Observer<Playlist> {
+            binding.recycler.adapter = SongListAdapter(it.songList) {
+                ForegroundServiceLiveDataProvider.currentPlaylist.value = it
+            }
         }
+        (viewModel as SongListViewModel).playlist.observe(this, observer)
     }
 
     override fun setTitle() {

@@ -52,12 +52,14 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
             when (it) {
 
                 PageState.IS_LOADING -> {
+                    viewModel.onLoading()
                     binding.recyclerWrapper.visibility = View.INVISIBLE
                     binding.playerControlView.visibility = View.INVISIBLE
                     binding.loader.loader.visibility = View.VISIBLE
                 }
 
                 PageState.IS_LOADED -> {
+                    viewModel.onLoaded()
                     binding.recyclerWrapper.visibility = View.VISIBLE
                     binding.playerControlView.visibility = View.VISIBLE
                     binding.loader.loader.visibility = View.INVISIBLE
