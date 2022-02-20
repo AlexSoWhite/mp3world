@@ -67,7 +67,7 @@ class AddSongToListActivity : RecyclerHolderActivity() {
         menuInflater.inflate(R.menu.add_songs_to_playlist_menu, menu)
         val confirm = menu?.findItem(R.id.confirm_adding)
         confirm?.setOnMenuItemClickListener {
-            ForegroundServiceLiveDataProvider.currentPlaylist.value = (viewModel as AddSongToListViewModel).pendingPlaylist.value
+            finish()
             true
         }
         return super.onCreateOptionsMenu(menu)

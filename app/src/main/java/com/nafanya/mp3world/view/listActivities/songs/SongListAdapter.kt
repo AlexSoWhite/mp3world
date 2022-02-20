@@ -62,8 +62,8 @@ open class SongListAdapter(
             callback: () -> Unit
         ) {
             binding.song = song
-            context?.let { context ->
-                val observer = Observer<Song> {
+//            context?.let { context ->
+//                val observer = Observer<Song> {
 //                    if (it.id == song.id) {
 //                        binding.title.alpha = maxAlpha
 //                        binding.artist.alpha = maxAlpha
@@ -73,12 +73,12 @@ open class SongListAdapter(
 //                        binding.artist.alpha = minAlpha
 //                        binding.dateHolder.alpha = minAlpha
 //                    }
-                }
-                ForegroundServiceLiveDataProvider.currentSong.observe(
-                    context,
-                    observer
-                )
-            }
+//                }
+//                ForegroundServiceLiveDataProvider.currentSong.observe(
+//                    context,
+//                    observer
+//                )
+//            }
             binding.songListItem.setOnClickListener {
                 callback()
                 ForegroundServiceLiveDataProvider.currentSong.value = song
