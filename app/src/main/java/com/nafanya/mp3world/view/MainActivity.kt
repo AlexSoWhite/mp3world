@@ -97,13 +97,13 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         binding.songCount = SongListManager.songList.size
-        binding.playlistCount = PlaylistListManager.playlists.size
         binding.artistCount = ArtistListManager.artists.size
         binding.albumCount = 0
         binding.favoriteCount = 0
     }
 
     private fun initMainMenu() {
+        // all songs
         binding.allSongs.item.setOnClickListener {
             val songListIntent = Intent(this, SongListActivity::class.java)
             SongListViewModel.newInstanceWithPlaylist(
@@ -115,10 +115,18 @@ class MainActivity : AppCompatActivity() {
             )
             startActivity(songListIntent)
         }
+
+        // playlists
+        val observer = Observer<List<Playlist>> {
+            binding.playlistCount = it.size
+        }
+        PlaylistListManager.playlists.observe(this, observer)
         binding.playlists.item.setOnClickListener {
             val playlistIntent = Intent(this, PlaylistListActivity::class.java)
             startActivity(playlistIntent)
         }
+
+        // artists
         binding.artists.item.setOnClickListener {
             val artistsIntent = Intent(this, ArtistListActivity::class.java)
             startActivity(artistsIntent)

@@ -13,4 +13,8 @@ abstract class ListViewModelInterface : ViewModel() {
     val pageState: MutableLiveData<PageState> by lazy {
         MutableLiveData<PageState>()
     }
+
+    val title: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 }

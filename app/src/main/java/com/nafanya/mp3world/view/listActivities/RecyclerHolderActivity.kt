@@ -37,6 +37,16 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         setTitle()
     }
 
+    // default for SongListActivity
+    protected open fun setTitle() {
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
+        val observer = Observer<String> {
+            supportActionBar?.title = it
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+        viewModel.title.observe(this, observer)
+    }
+
     private fun subscribeToViewModel() {
         val observer = Observer<PageState> {
             when (it) {
@@ -130,8 +140,6 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
 
     // requires child activity to set binding.recycler.adapter
     abstract fun setAdapter()
-
-    abstract fun setTitle()
 
     companion object {
         private const val duration = 500L
