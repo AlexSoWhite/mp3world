@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.view.listActivities.playlists
 
+import android.view.Menu
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -13,7 +14,6 @@ import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.AddSongToListViewModel
-import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class AddSongToListActivity : RecyclerHolderActivity() {
 
@@ -61,6 +61,16 @@ class AddSongToListActivity : RecyclerHolderActivity() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.add_songs_to_playlist_menu, menu)
+        val confirm = menu?.findItem(R.id.confirm_adding)
+        confirm?.setOnMenuItemClickListener {
+            ForegroundServiceLiveDataProvider.currentPlaylist.value = (viewModel as AddSongToListViewModel).pendingPlaylist.value
+            true
+        }
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onEmpty() {
