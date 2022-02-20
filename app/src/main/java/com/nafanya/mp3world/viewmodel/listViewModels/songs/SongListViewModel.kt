@@ -5,9 +5,10 @@ import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
+import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import java.lang.RuntimeException
 
-class SongListViewModel : ListViewModelInterface() {
+open class SongListViewModel : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()
@@ -22,10 +23,12 @@ class SongListViewModel : ListViewModelInterface() {
     }
 
     override fun onLoading() {
+        val query = SourceProvider.query
+        val initializingPlaylist = SourceProvider.initializingPlaylist
         when {
             query != null -> {
                 title.postValue(query)
-                startLoading(query!!) {
+                startLoading(query) {
                     playlist.postValue(it)
                     if (it.songList.isEmpty()) {
                         pageState.postValue(PageState.IS_EMPTY)
@@ -35,8 +38,8 @@ class SongListViewModel : ListViewModelInterface() {
                 }
             }
             initializingPlaylist != null -> {
-                title.value = initializingPlaylist!!.name
-                playlist.value = initializingPlaylist!!
+                title.value = initializingPlaylist.name
+                playlist.value = initializingPlaylist
                 if (playlist.value?.songList!!.isEmpty()) {
                     pageState.value = PageState.IS_EMPTY
                 } else {
@@ -56,24 +59,5 @@ class SongListViewModel : ListViewModelInterface() {
 
     override fun onEmpty() {
 
-    }
-
-    companion object {
-
-        private var initializingPlaylist: Playlist? = null
-        private var query: String? = null
-
-        fun newInstanceWithPlaylist(
-            playlist: Playlist
-        ) {
-            this.initializingPlaylist = playlist
-            this.query = null
-        }
-        fun newInstanceWithQuery(
-            query: String
-        ) {
-            this.query = query
-            this.initializingPlaylist = null
-        }
     }
 }

@@ -27,6 +27,12 @@
             app:layout_constraintTop_toTopOf="parent"
             android:visibility="gone" />
 
+        <include
+            layout="@layout/add_songs_to_playlist_button"
+            android:id="@+id/add_song_to_playlist"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
@@ -64,6 +70,15 @@
     <include
         android:id="@+id/empty_playlist"
         layout="@layout/empty_playlist_mock"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <include
+        android:id="@+id/empty_song_list"
+        layout="@layout/empty_song_list_mock"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

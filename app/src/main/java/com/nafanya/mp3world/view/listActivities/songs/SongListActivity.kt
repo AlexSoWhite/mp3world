@@ -35,6 +35,6 @@ class SongListActivity : RecyclerHolderActivity() {
 
     override fun onEmpty() {
         super.onEmpty()
-        binding.emptyPlaylist.emptyPlaylist.visibility = View.VISIBLE
+        binding.emptySongList.emptySongList.visibility = View.VISIBLE
     }
 }

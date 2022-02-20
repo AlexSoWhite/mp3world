@@ -29,6 +29,7 @@ import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
+import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             binding.songCount = songList.size
             binding.allSongs.item.setOnClickListener {
                 val songListIntent = Intent(this, SongListActivity::class.java)
-                SongListViewModel.newInstanceWithPlaylist(
+                SourceProvider.newInstanceWithPlaylist(
                     Playlist(
                         songList,
                         id = 0,
@@ -159,7 +160,7 @@ class MainActivity : AppCompatActivity() {
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     val intent = Intent(this@MainActivity, SongListActivity::class.java)
-                    SongListViewModel.newInstanceWithQuery(query)
+                    SourceProvider.newInstanceWithQuery(query)
                     startActivity(intent)
                     return false
                 }

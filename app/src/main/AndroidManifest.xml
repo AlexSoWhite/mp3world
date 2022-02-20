@@ -38,6 +38,8 @@
             android:theme="@style/Theme.CreatePlaylistDialog"/>
         <activity android:name=".view.listActivities.playlists.AddSongToListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".view.listActivities.playlists.PlaylistActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".view.listActivities.artists.ArtistListActivity"
             android:screenOrientation="portrait"/>
         <service android:name=".model.foregroundService.ForegroundService" />

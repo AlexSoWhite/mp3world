@@ -77,8 +77,10 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         binding.recyclerWrapper.visibility = View.VISIBLE
         binding.playerControlView.visibility = View.VISIBLE
         binding.loader.loader.visibility = View.INVISIBLE
+
         binding.emptyPlaylist.emptyPlaylist.visibility = View.INVISIBLE
         binding.emptyPlaylistList.emptyPlaylistList.visibility = View.INVISIBLE
+        binding.emptySongList.emptySongList.visibility = View.INVISIBLE
 
         // subscribing to playerState
         subscribeToPlayerState()

@@ -6,9 +6,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
-import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
+import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
-import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class PlaylistListActivity : RecyclerHolderActivity() {
 
@@ -17,8 +16,8 @@ class PlaylistListActivity : RecyclerHolderActivity() {
             binding.recycler.adapter = PlaylistListAdapter(
                 it
             ) { playlist ->
-                val intent = Intent(this, SongListActivity::class.java)
-                SongListViewModel.newInstanceWithPlaylist(playlist)
+                val intent = Intent(this, PlaylistActivity::class.java)
+                SourceProvider.newInstanceWithPlaylist(playlist)
                 startActivity(intent)
             }
         }
