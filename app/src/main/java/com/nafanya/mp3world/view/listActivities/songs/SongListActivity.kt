@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.view.listActivities.songs
 
+import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,5 +31,10 @@ class SongListActivity : RecyclerHolderActivity() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         (viewModel as SongListViewModel).title.observe(this, observer)
+    }
+
+    override fun onEmpty() {
+        super.onEmpty()
+        binding.emptyPlaylist.emptyPlaylist.visibility = View.VISIBLE
     }
 }

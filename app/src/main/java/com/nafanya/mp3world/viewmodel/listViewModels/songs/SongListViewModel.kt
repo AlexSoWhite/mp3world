@@ -27,13 +27,21 @@ class SongListViewModel : ListViewModelInterface() {
                 title.postValue(query)
                 startLoading(query!!) {
                     playlist.postValue(it)
-                    pageState.postValue(PageState.IS_LOADED)
+                    if (it.songList.isEmpty()) {
+                        pageState.postValue(PageState.IS_EMPTY)
+                    } else {
+                        pageState.postValue(PageState.IS_LOADED)
+                    }
                 }
             }
             initializingPlaylist != null -> {
-                title.postValue(initializingPlaylist!!.name)
-                playlist.postValue(initializingPlaylist!!)
-                pageState.postValue(PageState.IS_LOADED)
+                title.value = initializingPlaylist!!.name
+                playlist.value = initializingPlaylist!!
+                if (playlist.value?.songList!!.isEmpty()) {
+                    pageState.value = PageState.IS_EMPTY
+                } else {
+                    pageState.value = PageState.IS_LOADED
+                }
             }
             else -> {
                 throw(RuntimeException("song list must be initialized with query or playlist"))
@@ -42,9 +50,12 @@ class SongListViewModel : ListViewModelInterface() {
     }
 
     override fun onLoaded() {
-        title.postValue(
+        title.value =
             "${playlist.value!!.name} ${'(' + playlist.value!!.songList.size.toString() + ')'}"
-        )
+    }
+
+    override fun onEmpty() {
+
     }
 
     companion object {
@@ -53,13 +64,13 @@ class SongListViewModel : ListViewModelInterface() {
         private var query: String? = null
 
         fun newInstanceWithPlaylist(
-            playlist: Playlist? = null
+            playlist: Playlist
         ) {
             this.initializingPlaylist = playlist
             this.query = null
         }
         fun newInstanceWithQuery(
-            query: String? = null
+            query: String
         ) {
             this.query = query
             this.initializingPlaylist = null

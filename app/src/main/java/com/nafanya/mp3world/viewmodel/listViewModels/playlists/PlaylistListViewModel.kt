@@ -1,7 +1,6 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
@@ -20,33 +19,35 @@ class PlaylistListViewModel : ListViewModelInterface() {
             name
         )
         PlaylistListManager.addPlaylist(playlist)
-        triggerTitle()
         callback()
+        pageState.value = PageState.IS_LOADING
     }
 
-    fun getData(callback: (MutableList<Playlist>?) -> Unit) {
-        triggerTitle()
-        pageState.value = PageState.IS_LOADED
-        callback(PlaylistListManager.playlists.value)
-    }
+//    fun subscribeToManager() {
+//        val observer = Observer<MutableList<Playlist>> {
+//            triggerTitle()
+//        }
+//    }
 
-    fun subscribeToManager() {
-        val observer = Observer<MutableList<Playlist>> {
-            triggerTitle()
-        }
-    }
-
-    private fun triggerTitle() {
-        title.postValue("Мои плейлисты (${PlaylistListManager.playlists.value?.size})")
-    }
+//    private fun triggerTitle() {
+//        title.postValue("Мои плейлисты (${PlaylistListManager.playlists.value?.size})")
+//    }
 
     override fun onLoading() {
-        title.postValue("Мои плейлисты")
-        playlists.postValue(PlaylistListManager.playlists.value)
-        pageState.postValue(PageState.IS_LOADED)
+        title.value = "Мои плейлисты"
+        playlists.value = PlaylistListManager.playlists.value
+        if (playlists.value!!.isEmpty()) {
+            pageState.value = PageState.IS_EMPTY
+        } else {
+            pageState.value = PageState.IS_LOADED
+        }
     }
 
     override fun onLoaded() {
         title.postValue("Мои плейлисты (${PlaylistListManager.playlists.value?.size})")
+    }
+
+    override fun onEmpty() {
+
     }
 }

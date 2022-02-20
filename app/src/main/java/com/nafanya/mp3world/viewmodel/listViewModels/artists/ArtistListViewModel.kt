@@ -13,11 +13,19 @@ class ArtistListViewModel : ListViewModelInterface() {
     }
 
     override fun onLoading() {
-        artistList.postValue(ArtistListManager.artists.value)
-        pageState.postValue(PageState.IS_LOADED)
+        artistList.value = ArtistListManager.artists.value
+        if (artistList.value!!.isEmpty()) {
+            pageState.value = PageState.IS_EMPTY
+        } else {
+            pageState.value = PageState.IS_LOADED
+        }
     }
 
     override fun onLoaded() {
-        title.postValue("Исполнители (${artistList.value?.size})")
+        title.value = "Исполнители (${artistList.value?.size})"
+    }
+
+    override fun onEmpty() {
+
     }
 }

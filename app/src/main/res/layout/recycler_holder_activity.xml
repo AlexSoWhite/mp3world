@@ -52,5 +52,23 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="invisible"/>
 
+    <include
+        android:id="@+id/empty_playlist_list"
+        layout="@layout/empty_playlists_list_mock"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <include
+        android:id="@+id/empty_playlist"
+        layout="@layout/empty_playlist_mock"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

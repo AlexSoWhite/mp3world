@@ -19,7 +19,7 @@ class ArtistListActivity : RecyclerHolderActivity() {
         val observer = Observer<MutableList<Artist>> {
             binding.recycler.adapter = ArtistListAdapter(it) { artist ->
                 val intent = Intent(this, SongListActivity::class.java)
-                SongListViewModel.newInstanceWithPlaylist(artist.playlist)
+                SongListViewModel.newInstanceWithPlaylist(artist.playlist!!)
                 startActivity(intent)
             }
         }

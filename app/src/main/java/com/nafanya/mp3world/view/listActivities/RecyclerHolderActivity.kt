@@ -51,45 +51,11 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         val observer = Observer<PageState> {
             when (it) {
 
-                PageState.IS_LOADING -> {
-                    viewModel.onLoading()
-                    binding.recyclerWrapper.visibility = View.INVISIBLE
-                    binding.playerControlView.visibility = View.INVISIBLE
-                    binding.loader.loader.visibility = View.VISIBLE
-                }
+                PageState.IS_LOADING -> onLoading()
 
-                PageState.IS_LOADED -> {
-                    viewModel.onLoaded()
-                    binding.recyclerWrapper.visibility = View.VISIBLE
-                    binding.playerControlView.visibility = View.VISIBLE
-                    binding.loader.loader.visibility = View.INVISIBLE
+                PageState.IS_LOADED -> onLoaded()
 
-                    // subscribing to playerState
-                    subscribeToPlayerState()
-
-                    // list setting
-                    setAdapter()
-                    binding.recycler.layoutManager = LinearLayoutManager(this)
-                    binding.recycler.addItemDecoration(
-                        DividerItemDecoration(
-                            this,
-                            DividerItemDecoration.VERTICAL
-                        )
-                    )
-
-                    OnSwipeListener(binding.recycler) {
-                        this.finish()
-                    }
-
-                    // custom options
-                    addCustomBehavior()
-
-                    // animate elements arrive in list
-                    val alphaAnimation = AlphaAnimation(0.0f, 1.0f)
-                    alphaAnimation.duration = duration
-                    alphaAnimation.startOffset = startOffset
-                    binding.recycler.startAnimation(alphaAnimation)
-                }
+                PageState.IS_EMPTY -> onEmpty()
 
                 null -> {
                     // TODO display error
@@ -97,6 +63,55 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
             }
         }
         viewModel.pageState.observe(this, observer)
+    }
+
+    open fun onLoading() {
+        viewModel.onLoading()
+        binding.recyclerWrapper.visibility = View.INVISIBLE
+        binding.playerControlView.visibility = View.INVISIBLE
+        binding.loader.loader.visibility = View.VISIBLE
+    }
+
+    open fun onLoaded() {
+        viewModel.onLoaded()
+        binding.recyclerWrapper.visibility = View.VISIBLE
+        binding.playerControlView.visibility = View.VISIBLE
+        binding.loader.loader.visibility = View.INVISIBLE
+        binding.emptyPlaylist.emptyPlaylist.visibility = View.INVISIBLE
+        binding.emptyPlaylistList.emptyPlaylistList.visibility = View.INVISIBLE
+
+        // subscribing to playerState
+        subscribeToPlayerState()
+
+        // list setting
+        setAdapter()
+        binding.recycler.layoutManager = LinearLayoutManager(this)
+        binding.recycler.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+
+        OnSwipeListener(binding.recycler) {
+            this.finish()
+        }
+
+        // custom options
+        addCustomBehavior()
+
+        // animate elements arrive in list
+        val alphaAnimation = AlphaAnimation(0.0f, 1.0f)
+        alphaAnimation.duration = duration
+        alphaAnimation.startOffset = startOffset
+        binding.recycler.startAnimation(alphaAnimation)
+    }
+
+    open fun onEmpty() {
+        viewModel.onEmpty()
+        binding.loader.loader.visibility = View.INVISIBLE
+        binding.playerControlView.visibility = View.VISIBLE
+        subscribeToPlayerState()
     }
 
     private fun subscribeToPlayerState() {

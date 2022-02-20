@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 
 enum class PageState {
     IS_LOADING,
-    IS_LOADED
+    IS_LOADED,
+    IS_EMPTY
 }
 
 abstract class ListViewModelInterface : ViewModel() {
@@ -21,4 +22,6 @@ abstract class ListViewModelInterface : ViewModel() {
     abstract fun onLoading()
 
     abstract fun onLoaded()
+
+    abstract fun onEmpty()
 }
