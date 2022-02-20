@@ -28,6 +28,7 @@ class PlaylistListActivity : RecyclerHolderActivity() {
         binding.addPlaylist.addPlaylist.visibility = View.VISIBLE
         binding.addPlaylist.addPlaylist.setOnClickListener {
             val intent = Intent(this, AddPlaylistDialogActivity::class.java)
+            AddPlaylistDialogActivity.setViewModel(viewModel as PlaylistListViewModel)
             startActivity(intent)
         }
     }

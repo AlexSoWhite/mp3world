@@ -15,19 +15,15 @@ class PlaylistListViewModel : ListViewModelInterface() {
         MutableLiveData<MutableList<Playlist>>()
     }
 
-    fun addEmptyPlaylistWithName(name: String, callback: (Playlist) -> Unit) {
-        viewModelScope.launch {
-            val playlist = Playlist(
-                ArrayList(),
-                PlaylistListManager.playlists.value!!.size,
-                name
-            )
-            PlaylistListManager.addPlaylist(
-                playlist
-            )
-            triggerTitle()
-            callback(playlist)
-        }
+    fun addEmptyPlaylistWithName(name: String, callback: () -> Unit) {
+        val playlist = Playlist(
+            mutableListOf(),
+            PlaylistListManager.playlists.value!!.size,
+            name
+        )
+        PlaylistListManager.addPlaylist(playlist)
+        triggerTitle()
+        callback()
     }
 
     fun getData(callback: (MutableList<Playlist>?) -> Unit) {
@@ -43,7 +39,7 @@ class PlaylistListViewModel : ListViewModelInterface() {
     }
 
     private fun triggerTitle() {
-        title.value = "Мои плейлисты (${PlaylistListManager.playlists.value?.size})"
+        title.postValue("Мои плейлисты (${PlaylistListManager.playlists.value?.size})")
     }
 
     override fun onLoading() {
@@ -53,6 +49,6 @@ class PlaylistListViewModel : ListViewModelInterface() {
     }
 
     override fun onLoaded() {
-        title.value = "Мои плейлисты (${PlaylistListManager.playlists.value?.size})"
+        title.postValue("Мои плейлисты (${PlaylistListManager.playlists.value?.size})")
     }
 }

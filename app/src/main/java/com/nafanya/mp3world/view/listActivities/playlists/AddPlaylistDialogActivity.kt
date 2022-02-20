@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.view.listActivities.playlists
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -19,7 +18,6 @@ class AddPlaylistDialogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.add_playlist_dialog)
-        val viewModel = ViewModelProvider(this)[PlaylistListViewModel::class.java]
         binding.input.setOnKeyListener(
             View.OnKeyListener { _, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
@@ -32,9 +30,11 @@ class AddPlaylistDialogActivity : AppCompatActivity() {
                         ).show()
                     } else {
                         viewModel.addEmptyPlaylistWithName(text) {
+                            /*
                             val intent = Intent(this, AddSongToListActivity::class.java)
                             AddSongToListActivity.newInstance(it)
                             startActivity(intent)
+                             */
                             finish()
                         }
                     }
@@ -43,5 +43,14 @@ class AddPlaylistDialogActivity : AppCompatActivity() {
                 false
             }
         )
+    }
+
+    companion object {
+
+        private lateinit var viewModel: PlaylistListViewModel
+
+        fun setViewModel(viewModel: PlaylistListViewModel) {
+            this.viewModel = viewModel
+        }
     }
 }

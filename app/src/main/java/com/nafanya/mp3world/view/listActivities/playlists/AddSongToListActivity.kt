@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.view.listActivities.playlists
 
-import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -8,19 +7,16 @@ import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
-import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
-import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class AddSongToListActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {
         viewModel = ViewModelProvider(this)[SongListViewModel::class.java]
-        viewModel.pageState.value = PageState.IS_LOADED
     }
 
     override fun setAdapter() {
@@ -32,11 +28,11 @@ class AddSongToListActivity : RecyclerHolderActivity() {
         (viewModel as SongListViewModel).playlist.observe(this, observer)
     }
 
-    override fun setTitle() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
-        supportActionBar?.title = playlist!!.name
-    }
+//    override fun setTitle() {
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
+//        supportActionBar?.title = playlist!!.name
+//    }
 
     override fun addCustomBehavior() {
         super.addCustomBehavior()

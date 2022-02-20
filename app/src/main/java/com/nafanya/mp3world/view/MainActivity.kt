@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                 requestPermissions(arrayOf(permission), 0) // triggers onPermissionResult
             } else {
                 mainActivityViewModel.initializeLists(this)
-                initMainMenu()
                 subscribeToPlayerState()
                 initService()
             }
@@ -97,6 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        initMainMenu()
         binding.albumCount = 0
         binding.favoriteCount = 0
     }
