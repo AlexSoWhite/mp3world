@@ -4,17 +4,27 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.listManagers.MediaStoreReader
+import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.localStorage.DatabaseInitializer
 import com.nafanya.mp3world.model.wrappers.Playlist
+import kotlin.concurrent.thread
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {
 
-    fun initialize(context: Context) {
+    fun initializeLists(context: Context) {
         viewModelScope.launch {
-            SongListManager.initializeSongList(context)
+            // initialize songList
+            MediaStoreReader.initializeSongList(context)
+            // use initialized songList to initialize player state
             ForegroundServiceLiveDataProvider.currentPlaylist.value =
-                Playlist(SongListManager.getSongList())
+                Playlist(SongListManager.songList.value!!)
+            thread {
+                DatabaseInitializer.init(context)
+                PlaylistListManager.initialize()
+            }.join()
         }
     }
 }

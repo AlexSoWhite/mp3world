@@ -2,20 +2,36 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient">
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/recycler_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="50dp"
         android:paddingBottom="100dp"
         android:paddingHorizontal="30dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            layout="@layout/add_playlist_button"
+            android:id="@+id/add_playlist"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/add_songs_to_playlist_button"
+            android:id="@+id/add_song_to_playlist"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
@@ -23,7 +39,7 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"/>
 
-    </FrameLayout>
+    </LinearLayout>
 
     <com.google.android.exoplayer2.ui.StyledPlayerControlView
         android:id="@+id/player_control_view"
@@ -32,6 +48,42 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <include
+        layout="@layout/loader"
+        android:id="@+id/loader"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
+    <include
+        android:id="@+id/empty_playlist_list"
+        layout="@layout/empty_playlists_list_mock"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <include
+        android:id="@+id/empty_playlist"
+        layout="@layout/empty_playlist_mock"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <include
+        android:id="@+id/empty_song_list"
+        layout="@layout/empty_song_list_mock"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

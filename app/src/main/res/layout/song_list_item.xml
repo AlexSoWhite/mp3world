@@ -58,11 +58,11 @@
         </LinearLayout>
 
         <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/download"
+                android:id="@+id/action"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginEnd="10dp"
-                android:src="@drawable/download_icon"
+                tools:src="@drawable/download_icon"
                 android:clickable="true"
                 android:focusable="true"
                 android:visibility="invisible"

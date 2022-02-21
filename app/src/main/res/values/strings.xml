@@ -9,4 +9,8 @@
     <string name="name">mp3world</string>
     <string name="description">mp3world</string>
     <string name="loading">загрузка</string>
+    <string name="add_songs">добавить композиции</string>
+    <string name="no_playlists">создать плейлист</string>
+    <string name="no_songs">нет песен</string>
+    <string name="add_playlist">создать плейлист</string>
 </resources>
