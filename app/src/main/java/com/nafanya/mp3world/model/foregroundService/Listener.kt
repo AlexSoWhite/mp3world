@@ -18,4 +18,8 @@ object Listener : Player.Listener {
             ForegroundServiceLiveDataProvider.currentSong.value = song
         }
     }
+
+    override fun onIsPlayingChanged(isPlaying: Boolean) {
+        ForegroundServiceLiveDataProvider.isPlaying.value = isPlaying
+    }
 }

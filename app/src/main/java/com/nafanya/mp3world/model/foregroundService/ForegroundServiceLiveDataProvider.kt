@@ -19,6 +19,10 @@ object ForegroundServiceLiveDataProvider {
         MutableLiveData<Boolean>(false)
     }
 
+    val isPlaying: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
+    }
+
     private var player: ExoPlayer? = null
 
     fun setPlayer(player: ExoPlayer?) {
