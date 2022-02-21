@@ -43,6 +43,8 @@ open class SongListAdapter(
             binding.action.visibility = View.VISIBLE
             binding.action.setOnClickListener {}
             Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
+        } else {
+            binding.action.visibility = View.GONE
         }
     }
 
