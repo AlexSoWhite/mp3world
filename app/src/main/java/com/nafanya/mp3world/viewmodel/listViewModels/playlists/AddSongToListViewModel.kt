@@ -22,7 +22,7 @@ class AddSongToListViewModel : SongListViewModel() {
     }
 
     override fun onEmpty() {
-
+        title.value = passedPlaylist.name
     }
 
     fun addSong(song: Song) {

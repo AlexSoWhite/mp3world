@@ -21,6 +21,7 @@ import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 
+@Suppress("TooManyFunctions")
 abstract class RecyclerHolderActivity : AppCompatActivity() {
 
     protected lateinit var binding: RecyclerHolderActivityBinding

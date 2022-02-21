@@ -1,12 +1,10 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
-import kotlinx.coroutines.launch
 
 class PlaylistListViewModel : ListViewModelInterface() {
 
@@ -50,7 +48,7 @@ class PlaylistListViewModel : ListViewModelInterface() {
     }
 
     override fun onEmpty() {
-
+        title.value = "Мои плейлисты"
     }
 
     fun updatePlaylist(playlist: Playlist) {

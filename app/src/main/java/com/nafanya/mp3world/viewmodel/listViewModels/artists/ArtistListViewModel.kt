@@ -26,6 +26,6 @@ class ArtistListViewModel : ListViewModelInterface() {
     }
 
     override fun onEmpty() {
-
+        title.value = "Исполнители"
     }
 }

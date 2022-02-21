@@ -8,7 +8,6 @@ import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import com.nafanya.mp3world.viewmodel.listViewModels.artists.ArtistListViewModel
-import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class ArtistListActivity : RecyclerHolderActivity() {
 

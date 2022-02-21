@@ -30,7 +30,6 @@ import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
-import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class MainActivity : AppCompatActivity() {
 
