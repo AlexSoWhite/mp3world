@@ -63,7 +63,9 @@ open class SongListAdapter(
         ) {
             binding.song = song
             val isPlayingObserver = Observer<Boolean> { isPlaying ->
-                if (isPlaying && ForegroundServiceLiveDataProvider.currentSong.value?.id == song.id) {
+                if (isPlaying &&
+                    ForegroundServiceLiveDataProvider.currentSong.value?.id == song.id
+                ) {
                     Glide.with(binding.playingIndicator)
                         .load(R.drawable.pause)
                         .into(binding.playingIndicator)
