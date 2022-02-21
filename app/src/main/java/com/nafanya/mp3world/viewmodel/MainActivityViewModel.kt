@@ -7,7 +7,7 @@ import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataPro
 import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
-import com.nafanya.mp3world.model.localStorage.DatabaseInitializer
+import com.nafanya.mp3world.model.localStorage.DatabaseHolder
 import com.nafanya.mp3world.model.wrappers.Playlist
 import kotlin.concurrent.thread
 import kotlinx.coroutines.launch
@@ -22,8 +22,9 @@ class MainActivityViewModel : ViewModel() {
             ForegroundServiceLiveDataProvider.currentPlaylist.value =
                 Playlist(SongListManager.songList.value!!)
             thread {
-                DatabaseInitializer.init(context)
+                DatabaseHolder.init(context)
                 PlaylistListManager.initialize()
+                SongListManager.appendLocalSongs()
             }.join()
         }
     }

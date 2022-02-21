@@ -1,23 +1,20 @@
 package com.nafanya.mp3world.model.listManagers
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.model.localStorage.AppDatabase
-import com.nafanya.mp3world.model.localStorage.DatabaseInitializer
+import com.nafanya.mp3world.model.localStorage.DatabaseHolder
 import com.nafanya.mp3world.model.localStorage.PlaylistDao
 import com.nafanya.mp3world.model.wrappers.Playlist
 import kotlin.concurrent.thread
 
 object PlaylistListManager {
 
-    private lateinit var db: AppDatabase
     private lateinit var playlistDao: PlaylistDao
     val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
         MutableLiveData<MutableList<Playlist>>(mutableListOf())
     }
 
     fun initialize() {
-        db = DatabaseInitializer.db
-        playlistDao = db.playlistDao()
+        playlistDao = DatabaseHolder.db.playlistDao()
         playlists.postValue(playlistDao.getAll())
     }
 
