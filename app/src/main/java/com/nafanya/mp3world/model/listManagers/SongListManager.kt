@@ -5,7 +5,7 @@ import com.nafanya.mp3world.model.localStorage.DatabaseHolder
 import com.nafanya.mp3world.model.localStorage.SongListDao
 import com.nafanya.mp3world.model.wrappers.Song
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import kotlin.concurrent.thread
 
 object SongListManager {

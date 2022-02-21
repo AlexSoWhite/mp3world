@@ -10,7 +10,8 @@ import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import java.lang.RuntimeException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class SearchSongListActivityViewModel : ListViewModelInterface() {
 
@@ -63,13 +64,9 @@ class SearchSongListActivityViewModel : ListViewModelInterface() {
         }
     }
 
-    override fun onLoaded() {
+    override fun onLoaded() {}
 
-    }
-
-    override fun onEmpty() {
-
-    }
+    override fun onEmpty() {}
 
     fun deleteSongFromLocalStorage(song: Song) {
         SongListManager.deleteFromStorage(song)
