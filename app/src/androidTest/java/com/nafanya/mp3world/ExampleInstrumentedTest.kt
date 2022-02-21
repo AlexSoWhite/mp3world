@@ -1,20 +1,20 @@
 package com.nafanya.mp3world
 
 import androidx.room.migration.Migration
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.nafanya.mp3world.model.localStorage.AppDatabase
 import com.nafanya.mp3world.model.localStorage.DatabaseHolder
 import com.nafanya.mp3world.model.localStorage.SongListDao
 import com.nafanya.mp3world.model.wrappers.Song
+import java.io.IOException
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -61,7 +61,8 @@ class MigrationTest {
         // Migration from 1 to 2, Room 2.1.0
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("""
+                database.execSQL(
+                    """
                     CREATE TABLE Song (
                         `id` INTEGER PRIMARY KEY NOT NULL,
                         `title` TEXT,
@@ -69,11 +70,14 @@ class MigrationTest {
                         `date` TEXT,
                         `url` TEXT
                     )
-                """.trimIndent())
-                database.execSQL("""
+                    """.trimIndent()
+                )
+                database.execSQL(
+                    """
                     INSERT into Song (id, title, artist, date, url)
                     VALUES ("${song.id}", "${song.title}", "${song.artist}", "${song.date}", "${song.url}")
-                """.trimIndent())
+                    """.trimIndent()
+                )
             }
         }
 
@@ -100,5 +104,4 @@ class SongListStorageTest {
     fun testAdd(song: Song) {
         songListDao.insert(song)
     }
-
 }

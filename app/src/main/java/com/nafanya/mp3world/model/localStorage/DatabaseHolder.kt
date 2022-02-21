@@ -11,7 +11,8 @@ object DatabaseHolder {
 
     private val MIGRATION_1_2 = object : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("""
+            database.execSQL(
+                """
                     CREATE TABLE Song (
                         `id` INTEGER PRIMARY KEY NOT NULL,
                         `title` TEXT,
@@ -19,7 +20,8 @@ object DatabaseHolder {
                         `date` TEXT,
                         `url` TEXT
                     )
-                """.trimIndent())
+                """.trimIndent()
+            )
         }
     }
 
