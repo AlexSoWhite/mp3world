@@ -54,7 +54,7 @@ class PlaylistListViewModel : ListViewModelInterface() {
     fun updatePlaylist(playlist: Playlist) {
         val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
         if (index != -1) {
-            PlaylistListManager.playlists.value!![index] = playlist
+            PlaylistListManager.updatePlaylist(playlist)
             playlists.value = PlaylistListManager.playlists.value
             if (PlaylistListManager.playlists.value!!.isEmpty()) {
                 pageState.value = PageState.IS_EMPTY

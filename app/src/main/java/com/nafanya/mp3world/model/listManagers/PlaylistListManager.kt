@@ -5,6 +5,7 @@ import com.nafanya.mp3world.model.localStorage.AppDatabase
 import com.nafanya.mp3world.model.localStorage.DatabaseInitializer
 import com.nafanya.mp3world.model.localStorage.PlaylistDao
 import com.nafanya.mp3world.model.wrappers.Playlist
+import kotlin.concurrent.thread
 
 object PlaylistListManager {
 
@@ -21,8 +22,26 @@ object PlaylistListManager {
     }
 
     fun addPlaylist(playlist: Playlist) {
-        // playlistDao.insert(playlist)
         playlists.value?.add(playlist)
+        thread {
+            playlistDao.insert(playlist)
+        }
+    }
+
+    fun updatePlaylist(playlist: Playlist) {
+        val index = playlists.value!!.indexOf(playlist)
+        if (index != -1) {
+            playlists.value!![index] = playlist
+            playlists.value = playlists.value
+            thread {
+                playlistDao.update(playlist)
+            }
+            if (PlaylistListManager.playlists.value!!.isEmpty()) {
+
+            } else {
+
+            }
+        }
     }
 
     fun getPlaylistByName(name: String): Playlist? {

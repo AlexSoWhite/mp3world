@@ -6,10 +6,14 @@ import com.nafanya.mp3world.model.wrappers.Song
 
 class Converter {
     @TypeConverter
-    fun jsonToList(value: String) = Gson().fromJson(
-        value,
-        Array<Song>::class.java
-    ).toList() as MutableList<Song>
+    fun jsonToList(value: String): MutableList<Song> {
+        val list = Gson().fromJson(
+            value,
+            Array<Song>::class.java
+        ).toList()
+        return if (list.isNotEmpty()) list as MutableList<Song>
+        else mutableListOf()
+    }
 
     @TypeConverter
     fun listToJson(value: MutableList<Song>) = Gson().toJson(value)
