@@ -1,10 +1,12 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
+import kotlinx.coroutines.launch
 
 class PlaylistListViewModel : ListViewModelInterface() {
 
@@ -49,5 +51,18 @@ class PlaylistListViewModel : ListViewModelInterface() {
 
     override fun onEmpty() {
 
+    }
+
+    fun updatePlaylist(playlist: Playlist) {
+        val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
+        if (index != -1) {
+            PlaylistListManager.playlists.value!![index] = playlist
+            playlists.value = PlaylistListManager.playlists.value
+            if (PlaylistListManager.playlists.value!!.isEmpty()) {
+                pageState.value = PageState.IS_EMPTY
+            } else {
+                pageState.value = PageState.IS_LOADED
+            }
+        }
     }
 }

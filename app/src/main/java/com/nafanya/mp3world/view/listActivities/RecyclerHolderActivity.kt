@@ -112,6 +112,8 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
     open fun onEmpty() {
         viewModel.onEmpty()
         binding.loader.loader.visibility = View.INVISIBLE
+        binding.addSongToPlaylist.addSongToPlaylist.visibility = View.GONE
+        binding.addPlaylist.addPlaylist.visibility = View.GONE
         binding.playerControlView.visibility = View.VISIBLE
         subscribeToPlayerState()
     }

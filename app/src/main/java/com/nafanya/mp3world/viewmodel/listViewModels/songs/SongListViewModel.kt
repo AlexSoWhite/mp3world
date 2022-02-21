@@ -58,7 +58,7 @@ open class SongListViewModel : ListViewModelInterface() {
     }
 
     override fun onEmpty() {
-
+        title.value = playlist.value!!.name
     }
 
     fun updateData(arg: Playlist) {

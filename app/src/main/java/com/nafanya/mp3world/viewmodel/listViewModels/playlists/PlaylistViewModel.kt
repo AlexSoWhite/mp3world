@@ -7,5 +7,15 @@ class PlaylistViewModel : SongListViewModel() {
 
     fun resetPlaylist(playlist: Playlist) {
         updateData(playlist)
+        parentViewModel.updatePlaylist(playlist)
+    }
+
+    companion object {
+
+        private lateinit var parentViewModel: PlaylistListViewModel
+
+        fun newInstance(parentViewModel: PlaylistListViewModel) {
+            this.parentViewModel = parentViewModel
+        }
     }
 }

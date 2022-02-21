@@ -46,7 +46,13 @@ class AddSongToListViewModel : SongListViewModel() {
 
         fun newInstance(passedViewModel: PlaylistViewModel) {
             this.passedViewModel = passedViewModel
-            this.passedPlaylist = passedViewModel.playlist.value!!
+            val tempSongList: MutableList<Song> = mutableListOf()
+            passedViewModel.playlist.value!!.songList.forEach {
+                tempSongList.add(it)
+            }
+            this.passedPlaylist = passedViewModel.playlist.value!!.copy(
+                songList = tempSongList
+            )
         }
     }
 }

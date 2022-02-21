@@ -8,6 +8,7 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
+import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
 
 class PlaylistListActivity : RecyclerHolderActivity() {
 
@@ -18,6 +19,7 @@ class PlaylistListActivity : RecyclerHolderActivity() {
             ) { playlist ->
                 val intent = Intent(this, PlaylistActivity::class.java)
                 SourceProvider.newInstanceWithPlaylist(playlist)
+                PlaylistViewModel.newInstance(viewModel as PlaylistListViewModel)
                 startActivity(intent)
             }
         }
