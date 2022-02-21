@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
@@ -47,7 +48,7 @@ open class SongListAdapter(
 
     class SongViewHolder(
         itemView: View,
-        private val context: LifecycleOwner?,
+        private val context: LifecycleOwner,
         private val decorateItem: (
             binding: SongListItemBinding,
             song: Song
@@ -61,6 +62,24 @@ open class SongListAdapter(
             callback: () -> Unit
         ) {
             binding.song = song
+            val isPlayingObserver = Observer<Boolean> { isPlaying ->
+                if (isPlaying &&
+                    ForegroundServiceLiveDataProvider.currentSong.value?.id == song.id
+                ) {
+                    Glide.with(binding.playingIndicator)
+                        .load(R.drawable.pause)
+                        .into(binding.playingIndicator)
+                } else if (!isPlaying) {
+                    Glide.with(binding.playingIndicator)
+                        .load(R.drawable.play)
+                        .into(binding.playingIndicator)
+                } else {
+                    Glide.with(binding.playingIndicator)
+                        .load(R.drawable.play)
+                        .into(binding.playingIndicator)
+                }
+            }
+            ForegroundServiceLiveDataProvider.isPlaying.observe(context, isPlayingObserver)
             binding.songListItem.setOnClickListener {
                 callback()
                 ForegroundServiceLiveDataProvider.currentSong.value = song
