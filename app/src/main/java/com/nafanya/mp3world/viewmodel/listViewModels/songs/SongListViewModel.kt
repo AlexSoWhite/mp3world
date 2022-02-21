@@ -23,12 +23,12 @@ open class SongListViewModel : ListViewModelInterface() {
     }
 
     override fun onLoading() {
-        val query = SourceProvider.query
-        val initializingPlaylist = SourceProvider.initializingPlaylist
+        val initializingQuery = SourceProvider.getQuery()
+        val initializingPlaylist = SourceProvider.getPlaylist()
         when {
-            query != null -> {
-                title.postValue(query)
-                startLoading(query) {
+            initializingQuery != null -> {
+                title.postValue(initializingQuery)
+                startLoading(initializingQuery) {
                     playlist.postValue(it)
                     if (it.songList.isEmpty()) {
                         pageState.postValue(PageState.IS_EMPTY)
@@ -59,5 +59,14 @@ open class SongListViewModel : ListViewModelInterface() {
 
     override fun onEmpty() {
 
+    }
+
+    fun updateData(arg: Playlist) {
+        playlist.value = arg
+        if (playlist.value!!.songList.isEmpty()) {
+            pageState.value = PageState.IS_EMPTY
+        } else {
+            pageState.value = PageState.IS_LOADED
+        }
     }
 }

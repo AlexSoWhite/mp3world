@@ -24,4 +24,8 @@ abstract class ListViewModelInterface : ViewModel() {
     abstract fun onLoaded()
 
     abstract fun onEmpty()
+//
+//    abstract fun onDataAdded(arg: Any)
+//
+//    abstract fun onDataRemoved(arg: Any)
 }

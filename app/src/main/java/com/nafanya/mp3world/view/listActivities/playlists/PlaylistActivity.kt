@@ -11,12 +11,13 @@ import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.AddSongToListViewModel
+import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class PlaylistActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {
-        viewModel = ViewModelProvider(this)[SongListViewModel::class.java]
+        viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
     }
 
     override fun setAdapter() {
@@ -55,7 +56,7 @@ class PlaylistActivity : RecyclerHolderActivity() {
                 name = (viewModel as SongListViewModel).playlist.value!!.name
             )
         )
-        AddSongToListViewModel.newInstance((viewModel as SongListViewModel).playlist.value!!)
+        AddSongToListViewModel.newInstance(viewModel as PlaylistViewModel)
         return intent
     }
 }

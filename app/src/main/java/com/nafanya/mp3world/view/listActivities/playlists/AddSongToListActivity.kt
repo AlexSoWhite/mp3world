@@ -42,13 +42,13 @@ class AddSongToListActivity : RecyclerHolderActivity() {
     ) : SongListAdapter(list, context, callback) {
 
         override fun decorateItem(binding: SongListItemBinding, song: Song) {
-            viewModel.pendingPlaylist.value?.songList?.forEach {
-                Glide.with(binding.action).load(R.drawable.done).into(binding.action)
-                if (it.id == song.id) return
-            }
+            var isAdded = viewModel.isAdded(song)
             binding.action.visibility = View.VISIBLE
-            Glide.with(binding.action).load(R.drawable.add).into(binding.action)
-            var isAdded = false
+            if (isAdded) {
+                Glide.with(binding.action).load(R.drawable.done).into(binding.action)
+            } else {
+                Glide.with(binding.action).load(R.drawable.add).into(binding.action)
+            }
             binding.action.setOnClickListener {
                 isAdded = if (!isAdded) {
                     viewModel.addSong(song)
@@ -67,6 +67,7 @@ class AddSongToListActivity : RecyclerHolderActivity() {
         menuInflater.inflate(R.menu.add_songs_to_playlist_menu, menu)
         val confirm = menu?.findItem(R.id.confirm_adding)
         confirm?.setOnMenuItemClickListener {
+            (viewModel as AddSongToListViewModel).confirmChanges()
             finish()
             true
         }

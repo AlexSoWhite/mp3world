@@ -5,18 +5,37 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 object SourceProvider {
 
     var initializingPlaylist: Playlist? = null
-    var query: String? = null
+    var initializingQuery: String? = null
 
     fun newInstanceWithPlaylist(
         playlist: Playlist
     ) {
         this.initializingPlaylist = playlist
-        this.query = null
+        this.initializingQuery = null
     }
+
     fun newInstanceWithQuery(
         query: String
     ) {
-        this.query = query
+        this.initializingQuery = query
         this.initializingPlaylist = null
+    }
+
+    fun getPlaylist(): Playlist? {
+        if (this.initializingPlaylist != null) {
+            val playlist = this.initializingPlaylist
+            this.initializingPlaylist = null
+            return playlist
+        }
+        return null
+    }
+
+    fun getQuery(): String? {
+        if (this.initializingQuery != null) {
+            val query = this.initializingQuery
+            this.initializingQuery = null
+            return query
+        }
+        return null
     }
 }
