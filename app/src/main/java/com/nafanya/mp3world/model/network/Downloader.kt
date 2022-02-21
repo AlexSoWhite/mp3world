@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.model.network
 
 import android.content.Context
+import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
@@ -29,7 +30,9 @@ object Downloader {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
+                    var count: Long = 0
                     response.body?.let Playlist@{
+                        count++
                         val doc = Jsoup.parseBodyFragment(it.string())
                         val songList: ArrayList<Song> = arrayListOf()
                         doc.getElementsByClass("track__info").forEach { elem ->
@@ -41,7 +44,7 @@ object Downloader {
                                 .toString()
                             songList.add(
                                 Song(
-                                    id = 0,
+                                    id = SongListManager.urlBasedCount + count,
                                     title = title,
                                     artist = artist,
                                     date = "",
@@ -52,7 +55,7 @@ object Downloader {
                         if (songList.isEmpty()) {
                             callback(null)
                         } else {
-                            callback(Playlist(songList, id = 0, name = query))
+                            callback(Playlist(songList, id = -1, name = query))
                         }
                     }
                 }

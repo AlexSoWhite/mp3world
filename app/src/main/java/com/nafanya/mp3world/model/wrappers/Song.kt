@@ -1,9 +1,14 @@
 package com.nafanya.mp3world.model.wrappers
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class Song(
-    val id: Long = 0,
-    val title: String? = null,
-    val artist: String? = null,
-    val date: String? = null,
-    val url: String? = null
+    @PrimaryKey val id: Long = 0,
+    @ColumnInfo(name = "title") val title: String? = null,
+    @ColumnInfo(name = "artist") val artist: String? = null,
+    @ColumnInfo(name = "date") val date: String? = null,
+    @ColumnInfo(name = "url") val url: String? = null
 )
