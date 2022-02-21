@@ -27,6 +27,7 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
+import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
@@ -158,7 +159,7 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    val intent = Intent(this@MainActivity, SongListActivity::class.java)
+                    val intent = Intent(this@MainActivity, SearchSongListActivity::class.java)
                     SourceProvider.newInstanceWithQuery(query)
                     startActivity(intent)
                     return false
