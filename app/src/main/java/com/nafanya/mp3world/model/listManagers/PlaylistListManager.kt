@@ -36,11 +36,6 @@ object PlaylistListManager {
             thread {
                 playlistDao.update(playlist)
             }
-            if (PlaylistListManager.playlists.value!!.isEmpty()) {
-
-            } else {
-
-            }
         }
     }
 
