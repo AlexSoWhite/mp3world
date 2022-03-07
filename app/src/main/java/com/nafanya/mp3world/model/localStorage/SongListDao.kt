@@ -8,7 +8,7 @@ import androidx.room.Update
 import com.nafanya.mp3world.model.wrappers.Song
 
 @Dao
-interface SongListDao {
+interface SongDao {
 
     @Query("SELECT * FROM song")
     fun getAll(): MutableList<Song>

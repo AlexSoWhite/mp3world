@@ -2,7 +2,7 @@ package com.nafanya.mp3world.model.listManagers
 
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.localStorage.DatabaseHolder
-import com.nafanya.mp3world.model.localStorage.SongListDao
+import com.nafanya.mp3world.model.localStorage.SongDao
 import com.nafanya.mp3world.model.wrappers.Song
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -10,7 +10,7 @@ import kotlin.concurrent.thread
 
 object SongListManager {
 
-    private var songListDao: SongListDao? = null
+    private var songListDao: SongDao? = null
     private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
 
     val songList: MutableLiveData<MutableList<Song>> by lazy {
@@ -47,7 +47,7 @@ object SongListManager {
 
     fun deleteFromStorage(song: Song) {
         thread {
-            songList.value?.add(song)
+            songList.value?.remove(song)
             songListDao?.delete(song)
             urlBasedCount--
         }
