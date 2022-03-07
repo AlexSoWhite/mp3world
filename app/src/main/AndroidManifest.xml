@@ -48,6 +48,9 @@
         <activity android:name=".view.listActivities.artists.ArtistListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
+        <activity android:name=".view.listActivities.search.SearchSongListActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <service android:name=".model.foregroundService.ForegroundService" />
     </application>
 </manifest>

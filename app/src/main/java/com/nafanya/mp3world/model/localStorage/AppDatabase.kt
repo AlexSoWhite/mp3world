@@ -14,5 +14,5 @@ import com.nafanya.mp3world.model.wrappers.Song
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun playlistDao(): PlaylistDao
-    abstract fun songsListDao(): SongListDao
+    abstract fun songsListDao(): SongDao
 }
