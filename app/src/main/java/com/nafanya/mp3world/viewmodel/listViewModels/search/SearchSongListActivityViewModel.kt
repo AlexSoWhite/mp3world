@@ -64,9 +64,13 @@ class SearchSongListActivityViewModel : ListViewModelInterface() {
         }
     }
 
-    override fun onLoaded() {}
+    override fun onLoaded() {
+        // TODO
+    }
 
-    override fun onEmpty() {}
+    override fun onEmpty() {
+        // TODO
+    }
 
     fun deleteSongFromLocalStorage(song: Song) {
         SongListManager.deleteFromStorage(song)

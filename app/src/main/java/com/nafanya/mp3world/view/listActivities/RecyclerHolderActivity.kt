@@ -12,13 +12,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.exoplayer2.ui.StyledPlayerControlView
-import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.RecyclerHolderActivityBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
-import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
@@ -128,7 +125,7 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = GenericPlayerControlView(this, R.id.player_control_view)
-                playerView!!.setSongObserver {  song ->
+                playerView!!.setSongObserver { song ->
                     findViewById<TextView>(R.id.track_title).text = song.title
                     findViewById<TextView>(R.id.track_artist).text = song.artist
                 }

@@ -3,7 +3,6 @@ package com.nafanya.mp3world.view.playerViews
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.TextView
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -28,7 +27,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                     findViewById<TextView>(R.id.track_artist).text = song.artist
                 }
                 playerView!!.setPlaylistObserver { playlist ->
-                    //TODO expand playlist
+                    // TODO expand playlist
                 }
             }
         }

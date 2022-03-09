@@ -22,8 +22,8 @@ open class GenericPlayerControlView(
         playerControlView.player = ForegroundServiceLiveDataProvider.getPlayer()
         playerControlView.repeatToggleModes =
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
-                    RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
-                    RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
+            RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
+            RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
     }
 
     fun setSongObserver(callback: (Song) -> Unit) {
