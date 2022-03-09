@@ -12,7 +12,7 @@ class AlbumListViewModel : ListViewModelInterface() {
 
     override fun onLoading() {
         albumsList = AlbumListManager.albums
-        if(albumsList.value!!.isEmpty()) {
+        if (albumsList.value!!.isEmpty()) {
             pageState.value = PageState.IS_EMPTY
         } else {
             pageState.value = PageState.IS_LOADED
