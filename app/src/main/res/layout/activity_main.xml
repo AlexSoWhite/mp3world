@@ -27,17 +27,6 @@
     android:background="@drawable/background_gradient"
     android:paddingTop="50dp">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/player_control_view"
-        android:visibility="invisible"
-        />
-
     <LinearLayout
         android:id="@+id/main_menu"
         android:layout_width="match_parent"
@@ -97,12 +86,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.google.android.exoplayer2.ui.StyledPlayerControlView
-        android:id="@+id/player_control_view"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/controls_wrapper"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:clickable="true"
+        android:focusable="true">
+
+        <com.google.android.exoplayer2.ui.StyledPlayerControlView
+            android:id="@+id/player_control_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:controller_layout_id="@layout/exo_styled_player_control_view"/>
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
