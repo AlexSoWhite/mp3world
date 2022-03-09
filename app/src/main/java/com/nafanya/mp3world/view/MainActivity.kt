@@ -13,8 +13,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.exoplayer2.ui.StyledPlayerControlView
-import com.google.android.exoplayer2.util.RepeatModeUtil
+import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
@@ -29,6 +28,8 @@ import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
 import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
+import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
+import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainActivityViewModel: MainActivityViewModel
-    private var playerView: StyledPlayerControlView? = null
+    private var playerView: GenericPlayerControlView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,31 +55,29 @@ class MainActivity : AppCompatActivity() {
                 requestPermissions(arrayOf(permission), 0) // triggers onPermissionResult
             } else {
                 mainActivityViewModel.initializeLists(this)
-                subscribeToPlayerState()
                 initService()
+                subscribeToPlayerState()
             }
         }
     }
 
     private fun subscribeToPlayerState() {
-        // setting view
-        playerView = findViewById(R.id.player_control_view)
-        playerView?.showTimeoutMs = 0
-        playerView?.isNestedScrollingEnabled = false
-        // observe current song state
-        val observerSong = Observer<Song> {
-            findViewById<TextView>(R.id.track_title).text = it.title
-            findViewById<TextView>(R.id.track_artist).text = it.artist
-        }
-        ForegroundServiceLiveDataProvider.currentSong.observe(this, observerSong)
         // observe player state
         val observerPlayer = Observer<Boolean> {
             if (it) {
-                playerView?.player = ForegroundServiceLiveDataProvider.getPlayer()
-                playerView?.repeatToggleModes =
-                    RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
-                    RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
-                    RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
+                playerView = GenericPlayerControlView(this, R.id.player_control_view)
+                playerView!!.setSongObserver {  song ->
+                    findViewById<TextView>(R.id.track_title).text = song.title
+                    findViewById<TextView>(R.id.track_artist).text = song.artist
+                }
+                playerView!!.playerControlView.setOnClickListener {
+                    val intent = Intent(this, FullScreenPlayerActivity::class.java)
+                    startActivity(intent)
+                }
+                findViewById<ShapeableImageView>(R.id.fullscreen).setOnClickListener {
+                    val intent = Intent(this, FullScreenPlayerActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
         ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(

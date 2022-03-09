@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/player_control_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -10,6 +11,14 @@
     android:paddingTop="5dp"
     android:theme="@style/exoPlayer">
 
+<!--    <com.google.android.exoplayer2.ui.StyledPlayerControlView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent">-->
+<!--    -->
     <TextView
         android:id="@+id/track_title"
         android:layout_width="wrap_content"
@@ -37,13 +46,25 @@
         app:layout_constraintTop_toBottomOf="@id/track_title"
         tools:text="исполнитель" />
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/exo_repeat_toggle"
+        app:layout_constraintEnd_toStartOf="@+id/exo_repeat_toggle"
+        app:layout_constraintTop_toTopOf="@+id/exo_repeat_toggle"
+        android:src="@drawable/done"
+        android:id="@+id/fullscreen"
+        android:clickable="true"
+        android:focusable="true"/>
+
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
         app:layout_constraintEnd_toStartOf="@id/controls"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/exo_progress"
-        android:id="@+id/exo_repeat_toggle"/>
+        android:id="@+id/exo_repeat_toggle"
+        tools:src="@drawable/done"/>
 
     <LinearLayout
         android:id="@+id/controls"
@@ -84,5 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+<!--    </com.google.android.exoplayer2.ui.StyledPlayerControlView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
