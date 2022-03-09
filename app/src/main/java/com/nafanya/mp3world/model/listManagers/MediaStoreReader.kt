@@ -3,6 +3,7 @@ package com.nafanya.mp3world.model.listManagers
 import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
+import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Song
 import java.text.SimpleDateFormat
@@ -45,6 +46,8 @@ object MediaStoreReader {
             val artistColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
             val artistIdColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)
             val dateColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED)
+            val albumIdColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
+            val albumColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
             val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
@@ -54,6 +57,8 @@ object MediaStoreReader {
                 val thisArtist = cursor.getString(artistColumn)
                 val thisDate = cursor.getInt(dateColumn)
                 val thisArtistId = cursor.getLong(artistIdColumn)
+                val thisAlbumId = cursor.getLong(albumIdColumn)
+                val thisAlbumName = cursor.getString(albumColumn)
                 if (thisArtist != "<unknown>") {
                     val song = Song(
                         id = thisId,
@@ -68,6 +73,12 @@ object MediaStoreReader {
                         id = thisArtistId
                     )
                     ArtistListManager.add(artist, song)
+                    val album = Album(
+                        id = thisAlbumId,
+                        name = thisAlbumName,
+                        songList = mutableListOf()
+                    )
+                    AlbumListManager.add(album, song)
                 }
             }
         }
