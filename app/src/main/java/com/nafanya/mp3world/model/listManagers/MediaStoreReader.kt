@@ -9,6 +9,7 @@ import com.nafanya.mp3world.model.wrappers.Song
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@Suppress("LongMethod")
 object MediaStoreReader {
 
     private var isInitialized = false

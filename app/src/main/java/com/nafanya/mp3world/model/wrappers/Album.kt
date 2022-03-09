@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.model.wrappers
 
-data class Album (
+data class Album(
     val name: String = "",
     var songList: MutableList<Song>,
     val id: Long = 0
