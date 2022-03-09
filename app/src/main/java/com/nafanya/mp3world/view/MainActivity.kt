@@ -18,12 +18,15 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.listManagers.AlbumListManager
 import com.nafanya.mp3world.model.listManagers.ArtistListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.view.listActivities.albums.AlbumListActivity
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
 import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
@@ -97,7 +100,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         initMainMenu()
-        binding.albumCount = 0
         binding.favoriteCount = 0
     }
 
@@ -138,6 +140,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
         ArtistListManager.artists.observe(this, artistObserver)
+
+        // albums
+        val albumsObserver = Observer<MutableList<Album>> {
+            binding.albumCount = it.size
+            binding.albums.item.setOnClickListener {
+                val albumsIntent = Intent(this, AlbumListActivity::class.java)
+                startActivity(albumsIntent)
+            }
+        }
+        AlbumListManager.albums.observe(this, albumsObserver)
     }
 
     override fun onRequestPermissionsResult(
