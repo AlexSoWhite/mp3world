@@ -10,5 +10,7 @@ data class Song(
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "artist") val artist: String? = null,
     @ColumnInfo(name = "date") var date: String? = null,
-    @ColumnInfo(name = "url") val url: String? = null
+    @ColumnInfo(name = "url") val url: String? = null,
+    @ColumnInfo(name = "duration") val duration: Int? = null,
+    @ColumnInfo(name = "path") val path: String? = null
 )

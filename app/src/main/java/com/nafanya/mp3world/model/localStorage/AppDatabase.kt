@@ -8,7 +8,7 @@ import com.nafanya.mp3world.model.wrappers.Song
 
 @Database(
     entities = [Playlist::class, Song::class],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 @TypeConverters(Converter::class)

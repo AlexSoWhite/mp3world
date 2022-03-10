@@ -8,7 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.nafanya.mp3world.model.localStorage.AppDatabase
 import com.nafanya.mp3world.model.localStorage.DatabaseHolder
-import com.nafanya.mp3world.model.localStorage.SongListDao
+import com.nafanya.mp3world.model.localStorage.SongDao
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
 import org.junit.Assert.assertEquals
@@ -88,18 +88,47 @@ class MigrationTest {
         // MigrationTestHelper automatically verifies the schema changes,
         // but you need to validate that the data was migrated properly.
     }
+
+    @Test
+    fun migrate2To3() {
+        val song = Song(
+            id = 5,
+            title = "testSong",
+            artist = "testArtist",
+            date = null,
+            url = "sampleUrl",
+            duration = 100,
+            path = "asdas"
+        )
+        val migration23 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """
+                    ALTER TABLE Song ADD COLUMN duration INTEGER 
+                """.trimIndent()
+                )
+                database.execSQL(
+                    """
+                    ALTER TABLE Song ADD COLUMN path TEXT 
+                """.trimIndent()
+                )
+                database.execSQL(
+                    """
+                    INSERT into Song (id, title, artist, date, url, duration, path)
+                    VALUES ("${song.id}", "${song.title}", "${song.artist}", "${song.date}", "${song.url}", "${song.duration}", "${song.path}")
+                    """.trimIndent())
+            }
+        }
+        helper.createDatabase(TEST_DB,2)
+        helper.runMigrationsAndValidate(TEST_DB, 3, true, migration23)
+    }
 }
 
 @RunWith(AndroidJUnit4::class)
 class SongListStorageTest {
 
-    private var db: AppDatabase
-    private var songListDao: SongListDao
-    init {
-        DatabaseHolder.init(InstrumentationRegistry.getInstrumentation().targetContext)
-        db = DatabaseHolder.db
-        songListDao = db.songsListDao()
-    }
+    private var db: AppDatabase = DatabaseHolder(InstrumentationRegistry.getInstrumentation().targetContext).db
+    private var songListDao: SongDao = db.songsListDao()
 
     fun testAdd(song: Song) {
         songListDao.insert(song)

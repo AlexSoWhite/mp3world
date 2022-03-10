@@ -140,8 +140,6 @@ class ForegroundService : LifecycleService() {
             playlist.songList.forEach { song ->
                 val extras = Bundle()
                 extras.putLong("id", song.id)
-                extras.putString("url", song.url)
-                extras.putString("date", song.date)
                 val uri: Uri =
                     song.url?.toUri()
                         ?: ContentUris.withAppendedId(
@@ -153,8 +151,6 @@ class ForegroundService : LifecycleService() {
                     .setMediaMetadata(
                         MediaMetadata.Builder()
                             .setExtras(extras)
-                            .setTitle(song.title as CharSequence)
-                            .setArtist(song.artist as CharSequence)
                             .build()
                     ).build()
 

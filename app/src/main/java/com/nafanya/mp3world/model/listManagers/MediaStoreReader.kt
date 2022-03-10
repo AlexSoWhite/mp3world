@@ -14,6 +14,7 @@ object MediaStoreReader {
 
     private var isInitialized = false
     private const val multiplier = 1000L
+    var paths = mutableListOf<String?>()
 
     fun initializeSongList(context: Context) {
         if (!isInitialized) {
@@ -49,6 +50,7 @@ object MediaStoreReader {
             val dateColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED)
             val albumIdColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
             val albumColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
+            val pathColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
             val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
@@ -60,14 +62,17 @@ object MediaStoreReader {
                 val thisArtistId = cursor.getLong(artistIdColumn)
                 val thisAlbumId = cursor.getLong(albumIdColumn)
                 val thisAlbumName = cursor.getString(albumColumn)
+                val thisPath = cursor.getString(pathColumn)
                 if (thisArtist != "<unknown>") {
                     val song = Song(
                         id = thisId,
                         title = thisTitle,
                         artist = thisArtist,
                         date = simpleDateFormat.format(thisDate * multiplier),
-                        url = null
+                        url = null,
+                        path = thisPath
                     )
+                    paths.add(thisPath)
                     SongListManager.add(song)
                     val artist = Artist(
                         name = thisArtist,
