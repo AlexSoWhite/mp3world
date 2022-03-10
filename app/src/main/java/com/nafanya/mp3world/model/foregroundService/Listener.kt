@@ -10,10 +10,11 @@ object Listener : Player.Listener {
         super.onMediaItemTransition(mediaItem, reason)
         mediaItem?.let {
             val song = Song(
-                it.mediaMetadata.extras!!.getLong("id"),
-                it.mediaMetadata.title as String?,
-                it.mediaMetadata.artist as String?,
-                ""
+                id = it.mediaMetadata.extras!!.getLong("id"),
+                title = it.mediaMetadata.title as String?,
+                artist = it.mediaMetadata.artist as String?,
+                // date = it.mediaMetadata.extras!!.getString("date"),
+                url = it.mediaMetadata.extras!!.getString("url")
             )
             ForegroundServiceLiveDataProvider.currentSong.value = song
         }

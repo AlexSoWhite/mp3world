@@ -1,7 +1,9 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.search
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
@@ -13,18 +15,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class SearchSongListActivityViewModel : ListViewModelInterface() {
+class SearchSongListViewModel : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()
     }
 
     private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
-
-    fun addSongToLocalStorage(song: Song) {
-        song.date = simpleDateFormat.format(Date())
-        SongListManager.addToStorage(song)
-    }
 
     private fun startLoading(query: String, callback: (Playlist) -> Unit) {
         Downloader.preLoad(query) { playlist ->
@@ -72,13 +69,27 @@ class SearchSongListActivityViewModel : ListViewModelInterface() {
         // TODO
     }
 
-    fun deleteSongFromLocalStorage(song: Song) {
-        SongListManager.deleteFromStorage(song)
+    fun addSong(context: Context, song: Song) {
+        song.date = simpleDateFormat.format(Date())
+        // modifying LiveData
+        SongListManager.addSongWithUrl(song)
+        // adding song to the local storage
+        LocalStorageProvider.addSong(context, song)
+    }
+
+    fun deleteSong(context: Context, song: Song) {
+        // modifying LiveData
+        SongListManager.deleteSongWithUrl(song)
+        // removing song from the local storage
+        LocalStorageProvider.deleteSong(context, song)
     }
 
     fun isAdded(song: Song): Boolean {
         SongListManager.songList.value?.forEach {
-            if (it.url == song.url) return true
+            if (it.url == song.url) {
+                song.id = it.id
+                return true
+            }
         }
         return false
     }
