@@ -73,7 +73,7 @@ class SearchSongListViewModel : ListViewModelInterface() {
         song.date = simpleDateFormat.format(Date())
         // modifying LiveData
         SongListManager.addSongWithUrl(song)
-        // adding song to the   local storage
+        // adding song to the local storage
         LocalStorageProvider.addSong(context, song)
     }
 
