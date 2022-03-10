@@ -1,7 +1,6 @@
 package com.nafanya.mp3world.model.localStorage
 
 import android.content.Context
-import android.util.Log
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song

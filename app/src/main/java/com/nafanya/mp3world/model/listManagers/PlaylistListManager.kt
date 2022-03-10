@@ -3,11 +3,9 @@ package com.nafanya.mp3world.model.listManagers
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.localStorage.PlaylistDao
 import com.nafanya.mp3world.model.wrappers.Playlist
-import kotlin.concurrent.thread
 
 object PlaylistListManager {
 
-    private lateinit var playlistDao: PlaylistDao
     val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
         MutableLiveData<MutableList<Playlist>>(mutableListOf())
     }
