@@ -34,6 +34,7 @@ import com.nafanya.mp3world.view.MainActivity
 class ForegroundService : LifecycleService() {
 
     private var player: ExoPlayer? = null
+    private var isInitialized = false
     private lateinit var playlist: Playlist
     private lateinit var playerNotificationManager: PlayerNotificationManager
     var currentIdx: Int = 0
@@ -139,6 +140,8 @@ class ForegroundService : LifecycleService() {
             playlist.songList.forEach { song ->
                 val extras = Bundle()
                 extras.putLong("id", song.id)
+                extras.putString("url", song.url)
+                extras.putString("date", song.date)
                 val uri: Uri =
                     song.url?.toUri()
                         ?: ContentUris.withAppendedId(

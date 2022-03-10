@@ -45,7 +45,7 @@ object SongListManager {
     fun deleteSongWithUrl(song: Song) {
         val newList = songList.value
         for (i in newList!!.indices) {
-            if (newList[i].id == song.id) {
+            if (newList[i].url == song.url) {
                 newList.removeAt(i)
                 break
             }
