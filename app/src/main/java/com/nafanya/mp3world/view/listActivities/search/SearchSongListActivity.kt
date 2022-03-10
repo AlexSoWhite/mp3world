@@ -36,7 +36,7 @@ class SearchSongListActivity : RecyclerHolderActivity() {
     class SearchResultAdapter(
         private val viewModel: SearchSongListViewModel,
         list: MutableList<Song>,
-        context: LifecycleOwner,
+        private val context: LifecycleOwner,
         callback: () -> Unit
     ) : SongListAdapter(list, context, callback) {
 
@@ -51,11 +51,11 @@ class SearchSongListActivity : RecyclerHolderActivity() {
             }
             binding.action.setOnClickListener {
                 isAdded = if (!isAdded) {
-                    viewModel.addSongToLocalStorage(song)
+                    viewModel.addSong(context as SearchSongListActivity, song)
                     Glide.with(binding.action).load(R.drawable.done).into(binding.action)
                     true
                 } else {
-                    viewModel.deleteSongFromLocalStorage(song)
+                    viewModel.deleteSong(context as SearchSongListActivity, song)
                     Glide.with(binding.action).load(R.drawable.add).into(binding.action)
                     false
                 }

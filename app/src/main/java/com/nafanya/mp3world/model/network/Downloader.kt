@@ -31,11 +31,9 @@ object Downloader {
 
                 override fun onResponse(call: Call, response: Response) {
                     response.body?.let Playlist@{
-                        var count: Long = 0
                         val doc = Jsoup.parseBodyFragment(it.string())
                         val songList: ArrayList<Song> = arrayListOf()
                         doc.getElementsByClass("track__info").forEach { elem ->
-                            count++
                             val title = elem.getElementsByClass("track__title").text()
                             val artist = elem.getElementsByClass("track__desc").text()
                             val downloadUrl = elem
@@ -44,7 +42,7 @@ object Downloader {
                                 .toString()
                             songList.add(
                                 Song(
-                                    id = SongListManager.urlBasedCount + count,
+                                    id = -1,
                                     title = title,
                                     artist = artist,
                                     date = "",

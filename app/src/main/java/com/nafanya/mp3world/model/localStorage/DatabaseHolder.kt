@@ -38,10 +38,9 @@ class DatabaseHolder(context: Context) {
     fun populateLists() {
         PlaylistListManager.initialize(db.playlistDao())
         SongListManager.appendLocalSongs(db.songsListDao())
-        db.close()
     }
 
-    fun close() {
+    fun closeDataBase() {
         db.close()
     }
 }
