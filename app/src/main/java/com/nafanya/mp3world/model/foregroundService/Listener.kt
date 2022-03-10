@@ -13,7 +13,7 @@ object Listener : Player.Listener {
                 id = it.mediaMetadata.extras!!.getLong("id"),
                 title = it.mediaMetadata.title as String?,
                 artist = it.mediaMetadata.artist as String?,
-                //date = it.mediaMetadata.extras!!.getString("date"),
+                // date = it.mediaMetadata.extras!!.getString("date"),
                 url = it.mediaMetadata.extras!!.getString("url")
             )
             ForegroundServiceLiveDataProvider.currentSong.value = song

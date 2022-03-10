@@ -11,7 +11,10 @@ class DatabaseHolder(context: Context) {
 
     var db: AppDatabase
 
-    private val MIGRATION_1_2 = object : Migration(1, 2) {
+    /**
+     * migration from 1st version of database to 2nd
+     */
+    private val migration12 = object : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
                 """
@@ -32,7 +35,7 @@ class DatabaseHolder(context: Context) {
             context,
             AppDatabase::class.java,
             "appDb"
-        ).addMigrations(MIGRATION_1_2).build()
+        ).addMigrations(migration12).build()
     }
 
     fun populateLists() {

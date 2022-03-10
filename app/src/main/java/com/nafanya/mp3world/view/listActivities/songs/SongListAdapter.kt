@@ -59,6 +59,7 @@ open class SongListAdapter(
 
         private val binding = SongListItemBinding.bind(itemView)
 
+        @Suppress("ComplexCondition")
         fun bind(
             song: Song,
             callback: () -> Unit
@@ -67,8 +68,10 @@ open class SongListAdapter(
             val isPlayingObserver = Observer<Boolean> { isPlaying ->
                 val playingSong = ForegroundServiceLiveDataProvider.currentSong.value
                 if (isPlaying &&
-                    (playingSong?.id == song.id && playingSong.url == null ||
-                            playingSong?.url != null && playingSong.url == song.url)
+                    (
+                        playingSong?.id == song.id && playingSong.url == null ||
+                            playingSong?.url != null && playingSong.url == song.url
+                        )
                 ) {
                     Glide.with(binding.playingIndicator)
                         .load(R.drawable.pause)
