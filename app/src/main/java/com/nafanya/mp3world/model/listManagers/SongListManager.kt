@@ -22,15 +22,14 @@ object SongListManager {
         songList.value?.add(song)
     }
 
-    fun appendLocalSongs() {
-        songListDao = DatabaseHolder.db.songsListDao()
-        thread {
-            val addition = songListDao?.getAll()
-            urlBasedCount = addition!!.size
-            songList.value?.addAll(addition)
-            songList.value?.sortByDescending { song ->
-                simpleDateFormat.parse(song.date!!)
-            }
+    fun appendLocalSongs(songListDao: SongDao) {
+        val addition = songListDao.getAll()
+        urlBasedCount = addition.size
+        val newList = songList.value
+        newList?.addAll(addition)
+        songList.postValue(newList)
+        songList.value?.sortByDescending { song ->
+            simpleDateFormat.parse(song.date!!)
         }
     }
 

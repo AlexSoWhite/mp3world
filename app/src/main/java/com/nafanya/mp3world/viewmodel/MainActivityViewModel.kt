@@ -15,17 +15,23 @@ import kotlinx.coroutines.launch
 class MainActivityViewModel : ViewModel() {
 
     fun initializeLists(context: Context) {
-        viewModelScope.launch {
-            // initialize songList
-            MediaStoreReader.initializeSongList(context)
-            // use initialized songList to initialize player state
-            ForegroundServiceLiveDataProvider.currentPlaylist.value =
-                Playlist(SongListManager.songList.value!!)
-            thread {
-                DatabaseHolder.init(context)
-                PlaylistListManager.initialize()
-                SongListManager.appendLocalSongs()
-            }.join()
+        if (!isInitialized) {
+            viewModelScope.launch {
+                isInitialized = true
+                // initialize songList
+                MediaStoreReader.initializeSongList(context)
+                // use initialized songList to initialize player state
+                ForegroundServiceLiveDataProvider.currentPlaylist.value =
+                    Playlist(SongListManager.songList.value!!)
+                thread {
+                    val db = DatabaseHolder(context)
+                    db.populateLists()
+                }
+            }
         }
+    }
+
+    companion object {
+        private var isInitialized = false
     }
 }

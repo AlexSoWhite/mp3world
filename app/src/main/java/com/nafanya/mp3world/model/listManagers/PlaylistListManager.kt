@@ -1,7 +1,6 @@
 package com.nafanya.mp3world.model.listManagers
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.model.localStorage.DatabaseHolder
 import com.nafanya.mp3world.model.localStorage.PlaylistDao
 import com.nafanya.mp3world.model.wrappers.Playlist
 import kotlin.concurrent.thread
@@ -13,8 +12,7 @@ object PlaylistListManager {
         MutableLiveData<MutableList<Playlist>>(mutableListOf())
     }
 
-    fun initialize() {
-        playlistDao = DatabaseHolder.db.playlistDao()
+    fun initialize(playlistDao: PlaylistDao) {
         playlists.postValue(playlistDao.getAll())
     }
 

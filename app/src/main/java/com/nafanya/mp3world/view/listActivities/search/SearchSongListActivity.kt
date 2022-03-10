@@ -12,29 +12,29 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
-import com.nafanya.mp3world.viewmodel.listViewModels.search.SearchSongListActivityViewModel
+import com.nafanya.mp3world.viewmodel.listViewModels.search.SearchSongListViewModel
 
 class SearchSongListActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {
-        viewModel = ViewModelProvider(this)[SearchSongListActivityViewModel::class.java]
+        viewModel = ViewModelProvider(this)[SearchSongListViewModel::class.java]
     }
 
     override fun setAdapter() {
         val observer = Observer<Playlist> {
             binding.recycler.adapter = SearchResultAdapter(
-                viewModel as SearchSongListActivityViewModel,
+                viewModel as SearchSongListViewModel,
                 it.songList,
                 this
             ) {
                 ForegroundServiceLiveDataProvider.currentPlaylist.value = it
             }
         }
-        (viewModel as SearchSongListActivityViewModel).playlist.observe(this, observer)
+        (viewModel as SearchSongListViewModel).playlist.observe(this, observer)
     }
 
     class SearchResultAdapter(
-        private val viewModel: SearchSongListActivityViewModel,
+        private val viewModel: SearchSongListViewModel,
         list: MutableList<Song>,
         context: LifecycleOwner,
         callback: () -> Unit
