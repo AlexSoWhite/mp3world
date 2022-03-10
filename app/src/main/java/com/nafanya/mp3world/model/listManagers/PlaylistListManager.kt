@@ -18,19 +18,12 @@ object PlaylistListManager {
 
     fun addPlaylist(playlist: Playlist) {
         playlists.value?.add(playlist)
-        thread {
-            playlistDao.insert(playlist)
-        }
     }
 
     fun updatePlaylist(playlist: Playlist) {
         val index = playlists.value!!.indexOf(playlist)
         if (index != -1) {
             playlists.value!![index] = playlist
-            playlists.value = playlists.value
-            thread {
-                playlistDao.update(playlist)
-            }
         }
     }
 

@@ -55,6 +55,5 @@ object SongListManager {
         }
         songList.value = newList
         urlBasedCount--
-        Log.d("SONG", "deleted from live data")
     }
 }

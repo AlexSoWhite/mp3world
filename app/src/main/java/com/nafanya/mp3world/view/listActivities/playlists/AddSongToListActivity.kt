@@ -67,7 +67,7 @@ class AddSongToListActivity : RecyclerHolderActivity() {
         menuInflater.inflate(R.menu.add_songs_to_playlist_menu, menu)
         val confirm = menu?.findItem(R.id.confirm_adding)
         confirm?.setOnMenuItemClickListener {
-            (viewModel as AddSongToListViewModel).confirmChanges()
+            (viewModel as AddSongToListViewModel).confirmChanges(this)
             finish()
             true
         }

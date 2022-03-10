@@ -26,7 +26,6 @@ object LocalStorageProvider {
             val dbHolder = DatabaseHolder(context)
             dbHolder.db.songsListDao().delete(song)
             dbHolder.closeDataBase()
-            Log.d("SONG", "deleted from local Storage")
         }
     }
 
