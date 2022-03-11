@@ -13,7 +13,7 @@ data class Song(
     @ColumnInfo(name = "artist") var artist: String? = null,
     @ColumnInfo(name = "date") var date: String? = null,
     @ColumnInfo(name = "url") var url: String? = null,
-    @ColumnInfo(name = "duration") var duration: Int? = null,
+    @ColumnInfo(name = "duration") var duration: Long? = null,
     @ColumnInfo(name = "path") var path: String? = null,
     @Ignore
     @ColumnInfo(name = "art") val art: Bitmap? = null

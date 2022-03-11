@@ -58,6 +58,15 @@
                 tools:text="исполнитель" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/duration"
+            android:layout_marginHorizontal="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4:13"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"/>
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/action"
             android:layout_width="30dp"
