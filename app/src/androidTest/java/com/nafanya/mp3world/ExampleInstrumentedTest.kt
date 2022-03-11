@@ -31,6 +31,7 @@ class ExampleInstrumentedTest {
     }
 }
 
+@Suppress("MaxLineLength")
 @RunWith(AndroidJUnit4::class)
 class MigrationTest {
     private val TEST_DB = "migration-test"
@@ -105,21 +106,22 @@ class MigrationTest {
                 database.execSQL(
                     """
                     ALTER TABLE Song ADD COLUMN duration INTEGER 
-                """.trimIndent()
+                    """.trimIndent()
                 )
                 database.execSQL(
                     """
                     ALTER TABLE Song ADD COLUMN path TEXT 
-                """.trimIndent()
+                    """.trimIndent()
                 )
                 database.execSQL(
                     """
                     INSERT into Song (id, title, artist, date, url, duration, path)
                     VALUES ("${song.id}", "${song.title}", "${song.artist}", "${song.date}", "${song.url}", "${song.duration}", "${song.path}")
-                    """.trimIndent())
+                    """.trimIndent()
+                )
             }
         }
-        helper.createDatabase(TEST_DB,2)
+        helper.createDatabase(TEST_DB, 2)
         helper.runMigrationsAndValidate(TEST_DB, 3, true, migration23)
     }
 }
@@ -127,7 +129,9 @@ class MigrationTest {
 @RunWith(AndroidJUnit4::class)
 class SongListStorageTest {
 
-    private var db: AppDatabase = DatabaseHolder(InstrumentationRegistry.getInstrumentation().targetContext).db
+    private var db: AppDatabase = DatabaseHolder(
+        InstrumentationRegistry.getInstrumentation().targetContext
+    ).db
     private var songListDao: SongDao = db.songsListDao()
 
     fun testAdd(song: Song) {

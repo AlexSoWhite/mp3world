@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
 
+@Suppress("MagicNumber")
 class DatabaseHolder(context: Context) {
 
     var db: AppDatabase

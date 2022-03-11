@@ -10,7 +10,7 @@ import android.util.Size
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Song
-import java.lang.Exception
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -19,6 +19,7 @@ object MediaStoreReader {
 
     private var isInitialized = false
     private const val multiplier = 1000L
+    private const val artDimension = 1024
 
     fun initializeSongList(context: Context, contentResolver: ContentResolver) {
         if (!isInitialized) {
@@ -27,7 +28,9 @@ object MediaStoreReader {
     }
 
     private fun initialize(context: Context, contentResolver: ContentResolver) {
+        // get all the fields from media storage
         val projection = null
+        // select only music
         var selection: String? = MediaStore.Audio.Media.IS_ALARM + "=0 AND " +
             MediaStore.Audio.Media.IS_NOTIFICATION + "=0 AND " +
             MediaStore.Audio.Media.IS_RINGTONE + "=0"
@@ -39,6 +42,7 @@ object MediaStoreReader {
                 MediaStore.Audio.Media.IS_RINGTONE + "=0 AND " +
                 MediaStore.Audio.Media.IS_RECORDING + "=0"
         }
+        // sort based on date
         val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
         context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -69,16 +73,11 @@ object MediaStoreReader {
                 val thisAlbumName = cursor.getString(albumColumn)
                 val thisPath = cursor.getString(pathColumn)
                 val thisDuration = cursor.getInt(durationColumn)
+                // tracks with <unknown> artist are corrupted
                 if (thisArtist != "<unknown>") {
-                    val trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, thisId)
-                    var bitmap: Bitmap? = null
-                    if (Build.VERSION.SDK_INT >= 29) {
-                        bitmap = try {
-                            contentResolver.loadThumbnail(trackUri, Size(1024, 1024), null)
-                        } catch (exception: Exception) {
-                            null
-                        }
-                    }
+                    // set the song art
+                    val bitmap = getBitmap(contentResolver, thisId)
+                    // build song object
                     val song = Song(
                         id = thisId,
                         title = thisTitle,
@@ -105,5 +104,21 @@ object MediaStoreReader {
             }
         }
         isInitialized = true
+    }
+
+    private fun getBitmap(contentResolver: ContentResolver, trackId: Long): Bitmap? {
+        val trackUri = ContentUris.withAppendedId(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            trackId
+        )
+        var bitmap: Bitmap? = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            bitmap = try {
+                contentResolver.loadThumbnail(trackUri, Size(artDimension, artDimension), null)
+            } catch (exception: IOException) {
+                null
+            }
+        }
+        return bitmap
     }
 }

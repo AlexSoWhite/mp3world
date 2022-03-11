@@ -10,25 +10,32 @@ object Listener : Player.Listener {
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         super.onMediaItemTransition(mediaItem, reason)
         mediaItem?.let {
-            var song: Song? = null
             if (it.mediaMetadata.extras!!.getString("url") != null) {
-                song = Song(
-                    id = it.mediaMetadata.extras!!.getLong("id"),
-                    title = it.mediaMetadata.extras!!.getString("title"),
-                    artist = it.mediaMetadata.extras!!.getString("artist"),
-                    date = it.mediaMetadata.extras!!.getString("date"),
-                    url = it.mediaMetadata.extras!!.getString("url"),
-                    duration = null,
-                    path = it.mediaMetadata.extras!!.getString("path")
-                )
+                postUrlBasedSong(it)
             } else {
-                SongListManager.songList.value?.forEach { elem ->
-                    if (elem.id == it.mediaMetadata.extras!!.getLong("id")) {
-                        song = elem
-                    }
-                }
+                postLocalSong(it)
             }
-            ForegroundServiceLiveDataProvider.currentSong.value = song
+        }
+    }
+
+    private fun postUrlBasedSong(it: MediaItem) {
+        val song = Song(
+            id = it.mediaMetadata.extras!!.getLong("id"),
+            title = it.mediaMetadata.extras!!.getString("title"),
+            artist = it.mediaMetadata.extras!!.getString("artist"),
+            date = it.mediaMetadata.extras!!.getString("date"),
+            url = it.mediaMetadata.extras!!.getString("url"),
+            duration = null,
+            path = it.mediaMetadata.extras!!.getString("path")
+        )
+        ForegroundServiceLiveDataProvider.currentSong.value = song
+    }
+
+    private fun postLocalSong(it: MediaItem) {
+        SongListManager.songList.value?.forEach { elem ->
+            if (elem.id == it.mediaMetadata.extras!!.getLong("id")) {
+                ForegroundServiceLiveDataProvider.currentSong.value = elem
+            }
         }
     }
 
