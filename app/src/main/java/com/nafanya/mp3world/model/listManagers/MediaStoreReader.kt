@@ -1,11 +1,16 @@
 package com.nafanya.mp3world.model.listManagers
 
+import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Size
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Song
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -14,15 +19,14 @@ object MediaStoreReader {
 
     private var isInitialized = false
     private const val multiplier = 1000L
-    var paths = mutableListOf<String?>()
 
-    fun initializeSongList(context: Context) {
+    fun initializeSongList(context: Context, contentResolver: ContentResolver) {
         if (!isInitialized) {
-            initialize(context)
+            initialize(context, contentResolver)
         }
     }
 
-    private fun initialize(context: Context) {
+    private fun initialize(context: Context, contentResolver: ContentResolver) {
         val projection = null
         var selection: String? = MediaStore.Audio.Media.IS_ALARM + "=0 AND " +
             MediaStore.Audio.Media.IS_NOTIFICATION + "=0 AND " +
@@ -51,6 +55,7 @@ object MediaStoreReader {
             val albumIdColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
             val albumColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
             val pathColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
+            val durationColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
             val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
@@ -63,16 +68,27 @@ object MediaStoreReader {
                 val thisAlbumId = cursor.getLong(albumIdColumn)
                 val thisAlbumName = cursor.getString(albumColumn)
                 val thisPath = cursor.getString(pathColumn)
+                val thisDuration = cursor.getInt(durationColumn)
                 if (thisArtist != "<unknown>") {
+                    val trackUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, thisId)
+                    var bitmap: Bitmap? = null
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        bitmap = try {
+                            contentResolver.loadThumbnail(trackUri, Size(1024, 1024), null)
+                        } catch (exception: Exception) {
+                            null
+                        }
+                    }
                     val song = Song(
                         id = thisId,
                         title = thisTitle,
                         artist = thisArtist,
                         date = simpleDateFormat.format(thisDate * multiplier),
                         url = null,
-                        path = thisPath
+                        duration = thisDuration,
+                        path = thisPath,
+                        art = bitmap
                     )
-                    paths.add(thisPath)
                     SongListManager.add(song)
                     val artist = Artist(
                         name = thisArtist,
