@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.viewmodel
 
+import android.content.ContentResolver
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,12 +13,12 @@ import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {
 
-    fun initializeLists(context: Context) {
+    fun initializeLists(context: Context, contentResolver: ContentResolver) {
         if (!isInitialized) {
             viewModelScope.launch {
                 isInitialized = true
                 // initialize songList
-                MediaStoreReader.initializeSongList(context)
+                MediaStoreReader.initializeSongList(context, contentResolver)
                 // use initialized songList to initialize player state
                 ForegroundServiceLiveDataProvider.currentPlaylist.value =
                     Playlist(SongListManager.songList.value!!)

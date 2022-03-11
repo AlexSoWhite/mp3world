@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(permission), 0) // triggers onPermissionResult
             } else {
-                mainActivityViewModel.initializeLists(this)
+                mainActivityViewModel.initializeLists(this, contentResolver)
                 initService()
                 subscribeToPlayerState()
             }

@@ -25,6 +25,11 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 playerView!!.setSongObserver { song ->
                     findViewById<TextView>(R.id.track_title).text = song.title
                     findViewById<TextView>(R.id.track_artist).text = song.artist
+                    if (song.art != null) {
+                        binding.image.setImageBitmap(song.art)
+                    } else {
+                        binding.image.setImageResource(R.drawable.default_placeholder)
+                    }
                 }
                 playerView!!.setPlaylistObserver { playlist ->
                     // TODO expand playlist

@@ -140,8 +140,12 @@ class ForegroundService : LifecycleService() {
             playlist.songList.forEach { song ->
                 val extras = Bundle()
                 extras.putLong("id", song.id)
-                extras.putString("url", song.url)
+                extras.putString("title", song.title)
+                extras.putString("artist", song.artist)
                 extras.putString("date", song.date)
+                extras.putString("url", song.url)
+                // TODO extras.putInt("duration", song.duration!!)
+                extras.putString("path", song.path)
                 val uri: Uri =
                     song.url?.toUri()
                         ?: ContentUris.withAppendedId(
@@ -153,8 +157,6 @@ class ForegroundService : LifecycleService() {
                     .setMediaMetadata(
                         MediaMetadata.Builder()
                             .setExtras(extras)
-                            .setTitle(song.title as CharSequence)
-                            .setArtist(song.artist as CharSequence)
                             .build()
                     ).build()
 
@@ -162,7 +164,11 @@ class ForegroundService : LifecycleService() {
                     mediaItem
                 )
             }
-            player?.prepare()
+            if (isInitialized) {
+                player?.prepare()
+            } else {
+                isInitialized = true
+            }
         }
         ForegroundServiceLiveDataProvider.currentPlaylist.observe(this, observer)
     }

@@ -8,19 +8,21 @@
     android:clickable="true"
     android:focusable="true"
     android:paddingHorizontal="20dp"
-    android:paddingTop="5dp"
-    android:theme="@style/exoPlayer">
+    android:paddingTop="50dp"
+    android:theme="@style/exoPlayer"
+    android:animateLayoutChanges="true">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/equalizer"/>
+        tools:src="@drawable/default_placeholder"/>
 
     <com.google.android.exoplayer2.ui.StyledPlayerControlView
+        android:layout_marginTop="20dp"
         android:id="@+id/player_control_fullscreen_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

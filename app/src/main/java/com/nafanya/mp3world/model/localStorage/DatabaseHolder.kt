@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
 
+@Suppress("MagicNumber")
 class DatabaseHolder(context: Context) {
 
     var db: AppDatabase
@@ -30,12 +31,33 @@ class DatabaseHolder(context: Context) {
         }
     }
 
+    /**
+     * migration from 2nd version of database to 3rd
+     */
+    private val migration23 = object : Migration(2, 3) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                """
+                    ALTER TABLE Song ADD COLUMN duration INTEGER 
+                """.trimIndent()
+            )
+            database.execSQL(
+                """
+                    ALTER TABLE Song ADD COLUMN path TEXT 
+                """.trimIndent()
+            )
+        }
+    }
+
     init {
         db = Room.databaseBuilder(
             context,
             AppDatabase::class.java,
             "appDb"
-        ).addMigrations(migration12).build()
+        ).addMigrations(
+            migration12,
+            migration23
+        ).build()
     }
 
     fun populateLists() {
