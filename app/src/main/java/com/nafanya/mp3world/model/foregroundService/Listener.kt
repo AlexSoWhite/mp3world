@@ -11,20 +11,23 @@ object Listener : Player.Listener {
         super.onMediaItemTransition(mediaItem, reason)
         mediaItem?.let {
             var song: Song? = null
-            SongListManager.songList.value?.forEach { elem ->
-                if (elem.id == it.mediaMetadata.extras!!.getLong("id")) {
-                    song = elem
+            if (it.mediaMetadata.extras!!.getString("url") != null) {
+                song = Song(
+                    id = it.mediaMetadata.extras!!.getLong("id"),
+                    title = it.mediaMetadata.extras!!.getString("title"),
+                    artist = it.mediaMetadata.extras!!.getString("artist"),
+                    date = it.mediaMetadata.extras!!.getString("date"),
+                    url = it.mediaMetadata.extras!!.getString("url"),
+                    duration = null,
+                    path = it.mediaMetadata.extras!!.getString("path")
+                )
+            } else {
+                SongListManager.songList.value?.forEach { elem ->
+                    if (elem.id == it.mediaMetadata.extras!!.getLong("id")) {
+                        song = elem
+                    }
                 }
             }
-//            val song = Song(
-//                id = it.mediaMetadata.extras!!.getLong("id"),
-//                title = it.mediaMetadata.title as String?,
-//                artist = it.mediaMetadata.artist as String?,
-//                // date = it.mediaMetadata.extras!!.getString("date"),
-//                url = it.mediaMetadata.extras!!.getString("url"),
-//                duration = null,
-//                path = it.mediaMetadata.extras!!.getString("path")
-//            )
             ForegroundServiceLiveDataProvider.currentSong.value = song
         }
     }
