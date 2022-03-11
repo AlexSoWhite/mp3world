@@ -41,7 +41,6 @@ class SearchSongListActivity : RecyclerHolderActivity() {
     ) : SongListAdapter(list, context, callback) {
 
         override fun decorateItem(binding: SongListItemBinding, song: Song) {
-            binding.dateHolder.visibility = View.GONE
             var isAdded = viewModel.isAdded(song)
             binding.action.visibility = View.VISIBLE
             if (isAdded) {
