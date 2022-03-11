@@ -87,6 +87,11 @@ open class SongListAdapter(
                 }
             }
             ForegroundServiceLiveDataProvider.isPlaying.observe(context, isPlayingObserver)
+            if (song.art != null) {
+                binding.songIcon.setImageBitmap(song.art)
+            } else {
+                binding.songIcon.setImageResource(R.drawable.default_placeholder)
+            }
             binding.songListItem.setOnClickListener {
                 callback()
                 ForegroundServiceLiveDataProvider.currentSong.value = song

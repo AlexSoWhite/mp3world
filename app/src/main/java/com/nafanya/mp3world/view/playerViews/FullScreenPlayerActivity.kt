@@ -6,9 +6,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
-import com.nafanya.mp3world.model.ImageResolver
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 
 class FullScreenPlayerActivity : AppCompatActivity() {
@@ -26,7 +26,11 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 playerView!!.setSongObserver { song ->
                     findViewById<TextView>(R.id.track_title).text = song.title
                     findViewById<TextView>(R.id.track_artist).text = song.artist
-                    ImageResolver.songImage(song, binding.image)
+                    if (song.art != null) {
+                        binding.image.setImageBitmap(song.art)
+                    } else {
+                        binding.image.setImageResource(R.drawable.default_placeholder)
+                    }
                 }
                 playerView!!.setPlaylistObserver { playlist ->
                     // TODO expand playlist
