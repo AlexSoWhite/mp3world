@@ -95,7 +95,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        //initMainMenu()
         binding.favoriteCount = 0
     }
 

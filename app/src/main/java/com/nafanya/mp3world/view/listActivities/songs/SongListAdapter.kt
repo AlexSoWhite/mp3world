@@ -11,7 +11,6 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.wrappers.Song
-import java.time.Duration
 
 open class SongListAdapter(
     private val list: MutableList<Song>,
@@ -107,9 +106,8 @@ open class SongListAdapter(
         private fun stringFromDuration(arg: Long?): String {
             var duration = arg
             if (duration == null) return ""
-            // hours (1 hour = 3600000 milliseconds)
             var hours = 0
-            while(duration >= millisecondsInOneHour) {
+            while (duration >= millisecondsInOneHour) {
                 hours++
                 duration -= millisecondsInOneHour
             }
@@ -124,11 +122,11 @@ open class SongListAdapter(
                 duration -= millisecondsInOneSecond
             }
             return if (hours == 0) {
-                minutes.toString()+":"+seconds.toString().padStart(2, '0')
+                minutes.toString() + ":" + seconds.toString().padStart(2, '0')
             } else {
-                hours.toString()+":"+
-                        minutes.toString().padStart(2,'0')+""+
-                        seconds.toString().padStart(2,'0')
+                hours.toString() + ":" +
+                    minutes.toString().padStart(2, '0') + "" +
+                    seconds.toString().padStart(2, '0')
             }
         }
 

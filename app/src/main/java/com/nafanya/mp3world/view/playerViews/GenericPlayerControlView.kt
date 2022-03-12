@@ -39,7 +39,9 @@ open class GenericPlayerControlView(
             activity.findViewById<TextView>(R.id.track_artist).text = song.artist
             thread {
                 if (song.art != null) {
-                    activity.findViewById<ImageView>(R.id.control_song_icon).setImageBitmap(song.art)
+                    activity.findViewById<ImageView>(
+                        R.id.control_song_icon
+                    ).setImageBitmap(song.art)
                 } else {
                     activity.findViewById<ImageView>(R.id.control_song_icon)
                         .setImageResource(R.drawable.default_placeholder)
