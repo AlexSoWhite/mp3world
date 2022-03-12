@@ -1,14 +1,18 @@
 package com.nafanya.mp3world
 
+import androidx.paging.PagedList
 import androidx.room.migration.Migration
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.gson.Gson
 import com.nafanya.mp3world.model.localStorage.AppDatabase
 import com.nafanya.mp3world.model.localStorage.DatabaseHolder
 import com.nafanya.mp3world.model.localStorage.SongDao
+import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.wrappers.PlaylistStorageEntity
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
 import org.junit.Assert.assertEquals
@@ -123,6 +127,156 @@ class MigrationTest {
         }
         helper.createDatabase(TEST_DB, 2)
         helper.runMigrationsAndValidate(TEST_DB, 3, true, migration23)
+    }
+
+    @Test
+    fun migrate3to4() {
+        val migration34 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                val song1 = Song(
+                    id = 1,
+                    title = "testSong1",
+                    artist = "testArtist",
+                    date = null,
+                    url = "sampleUrl",
+                    duration = 100,
+                    path = "asdas"
+                )
+                val song2 = Song(
+                    id = 2,
+                    title = "testSong2",
+                    artist = "testArtist",
+                    date = null,
+                    url = "sampleUrl",
+                    duration = 100,
+                    path = "asdas"
+                )
+                val song3 = Song(
+                    id = 3,
+                    title = "testSong3",
+                    artist = "testArtist",
+                    date = null,
+                    url = "sampleUrl",
+                    duration = 100,
+                    path = "asdas"
+                )
+                val song4 = Song(
+                    id = 5,
+                    title = "testSong4",
+                    artist = "testArtist",
+                    date = null,
+                    url = "sampleUrl",
+                    duration = 100,
+                    path = "asdas"
+                )
+                val song5 = Song(
+                    id = 6,
+                    title = "testSong5",
+                    artist = "testArtist",
+                    date = null,
+                    url = "sampleUrl",
+                    duration = 100,
+                    path = "asdas"
+                )
+                val song6 = Song(
+                    id = 7,
+                    title = "testSong6",
+                    artist = "testArtist",
+                    date = null,
+                    url = "sampleUrl",
+                    duration = 100,
+                    path = "asdas"
+                )
+                val playlist1 = Playlist(
+                    songList = mutableListOf(song1, song2, song3),
+                    id = 1,
+                    name = "playlist1"
+                )
+                val playlist2 = Playlist(
+                    songList = mutableListOf(song4, song5, song6),
+                    id = 2,
+                    name = "playlist2"
+                )
+                database.execSQL(
+                    """
+                        INSERT into playlist (songList, id, name)
+                        VALUES ("${playlist1.songList}", "${playlist1.id}", "${playlist1.name}")
+                    """.trimIndent()
+                )
+                database.execSQL(
+                    """
+                        INSERT into playlist (songList, id, name)
+                        VALUES ("${playlist2.songList}", "${playlist2.id}", "${playlist2.name}")
+                    """.trimIndent()
+                )
+                val cursor = database.query("SELECT * FROM playlist")
+                val playlists = mutableListOf<Playlist>()
+                val songListColumn = cursor.getColumnIndex("songList")
+                val idColumn = cursor.getColumnIndex("id")
+                val nameColumn = cursor.getColumnIndex("name")
+                while (cursor.moveToNext()) {
+                    var string = cursor.getString(songListColumn)
+                    string = string.slice(1 until string.length - 1)
+                    val rawSongs = string.split("),")
+                    val songList = mutableListOf<Song>()
+                    rawSongs.forEach {
+                        songList.add(jsonToSong("{${
+                            it
+                                .slice(5 until it.length)
+                                .replace("(", "")
+                                .replace(")", "")
+                        }}"))
+                    }
+                    val thisId = cursor.getInt(idColumn)
+                    val thisName = cursor.getString(nameColumn)
+                    playlists.add(
+                        Playlist(
+                            songList, thisId, thisName
+                        )
+                    )
+                }
+                val newPlaylists = mutableListOf<PlaylistStorageEntity>()
+                playlists.forEach {
+                    newPlaylists.add(it.toStorageEntity())
+                }
+                database.execSQL(
+                    """
+                        CREATE TABLE PlaylistStorageEntity (
+                            `id` INTEGER PRIMARY KEY NOT NULL,
+                            `songIds` TEXT,
+                            `name` TEXT NOT NULL
+                        )
+                    """.trimIndent()
+                )
+                newPlaylists.forEach {
+                    database.execSQL(
+                        """
+                            INSERT into PlaylistStorageEntity (id, songIds, name)
+                            VALUES ("${it.id}", "${it.songIds}", "${it.name}")
+                        """.trimIndent()
+                    )
+                }
+                database.execSQL("DROP TABLE Playlist")
+            }
+
+            private fun jsonToListOfSong(value: String): MutableList<Song> {
+                val list = Gson().fromJson(
+                    value,
+                    Array<Song>::class.java
+                ).toList()
+                return if (list.isNotEmpty()) list as MutableList<Song>
+                else mutableListOf()
+            }
+
+            private fun jsonToSong(value: String): Song {
+                 return Gson().fromJson(
+                    value,
+                    Song::class.java
+                )
+            }
+        }
+        helper.createDatabase(TEST_DB, 3)
+        helper.runMigrationsAndValidate(TEST_DB, 4, true, migration34)
     }
 }
 

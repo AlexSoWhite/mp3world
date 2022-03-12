@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.nafanya.mp3world.model.wrappers.Playlist
-
+/*
 @Dao
 interface PlaylistDao {
     @Query("SELECT * FROM playlist")
@@ -24,3 +24,4 @@ interface PlaylistDao {
     @Delete
     fun delete(playlist: Playlist)
 }
+*/
