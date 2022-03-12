@@ -68,11 +68,7 @@ class DatabaseHolder(context: Context) {
                 val songList = jsonToListOfSong(string)
                 val thisId = cursor.getInt(idColumn)
                 val thisName = cursor.getString(nameColumn)
-                playlists.add(
-                    Playlist(
-                        songList, thisId, thisName
-                    )
-                )
+                playlists.add(Playlist(songList, thisId, thisName))
             }
             val newPlaylists = mutableListOf<PlaylistStorageEntity>()
             playlists.forEach {
@@ -80,29 +76,22 @@ class DatabaseHolder(context: Context) {
             }
             database.execSQL(
                 """
-                        CREATE TABLE PlaylistStorageEntity (
-                            `id` INTEGER PRIMARY KEY NOT NULL,
-                            `songIds` TEXT,
-                            `name` TEXT NOT NULL
-                        )
-                    """.trimIndent()
+                    CREATE TABLE PlaylistStorageEntity (
+                        `id` INTEGER PRIMARY KEY NOT NULL,
+                        `songIds` TEXT,
+                        `name` TEXT NOT NULL
+                    )
+                """.trimIndent()
             )
             newPlaylists.forEach {
                 database.execSQL(
                     """
-                            INSERT into PlaylistStorageEntity (id, songIds, name)
-                            VALUES ("${it.id}", "${it.songIds}", "${it.name}")
-                        """.trimIndent()
+                        INSERT into PlaylistStorageEntity (id, songIds, name)
+                        VALUES ("${it.id}", "${it.songIds}", "${it.name}")
+                    """.trimIndent()
                 )
             }
             database.execSQL("DROP TABLE Playlist")
-        }
-
-        private fun jsonToSong(value: String): Song {
-            return Gson().fromJson(
-                value,
-                Song::class.java
-            )
         }
 
         private fun jsonToListOfSong(value: String): MutableList<Song> {

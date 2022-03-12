@@ -22,8 +22,6 @@ data class Playlist(
         songList.forEach {
             songIds.add(it.id)
         }
-        return PlaylistStorageEntity(
-            songIds, id, name
-        )
+        return PlaylistStorageEntity(songIds, id, name)
     }
 }

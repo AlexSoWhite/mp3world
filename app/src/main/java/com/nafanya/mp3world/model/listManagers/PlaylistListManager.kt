@@ -11,6 +11,7 @@ object PlaylistListManager {
         MutableLiveData<MutableList<Playlist>>(mutableListOf())
     }
 
+    @Suppress("NestedBlockDepth")
     fun initialize(playlistDao: StoredPlaylistDao) {
         val storedPlaylists = playlistDao.getAll()
         val temp = mutableListOf<Playlist>()

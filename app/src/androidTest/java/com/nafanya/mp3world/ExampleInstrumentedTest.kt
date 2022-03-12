@@ -1,6 +1,5 @@
 package com.nafanya.mp3world
 
-import androidx.paging.PagedList
 import androidx.room.migration.Migration
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -129,6 +128,7 @@ class MigrationTest {
         helper.runMigrationsAndValidate(TEST_DB, 3, true, migration23)
     }
 
+    @Suppress("LongMethod")
     @Test
     fun migrate3to4() {
         val migration34 = object : Migration(3, 4) {
@@ -220,20 +220,19 @@ class MigrationTest {
                     val rawSongs = string.split("),")
                     val songList = mutableListOf<Song>()
                     rawSongs.forEach {
-                        songList.add(jsonToSong("{${
-                            it
-                                .slice(5 until it.length)
-                                .replace("(", "")
-                                .replace(")", "")
-                        }}"))
+                        songList.add(
+                            jsonToSong(
+                                "{${
+                                it.slice(5 until it.length)
+                                    .replace("(", "")
+                                    .replace(")", "")
+                                }}"
+                            )
+                        )
                     }
                     val thisId = cursor.getInt(idColumn)
                     val thisName = cursor.getString(nameColumn)
-                    playlists.add(
-                        Playlist(
-                            songList, thisId, thisName
-                        )
-                    )
+                    playlists.add(Playlist(songList, thisId, thisName))
                 }
                 val newPlaylists = mutableListOf<PlaylistStorageEntity>()
                 playlists.forEach {
@@ -269,7 +268,7 @@ class MigrationTest {
             }
 
             private fun jsonToSong(value: String): Song {
-                 return Gson().fromJson(
+                return Gson().fromJson(
                     value,
                     Song::class.java
                 )
