@@ -35,7 +35,7 @@ object LocalStorageProvider {
     fun addPlaylist(context: Context, playlist: Playlist) {
         thread {
             val dbHolder = DatabaseHolder(context)
-            dbHolder.db.playlistDao().insert(playlist)
+            dbHolder.db.playlistDao().insert(playlist.toStorageEntity())
             dbHolder.closeDataBase()
         }
     }
@@ -48,7 +48,7 @@ object LocalStorageProvider {
             val dbHolder = DatabaseHolder(context)
             val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
             if (index != -1) {
-                dbHolder.db.playlistDao().update(playlist)
+                dbHolder.db.playlistDao().update(playlist.toStorageEntity())
             }
             dbHolder.closeDataBase()
         }
@@ -60,7 +60,7 @@ object LocalStorageProvider {
     fun deletePlaylist(context: Context, playlist: Playlist) {
         thread {
             val dbHolder = DatabaseHolder(context)
-            dbHolder.db.playlistDao().delete(playlist)
+            dbHolder.db.playlistDao().delete(playlist.toStorageEntity())
             dbHolder.closeDataBase()
         }
     }

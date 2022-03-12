@@ -1,14 +1,9 @@
 package com.nafanya.mp3world.model.wrappers
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity
 data class Playlist(
-    @ColumnInfo(name = "songList") var songList: MutableList<Song>,
-    @PrimaryKey val id: Int = 0,
-    @ColumnInfo(name = "name") var name: String = ""
+    var songList: MutableList<Song>,
+    val id: Int = 0,
+    var name: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
         if (this.id == (other as Playlist).id) return true
@@ -20,5 +15,13 @@ data class Playlist(
         result = 31 * result + id
         result = 31 * result + name.hashCode()
         return result
+    }
+
+    fun toStorageEntity(): PlaylistStorageEntity {
+        val songIds = mutableListOf<Long>()
+        songList.forEach {
+            songIds.add(it.id)
+        }
+        return PlaylistStorageEntity(songIds, id, name)
     }
 }
