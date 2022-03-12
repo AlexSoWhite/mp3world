@@ -19,23 +19,15 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/default_placeholder"/>
+            android:src="@drawable/default_placeholder" />
 
         <LinearLayout
-            android:paddingStart="10dp"
+            android:paddingHorizontal="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
             android:layout_weight="1">
-
-<!--            <TextView-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:id="@+id/date_holder"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@{song.date}"-->
-<!--                tools:text="15 октября 2021"/>-->
 
             <TextView
                 android:id="@+id/title"
@@ -65,7 +57,7 @@
             android:layout_height="wrap_content"
             tools:text="4:13"
             android:textSize="16sp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/action"
@@ -81,7 +73,7 @@
             android:id="@+id/playing_indicator"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical" />
 
     </LinearLayout>
 </layout>

@@ -125,10 +125,6 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = GenericPlayerControlView(this, R.id.player_control_view)
-                playerView!!.setSongObserver { song ->
-                    findViewById<TextView>(R.id.track_title).text = song.title
-                    findViewById<TextView>(R.id.track_artist).text = song.artist
-                }
                 playerView!!.playerControlView.setOnClickListener {
                     val intent = Intent(this, FullScreenPlayerActivity::class.java)
                     startActivity(intent)
