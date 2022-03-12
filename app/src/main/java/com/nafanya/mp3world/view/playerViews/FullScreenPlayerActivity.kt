@@ -2,7 +2,6 @@ package com.nafanya.mp3world.view.playerViews
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -22,15 +21,6 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = GenericPlayerControlView(this, R.id.player_control_fullscreen_view)
-                playerView!!.setSongObserver { song ->
-                    findViewById<TextView>(R.id.track_title).text = song.title
-                    findViewById<TextView>(R.id.track_artist).text = song.artist
-                    if (song.art != null) {
-                        binding.image.setImageBitmap(song.art)
-                    } else {
-                        binding.image.setImageResource(R.drawable.default_placeholder)
-                    }
-                }
                 playerView!!.setPlaylistObserver { playlist ->
                     // TODO expand playlist
                 }

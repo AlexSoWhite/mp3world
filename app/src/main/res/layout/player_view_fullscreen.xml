@@ -13,13 +13,13 @@
     android:animateLayoutChanges="true">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/image"
+        android:id="@+id/control_song_icon"
         android:layout_width="300dp"
         android:layout_height="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/default_placeholder"/>
+        tools:src="@drawable/default_placeholder" />
 
     <com.google.android.exoplayer2.ui.StyledPlayerControlView
         android:layout_marginTop="20dp"
@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image"
-        app:controller_layout_id="@layout/player_control_view_fullscreen"/>
+        app:layout_constraintTop_toBottomOf="@id/control_song_icon"
+        app:controller_layout_id="@layout/player_control_view_fullscreen" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

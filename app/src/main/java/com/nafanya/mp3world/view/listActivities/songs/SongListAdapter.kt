@@ -92,6 +92,7 @@ open class SongListAdapter(
             } else {
                 binding.songIcon.setImageResource(R.drawable.default_placeholder)
             }
+            binding.duration.text = stringFromDuration(song.duration)
             binding.songListItem.setOnClickListener {
                 callback()
                 ForegroundServiceLiveDataProvider.currentSong.value = song
@@ -100,6 +101,39 @@ open class SongListAdapter(
                 binding,
                 song
             )
+        }
+
+        private fun stringFromDuration(arg: Long?): String {
+            var duration = arg
+            if (duration == null) return ""
+            var hours = 0
+            while (duration >= millisecondsInOneHour) {
+                hours++
+                duration -= millisecondsInOneHour
+            }
+            var minutes = 0
+            while (duration >= millisecondsInOneMinute) {
+                minutes++
+                duration -= millisecondsInOneMinute
+            }
+            var seconds = 0
+            while (duration >= millisecondsInOneSecond) {
+                seconds++
+                duration -= millisecondsInOneSecond
+            }
+            return if (hours == 0) {
+                minutes.toString() + ":" + seconds.toString().padStart(2, '0')
+            } else {
+                hours.toString() + ":" +
+                    minutes.toString().padStart(2, '0') + "" +
+                    seconds.toString().padStart(2, '0')
+            }
+        }
+
+        companion object {
+            private const val millisecondsInOneHour = 3600000
+            private const val millisecondsInOneMinute = 60000
+            private const val millisecondsInOneSecond = 1000
         }
     }
 }

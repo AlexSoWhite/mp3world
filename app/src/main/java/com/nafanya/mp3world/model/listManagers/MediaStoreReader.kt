@@ -72,7 +72,7 @@ object MediaStoreReader {
                 val thisAlbumId = cursor.getLong(albumIdColumn)
                 val thisAlbumName = cursor.getString(albumColumn)
                 val thisPath = cursor.getString(pathColumn)
-                val thisDuration = cursor.getInt(durationColumn)
+                val thisDuration = cursor.getLong(durationColumn)
                 // tracks with <unknown> artist are corrupted
                 if (thisArtist != "<unknown>") {
                     // set the song art

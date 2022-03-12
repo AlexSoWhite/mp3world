@@ -15,7 +15,9 @@ object PlaylistListManager {
     }
 
     fun addPlaylist(playlist: Playlist) {
-        playlists.value?.add(playlist)
+        val temp = playlists.value
+        temp?.add(playlist)
+        playlists.value = temp
     }
 
     fun updatePlaylist(playlist: Playlist) {
