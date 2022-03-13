@@ -42,10 +42,16 @@ object PlaylistListManager {
         }
     }
 
-    fun getPlaylistByName(name: String): Playlist? {
-        playlists.value?.forEach {
-            if (it.name == name) return it
-        }
-        return null
-    }
+//    fun deleteSongWithUrl(song: Song) {
+//        val temp = playlists.value
+//        temp?.forEach { playlist ->
+//            playlist.songList.forEach {
+//                if (it.url != null && it.url == song.url) {
+//                    playlist.songList.remove(song)
+//                    updatePlaylist(playlist)
+//                }
+//            }
+//        }
+//        playlists.postValue(temp)
+//    }
 }

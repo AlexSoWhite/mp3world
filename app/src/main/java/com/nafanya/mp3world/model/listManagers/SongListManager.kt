@@ -21,7 +21,6 @@ object SongListManager {
 
     fun appendLocalSongs(songListDao: SongDao) {
         val addition = songListDao.getAll()
-        urlBasedCount = addition.size.toLong()
         val newList = songList.value
         newList?.addAll(addition)
         songList.postValue(newList)
@@ -32,13 +31,11 @@ object SongListManager {
 
     fun addSongWithUrl(song: Song) {
         val newList = songList.value
-        song.id = urlBasedCount
         newList?.add(song)
         newList?.sortByDescending { it ->
             simpleDateFormat.parse(it.date!!)
         }
         songList.value = newList
-        urlBasedCount++
     }
 
     fun deleteSongWithUrl(song: Song) {
@@ -53,6 +50,7 @@ object SongListManager {
             simpleDateFormat.parse(it.date!!)
         }
         songList.value = newList
+        // PlaylistListManager.deleteSongWithUrl(song)
         urlBasedCount--
     }
 }

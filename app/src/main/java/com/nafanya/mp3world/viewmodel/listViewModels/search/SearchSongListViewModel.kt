@@ -71,6 +71,8 @@ class SearchSongListViewModel : ListViewModelInterface() {
 
     fun addSong(context: Context, song: Song) {
         song.date = simpleDateFormat.format(Date())
+        song.id = SongListManager.urlBasedCount
+        SongListManager.urlBasedCount++
         // modifying LiveData
         SongListManager.addSongWithUrl(song)
         // adding song to the local storage
