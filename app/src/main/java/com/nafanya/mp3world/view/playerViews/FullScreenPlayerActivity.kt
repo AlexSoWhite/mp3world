@@ -73,13 +73,23 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 }
                 binding.favouriteButton.setOnClickListener {
                     if (!isFavourite) {
-                        FavouriteListManager.add(ForegroundServiceLiveDataProvider.currentSong.value!!)
-                        LocalStorageProvider.addFavourite(activity, ForegroundServiceLiveDataProvider.currentSong.value!!)
+                        FavouriteListManager.add(
+                            ForegroundServiceLiveDataProvider.currentSong.value!!
+                        )
+                        LocalStorageProvider.addFavourite(
+                            activity,
+                            ForegroundServiceLiveDataProvider.currentSong.value!!
+                        )
                         isFavourite = true
                         binding.favouriteButton.setImageResource(R.drawable.favorite)
                     } else {
-                        FavouriteListManager.delete(ForegroundServiceLiveDataProvider.currentSong.value!!)
-                        LocalStorageProvider.deleteFavourite(activity, ForegroundServiceLiveDataProvider.currentSong.value!!)
+                        FavouriteListManager.delete(
+                            ForegroundServiceLiveDataProvider.currentSong.value!!
+                        )
+                        LocalStorageProvider.deleteFavourite(
+                            activity,
+                            ForegroundServiceLiveDataProvider.currentSong.value!!
+                        )
                         isFavourite = false
                         binding.favouriteButton.setImageResource(R.drawable.favorite_border)
                     }

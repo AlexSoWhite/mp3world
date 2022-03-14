@@ -64,7 +64,7 @@ open class SongListViewModel : ListViewModelInterface() {
     }
 
     fun start() {
-        if(!isInitialized) {
+        if (!isInitialized) {
             isInitialized = true
         } else {
             pageState.postValue(PageState.IS_LOADING)

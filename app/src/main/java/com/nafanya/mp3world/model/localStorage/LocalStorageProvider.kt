@@ -1,8 +1,6 @@
 package com.nafanya.mp3world.model.localStorage
 
 import android.content.Context
-import android.provider.ContactsContract
-import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.FavouriteListEntity
 import com.nafanya.mp3world.model.wrappers.Playlist

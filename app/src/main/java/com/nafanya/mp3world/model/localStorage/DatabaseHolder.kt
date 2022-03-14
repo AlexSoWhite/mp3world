@@ -107,11 +107,13 @@ class DatabaseHolder(context: Context) {
 
     private val migration45 = object : Migration(4, 5) {
         override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("""
+            database.execSQL(
+                """
                 CREATE TABLE FavouriteListEntity(
                     `id` INTEGER PRIMARY KEY NOT NULL
                 )
-            """.trimIndent())
+                """.trimIndent()
+            )
         }
     }
 
