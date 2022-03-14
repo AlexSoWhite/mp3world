@@ -63,16 +63,17 @@
         </LinearLayout>
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/fullscreen"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:paddingTop="3dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/fullscreen"
             app:layout_constraintBottom_toBottomOf="@+id/exo_repeat_toggle"
             app:layout_constraintEnd_toStartOf="@+id/exo_repeat_toggle"
-            app:layout_constraintTop_toTopOf="@+id/exo_repeat_toggle"
-            android:src="@drawable/done"
-            android:id="@+id/fullscreen"
-            android:clickable="true"
-            android:focusable="true" />
+            app:layout_constraintTop_toTopOf="@+id/exo_repeat_toggle" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_gravity="center_vertical"
