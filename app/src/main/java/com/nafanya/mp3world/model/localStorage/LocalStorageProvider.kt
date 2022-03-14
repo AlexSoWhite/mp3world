@@ -1,7 +1,10 @@
 package com.nafanya.mp3world.model.localStorage
 
 import android.content.Context
+import android.provider.ContactsContract
+import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
+import com.nafanya.mp3world.model.wrappers.FavouriteListEntity
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import kotlin.concurrent.thread
@@ -61,6 +64,27 @@ object LocalStorageProvider {
         thread {
             val dbHolder = DatabaseHolder(context)
             dbHolder.db.playlistDao().delete(playlist.toStorageEntity())
+            dbHolder.closeDataBase()
+        }
+    }
+
+    // favourite list section
+    fun addFavourite(context: Context, song: Song) {
+        thread {
+            val dbHolder = DatabaseHolder(context)
+            dbHolder.db.favouriteListDao().insert(
+                FavouriteListEntity(song.id)
+            )
+            dbHolder.closeDataBase()
+        }
+    }
+
+    fun deleteFavourite(context: Context, song: Song) {
+        thread {
+            val dbHolder = DatabaseHolder(context)
+            dbHolder.db.favouriteListDao().delete(
+                FavouriteListEntity(song.id)
+            )
             dbHolder.closeDataBase()
         }
     }

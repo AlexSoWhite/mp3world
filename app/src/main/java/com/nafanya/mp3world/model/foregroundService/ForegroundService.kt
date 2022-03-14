@@ -135,9 +135,19 @@ class ForegroundService : LifecycleService() {
 
     private fun subscribePlaylist() {
         val observer = Observer<Playlist> {
+            // create copy of playlist to continue playing deleted from playlist songs
+            val songList = mutableListOf<Song>()
+            it?.songList?.forEach { song ->
+                songList.add(song)
+            }
+            val playlist = Playlist(
+                id = it.id,
+                name = it.name,
+                songList = songList
+            )
             player?.clearMediaItems()
-            this.playlist = it
-            playlist.songList.forEach { song ->
+            this.playlist = playlist
+            this.playlist.songList.forEach { song ->
                 val extras = Bundle()
                 extras.putLong("id", song.id)
                 extras.putString("title", song.title)

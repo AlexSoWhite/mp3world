@@ -14,6 +14,8 @@ open class SongListViewModel : ListViewModelInterface() {
         MutableLiveData<Playlist>()
     }
 
+    private var isInitialized = false
+
     private fun startLoading(query: String, callback: (Playlist) -> Unit) {
         Downloader.preLoad(query) { playlist ->
             playlist?.let {
@@ -59,6 +61,14 @@ open class SongListViewModel : ListViewModelInterface() {
 
     override fun onEmpty() {
         title.value = playlist.value!!.name
+    }
+
+    fun start() {
+        if(!isInitialized) {
+            isInitialized = true
+        } else {
+            pageState.postValue(PageState.IS_LOADING)
+        }
     }
 
     fun updateData(arg: Playlist) {

@@ -17,16 +17,14 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
-import com.nafanya.mp3world.model.listManagers.AlbumListManager
-import com.nafanya.mp3world.model.listManagers.ArtistListManager
-import com.nafanya.mp3world.model.listManagers.PlaylistListManager
-import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.listManagers.*
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.albums.AlbumListActivity
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
+import com.nafanya.mp3world.view.listActivities.favourite.FavouriteListActivity
 import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
 import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
@@ -69,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = GenericPlayerControlView(this, R.id.player_control_view)
+                playerView!!.setSongObserver()
                 playerView!!.playerControlView.setOnClickListener {
                     val intent = Intent(this, FullScreenPlayerActivity::class.java)
                     startActivity(intent)
@@ -95,7 +94,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        binding.favoriteCount = 0
     }
 
     private fun initMainMenu() {
@@ -145,6 +143,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
         AlbumListManager.albums.observe(this, albumsObserver)
+
+        // favourites
+        val favouriteObserver = Observer<MutableList<Song>> { songList ->
+            binding.favouriteCount = songList.size
+            binding.favourite.item.setOnClickListener {
+                val favouriteIntent = Intent(this, FavouriteListActivity::class.java)
+                SourceProvider.newInstanceWithPlaylist(
+                    Playlist(
+                        songList,
+                        id = 0,
+                        name = "Избранное"
+                    )
+                )
+                startActivity(favouriteIntent)
+            }
+        }
+        FavouriteListManager.songList.observe(this, favouriteObserver)
     }
 
     override fun onRequestPermissionsResult(

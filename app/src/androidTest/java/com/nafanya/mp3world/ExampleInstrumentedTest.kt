@@ -277,6 +277,23 @@ class MigrationTest {
         helper.createDatabase(TEST_DB, 3)
         helper.runMigrationsAndValidate(TEST_DB, 4, true, migration34)
     }
+
+    @Test
+    fun migrate4to5() {
+        val migration45 = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """
+                        CREATE TABLE FavouriteListEntity(
+                            `id` INTEGER PRIMARY KEY NOT NULL
+                        )
+                    """.trimIndent()
+                )
+            }
+        }
+        helper.createDatabase(TEST_DB, 4)
+        helper.runMigrationsAndValidate(TEST_DB, 5, true, migration45)
+    }
 }
 
 @RunWith(AndroidJUnit4::class)
