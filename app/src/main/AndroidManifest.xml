@@ -54,6 +54,9 @@
         <activity android:name=".view.listActivities.search.SearchSongListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
+        <activity android:name=".view.listActivities.favourite.FavouriteListActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity android:name=".view.playerViews.FullScreenPlayerActivity"
             android:screenOrientation="portrait"/>
         <service android:name=".model.foregroundService.ForegroundService" />

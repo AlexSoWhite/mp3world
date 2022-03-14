@@ -28,11 +28,9 @@ open class GenericPlayerControlView(
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
             RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
-        // setting song observer
-        setSongObserver()
     }
 
-    private fun setSongObserver() {
+    open fun setSongObserver() {
         // observe current song state
         val songObserver = Observer<Song> { song ->
             activity.findViewById<TextView>(R.id.track_title).text = song.title

@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
+import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
@@ -104,6 +105,18 @@ class DatabaseHolder(context: Context) {
         }
     }
 
+    private val migration45 = object : Migration(4, 5) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                """
+                CREATE TABLE FavouriteListEntity(
+                    `id` INTEGER PRIMARY KEY NOT NULL
+                )
+                """.trimIndent()
+            )
+        }
+    }
+
     init {
         db = Room.databaseBuilder(
             context,
@@ -112,13 +125,15 @@ class DatabaseHolder(context: Context) {
         ).addMigrations(
             migration12,
             migration23,
-            migration34
+            migration34,
+            migration45
         ).build()
     }
 
     fun populateLists() {
-        PlaylistListManager.initialize(db.playlistDao())
         SongListManager.appendLocalSongs(db.songsListDao())
+        PlaylistListManager.initialize(db.playlistDao())
+        FavouriteListManager.initialize(db.favouriteListDao())
     }
 
     fun closeDataBase() {

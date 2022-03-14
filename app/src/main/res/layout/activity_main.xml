@@ -17,7 +17,7 @@
         name="artistCount"
         type="Integer" />
     <variable
-        name="favoriteCount"
+        name="favouriteCount"
         type="Integer" />
 </data>
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,10 +65,10 @@
             bind:count="@{albumCount.toString()}" />
 
         <include
-            android:id="@+id/favorite"
+            android:id="@+id/favourite"
             layout="@layout/main_menu_item"
             bind:description="@{&quot;Избранное&quot;}"
-            bind:count="@{favoriteCount.toString()}" />
+            bind:count="@{favouriteCount.toString()}" />
 
         <include
             android:id="@+id/statistics"
