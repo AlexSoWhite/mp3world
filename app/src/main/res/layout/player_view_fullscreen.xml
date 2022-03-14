@@ -32,10 +32,10 @@
         app:controller_layout_id="@layout/player_control_view_fullscreen" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/favourite_button"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_control_fullscreen_view"
