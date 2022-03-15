@@ -15,10 +15,10 @@ class StatisticViewModel : ListViewModelInterface() {
     }
 
     override fun onLoaded() {
-
+        // TODO
     }
 
     override fun onEmpty() {
-
+        // TODO
     }
 }

@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class SongStatisticEntity (
+data class SongStatisticEntity(
     @PrimaryKey val id: Long,
     @ColumnInfo(name = "time") var time: Long? = null,
     @ColumnInfo(name = "title") val title: String? = null,

@@ -122,13 +122,13 @@ class DatabaseHolder(context: Context) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
                 """
-                        CREATE TABLE SongStatisticEntity(
-                                `id` INTEGER PRIMARY KEY NOT NULL,
-                                `time` INTEGER,
-                                `title` TEXT,
-                                `artist` TEXT
-                        )
-                    """.trimIndent()
+                    CREATE TABLE SongStatisticEntity(
+                            `id` INTEGER PRIMARY KEY NOT NULL,
+                            `time` INTEGER,
+                            `title` TEXT,
+                            `artist` TEXT
+                    )
+                """.trimIndent()
             )
         }
     }

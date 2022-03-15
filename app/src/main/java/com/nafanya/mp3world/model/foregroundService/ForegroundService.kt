@@ -33,7 +33,7 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 import com.nafanya.mp3world.view.MainActivity
-import java.util.*
+import java.util.Date
 
 class ForegroundService : LifecycleService() {
 
@@ -209,6 +209,7 @@ class ForegroundService : LifecycleService() {
         ForegroundServiceLiveDataProvider.currentSong.observe(this, observer)
     }
 
+    @Suppress("NestedBlockDepth")
     private fun logStatistic(remember: Song?) {
         endPlayingSongTime = Date()
         startPlayingSongTime?.let {

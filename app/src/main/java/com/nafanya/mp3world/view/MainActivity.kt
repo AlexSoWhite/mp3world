@@ -17,8 +17,17 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
-import com.nafanya.mp3world.model.listManagers.*
-import com.nafanya.mp3world.model.wrappers.*
+import com.nafanya.mp3world.model.listManagers.AlbumListManager
+import com.nafanya.mp3world.model.listManagers.ArtistListManager
+import com.nafanya.mp3world.model.listManagers.FavouriteListManager
+import com.nafanya.mp3world.model.listManagers.PlaylistListManager
+import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.listManagers.StatisticInfoManager
+import com.nafanya.mp3world.model.wrappers.Album
+import com.nafanya.mp3world.model.wrappers.Artist
+import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 import com.nafanya.mp3world.view.listActivities.albums.AlbumListActivity
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.favourite.FavouriteListActivity
@@ -90,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("LongMethod")
     private fun initMainMenu() {
         // all songs
         val songListObserver = Observer<MutableList<Song>> { songList ->
