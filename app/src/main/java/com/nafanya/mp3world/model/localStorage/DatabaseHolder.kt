@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.listManagers.StatisticInfoManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.PlaylistStorageEntity
 import com.nafanya.mp3world.model.wrappers.Song
@@ -117,6 +118,21 @@ class DatabaseHolder(context: Context) {
         }
     }
 
+    private val migration56 = object : Migration(5, 6) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                """
+                        CREATE TABLE SongStatisticEntity(
+                                `id` INTEGER PRIMARY KEY NOT NULL,
+                                `time` INTEGER,
+                                `title` TEXT,
+                                `artist` TEXT
+                        )
+                    """.trimIndent()
+            )
+        }
+    }
+
     init {
         db = Room.databaseBuilder(
             context,
@@ -126,7 +142,8 @@ class DatabaseHolder(context: Context) {
             migration12,
             migration23,
             migration34,
-            migration45
+            migration45,
+            migration56
         ).build()
     }
 
@@ -134,6 +151,7 @@ class DatabaseHolder(context: Context) {
         SongListManager.appendLocalSongs(db.songsListDao())
         PlaylistListManager.initialize(db.playlistDao())
         FavouriteListManager.initialize(db.favouriteListDao())
+        StatisticInfoManager.initialize(db.songStatisticDao())
     }
 
     fun closeDataBase() {

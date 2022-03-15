@@ -27,9 +27,13 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_DEFAULT
 import com.google.android.exoplayer2.util.NotificationUtil.createNotificationChannel
 import com.nafanya.mp3world.R
+import com.nafanya.mp3world.model.listManagers.StatisticInfoManager
+import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 import com.nafanya.mp3world.view.MainActivity
+import java.util.*
 
 class ForegroundService : LifecycleService() {
 
@@ -38,6 +42,10 @@ class ForegroundService : LifecycleService() {
     private lateinit var playlist: Playlist
     private lateinit var playerNotificationManager: PlayerNotificationManager
     var currentIdx: Int = 0
+    // statistic
+    private var startPlayingSongTime: Date? = null
+    private var endPlayingSongTime: Date? = null
+    private var previousSong: Song? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -188,11 +196,52 @@ class ForegroundService : LifecycleService() {
     }
 
     private fun subscribeSong() {
-        val observer = Observer<Song> {
-            currentIdx = playlist.songList.indexOf(it)
+        val observer = Observer<Song> { song ->
+            currentIdx = playlist.songList.indexOf(song)
             try {
                 player?.seekToDefaultPosition(currentIdx)
                 player?.play()
+                endPlayingSongTime = Date()
+                startPlayingSongTime?.let {
+                    var playingTime = endPlayingSongTime!!.time - startPlayingSongTime!!.time
+                    var entity: SongStatisticEntity? = null
+                    StatisticInfoManager.info.value!!.forEach { e ->
+                        if (e.id == previousSong!!.id) {
+                            entity = e
+                            e.time?.let {
+                                playingTime += it
+                            }
+                        }
+                    }
+                    if (playingTime >= addingSongToStatisticEntityThreshold) {
+                        when (entity) {
+                            null -> {
+                                LocalStorageProvider.addStatisticEntity(
+                                    this,
+                                    SongStatisticEntity(
+                                        previousSong!!.id,
+                                        playingTime,
+                                        previousSong!!.title,
+                                        previousSong!!.artist
+                                    )
+                                )
+                            }
+                            else -> {
+                                LocalStorageProvider.updateStatisticEntity(
+                                    this,
+                                    SongStatisticEntity(
+                                        previousSong!!.id,
+                                        playingTime,
+                                        previousSong!!.title,
+                                        previousSong!!.artist
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+                previousSong = song
+                startPlayingSongTime = Date()
             } catch (e: IllegalSeekPositionException) {
                 Log.d("subscribe", currentIdx.toString())
             }
@@ -215,5 +264,10 @@ class ForegroundService : LifecycleService() {
         playerNotificationManager.setPlayer(null)
         player?.release()
         player = null
+    }
+
+    companion object {
+        // 5 seconds
+        private const val addingSongToStatisticEntityThreshold = 5000
     }
 }

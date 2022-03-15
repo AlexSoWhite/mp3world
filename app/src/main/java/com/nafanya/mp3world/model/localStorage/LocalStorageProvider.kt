@@ -5,6 +5,7 @@ import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.FavouriteListEntity
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 import kotlin.concurrent.thread
 
 object LocalStorageProvider {
@@ -83,6 +84,23 @@ object LocalStorageProvider {
             dbHolder.db.favouriteListDao().delete(
                 FavouriteListEntity(song.id)
             )
+            dbHolder.closeDataBase()
+        }
+    }
+
+    // statistic section
+    fun addStatisticEntity(context: Context, value: SongStatisticEntity) {
+        thread {
+            val dbHolder = DatabaseHolder(context)
+            dbHolder.db.songStatisticDao().insert(value)
+            dbHolder.closeDataBase()
+        }
+    }
+
+    fun updateStatisticEntity(context: Context, value: SongStatisticEntity) {
+        thread {
+            val dbHolder = DatabaseHolder(context)
+            dbHolder.db.songStatisticDao().update(value)
             dbHolder.closeDataBase()
         }
     }
