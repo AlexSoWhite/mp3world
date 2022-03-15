@@ -18,9 +18,8 @@ class OnSwipeListener(view: View, var callback: () -> Unit) : View.OnTouchListen
             if (event.action == MotionEvent.ACTION_UP) {
                 val diffX = lastX - event.x
                 val diffY = lastY - event.y
-                // Log.d("touch", "$diffX $diffY")
-                if (abs(diffX) > 2 * abs(diffY)) {
-                    Log.d("touch", "swipe detected")
+                if (abs(diffX) > 2 * abs(diffY) && diffX < 0) {
+                    Log.d("touch", "right swipe detected")
                     callback()
                 }
                 lastIsUp = true
@@ -29,7 +28,6 @@ class OnSwipeListener(view: View, var callback: () -> Unit) : View.OnTouchListen
                 lastY = event.y
                 lastIsUp = false
             }
-            // Log.d("touch", MotionEvent.actionToString(event.action))
         }
         return result
     }
