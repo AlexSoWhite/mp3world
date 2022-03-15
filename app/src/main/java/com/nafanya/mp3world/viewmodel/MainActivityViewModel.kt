@@ -21,7 +21,11 @@ class MainActivityViewModel : ViewModel() {
                 MediaStoreReader.initializeSongList(context, contentResolver)
                 // use initialized songList to initialize player state
                 ForegroundServiceLiveDataProvider.currentPlaylist.value =
-                    Playlist(SongListManager.songList.value!!)
+                    Playlist(
+                        SongListManager.songList.value!!,
+                        id = -1,
+                        name = "Мои песни"
+                    )
                 LocalStorageProvider.populateLists(context)
             }
         }

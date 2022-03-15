@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.view.playerViews
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
@@ -7,12 +8,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
 import kotlin.concurrent.thread
 
 class FullScreenPlayerActivity : AppCompatActivity() {
@@ -28,8 +31,9 @@ class FullScreenPlayerActivity : AppCompatActivity() {
             if (it) {
                 playerView = FullScreenPlayerView(this, R.id.player_control_fullscreen_view)
                 playerView!!.setSongObserver()
-                playerView!!.setPlaylistObserver { playlist ->
-                    // TODO expand playlist
+                findViewById<ShapeableImageView>(R.id.current_playlist).setOnClickListener {
+                    val intent = Intent(this, CurrentPlaylistDialogActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }
