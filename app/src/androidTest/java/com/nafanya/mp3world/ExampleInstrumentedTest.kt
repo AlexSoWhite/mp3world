@@ -294,6 +294,26 @@ class MigrationTest {
         helper.createDatabase(TEST_DB, 4)
         helper.runMigrationsAndValidate(TEST_DB, 5, true, migration45)
     }
+
+    @Test
+    fun migrate5to6() {
+        val migration56 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    """
+                        CREATE TABLE SongStatisticEntity(
+                                `id` INTEGER PRIMARY KEY NOT NULL,
+                                `time` INTEGER,
+                                `title` TEXT,
+                                `artist` TEXT
+                        )
+                    """.trimIndent()
+                )
+            }
+        }
+        helper.createDatabase(TEST_DB, 5)
+        helper.runMigrationsAndValidate(TEST_DB, 6, true, migration56)
+    }
 }
 
 @RunWith(AndroidJUnit4::class)

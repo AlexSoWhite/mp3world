@@ -22,16 +22,19 @@ import com.nafanya.mp3world.model.listManagers.ArtistListManager
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.listManagers.StatisticInfoManager
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 import com.nafanya.mp3world.view.listActivities.albums.AlbumListActivity
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.favourite.FavouriteListActivity
 import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
 import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
+import com.nafanya.mp3world.view.listActivities.statistic.StatisticActivity
 import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
@@ -96,10 +99,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
+    @Suppress("LongMethod")
     private fun initMainMenu() {
         // all songs
         val songListObserver = Observer<MutableList<Song>> { songList ->
@@ -164,6 +164,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
         FavouriteListManager.songList.observe(this, favouriteObserver)
+
+        // statistic
+        val statisticObserver = Observer<MutableList<SongStatisticEntity>> {
+            binding.statistics.item.setOnClickListener {
+                val statisticIntent = Intent(this, StatisticActivity::class.java)
+                startActivity(statisticIntent)
+            }
+        }
+        StatisticInfoManager.info.observe(this, statisticObserver)
     }
 
     override fun onRequestPermissionsResult(
