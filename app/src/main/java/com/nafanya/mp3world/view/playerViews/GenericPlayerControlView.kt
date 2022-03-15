@@ -8,7 +8,6 @@ import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
-import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import kotlin.concurrent.thread
 
@@ -47,13 +46,5 @@ open class GenericPlayerControlView(
             }
         }
         ForegroundServiceLiveDataProvider.currentSong.observe(activity, songObserver)
-    }
-
-    fun setPlaylistObserver(callback: (Playlist) -> Unit) {
-        // observe current playlist state
-        val playlistObserver = Observer<Playlist> {
-            callback(it)
-        }
-        ForegroundServiceLiveDataProvider.currentPlaylist.observe(activity, playlistObserver)
     }
 }

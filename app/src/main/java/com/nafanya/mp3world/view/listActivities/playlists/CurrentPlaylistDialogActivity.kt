@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlaylistPopupActivityBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
 
 class CurrentPlaylistDialogActivity : AppCompatActivity() {
@@ -31,5 +32,8 @@ class CurrentPlaylistDialogActivity : AppCompatActivity() {
             ForegroundServiceLiveDataProvider.currentPlaylist.value = playlist
         }
         binding.playlistTitle.text = playlist.name
+        OnSwipeListener(binding.playlist) {
+            finish()
+        }
     }
 }

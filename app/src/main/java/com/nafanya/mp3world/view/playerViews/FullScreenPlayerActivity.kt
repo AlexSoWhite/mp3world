@@ -15,6 +15,7 @@ import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataPro
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
 import kotlin.concurrent.thread
 
@@ -27,6 +28,9 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = DataBindingUtil.setContentView(this, R.layout.player_view_fullscreen)
+        OnSwipeListener(binding.root) {
+            finish()
+        }
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = FullScreenPlayerView(this, R.id.player_control_fullscreen_view)
