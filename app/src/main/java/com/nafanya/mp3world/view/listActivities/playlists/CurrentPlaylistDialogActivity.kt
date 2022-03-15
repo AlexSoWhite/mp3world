@@ -1,17 +1,14 @@
 package com.nafanya.mp3world.view.listActivities.playlists
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlaylistPopupActivityBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
-import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
 
 class CurrentPlaylistDialogActivity : AppCompatActivity() {

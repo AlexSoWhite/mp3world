@@ -3,13 +3,11 @@ package com.nafanya.mp3world.view.playerViews
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
@@ -17,9 +15,7 @@ import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataPro
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.wrappers.Song
-import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
-import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
 import kotlin.concurrent.thread
 
 class FullScreenPlayerActivity : AppCompatActivity() {
