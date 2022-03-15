@@ -199,54 +199,58 @@ class ForegroundService : LifecycleService() {
         val observer = Observer<Song> { song ->
             currentIdx = playlist.songList.indexOf(song)
             try {
+                logStatistic(song)
                 player?.seekToDefaultPosition(currentIdx)
                 player?.play()
-                endPlayingSongTime = Date()
-                startPlayingSongTime?.let {
-                    var playingTime = endPlayingSongTime!!.time - startPlayingSongTime!!.time
-                    var entity: SongStatisticEntity? = null
-                    StatisticInfoManager.info.value!!.forEach { e ->
-                        if (e.id == previousSong!!.id) {
-                            entity = e
-                            e.time?.let {
-                                playingTime += it
-                            }
-                        }
-                    }
-                    if (playingTime >= addingSongToStatisticEntityThreshold) {
-                        when (entity) {
-                            null -> {
-                                LocalStorageProvider.addStatisticEntity(
-                                    this,
-                                    SongStatisticEntity(
-                                        previousSong!!.id,
-                                        playingTime,
-                                        previousSong!!.title,
-                                        previousSong!!.artist
-                                    )
-                                )
-                            }
-                            else -> {
-                                LocalStorageProvider.updateStatisticEntity(
-                                    this,
-                                    SongStatisticEntity(
-                                        previousSong!!.id,
-                                        playingTime,
-                                        previousSong!!.title,
-                                        previousSong!!.artist
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-                previousSong = song
-                startPlayingSongTime = Date()
             } catch (e: IllegalSeekPositionException) {
                 Log.d("subscribe", currentIdx.toString())
             }
         }
         ForegroundServiceLiveDataProvider.currentSong.observe(this, observer)
+    }
+
+    private fun logStatistic(remember: Song?) {
+        endPlayingSongTime = Date()
+        startPlayingSongTime?.let {
+            var playingTime = endPlayingSongTime!!.time - startPlayingSongTime!!.time
+            var entity: SongStatisticEntity? = null
+            StatisticInfoManager.info.value!!.forEach { e ->
+                if (e.id == previousSong!!.id) {
+                    entity = e
+                    e.time?.let {
+                        playingTime += it
+                    }
+                }
+            }
+            if (playingTime >= addingSongToStatisticEntityThreshold) {
+                when (entity) {
+                    null -> {
+                        LocalStorageProvider.addStatisticEntity(
+                            this,
+                            SongStatisticEntity(
+                                previousSong!!.id,
+                                playingTime,
+                                previousSong!!.title,
+                                previousSong!!.artist
+                            )
+                        )
+                    }
+                    else -> {
+                        LocalStorageProvider.updateStatisticEntity(
+                            this,
+                            SongStatisticEntity(
+                                previousSong!!.id,
+                                playingTime,
+                                previousSong!!.title,
+                                previousSong!!.artist
+                            )
+                        )
+                    }
+                }
+            }
+        }
+        previousSong = remember
+        startPlayingSongTime = Date()
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -263,6 +267,7 @@ class ForegroundService : LifecycleService() {
         super.onDestroy()
         playerNotificationManager.setPlayer(null)
         player?.release()
+        logStatistic(null)
         player = null
     }
 

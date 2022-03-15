@@ -11,6 +11,10 @@ object StatisticInfoManager {
     }
 
     fun initialize(songStatisticDao: SongStatisticDao) {
-        info.postValue(songStatisticDao.getAll())
+        val list = songStatisticDao.getAll()
+        list.sortByDescending {
+            it.time
+        }
+        info.postValue(list)
     }
 }
