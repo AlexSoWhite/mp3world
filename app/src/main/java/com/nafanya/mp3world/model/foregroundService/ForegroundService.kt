@@ -72,6 +72,10 @@ class ForegroundService : LifecycleService() {
                 .setMediaDescriptionAdapter(Adapter(this))
                 .setNotificationListener(NotificationListener())
                 .build()
+            playerNotificationManager.setUseFastForwardAction(false)
+            playerNotificationManager.setUseRewindAction(false)
+            playerNotificationManager.setUseNextActionInCompactView(true)
+            playerNotificationManager.setUsePreviousActionInCompactView(true)
             playerNotificationManager.setPlayer(player)
             // provide player data to set it into the player controller in the app
             ForegroundServiceLiveDataProvider.setPlayer(player)
@@ -104,7 +108,7 @@ class ForegroundService : LifecycleService() {
             }
         }
 
-        override fun getCurrentContentText(player: Player): CharSequence? {
+        override fun getCurrentContentText(player: Player): CharSequence {
             return playlist.songList[player.currentMediaItemIndex].artist as CharSequence
         }
 
@@ -112,7 +116,7 @@ class ForegroundService : LifecycleService() {
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
         ): Bitmap? {
-            return null
+            return ForegroundServiceLiveDataProvider.currentSong.value!!.art
         }
     }
 

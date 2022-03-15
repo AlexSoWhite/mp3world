@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                 SourceProvider.newInstanceWithPlaylist(
                     Playlist(
                         songList,
-                        id = 0,
+                        id = -1,
                         name = "Мои песни"
                     )
                 )
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity() {
                 SourceProvider.newInstanceWithPlaylist(
                     Playlist(
                         songList,
-                        id = 0,
+                        id = -1,
                         name = "Избранное"
                     )
                 )
