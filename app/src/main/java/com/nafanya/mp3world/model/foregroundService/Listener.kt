@@ -76,7 +76,9 @@ class Listener(private val context: Context) : Player.Listener {
         endPlayingSongTime = Date()
         startPlayingSongTime?.let {
             if (startPlayingSongTime!!.time > 0 && playingTime != null) {
-                playingTime = playingTime!! + endPlayingSongTime!!.time - startPlayingSongTime!!.time
+                playingTime = playingTime!! +
+                    endPlayingSongTime!!.time -
+                    startPlayingSongTime!!.time
             } else if (startPlayingSongTime!!.time > 0) {
                 playingTime = endPlayingSongTime!!.time - startPlayingSongTime!!.time
             }
