@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.google.gson.Gson
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
@@ -133,6 +135,12 @@ class DatabaseHolder(context: Context) {
         }
     }
 
+    private val migration67 = object : Migration(6, 7) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("DELETE FROM SongStatisticEntity")
+        }
+    }
+
     init {
         db = Room.databaseBuilder(
             context,
@@ -143,7 +151,8 @@ class DatabaseHolder(context: Context) {
             migration23,
             migration34,
             migration45,
-            migration56
+            migration56,
+            migration67
         ).build()
     }
 

@@ -2,6 +2,7 @@ package com.nafanya.mp3world.model.localStorage
 
 import android.content.Context
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
+import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.FavouriteListEntity
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
@@ -90,19 +91,19 @@ object LocalStorageProvider {
 
     // statistic section
     fun addStatisticEntity(context: Context, value: SongStatisticEntity) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
-            dbHolder.db.songStatisticDao().insert(value)
-            dbHolder.closeDataBase()
-        }
+//        thread {
+//            val dbHolder = DatabaseHolder(context)
+//            dbHolder.db.songStatisticDao().insert(value)
+//            dbHolder.closeDataBase()
+//        }
     }
 
     fun updateStatisticEntity(context: Context, value: SongStatisticEntity) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
-            dbHolder.db.songStatisticDao().update(value)
-            dbHolder.closeDataBase()
-        }
+//        thread {
+//            val dbHolder = DatabaseHolder(context)
+//            dbHolder.db.songStatisticDao().update(value)
+//            dbHolder.closeDataBase()
+//        }
     }
 
     // all list section
