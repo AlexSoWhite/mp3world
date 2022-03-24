@@ -15,7 +15,7 @@ import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
         FavouriteListEntity::class,
         SongStatisticEntity::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = true
 )
 @TypeConverters(Converter::class)
