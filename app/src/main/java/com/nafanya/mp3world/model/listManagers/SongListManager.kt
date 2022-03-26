@@ -3,6 +3,9 @@ package com.nafanya.mp3world.model.listManagers
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.localStorage.SongDao
 import com.nafanya.mp3world.model.wrappers.Song
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -13,10 +16,22 @@ object SongListManager {
     val songList: MutableLiveData<MutableList<Song>> by lazy {
         MutableLiveData<MutableList<Song>>(mutableListOf())
     }
+    private var suspendedList = mutableListOf<Song>()
     var urlBasedCount: Long = 0
 
     fun add(song: Song) {
-        songList.value?.add(song)
+        suspendedList.add(song)
+    }
+
+    @DelicateCoroutinesApi
+    fun resetData() {
+        songList.value = suspendedList
+        GlobalScope.launch {
+            suspendedList = mutableListOf()
+            songList.value?.forEach {
+                suspendedList.add(it)
+            }
+        }
     }
 
     fun appendLocalSongs(songListDao: SongDao) {

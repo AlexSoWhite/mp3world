@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.model.network
 
-import android.content.Context
+import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
@@ -41,7 +41,7 @@ object Downloader {
                                 .toString()
                             songList.add(
                                 Song(
-                                    id = -1,
+                                    id = SongListManager.urlBasedCount++,
                                     title = title,
                                     artist = artist,
                                     date = "",
@@ -55,23 +55,6 @@ object Downloader {
                             callback(Playlist(songList, id = -1, name = query))
                         }
                     }
-                }
-            }
-        )
-    }
-
-    fun downLoad(url: String, context: Context, song: Song) {
-        val request = Request.Builder()
-            .url(url)
-            .build()
-        client.newCall(request).enqueue(
-            object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    DownloadAudioFromUrl(context).execute()
                 }
             }
         )

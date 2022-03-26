@@ -100,6 +100,7 @@
             android:id="@+id/player_control_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             app:controller_layout_id="@layout/exo_styled_player_control_view"/>
 
     </FrameLayout>

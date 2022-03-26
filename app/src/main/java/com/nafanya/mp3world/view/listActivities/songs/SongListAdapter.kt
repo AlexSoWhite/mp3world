@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.network.DownloadService
 import com.nafanya.mp3world.model.wrappers.Song
 
 open class SongListAdapter(
@@ -41,7 +42,9 @@ open class SongListAdapter(
     ) {
         if (song.url != null) {
             binding.action.visibility = View.VISIBLE
-            binding.action.setOnClickListener {}
+            binding.action.setOnClickListener {
+                DownloadService().startLoading(song.url!!)
+            }
             Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
         } else {
             binding.action.visibility = View.GONE

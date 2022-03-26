@@ -66,5 +66,6 @@
         <activity android:name=".view.playerViews.FullScreenPlayerActivity"
             android:screenOrientation="portrait"/>
         <service android:name=".model.foregroundService.ForegroundService" />
+        <service android:name=".model.foregroundService.ServiceInitializer" />
     </application>
 </manifest>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/player_control_view"
+    android:id="@+id/controls_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -10,6 +10,8 @@
     android:paddingHorizontal="10dp"
     android:paddingTop="5dp"
     android:theme="@style/exoPlayer"
+    android:visibility="invisible"
+    tools:visibility="visible"
     android:orientation="vertical">
 
     <LinearLayout
