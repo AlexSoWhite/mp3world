@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.network.DownloadService
 import com.nafanya.mp3world.model.wrappers.Song
 
@@ -69,7 +69,7 @@ open class SongListAdapter(
         ) {
             binding.song = song
             val isPlayingObserver = Observer<Boolean> { isPlaying ->
-                val playingSong = ForegroundServiceLiveDataProvider.currentSong.value
+                val playingSong = PlayerLiveDataProvider.currentSong.value
                 if (isPlaying &&
                     (
                         playingSong?.id == song.id && playingSong.url == null ||
@@ -89,7 +89,7 @@ open class SongListAdapter(
                         .into(binding.playingIndicator)
                 }
             }
-            ForegroundServiceLiveDataProvider.isPlaying.observe(context, isPlayingObserver)
+            PlayerLiveDataProvider.isPlaying.observe(context, isPlayingObserver)
             if (song.art != null) {
                 binding.songIcon.setImageBitmap(song.art)
             } else {
@@ -98,7 +98,7 @@ open class SongListAdapter(
             binding.duration.text = stringFromDuration(song.duration)
             binding.songListItem.setOnClickListener {
                 callback()
-                ForegroundServiceLiveDataProvider.currentSong.value = song
+                PlayerLiveDataProvider.currentSong.value = song
             }
             decorateItem(
                 binding,

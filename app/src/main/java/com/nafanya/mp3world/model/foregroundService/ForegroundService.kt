@@ -80,7 +80,7 @@ class ForegroundService : LifecycleService() {
             playerNotificationManager.setUsePreviousActionInCompactView(true)
             playerNotificationManager.setPlayer(player)
             // provide player data to set it into the player controller in the app
-            ForegroundServiceLiveDataProvider.setPlayer(player)
+            PlayerLiveDataProvider.setPlayer(player)
         }
     }
 
@@ -118,7 +118,7 @@ class ForegroundService : LifecycleService() {
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
         ): Bitmap? {
-            return ForegroundServiceLiveDataProvider.currentSong.value!!.art
+            return PlayerLiveDataProvider.currentSong.value!!.art
         }
     }
 
@@ -186,7 +186,7 @@ class ForegroundService : LifecycleService() {
                 isInitialized = true
             }
         }
-        ForegroundServiceLiveDataProvider.currentPlaylist.observe(this, observer)
+        PlayerLiveDataProvider.currentPlaylist.observe(this, observer)
     }
 
     private fun subscribeSong() {
@@ -199,7 +199,7 @@ class ForegroundService : LifecycleService() {
                 Log.d("subscribe", currentIdx.toString())
             }
         }
-        ForegroundServiceLiveDataProvider.currentSong.observe(this, observer)
+        PlayerLiveDataProvider.currentSong.observe(this, observer)
     }
 
     override fun onBind(intent: Intent): IBinder? {

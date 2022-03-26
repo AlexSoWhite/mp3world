@@ -18,7 +18,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.foregroundService.ServiceInitializer
 import com.nafanya.mp3world.model.listManagers.AlbumListManager
 import com.nafanya.mp3world.model.listManagers.ArtistListManager
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(
+        PlayerLiveDataProvider.isPlayerInitialized.observe(
             this,
             observerPlayer
         )

@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.wrappers.Song
 
 open class GenericPlayerControlView(
@@ -26,10 +26,10 @@ open class GenericPlayerControlView(
         // setting player
         val playerObserver = Observer<Boolean> {
             if (it) {
-                playerControlView.player = ForegroundServiceLiveDataProvider.getPlayer()
+                playerControlView.player = PlayerLiveDataProvider.getPlayer()
             }
         }
-        ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(activity, playerObserver)
+        PlayerLiveDataProvider.isPlayerInitialized.observe(activity, playerObserver)
         playerControlView.repeatToggleModes =
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
@@ -51,6 +51,6 @@ open class GenericPlayerControlView(
                     .setImageResource(R.drawable.default_placeholder)
             }
         }
-        ForegroundServiceLiveDataProvider.currentSong.observe(activity, songObserver)
+        PlayerLiveDataProvider.currentSong.observe(activity, songObserver)
     }
 }

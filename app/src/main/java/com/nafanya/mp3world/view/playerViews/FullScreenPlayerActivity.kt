@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.wrappers.Song
@@ -41,7 +41,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 }
             }
         }
-        ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(
+        PlayerLiveDataProvider.isPlayerInitialized.observe(
             this,
             observerPlayer
         )
@@ -70,7 +70,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 // favourite
                 var isFavourite = false
                 FavouriteListManager.songList.value?.let { list ->
-                    if (list.contains(ForegroundServiceLiveDataProvider.currentSong.value)) {
+                    if (list.contains(PlayerLiveDataProvider.currentSong.value)) {
                         isFavourite = true
                     }
                 }
@@ -82,28 +82,28 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 binding.favouriteButton.setOnClickListener {
                     if (!isFavourite) {
                         FavouriteListManager.add(
-                            ForegroundServiceLiveDataProvider.currentSong.value!!
+                            PlayerLiveDataProvider.currentSong.value!!
                         )
                         LocalStorageProvider.addFavourite(
                             activity,
-                            ForegroundServiceLiveDataProvider.currentSong.value!!
+                            PlayerLiveDataProvider.currentSong.value!!
                         )
                         isFavourite = true
                         binding.favouriteButton.setImageResource(R.drawable.favorite)
                     } else {
                         FavouriteListManager.delete(
-                            ForegroundServiceLiveDataProvider.currentSong.value!!
+                            PlayerLiveDataProvider.currentSong.value!!
                         )
                         LocalStorageProvider.deleteFavourite(
                             activity,
-                            ForegroundServiceLiveDataProvider.currentSong.value!!
+                            PlayerLiveDataProvider.currentSong.value!!
                         )
                         isFavourite = false
                         binding.favouriteButton.setImageResource(R.drawable.favorite_border)
                     }
                 }
             }
-            ForegroundServiceLiveDataProvider.currentSong.observe(activity, songObserver)
+            PlayerLiveDataProvider.currentSong.observe(activity, songObserver)
         }
     }
 

@@ -24,7 +24,7 @@ class ServiceInitializer : LifecycleService() {
                 isServiceInitialized = true
             }
         }
-        ForegroundServiceLiveDataProvider.currentPlaylist.observe(this, observer)
+        PlayerLiveDataProvider.currentPlaylist.observe(this, observer)
     }
 
     override fun onBind(p0: Intent): IBinder? {

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
@@ -28,7 +28,7 @@ class AddSongToListActivity : RecyclerHolderActivity() {
                 it.songList,
                 this
             ) {
-                ForegroundServiceLiveDataProvider.currentPlaylist.value = it
+                PlayerLiveDataProvider.currentPlaylist.value = it
             }
         }
         (viewModel as AddSongToListViewModel).playlist.observe(this, observer)
