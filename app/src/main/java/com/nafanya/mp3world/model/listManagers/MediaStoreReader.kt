@@ -39,7 +39,6 @@ object MediaStoreReader {
             selection =
                 MediaStore.Audio.Media.IS_DOWNLOAD
         }
-        selection = null
         // sort based on date
         val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
         context.contentResolver.query(
@@ -72,7 +71,7 @@ object MediaStoreReader {
                 val thisPath = cursor.getString(pathColumn)
                 val thisDuration = cursor.getLong(durationColumn)
                 // tracks with <unknown> artist are corrupted
-                //if (thisArtist != "<unknown>") {
+                if (thisArtist != "<unknown>") {
                     // set the song art
                     val bitmap = getBitmap(contentResolver, thisId)
                     // build song object
@@ -87,18 +86,18 @@ object MediaStoreReader {
                         art = bitmap
                     )
                     SongListManager.add(song)
-//                    val artist = Artist(
-//                        name = thisArtist,
-//                        id = thisArtistId
-//                    )
-//                    ArtistListManager.add(artist, song)
-//                    val album = Album(
-//                        id = thisAlbumId,
-//                        name = thisAlbumName,
-//                        songList = mutableListOf()
-//                    )
-//                    AlbumListManager.add(album, song)
-                //}
+                    val artist = Artist(
+                        name = thisArtist,
+                        id = thisArtistId
+                    )
+                    ArtistListManager.add(artist, song)
+                    val album = Album(
+                        id = thisAlbumId,
+                        name = thisAlbumName,
+                        songList = mutableListOf()
+                    )
+                    AlbumListManager.add(album, song)
+                }
             }
         }
         SongListManager.resetData()
