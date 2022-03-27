@@ -39,11 +39,13 @@ object Downloader {
                             val art = arts[i]
                             val title = elem.getElementsByClass("track__title").text()
                             val artist = elem.getElementsByClass("track__desc").text()
-                            val duration = textToDuration(elem.getElementsByClass("track__fulltime").text())
+                            val duration = textToDuration(
+                                elem.getElementsByClass("track__fulltime").text()
+                            )
                             var artUrl = art
                                 .attr("style")
                             artUrl = artUrl.substring(
-                                artUrl.indexOf('\'')+2,
+                                artUrl.indexOf('\'') + 2,
                                 artUrl.lastIndexOf('\'')
                             )
                             artUrl = "https://ru.hitmotop.com/$artUrl"

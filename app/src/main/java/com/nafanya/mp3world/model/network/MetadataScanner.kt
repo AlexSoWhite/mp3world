@@ -3,6 +3,7 @@ package com.nafanya.mp3world.model.network
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.util.Log
 
 @Suppress("StaticFieldLeak")
 object MetadataScanner {
@@ -12,16 +13,18 @@ object MetadataScanner {
 
     fun context(context: Context) {
         this.context = context
-        scanner = MediaScannerConnection(MetadataScanner.context, object : MediaScannerConnection.MediaScannerConnectionClient {
-            override fun onScanCompleted(p0: String?, p1: Uri?) {
+        scanner = MediaScannerConnection(
+            MetadataScanner.context,
+            object : MediaScannerConnection.MediaScannerConnectionClient {
+                override fun onScanCompleted(p0: String?, p1: Uri?) {
+                    p1?.toString()?.let { Log.d("Scan", it) }
+                }
 
+                override fun onMediaScannerConnected() {
+                    Log.d("Scan", "connected")
+                }
             }
-
-            override fun onMediaScannerConnected() {
-
-            }
-
-        })
+        )
         scanner.connect()
     }
 

@@ -3,7 +3,6 @@ package com.nafanya.mp3world.view.playerViews
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -21,7 +20,6 @@ import com.nafanya.mp3world.model.network.DownloadService
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
-import kotlin.concurrent.thread
 
 class FullScreenPlayerActivity : AppCompatActivity() {
 
@@ -56,6 +54,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         layoutResId: Int
     ) : GenericPlayerControlView(activity, layoutResId) {
 
+        @Suppress("LongMethod")
         override fun setSongObserver() {
             // observe current song state
             val songObserver = Observer<Song> { song ->
