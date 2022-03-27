@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
-        mainActivityViewModel.initializeLists(this, contentResolver)
+        mainActivityViewModel.initializeLists(this)
         initMainMenu()
         initInitializer()
         PRDownloader.initialize(applicationContext)

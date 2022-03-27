@@ -13,18 +13,19 @@ import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
 
 @Suppress("LongMethod")
+// TODO: inject context
 object MediaStoreReader {
 
     private var isInitialized = false
     private const val artDimension = 1024
 
-    fun initializeSongList(context: Context, contentResolver: ContentResolver) {
+    fun readMediaStore(context: Context) {
         if (!isInitialized) {
-            initialize(context, contentResolver)
+            initialize(context)
         }
     }
 
-    private fun initialize(context: Context, contentResolver: ContentResolver) {
+    private fun initialize(context: Context) {
         // get all the fields from media storage
         val projection = null
         // select only music
@@ -69,7 +70,7 @@ object MediaStoreReader {
                 // tracks with <unknown> artist are corrupted
                 if (thisArtist != "<unknown>") {
                     // set the song art
-                    val bitmap = getBitmap(contentResolver, thisId)
+                    val bitmap = getBitmap(context.contentResolver, thisId)
                     // build song object
                     val song = Song(
                         id = thisId,

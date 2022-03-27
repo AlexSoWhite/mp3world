@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.viewmodel
 
-import android.content.ContentResolver
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,12 +10,12 @@ import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {
 
-    fun initializeLists(context: Context, contentResolver: ContentResolver) {
+    fun initializeLists(context: Context) {
         if (!isInitialized) {
             viewModelScope.launch {
                 isInitialized = true
                 // initialize songList
-                MediaStoreReader.initializeSongList(context, contentResolver)
+                MediaStoreReader.readMediaStore(context)
                 LocalStorageProvider.populateLists(context)
                 MetadataScanner.context(context)
             }
