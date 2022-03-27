@@ -40,7 +40,8 @@ class Listener(private val context: Context) : Player.Listener {
             artist = it.mediaMetadata.extras!!.getString("artist"),
             date = it.mediaMetadata.extras!!.getString("date"),
             url = it.mediaMetadata.extras!!.getString("url"),
-            duration = null,
+            duration = it.mediaMetadata.extras!!.getLong("duration"),
+            artUrl = it.mediaMetadata.extras!!.getString("artUrl"),
             path = it.mediaMetadata.extras!!.getString("path")
         )
         PlayerLiveDataProvider.currentSong.value = song

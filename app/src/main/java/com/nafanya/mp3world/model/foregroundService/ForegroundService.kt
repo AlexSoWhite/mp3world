@@ -160,8 +160,9 @@ class ForegroundService : LifecycleService() {
                 extras.putString("artist", song.artist)
                 extras.putString("date", song.date)
                 extras.putString("url", song.url)
-                // TODO extras.putInt("duration", song.duration!!)
+                extras.putLong("duration", song.duration!!)
                 extras.putString("path", song.path)
+                extras.putString("artUrl", song.artUrl)
                 val uri: Uri =
                     song.url?.toUri()
                         ?: ContentUris.withAppendedId(

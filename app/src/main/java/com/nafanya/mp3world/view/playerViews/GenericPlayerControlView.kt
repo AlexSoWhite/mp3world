@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.nafanya.mp3world.R
@@ -42,13 +43,19 @@ open class GenericPlayerControlView(
             activity.findViewById<LinearLayout>(R.id.controls_view).visibility = View.VISIBLE
             activity.findViewById<TextView>(R.id.track_title).text = song.title
             activity.findViewById<TextView>(R.id.track_artist).text = song.artist
-            if (song.art != null) {
-                activity.findViewById<ImageView>(
-                    R.id.control_song_icon
-                ).setImageBitmap(song.art)
-            } else {
-                activity.findViewById<ImageView>(R.id.control_song_icon)
-                    .setImageResource(R.drawable.default_placeholder)
+            val songIcon = activity.findViewById<ImageView>(R.id.control_song_icon)
+            when {
+                song.art != null -> {
+                    songIcon.setImageBitmap(song.art)
+                }
+                song.artUrl != null -> {
+                    Glide.with(songIcon)
+                        .load(song.artUrl)
+                        .into(songIcon)
+                }
+                else -> {
+                    songIcon.setImageResource(R.drawable.default_placeholder)
+                }
             }
         }
         PlayerLiveDataProvider.currentSong.observe(activity, songObserver)

@@ -98,10 +98,18 @@ open class SongListAdapter(
                 }
             }
             PlayerLiveDataProvider.isPlaying.observe(context, isPlayingObserver)
-            if (song.art != null) {
-                binding.songIcon.setImageBitmap(song.art)
-            } else {
-                binding.songIcon.setImageResource(R.drawable.default_placeholder)
+            when {
+                song.art != null -> {
+                    binding.songIcon.setImageBitmap(song.art)
+                }
+                song.artUrl != null -> {
+                    Glide.with(binding.songIcon)
+                        .load(song.artUrl)
+                        .into(binding.songIcon)
+                }
+                else -> {
+                    binding.songIcon.setImageResource(R.drawable.default_placeholder)
+                }
             }
             binding.duration.text = stringFromDuration(song.duration)
             binding.songListItem.setOnClickListener {

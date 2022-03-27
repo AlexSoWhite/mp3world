@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.model.network
 
+import com.bumptech.glide.Glide
 import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
@@ -32,10 +33,21 @@ object Downloader {
                     response.body?.let Playlist@{
                         val doc = Jsoup.parseBodyFragment(it.string())
                         val songList: ArrayList<Song> = arrayListOf()
-                        doc.getElementsByClass("track__info").forEach { elem ->
+                        val arts = doc.getElementsByClass("track__img")
+                        val info = doc.getElementsByClass("track__info")
+                        for (i in info.indices) {
+                            val elem = info[i]
+                            val art = arts[i]
                             val title = elem.getElementsByClass("track__title").text()
                             val artist = elem.getElementsByClass("track__desc").text()
                             val duration = textToDuration(elem.getElementsByClass("track__fulltime").text())
+                            var artUrl = art
+                                .attr("style")
+                            artUrl = artUrl.substring(
+                                artUrl.indexOf('\'')+2,
+                                artUrl.lastIndexOf('\'')
+                            )
+                            artUrl = "https://ru.hitmotop.com/$artUrl"
                             val downloadUrl = elem
                                 .getElementsByClass("track__download-btn")
                                 .attr("href")
@@ -47,7 +59,8 @@ object Downloader {
                                     artist = artist,
                                     date = "",
                                     duration = duration,
-                                    url = downloadUrl
+                                    url = downloadUrl,
+                                    artUrl = artUrl
                                 )
                             )
                         }
