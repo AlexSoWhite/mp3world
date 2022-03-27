@@ -35,6 +35,7 @@ object Downloader {
                         doc.getElementsByClass("track__info").forEach { elem ->
                             val title = elem.getElementsByClass("track__title").text()
                             val artist = elem.getElementsByClass("track__desc").text()
+                            val duration = textToDuration(elem.getElementsByClass("track__fulltime").text())
                             val downloadUrl = elem
                                 .getElementsByClass("track__download-btn")
                                 .attr("href")
@@ -45,6 +46,7 @@ object Downloader {
                                     title = title,
                                     artist = artist,
                                     date = "",
+                                    duration = duration,
                                     url = downloadUrl
                                 )
                             )
@@ -58,5 +60,18 @@ object Downloader {
                 }
             }
         )
+    }
+
+    private const val millisecondsInOneHour = 3600000
+    private const val millisecondsInOneMinute = 60000
+    private const val millisecondsInOneSecond = 1000
+
+    private fun textToDuration(value: String): Long {
+        var result = 0L
+        val split = value.split(':').reversed() as ArrayList<String>
+        result += (split[0].toInt()) * millisecondsInOneSecond
+        if (split.size > 1) result += (split[1].toInt()) * millisecondsInOneMinute
+        if (split.size > 2) result += (split[2].toInt()) * millisecondsInOneHour
+        return result
     }
 }

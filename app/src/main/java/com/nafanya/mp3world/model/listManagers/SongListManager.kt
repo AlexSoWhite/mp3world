@@ -1,7 +1,9 @@
 package com.nafanya.mp3world.model.listManagers
 
 import androidx.lifecycle.MutableLiveData
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.localStorage.SongDao
+import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -26,6 +28,13 @@ object SongListManager {
     @DelicateCoroutinesApi
     fun resetData() {
         songList.value = suspendedList
+        if (songList.value!!.isNotEmpty()) {
+            PlayerLiveDataProvider.currentPlaylist.value = Playlist(
+                id = -1,
+                name = "Мои песни",
+                songList = songList.value!!
+            )
+        }
         GlobalScope.launch {
             suspendedList = mutableListOf()
             songList.value?.forEach {

@@ -1,8 +1,10 @@
 package com.nafanya.mp3world.view.listActivities.songs
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
@@ -43,7 +45,13 @@ open class SongListAdapter(
         if (song.url != null) {
             binding.action.visibility = View.VISIBLE
             binding.action.setOnClickListener {
-                DownloadService().startLoading(song.url!!)
+                DownloadService().downLoad(song) {
+                    Toast.makeText(
+                        context as Context,
+                        "finished",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
             Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
         } else {
