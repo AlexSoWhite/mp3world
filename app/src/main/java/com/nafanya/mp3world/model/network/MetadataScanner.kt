@@ -14,7 +14,7 @@ object MetadataScanner {
         this.context = context
         scanner = MediaScannerConnection(MetadataScanner.context, object : MediaScannerConnection.MediaScannerConnectionClient {
             override fun onScanCompleted(p0: String?, p1: Uri?) {
-                val a = 0
+
             }
 
             override fun onMediaScannerConnected() {

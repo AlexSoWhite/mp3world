@@ -1,18 +1,13 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.search
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.model.listManagers.SongListManager
-import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Playlist
-import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import java.lang.RuntimeException
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class SearchSongListViewModel : ListViewModelInterface() {
@@ -67,32 +62,5 @@ class SearchSongListViewModel : ListViewModelInterface() {
 
     override fun onEmpty() {
         // TODO
-    }
-
-    fun addSong(context: Context, song: Song) {
-        song.date = simpleDateFormat.format(Date())
-        song.id = SongListManager.urlBasedCount
-        SongListManager.urlBasedCount++
-        // modifying LiveData
-        SongListManager.addSongWithUrl(song)
-        // adding song to the local storage
-        LocalStorageProvider.addSong(context, song)
-    }
-
-    fun deleteSong(context: Context, song: Song) {
-        // modifying LiveData
-        SongListManager.deleteSongWithUrl(song)
-        // removing song from the local storage
-        LocalStorageProvider.deleteSong(context, song)
-    }
-
-    fun isAdded(song: Song): Boolean {
-        SongListManager.songList.value?.forEach {
-            if (it.url == song.url) {
-                song.id = it.id
-                return true
-            }
-        }
-        return false
     }
 }

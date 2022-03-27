@@ -19,11 +19,6 @@ class DownloadService {
             .build()
             .start(object : OnDownloadListener {
                 override fun onDownloadComplete() {
-//                    val contentValues = ContentValues()
-//                    contentValues.put(MediaStore.Audio.AudioColumns.TITLE, song.title)
-//                    contentValues.put(MediaStore.Audio.AudioColumns.ARTIST, song.artist)
-//                    contentValues.put(MediaStore.Audio.AudioColumns.DURATION, song.duration)
-//                    contentValues.put(MediaStore.Audio.AudioColumns.DATE_MODIFIED, Date().time)
                     MetadataScanner.scan("$dirPath/$fileName")
                     callback()
                 }

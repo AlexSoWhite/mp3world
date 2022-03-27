@@ -3,8 +3,10 @@ package com.nafanya.mp3world.view.playerViews
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -15,6 +17,7 @@ import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
+import com.nafanya.mp3world.model.network.DownloadService
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
@@ -73,38 +76,51 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                     }
                 }
                 // favourite
-                var isFavourite = false
-                FavouriteListManager.songList.value?.let { list ->
-                    if (list.contains(PlayerLiveDataProvider.currentSong.value)) {
-                        isFavourite = true
+                if (song.url == null) {
+                    var isFavourite = false
+                    FavouriteListManager.songList.value?.let { list ->
+                        if (list.contains(PlayerLiveDataProvider.currentSong.value)) {
+                            isFavourite = true
+                        }
                     }
-                }
-                if (!isFavourite) {
-                    binding.favouriteButton.setImageResource(R.drawable.favorite_border)
-                } else {
-                    binding.favouriteButton.setImageResource(R.drawable.favorite)
-                }
-                binding.favouriteButton.setOnClickListener {
                     if (!isFavourite) {
-                        FavouriteListManager.add(
-                            PlayerLiveDataProvider.currentSong.value!!
-                        )
-                        LocalStorageProvider.addFavourite(
-                            activity,
-                            PlayerLiveDataProvider.currentSong.value!!
-                        )
-                        isFavourite = true
-                        binding.favouriteButton.setImageResource(R.drawable.favorite)
-                    } else {
-                        FavouriteListManager.delete(
-                            PlayerLiveDataProvider.currentSong.value!!
-                        )
-                        LocalStorageProvider.deleteFavourite(
-                            activity,
-                            PlayerLiveDataProvider.currentSong.value!!
-                        )
-                        isFavourite = false
                         binding.favouriteButton.setImageResource(R.drawable.favorite_border)
+                    } else {
+                        binding.favouriteButton.setImageResource(R.drawable.favorite)
+                    }
+                    binding.favouriteButton.setOnClickListener {
+                        if (!isFavourite) {
+                            FavouriteListManager.add(
+                                PlayerLiveDataProvider.currentSong.value!!
+                            )
+                            LocalStorageProvider.addFavourite(
+                                activity,
+                                PlayerLiveDataProvider.currentSong.value!!
+                            )
+                            isFavourite = true
+                            binding.favouriteButton.setImageResource(R.drawable.favorite)
+                        } else {
+                            FavouriteListManager.delete(
+                                PlayerLiveDataProvider.currentSong.value!!
+                            )
+                            LocalStorageProvider.deleteFavourite(
+                                activity,
+                                PlayerLiveDataProvider.currentSong.value!!
+                            )
+                            isFavourite = false
+                            binding.favouriteButton.setImageResource(R.drawable.favorite_border)
+                        }
+                    }
+                } else {
+                    binding.favouriteButton.setImageResource(R.drawable.download_icon)
+                    binding.favouriteButton.setOnClickListener {
+                        DownloadService().downLoad(song) {
+                            Toast.makeText(
+                                activity,
+                                "${song.artist} - ${song.title} загружено",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }

@@ -48,7 +48,7 @@ open class SongListAdapter(
                 DownloadService().downLoad(song) {
                     Toast.makeText(
                         context as Context,
-                        "finished",
+                        "${song.artist} - ${song.title} загружено",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
