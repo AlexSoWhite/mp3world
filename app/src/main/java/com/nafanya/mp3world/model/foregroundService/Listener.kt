@@ -10,6 +10,7 @@ import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 import java.util.Date
 
+// TODO: statistic
 class Listener : Player.Listener {
 
     // statistic
