@@ -60,19 +60,19 @@ dependencies {
     implementation 'androidx.databinding:databinding-runtime:4.1.3'
 
     // coroutines and viewModel
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.2.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
 
     // okhttp3 to make requests to internet
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
     // jsoup to parse html pages
-    implementation 'org.jsoup:jsoup:1.11.2'
+    implementation 'org.jsoup:jsoup:1.13.1'
 
     // glide to load images
-    implementation 'com.github.bumptech.glide:glide:4.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
 
     // local storage, SQLite wrapper Room
     def room_version = "2.4.2"
@@ -84,7 +84,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
 
     // paging
-    def paging_version = "3.1.0"
+    def paging_version = "3.1.1"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // download

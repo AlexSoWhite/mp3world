@@ -17,6 +17,7 @@ class Listener(private val context: Context) : Player.Listener {
     private var endPlayingSongTime: Date? = null
     private var playingTime: Long? = null
     private var previousSong: Song? = null
+
     companion object {
         // 5 seconds
         private const val addingSongToStatisticEntityThreshold = 5000
