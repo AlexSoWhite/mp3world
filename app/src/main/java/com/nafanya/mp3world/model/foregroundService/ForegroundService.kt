@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.model.foregroundService
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.ContentUris
@@ -74,7 +73,7 @@ class ForegroundService : LifecycleService() {
             subscribePlaylist()
             subscribeSong()
             // add listener that trigger observers to sync player state with other classes throughout the app
-            listener = Listener(this)
+            listener = Listener()
             player!!.addListener(listener)
             // add headphones unplugging handler
             player!!.setHandleAudioBecomingNoisy(true)

@@ -10,18 +10,18 @@ import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 import java.util.Date
 
-class Listener(private val context: Context) : Player.Listener {
+class Listener : Player.Listener {
 
     // statistic
-    private var startPlayingSongTime: Date? = null
-    private var endPlayingSongTime: Date? = null
-    private var playingTime: Long? = null
-    private var previousSong: Song? = null
-
-    companion object {
-        // 5 seconds
-        private const val addingSongToStatisticEntityThreshold = 5000
-    }
+//    private var startPlayingSongTime: Date? = null
+//    private var endPlayingSongTime: Date? = null
+//    private var playingTime: Long? = null
+//    private var previousSong: Song? = null
+//
+//    companion object {
+//        // 5 seconds
+//        private const val addingSongToStatisticEntityThreshold = 5000
+//    }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         super.onMediaItemTransition(mediaItem, reason)
@@ -52,73 +52,73 @@ class Listener(private val context: Context) : Player.Listener {
         SongListManager.songList.value?.forEach { elem ->
             if (elem.id == it.mediaMetadata.extras!!.getLong("id")) {
                 PlayerLiveDataProvider.currentSong.value = elem
-                logStatistic()
-                previousSong = elem
+                // logStatistic()
+                // previousSong = elem
             }
         }
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         PlayerLiveDataProvider.isPlaying.value = isPlaying
-        if (!isPlaying) {
-            playingTime = Date().time - startPlayingSongTime!!.time
-            startPlayingSongTime?.time = 0
-        } else {
-            startPlayingSongTime = Date()
-        }
+//        if (!isPlaying) {
+//            playingTime = Date().time - startPlayingSongTime!!.time
+//            startPlayingSongTime?.time = 0
+//        } else {
+//            startPlayingSongTime = Date()
+//        }
     }
 
     fun destroy() {
-        logStatistic()
+        // logStatistic()
     }
 
-    @Suppress("NestedBlockDepth")
-    private fun logStatistic() {
-        endPlayingSongTime = Date()
-        startPlayingSongTime?.let {
-            if (startPlayingSongTime!!.time > 0 && playingTime != null) {
-                playingTime = playingTime!! +
-                    endPlayingSongTime!!.time -
-                    startPlayingSongTime!!.time
-            } else if (startPlayingSongTime!!.time > 0) {
-                playingTime = endPlayingSongTime!!.time - startPlayingSongTime!!.time
-            }
-            var entity: SongStatisticEntity? = null
-            StatisticInfoManager.info.value!!.forEach { e ->
-                if (e.id == previousSong!!.id) {
-                    entity = e
-                    e.time?.let {
-                        playingTime = playingTime!! + it
-                    }
-                }
-            }
-            if (playingTime!! >= addingSongToStatisticEntityThreshold) {
-                when (entity) {
-                    null -> {
-                        LocalStorageProvider.addStatisticEntity(
-                            context,
-                            SongStatisticEntity(
-                                previousSong!!.id,
-                                playingTime,
-                                previousSong!!.title,
-                                previousSong!!.artist
-                            )
-                        )
-                    }
-                    else -> {
-                        LocalStorageProvider.updateStatisticEntity(
-                            context,
-                            SongStatisticEntity(
-                                previousSong!!.id,
-                                playingTime,
-                                previousSong!!.title,
-                                previousSong!!.artist
-                            )
-                        )
-                    }
-                }
-            }
-        }
-        startPlayingSongTime = Date()
-    }
+//    @Suppress("NestedBlockDepth")
+//    private fun logStatistic() {
+//        endPlayingSongTime = Date()
+//        startPlayingSongTime?.let {
+//            if (startPlayingSongTime!!.time > 0 && playingTime != null) {
+//                playingTime = playingTime!! +
+//                    endPlayingSongTime!!.time -
+//                    startPlayingSongTime!!.time
+//            } else if (startPlayingSongTime!!.time > 0) {
+//                playingTime = endPlayingSongTime!!.time - startPlayingSongTime!!.time
+//            }
+//            var entity: SongStatisticEntity? = null
+//            StatisticInfoManager.info.value!!.forEach { e ->
+//                if (e.id == previousSong!!.id) {
+//                    entity = e
+//                    e.time?.let {
+//                        playingTime = playingTime!! + it
+//                    }
+//                }
+//            }
+//            if (playingTime!! >= addingSongToStatisticEntityThreshold) {
+//                when (entity) {
+//                    null -> {
+//                        LocalStorageProvider.addStatisticEntity(
+//                            context,
+//                            SongStatisticEntity(
+//                                previousSong!!.id,
+//                                playingTime,
+//                                previousSong!!.title,
+//                                previousSong!!.artist
+//                            )
+//                        )
+//                    }
+//                    else -> {
+//                        LocalStorageProvider.updateStatisticEntity(
+//                            context,
+//                            SongStatisticEntity(
+//                                previousSong!!.id,
+//                                playingTime,
+//                                previousSong!!.title,
+//                                previousSong!!.artist
+//                            )
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//        startPlayingSongTime = Date()
+//    }
 }

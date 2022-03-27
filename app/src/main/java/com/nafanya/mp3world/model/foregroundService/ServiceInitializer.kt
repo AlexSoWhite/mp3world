@@ -7,6 +7,10 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
 import com.nafanya.mp3world.model.wrappers.Playlist
 
+/**
+ * Service responsible for starting foreground player service.
+ * As the application catches ANR since Android 8 if we don't call startForeground() after few seconds from calling startForegroundService(), it's better to control service start.
+ */
 class ServiceInitializer : LifecycleService() {
 
     private var isServiceInitialized = false
@@ -14,6 +18,7 @@ class ServiceInitializer : LifecycleService() {
     private fun initService() {
         val intent = Intent(this.applicationContext, ForegroundService::class.java)
         startForegroundService(this.applicationContext, intent)
+        stopSelf()
     }
 
     override fun onCreate() {
