@@ -7,16 +7,11 @@ import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import java.lang.RuntimeException
-import java.text.SimpleDateFormat
-import java.util.Locale
-
 class SearchSongListViewModel : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()
     }
-
-    private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
 
     private fun startLoading(query: String, callback: (Playlist) -> Unit) {
         Downloader.preLoad(query) { playlist ->
