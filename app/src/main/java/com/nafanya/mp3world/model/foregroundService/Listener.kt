@@ -38,21 +38,20 @@ class Listener(private val context: Context) : Player.Listener {
             id = it.mediaMetadata.extras!!.getLong("id"),
             title = it.mediaMetadata.extras!!.getString("title"),
             artist = it.mediaMetadata.extras!!.getString("artist"),
-            date = it.mediaMetadata.extras!!.getString("date"),
+            date = it.mediaMetadata.extras!!.getLong("date"),
             url = it.mediaMetadata.extras!!.getString("url"),
             duration = it.mediaMetadata.extras!!.getLong("duration"),
             artUrl = it.mediaMetadata.extras!!.getString("artUrl"),
             path = it.mediaMetadata.extras!!.getString("path")
         )
         PlayerLiveDataProvider.currentSong.value = song
-        logStatistic()
-        previousSong = song
     }
 
     private fun postLocalSong(it: MediaItem) {
         SongListManager.songList.value?.forEach { elem ->
             if (elem.id == it.mediaMetadata.extras!!.getLong("id")) {
                 PlayerLiveDataProvider.currentSong.value = elem
+                logStatistic()
                 previousSong = elem
             }
         }

@@ -1,22 +1,15 @@
 package com.nafanya.mp3world.model.wrappers
 
 import android.graphics.Bitmap
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
 
-@Entity
 data class Song(
-    @PrimaryKey var id: Long = 0,
-    @ColumnInfo(name = "title") var title: String? = null,
-    @ColumnInfo(name = "artist") var artist: String? = null,
-    @ColumnInfo(name = "date") var date: String? = null,
-    @ColumnInfo(name = "url") var url: String? = null,
-    @ColumnInfo(name = "duration") var duration: Long? = null,
-    @ColumnInfo(name = "path") var path: String? = null,
-    @Ignore
-    @ColumnInfo(name = "art") val art: Bitmap? = null,
-    @Ignore
-    @ColumnInfo(name = "artUrl") val artUrl: String? = null
+    var id: Long = 0,
+    var title: String? = null,
+    var artist: String? = null,
+    var date: Long? = null,
+    var url: String? = null,
+    var duration: Long? = null,
+    var path: String? = null,
+    val art: Bitmap? = null,
+    val artUrl: String? = null
 )

@@ -158,7 +158,7 @@ class ForegroundService : LifecycleService() {
                 extras.putLong("id", song.id)
                 extras.putString("title", song.title)
                 extras.putString("artist", song.artist)
-                extras.putString("date", song.date)
+                song.date?.let { it1 -> extras.putLong("date", it1) }
                 extras.putString("url", song.url)
                 extras.putLong("duration", song.duration!!)
                 extras.putString("path", song.path)

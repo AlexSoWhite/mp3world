@@ -11,14 +11,11 @@ import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @Suppress("LongMethod")
 object MediaStoreReader {
 
     private var isInitialized = false
-    private const val multiplier = 1000L
     private const val artDimension = 1024
 
     fun initializeSongList(context: Context, contentResolver: ContentResolver) {
@@ -57,14 +54,13 @@ object MediaStoreReader {
             val albumColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
             val pathColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
             val durationColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
-            val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
                 // a URI representing the media item itself.
                 val thisId = cursor.getLong(idColumn)
                 val thisTitle = cursor.getString(titleColumn)
                 val thisArtist = cursor.getString(artistColumn)
-                val thisDate = cursor.getInt(dateColumn)
+                val thisDate = cursor.getLong(dateColumn)
                 val thisArtistId = cursor.getLong(artistIdColumn)
                 val thisAlbumId = cursor.getLong(albumIdColumn)
                 val thisAlbumName = cursor.getString(albumColumn)
@@ -79,7 +75,7 @@ object MediaStoreReader {
                         id = thisId,
                         title = thisTitle,
                         artist = thisArtist,
-                        date = simpleDateFormat.format(thisDate * multiplier),
+                        date = thisDate,
                         url = null,
                         duration = thisDuration,
                         path = thisPath,

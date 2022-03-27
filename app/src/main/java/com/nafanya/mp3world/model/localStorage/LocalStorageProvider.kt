@@ -10,26 +10,6 @@ import kotlin.concurrent.thread
 
 object LocalStorageProvider {
 
-    // song section
-    /**
-     * adding song to the local storage, creates a thread
-     */
-    fun addSong(context: Context, song: Song) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
-            dbHolder.db.songsListDao().insert(song)
-            dbHolder.closeDataBase()
-        }
-    }
-
-    fun deleteSong(context: Context, song: Song) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
-            dbHolder.db.songsListDao().delete(song)
-            dbHolder.closeDataBase()
-        }
-    }
-
     // playlist section
     /**
      * adding playlist to the local storage, creates a thread

@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.model.network
 
 import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
@@ -39,7 +40,7 @@ object Downloader {
                             val art = arts[i]
                             val title = elem.getElementsByClass("track__title").text()
                             val artist = elem.getElementsByClass("track__desc").text()
-                            val duration = textToDuration(
+                            val duration = TimeConverter().stringToDuration(
                                 elem.getElementsByClass("track__fulltime").text()
                             )
                             var artUrl = art
@@ -58,7 +59,6 @@ object Downloader {
                                     id = SongListManager.urlBasedCount++,
                                     title = title,
                                     artist = artist,
-                                    date = "",
                                     duration = duration,
                                     url = downloadUrl,
                                     artUrl = artUrl
@@ -74,18 +74,5 @@ object Downloader {
                 }
             }
         )
-    }
-
-    private const val millisecondsInOneHour = 3600000
-    private const val millisecondsInOneMinute = 60000
-    private const val millisecondsInOneSecond = 1000
-
-    private fun textToDuration(value: String): Long {
-        var result = 0L
-        val split = value.split(':').reversed() as ArrayList<String>
-        result += (split[0].toInt()) * millisecondsInOneSecond
-        if (split.size > 1) result += (split[1].toInt()) * millisecondsInOneMinute
-        if (split.size > 2) result += (split[2].toInt()) * millisecondsInOneHour
-        return result
     }
 }

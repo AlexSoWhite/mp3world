@@ -13,6 +13,7 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.network.DownloadService
+import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Song
 
 open class SongListAdapter(
@@ -111,7 +112,7 @@ open class SongListAdapter(
                     binding.songIcon.setImageResource(R.drawable.default_placeholder)
                 }
             }
-            binding.duration.text = stringFromDuration(song.duration)
+            binding.duration.text = song.duration?.let { TimeConverter().durationToString(it) }
             binding.songListItem.setOnClickListener {
                 callback()
                 PlayerLiveDataProvider.currentSong.value = song
@@ -120,39 +121,6 @@ open class SongListAdapter(
                 binding,
                 song
             )
-        }
-
-        private fun stringFromDuration(arg: Long?): String {
-            var duration = arg
-            if (duration == null) return ""
-            var hours = 0
-            while (duration >= millisecondsInOneHour) {
-                hours++
-                duration -= millisecondsInOneHour
-            }
-            var minutes = 0
-            while (duration >= millisecondsInOneMinute) {
-                minutes++
-                duration -= millisecondsInOneMinute
-            }
-            var seconds = 0
-            while (duration >= millisecondsInOneSecond) {
-                seconds++
-                duration -= millisecondsInOneSecond
-            }
-            return if (hours == 0) {
-                minutes.toString() + ":" + seconds.toString().padStart(2, '0')
-            } else {
-                hours.toString() + ":" +
-                    minutes.toString().padStart(2, '0') + "" +
-                    seconds.toString().padStart(2, '0')
-            }
-        }
-
-        companion object {
-            private const val millisecondsInOneHour = 3600000
-            private const val millisecondsInOneMinute = 60000
-            private const val millisecondsInOneSecond = 1000
         }
     }
 }

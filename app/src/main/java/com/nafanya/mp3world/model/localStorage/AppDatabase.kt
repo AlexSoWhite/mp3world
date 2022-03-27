@@ -11,17 +11,15 @@ import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 @Database(
     entities = [
         PlaylistStorageEntity::class,
-        Song::class,
         FavouriteListEntity::class,
         SongStatisticEntity::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = true
 )
 @TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun playlistDao(): StoredPlaylistDao
-    abstract fun songsListDao(): SongDao
     abstract fun favouriteListDao(): FavouriteListDao
     abstract fun songStatisticDao(): SongStatisticDao
 }
