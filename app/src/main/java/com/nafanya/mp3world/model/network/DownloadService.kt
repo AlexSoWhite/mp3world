@@ -22,7 +22,7 @@ class DownloadService {
             .start(
                 object : OnDownloadListener {
                     override fun onDownloadComplete() {
-                        MetadataScanner.scan("$dirPath/$fileName")
+                        MetadataScanner().scan("$dirPath/$fileName")
                         callback()
                     }
 

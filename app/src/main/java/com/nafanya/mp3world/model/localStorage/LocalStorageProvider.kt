@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.model.localStorage
 
-import android.content.Context
+import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.FavouriteListEntity
 import com.nafanya.mp3world.model.wrappers.Playlist
@@ -8,15 +8,17 @@ import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 import kotlin.concurrent.thread
 
-object LocalStorageProvider {
+class LocalStorageProvider {
+
+    private var context = PlayerApplication.context()
 
     // playlist section
     /**
      * adding playlist to the local storage, creates a thread
      */
-    fun addPlaylist(context: Context, playlist: Playlist) {
+    fun addPlaylist(playlist: Playlist) {
         thread {
-            val dbHolder = DatabaseHolder(context)
+            val dbHolder = DatabaseHolder()
             dbHolder.db.playlistDao().insert(playlist.toStorageEntity())
             dbHolder.closeDataBase()
         }
@@ -25,9 +27,9 @@ object LocalStorageProvider {
     /**
      * updating playlist from the local storage, creates a thread
      */
-    fun updatePlaylist(context: Context, playlist: Playlist) {
+    fun updatePlaylist(playlist: Playlist) {
         thread {
-            val dbHolder = DatabaseHolder(context)
+            val dbHolder = DatabaseHolder()
             val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
             if (index != -1) {
                 dbHolder.db.playlistDao().update(playlist.toStorageEntity())
@@ -39,18 +41,18 @@ object LocalStorageProvider {
     /**
      * deleting playlist from a local storage, creates a thread
      */
-    fun deletePlaylist(context: Context, playlist: Playlist) {
+    fun deletePlaylist(playlist: Playlist) {
         thread {
-            val dbHolder = DatabaseHolder(context)
+            val dbHolder = DatabaseHolder()
             dbHolder.db.playlistDao().delete(playlist.toStorageEntity())
             dbHolder.closeDataBase()
         }
     }
 
     // favourite list section
-    fun addFavourite(context: Context, song: Song) {
+    fun addFavourite(song: Song) {
         thread {
-            val dbHolder = DatabaseHolder(context)
+            val dbHolder = DatabaseHolder()
             dbHolder.db.favouriteListDao().insert(
                 FavouriteListEntity(song.id)
             )
@@ -58,9 +60,9 @@ object LocalStorageProvider {
         }
     }
 
-    fun deleteFavourite(context: Context, song: Song) {
+    fun deleteFavourite(song: Song) {
         thread {
-            val dbHolder = DatabaseHolder(context)
+            val dbHolder = DatabaseHolder()
             dbHolder.db.favouriteListDao().delete(
                 FavouriteListEntity(song.id)
             )
@@ -69,7 +71,7 @@ object LocalStorageProvider {
     }
 
     // statistic section
-    fun addStatisticEntity(context: Context, value: SongStatisticEntity) {
+    fun addStatisticEntity(value: SongStatisticEntity) {
 //        thread {
 //            val dbHolder = DatabaseHolder(context)
 //            dbHolder.db.songStatisticDao().insert(value)
@@ -77,7 +79,7 @@ object LocalStorageProvider {
 //        }
     }
 
-    fun updateStatisticEntity(context: Context, value: SongStatisticEntity) {
+    fun updateStatisticEntity(value: SongStatisticEntity) {
 //        thread {
 //            val dbHolder = DatabaseHolder(context)
 //            dbHolder.db.songStatisticDao().update(value)
@@ -89,9 +91,9 @@ object LocalStorageProvider {
     /**
      * populating lists
      */
-    fun populateLists(context: Context) {
+    fun populateLists() {
         thread {
-            val dbHolder = DatabaseHolder(context)
+            val dbHolder = DatabaseHolder()
             dbHolder.populateLists()
             dbHolder.closeDataBase()
         }

@@ -2,30 +2,37 @@ package com.nafanya.mp3world.model.listManagers
 
 import android.content.ContentResolver
 import android.content.ContentUris
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
+import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
 
 @Suppress("LongMethod")
-// TODO: inject context
-object MediaStoreReader {
+class MediaStoreReader {
 
-    private var isInitialized = false
-    private const val artDimension = 1024
+    var context = PlayerApplication.context()
 
-    fun readMediaStore(context: Context) {
+    companion object {
+        private var isInitialized = false
+        private const val artDimension = 1024
+    }
+
+    fun readMediaStore() {
         if (!isInitialized) {
-            initialize(context)
+            initialize()
         }
     }
 
-    private fun initialize(context: Context) {
+    fun reset() {
+        initialize()
+    }
+
+    private fun initialize() {
         // get all the fields from media storage
         val projection = null
         // select only music

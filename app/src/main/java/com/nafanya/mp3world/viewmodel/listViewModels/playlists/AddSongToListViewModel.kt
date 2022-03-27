@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
-import android.content.Context
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
@@ -36,8 +35,8 @@ class AddSongToListViewModel : SongListViewModel() {
         triggerTitle()
     }
 
-    fun confirmChanges(context: Context) {
-        passedViewModel.resetPlaylist(context, passedPlaylist)
+    fun confirmChanges() {
+        passedViewModel.resetPlaylist(passedPlaylist)
     }
 
     companion object {

@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
@@ -8,13 +7,14 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 
+// TODO delete redundant methods
 class PlaylistListViewModel : ListViewModelInterface() {
 
     val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
         MutableLiveData<MutableList<Playlist>>()
     }
 
-    fun addEmptyPlaylistWithName(context: Context, name: String, callback: () -> Unit) {
+    fun addEmptyPlaylistWithName(name: String, callback: () -> Unit) {
         val playlist = Playlist(
             songList = mutableListOf(),
             id = PlaylistListManager.playlists.value!!.size,
@@ -23,7 +23,7 @@ class PlaylistListViewModel : ListViewModelInterface() {
         // modifying LiveData
         PlaylistListManager.addPlaylist(playlist)
         // adding playlist to the local storage
-        LocalStorageProvider.addPlaylist(context, playlist)
+        LocalStorageProvider().addPlaylist(playlist)
         callback()
         pageState.value = PageState.IS_LOADING
     }
@@ -56,13 +56,13 @@ class PlaylistListViewModel : ListViewModelInterface() {
         title.value = "Мои плейлисты"
     }
 
-    fun updatePlaylist(context: Context, playlist: Playlist) {
+    fun updatePlaylist(playlist: Playlist) {
         val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
         if (index != -1) {
             // modifying LiveData
             PlaylistListManager.updatePlaylist(playlist)
             // modifying playlist in local storage
-            LocalStorageProvider.updatePlaylist(context, playlist)
+            LocalStorageProvider().updatePlaylist(playlist)
             playlists.value = PlaylistListManager.playlists.value
             if (PlaylistListManager.playlists.value!!.isEmpty()) {
                 pageState.value = PageState.IS_EMPTY

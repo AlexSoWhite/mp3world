@@ -17,6 +17,7 @@ import com.downloader.PRDownloader
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
+import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.foregroundService.ServiceInitializer
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
-        mainActivityViewModel.initializeLists(this)
+        mainActivityViewModel.initializeLists()
         initMainMenu()
         initInitializer()
         PRDownloader.initialize(applicationContext)

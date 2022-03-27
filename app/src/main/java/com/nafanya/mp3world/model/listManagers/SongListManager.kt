@@ -33,11 +33,6 @@ object SongListManager {
                 songList = songList.value!!
             )
         }
-        GlobalScope.launch {
-            suspendedList = mutableListOf()
-            songList.value?.forEach {
-                suspendedList.add(it)
-            }
-        }
+        suspendedList = mutableListOf()
     }
 }

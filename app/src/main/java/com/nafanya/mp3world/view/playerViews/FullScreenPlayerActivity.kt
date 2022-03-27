@@ -92,8 +92,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                             FavouriteListManager.add(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
-                            LocalStorageProvider.addFavourite(
-                                activity,
+                            LocalStorageProvider().addFavourite(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
                             isFavourite = true
@@ -102,8 +101,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                             FavouriteListManager.delete(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
-                            LocalStorageProvider.deleteFavourite(
-                                activity,
+                            LocalStorageProvider().deleteFavourite(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
                             isFavourite = false

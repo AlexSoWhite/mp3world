@@ -28,12 +28,7 @@ class AddPlaylistDialogActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        viewModel.addEmptyPlaylistWithName(this, text) {
-                            /*
-                            val intent = Intent(this, AddSongToListActivity::class.java)
-                            AddSongToListActivity.newInstance(it)
-                            startActivity(intent)
-                             */
+                        viewModel.addEmptyPlaylistWithName(text) {
                             finish()
                         }
                     }

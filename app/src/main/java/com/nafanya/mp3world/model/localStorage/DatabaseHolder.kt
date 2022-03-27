@@ -1,10 +1,10 @@
 package com.nafanya.mp3world.model.localStorage
 
-import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
+import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.StatisticInfoManager
@@ -13,7 +13,9 @@ import com.nafanya.mp3world.model.wrappers.PlaylistStorageEntity
 import com.nafanya.mp3world.model.wrappers.Song
 
 @Suppress("MagicNumber")
-class DatabaseHolder(context: Context) {
+class DatabaseHolder {
+
+    private var context = PlayerApplication.context()
 
     var db: AppDatabase
 
