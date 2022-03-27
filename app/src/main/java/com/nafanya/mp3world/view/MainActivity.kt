@@ -6,17 +6,20 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.downloader.PRDownloader
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.ServiceInitializer
 import com.nafanya.mp3world.model.listManagers.AlbumListManager
 import com.nafanya.mp3world.model.listManagers.ArtistListManager
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
@@ -56,17 +59,23 @@ class MainActivity : AppCompatActivity() {
 
     // part of onCreate
     private fun checkPermissions() {
-        val permission = Manifest.permission.READ_EXTERNAL_STORAGE
+        val permissionRead = Manifest.permission.READ_EXTERNAL_STORAGE
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(permission), 0) // triggers onPermissionResult
-            } else {
-                mainActivityViewModel.initializeLists(this, contentResolver)
-                initMainMenu()
-                initService()
-                subscribeToPlayerState()
+            if (checkSelfPermission(permissionRead) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(permissionRead), 0) // triggers onPermissionResult
+                return
             }
         }
+        mainActivityViewModel.initializeLists(this, contentResolver)
+        initMainMenu()
+        initInitializer()
+        PRDownloader.initialize(applicationContext)
+        subscribeToPlayerState()
+    }
+
+    private fun initInitializer() {
+        val intent = Intent(applicationContext, ServiceInitializer::class.java)
+        startService(intent)
     }
 
     private fun subscribeToPlayerState() {
@@ -75,28 +84,17 @@ class MainActivity : AppCompatActivity() {
             if (it) {
                 playerView = GenericPlayerControlView(this, R.id.player_control_view)
                 playerView!!.setSongObserver()
-                playerView!!.playerControlView.setOnClickListener {
-                    val intent = Intent(this, FullScreenPlayerActivity::class.java)
-                    startActivity(intent)
-                }
+                playerView!!.playerControlView.visibility = View.VISIBLE
                 findViewById<ShapeableImageView>(R.id.fullscreen).setOnClickListener {
                     val intent = Intent(this, FullScreenPlayerActivity::class.java)
                     startActivity(intent)
                 }
             }
         }
-        ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(
+        PlayerLiveDataProvider.isPlayerInitialized.observe(
             this,
             observerPlayer
         )
-    }
-
-    private fun initService() {
-        // init service
-        val intent = Intent(applicationContext, ForegroundService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent)
-        }
     }
 
     @Suppress("LongMethod")

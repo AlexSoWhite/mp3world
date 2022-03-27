@@ -80,7 +80,7 @@ class ForegroundService : LifecycleService() {
             playerNotificationManager.setUsePreviousActionInCompactView(true)
             playerNotificationManager.setPlayer(player)
             // provide player data to set it into the player controller in the app
-            ForegroundServiceLiveDataProvider.setPlayer(player)
+            PlayerLiveDataProvider.setPlayer(player)
         }
     }
 
@@ -118,7 +118,7 @@ class ForegroundService : LifecycleService() {
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
         ): Bitmap? {
-            return ForegroundServiceLiveDataProvider.currentSong.value!!.art
+            return PlayerLiveDataProvider.currentSong.value!!.art
         }
     }
 
@@ -160,8 +160,9 @@ class ForegroundService : LifecycleService() {
                 extras.putString("artist", song.artist)
                 extras.putString("date", song.date)
                 extras.putString("url", song.url)
-                // TODO extras.putInt("duration", song.duration!!)
+                extras.putLong("duration", song.duration!!)
                 extras.putString("path", song.path)
+                extras.putString("artUrl", song.artUrl)
                 val uri: Uri =
                     song.url?.toUri()
                         ?: ContentUris.withAppendedId(
@@ -186,7 +187,7 @@ class ForegroundService : LifecycleService() {
                 isInitialized = true
             }
         }
-        ForegroundServiceLiveDataProvider.currentPlaylist.observe(this, observer)
+        PlayerLiveDataProvider.currentPlaylist.observe(this, observer)
     }
 
     private fun subscribeSong() {
@@ -199,7 +200,7 @@ class ForegroundService : LifecycleService() {
                 Log.d("subscribe", currentIdx.toString())
             }
         }
-        ForegroundServiceLiveDataProvider.currentSong.observe(this, observer)
+        PlayerLiveDataProvider.currentSong.observe(this, observer)
     }
 
     override fun onBind(intent: Intent): IBinder? {

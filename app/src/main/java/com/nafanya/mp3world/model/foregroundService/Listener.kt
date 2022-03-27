@@ -40,10 +40,11 @@ class Listener(private val context: Context) : Player.Listener {
             artist = it.mediaMetadata.extras!!.getString("artist"),
             date = it.mediaMetadata.extras!!.getString("date"),
             url = it.mediaMetadata.extras!!.getString("url"),
-            duration = null,
+            duration = it.mediaMetadata.extras!!.getLong("duration"),
+            artUrl = it.mediaMetadata.extras!!.getString("artUrl"),
             path = it.mediaMetadata.extras!!.getString("path")
         )
-        ForegroundServiceLiveDataProvider.currentSong.value = song
+        PlayerLiveDataProvider.currentSong.value = song
         logStatistic()
         previousSong = song
     }
@@ -51,14 +52,14 @@ class Listener(private val context: Context) : Player.Listener {
     private fun postLocalSong(it: MediaItem) {
         SongListManager.songList.value?.forEach { elem ->
             if (elem.id == it.mediaMetadata.extras!!.getLong("id")) {
-                ForegroundServiceLiveDataProvider.currentSong.value = elem
+                PlayerLiveDataProvider.currentSong.value = elem
                 previousSong = elem
             }
         }
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
-        ForegroundServiceLiveDataProvider.isPlaying.value = isPlaying
+        PlayerLiveDataProvider.isPlaying.value = isPlaying
         if (!isPlaying) {
             playingTime = Date().time - startPlayingSongTime!!.time
             startPlayingSongTime?.time = 0

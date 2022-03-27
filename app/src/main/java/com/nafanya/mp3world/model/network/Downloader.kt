@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.model.network
 
-import android.content.Context
+import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
@@ -32,20 +32,36 @@ object Downloader {
                     response.body?.let Playlist@{
                         val doc = Jsoup.parseBodyFragment(it.string())
                         val songList: ArrayList<Song> = arrayListOf()
-                        doc.getElementsByClass("track__info").forEach { elem ->
+                        val arts = doc.getElementsByClass("track__img")
+                        val info = doc.getElementsByClass("track__info")
+                        for (i in info.indices) {
+                            val elem = info[i]
+                            val art = arts[i]
                             val title = elem.getElementsByClass("track__title").text()
                             val artist = elem.getElementsByClass("track__desc").text()
+                            val duration = textToDuration(
+                                elem.getElementsByClass("track__fulltime").text()
+                            )
+                            var artUrl = art
+                                .attr("style")
+                            artUrl = artUrl.substring(
+                                artUrl.indexOf('\'') + 2,
+                                artUrl.lastIndexOf('\'')
+                            )
+                            artUrl = "https://ru.hitmotop.com/$artUrl"
                             val downloadUrl = elem
                                 .getElementsByClass("track__download-btn")
                                 .attr("href")
                                 .toString()
                             songList.add(
                                 Song(
-                                    id = -1,
+                                    id = SongListManager.urlBasedCount++,
                                     title = title,
                                     artist = artist,
                                     date = "",
-                                    url = downloadUrl
+                                    duration = duration,
+                                    url = downloadUrl,
+                                    artUrl = artUrl
                                 )
                             )
                         }
@@ -60,20 +76,16 @@ object Downloader {
         )
     }
 
-    fun downLoad(url: String, context: Context, song: Song) {
-        val request = Request.Builder()
-            .url(url)
-            .build()
-        client.newCall(request).enqueue(
-            object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                }
+    private const val millisecondsInOneHour = 3600000
+    private const val millisecondsInOneMinute = 60000
+    private const val millisecondsInOneSecond = 1000
 
-                override fun onResponse(call: Call, response: Response) {
-                    DownloadAudioFromUrl(context).execute()
-                }
-            }
-        )
+    private fun textToDuration(value: String): Long {
+        var result = 0L
+        val split = value.split(':').reversed() as ArrayList<String>
+        result += (split[0].toInt()) * millisecondsInOneSecond
+        if (split.size > 1) result += (split[1].toInt()) * millisecondsInOneMinute
+        if (split.size > 2) result += (split[2].toInt()) * millisecondsInOneHour
+        return result
     }
 }

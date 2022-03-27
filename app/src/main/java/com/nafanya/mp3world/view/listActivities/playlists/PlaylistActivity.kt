@@ -4,7 +4,7 @@ import android.content.Intent
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
@@ -23,7 +23,7 @@ class PlaylistActivity : RecyclerHolderActivity() {
     override fun setAdapter() {
         val observer = Observer<Playlist> {
             binding.recycler.adapter = SongListAdapter(it.songList, this) {
-                ForegroundServiceLiveDataProvider.currentPlaylist.value = it
+                PlayerLiveDataProvider.currentPlaylist.value = it
             }
         }
         (viewModel as SongListViewModel).playlist.observe(this, observer)

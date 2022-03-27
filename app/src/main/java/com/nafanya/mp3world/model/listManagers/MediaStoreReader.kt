@@ -37,10 +37,7 @@ object MediaStoreReader {
         val selectionArgs = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             selection =
-                MediaStore.Audio.Media.IS_ALARM + "=0 AND " +
-                MediaStore.Audio.Media.IS_NOTIFICATION + "=0 AND " +
-                MediaStore.Audio.Media.IS_RINGTONE + "=0 AND " +
-                MediaStore.Audio.Media.IS_RECORDING + "=0"
+                MediaStore.Audio.Media.IS_DOWNLOAD
         }
         // sort based on date
         val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
@@ -103,6 +100,7 @@ object MediaStoreReader {
                 }
             }
         }
+        SongListManager.resetData()
         isInitialized = true
     }
 

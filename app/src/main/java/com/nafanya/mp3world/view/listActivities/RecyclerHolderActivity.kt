@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.RecyclerHolderActivityBinding
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
@@ -135,7 +135,7 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
                 }
             }
         }
-        ForegroundServiceLiveDataProvider.isPlayerInitialized.observe(
+        PlayerLiveDataProvider.isPlayerInitialized.observe(
             this,
             observerPlayer
         )

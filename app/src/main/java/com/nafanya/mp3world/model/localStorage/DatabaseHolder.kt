@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.sqlite.db.SupportSQLiteQuery
-import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import com.google.gson.Gson
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager

@@ -5,7 +5,7 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 
-object ForegroundServiceLiveDataProvider {
+object PlayerLiveDataProvider {
 
     val currentPlaylist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()
@@ -26,7 +26,7 @@ object ForegroundServiceLiveDataProvider {
     private var player: ExoPlayer? = null
 
     fun setPlayer(player: ExoPlayer?) {
-        ForegroundServiceLiveDataProvider.player = player
+        PlayerLiveDataProvider.player = player
         isPlayerInitialized.value = true
     }
 

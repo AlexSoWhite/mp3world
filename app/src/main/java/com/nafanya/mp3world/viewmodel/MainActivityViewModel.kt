@@ -4,11 +4,9 @@ import android.content.ContentResolver
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.MediaStoreReader
-import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
-import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.network.MetadataScanner
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {
@@ -19,14 +17,8 @@ class MainActivityViewModel : ViewModel() {
                 isInitialized = true
                 // initialize songList
                 MediaStoreReader.initializeSongList(context, contentResolver)
-                // use initialized songList to initialize player state
-                ForegroundServiceLiveDataProvider.currentPlaylist.value =
-                    Playlist(
-                        SongListManager.songList.value!!,
-                        id = -1,
-                        name = "Мои песни"
-                    )
                 LocalStorageProvider.populateLists(context)
+                MetadataScanner.context(context)
             }
         }
     }

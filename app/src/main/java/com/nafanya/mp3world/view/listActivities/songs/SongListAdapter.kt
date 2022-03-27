@@ -1,15 +1,18 @@
 package com.nafanya.mp3world.view.listActivities.songs
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.model.foregroundService.ForegroundServiceLiveDataProvider
+import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
+import com.nafanya.mp3world.model.network.DownloadService
 import com.nafanya.mp3world.model.wrappers.Song
 
 open class SongListAdapter(
@@ -41,7 +44,15 @@ open class SongListAdapter(
     ) {
         if (song.url != null) {
             binding.action.visibility = View.VISIBLE
-            binding.action.setOnClickListener {}
+            binding.action.setOnClickListener {
+                DownloadService().downLoad(song) {
+                    Toast.makeText(
+                        context as Context,
+                        "${song.artist} - ${song.title} загружено",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
             Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
         } else {
             binding.action.visibility = View.GONE
@@ -66,7 +77,7 @@ open class SongListAdapter(
         ) {
             binding.song = song
             val isPlayingObserver = Observer<Boolean> { isPlaying ->
-                val playingSong = ForegroundServiceLiveDataProvider.currentSong.value
+                val playingSong = PlayerLiveDataProvider.currentSong.value
                 if (isPlaying &&
                     (
                         playingSong?.id == song.id && playingSong.url == null ||
@@ -86,16 +97,24 @@ open class SongListAdapter(
                         .into(binding.playingIndicator)
                 }
             }
-            ForegroundServiceLiveDataProvider.isPlaying.observe(context, isPlayingObserver)
-            if (song.art != null) {
-                binding.songIcon.setImageBitmap(song.art)
-            } else {
-                binding.songIcon.setImageResource(R.drawable.default_placeholder)
+            PlayerLiveDataProvider.isPlaying.observe(context, isPlayingObserver)
+            when {
+                song.art != null -> {
+                    binding.songIcon.setImageBitmap(song.art)
+                }
+                song.artUrl != null -> {
+                    Glide.with(binding.songIcon)
+                        .load(song.artUrl)
+                        .into(binding.songIcon)
+                }
+                else -> {
+                    binding.songIcon.setImageResource(R.drawable.default_placeholder)
+                }
             }
             binding.duration.text = stringFromDuration(song.duration)
             binding.songListItem.setOnClickListener {
                 callback()
-                ForegroundServiceLiveDataProvider.currentSong.value = song
+                PlayerLiveDataProvider.currentSong.value = song
             }
             decorateItem(
                 binding,
