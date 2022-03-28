@@ -4,6 +4,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.util.Log
 import com.nafanya.mp3world.model.dependencies.PlayerApplication
+import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 
 class MetadataScanner {
 
@@ -12,7 +13,10 @@ class MetadataScanner {
         context,
         object : MediaScannerConnection.MediaScannerConnectionClient {
             override fun onScanCompleted(p0: String?, p1: Uri?) {
-                p1?.toString()?.let { Log.d("Scan", it) }
+                p1?.toString()?.let {
+                    MediaStoreReader().reset()
+                    Log.d("Scan", it)
+                }
             }
 
             override fun onMediaScannerConnected() {

@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.search
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.model.network.Downloader
+import com.nafanya.mp3world.model.network.QueryExecutor
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
@@ -14,7 +14,7 @@ class SearchSongListViewModel : ListViewModelInterface() {
     }
 
     private fun startLoading(query: String, callback: (Playlist) -> Unit) {
-        Downloader.preLoad(query) { playlist ->
+        QueryExecutor.preLoad(query) { playlist ->
             playlist?.let {
                 callback(playlist)
             }

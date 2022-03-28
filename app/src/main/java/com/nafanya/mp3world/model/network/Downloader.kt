@@ -1,78 +1,36 @@
 package com.nafanya.mp3world.model.network
 
-import com.nafanya.mp3world.model.listManagers.SongListManager
-import com.nafanya.mp3world.model.timeConverters.TimeConverter
-import com.nafanya.mp3world.model.wrappers.Playlist
+import android.os.Environment
+import android.util.Log
+import com.downloader.Error
+import com.downloader.OnDownloadListener
+import com.downloader.PRDownloader
+import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 import com.nafanya.mp3world.model.wrappers.Song
-import java.io.IOException
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import org.jsoup.Jsoup
 
-object Downloader {
+class Downloader {
 
-    private val client = OkHttpClient()
-    private const val prefix = "https://ru.hitmotop.com/search?q="
-
-    fun preLoad(query: String, callback: (Playlist?) -> Unit?) {
-        val url = prefix + query
-        val request = Request.Builder()
-            .url(url)
+    fun downLoad(song: Song, callback: () -> Unit): Int {
+        val url = song.url!!
+        var fileName = url
+            .substring(url.lastIndexOf('/') + 1)
+            .replace('_', ' ')
+        fileName = fileName.substring(0, fileName.lastIndexOf(' ')) + ".mp3"
+        val dirPath = Environment
+            .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+        return PRDownloader.download(url, dirPath, fileName)
             .build()
-        client.newCall(request).enqueue(
-            object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                    callback(null)
-                }
+            .start(
+                object : OnDownloadListener {
+                    override fun onDownloadComplete() {
+                        MetadataScanner().scan("$dirPath/$fileName")
+                        callback()
+                    }
 
-                override fun onResponse(call: Call, response: Response) {
-                    response.body?.let Playlist@{
-                        val doc = Jsoup.parseBodyFragment(it.string())
-                        val songList: ArrayList<Song> = arrayListOf()
-                        val arts = doc.getElementsByClass("track__img")
-                        val info = doc.getElementsByClass("track__info")
-                        for (i in info.indices) {
-                            val elem = info[i]
-                            val art = arts[i]
-                            val title = elem.getElementsByClass("track__title").text()
-                            val artist = elem.getElementsByClass("track__desc").text()
-                            val duration = TimeConverter().stringToDuration(
-                                elem.getElementsByClass("track__fulltime").text()
-                            )
-                            var artUrl = art
-                                .attr("style")
-                            artUrl = artUrl.substring(
-                                artUrl.indexOf('\'') + 2,
-                                artUrl.lastIndexOf('\'')
-                            )
-                            artUrl = "https://ru.hitmotop.com/$artUrl"
-                            val downloadUrl = elem
-                                .getElementsByClass("track__download-btn")
-                                .attr("href")
-                                .toString()
-                            songList.add(
-                                Song(
-                                    id = SongListManager.urlBasedCount++,
-                                    title = title,
-                                    artist = artist,
-                                    duration = duration,
-                                    url = downloadUrl,
-                                    artUrl = artUrl
-                                )
-                            )
-                        }
-                        if (songList.isEmpty()) {
-                            callback(null)
-                        } else {
-                            callback(Playlist(songList, id = -1, name = query))
-                        }
+                    override fun onError(error: Error?) {
+                        Log.d("Download", error.toString())
                     }
                 }
-            }
-        )
+            )
     }
 }

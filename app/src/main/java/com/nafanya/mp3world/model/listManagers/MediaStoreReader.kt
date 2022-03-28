@@ -105,6 +105,8 @@ class MediaStoreReader {
             }
         }
         SongListManager.resetData()
+        ArtistListManager.resetData()
+        AlbumListManager.resetData()
         isInitialized = true
     }
 

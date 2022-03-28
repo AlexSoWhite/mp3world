@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.model.network.DownloadService
+import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Song
 
@@ -46,7 +46,7 @@ open class SongListAdapter(
         if (song.url != null) {
             binding.action.visibility = View.VISIBLE
             binding.action.setOnClickListener {
-                DownloadService().downLoad(song) {
+                Downloader().downLoad(song) {
                     Toast.makeText(
                         context as Context,
                         "${song.artist} - ${song.title} загружено",

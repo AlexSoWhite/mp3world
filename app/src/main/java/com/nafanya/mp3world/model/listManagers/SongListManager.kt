@@ -20,18 +20,12 @@ object SongListManager {
         suspendedList.add(song)
     }
 
-    @DelicateCoroutinesApi
     fun resetData() {
-        songList.value = suspendedList
-        songList.value?.sortByDescending {
+        suspendedList.sortByDescending {
             it.date
         }
-        if (songList.value!!.isNotEmpty()) {
-            PlayerLiveDataProvider.currentPlaylist.value = Playlist(
-                id = -1,
-                name = "Мои песни",
-                songList = songList.value!!
-            )
+        if (suspendedList.isNotEmpty()) {
+            songList.postValue(suspendedList)
         }
         suspendedList = mutableListOf()
     }

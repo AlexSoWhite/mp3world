@@ -5,7 +5,9 @@ import android.os.IBinder
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
+import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.wrappers.Song
 
 /**
  * Service responsible for starting foreground player service.
@@ -23,13 +25,19 @@ class ServiceInitializer : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        val observer = Observer<Playlist> {
-            if (!isServiceInitialized && it.songList.isNotEmpty()) {
+        val observer = Observer<MutableList<Song>> {
+            if (!isServiceInitialized && it.isNotEmpty()) {
+                PlayerLiveDataProvider.currentPlaylist.value =
+                    Playlist(
+                        songList = it,
+                        id = -1,
+                        name = "Мои песни"
+                    )
                 initService()
                 isServiceInitialized = true
             }
         }
-        PlayerLiveDataProvider.currentPlaylist.observe(this, observer)
+        SongListManager.songList.observe(this, observer)
     }
 
     override fun onBind(p0: Intent): IBinder? {
