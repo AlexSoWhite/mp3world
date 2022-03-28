@@ -15,4 +15,6 @@
     <string name="add_playlist">создать плейлист</string>
     <string name="delete_playlist">удалить плейлист %1$s?</string>
     <string name="enter_name">введите название</string>
+    <string name="delete">удалить</string>
+    <string name="cancel">отмена</string>
 </resources>

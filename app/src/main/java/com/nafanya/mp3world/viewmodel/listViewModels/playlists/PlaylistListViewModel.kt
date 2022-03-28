@@ -77,6 +77,7 @@ class PlaylistListViewModel : ListViewModelInterface() {
             PlaylistListManager.deletePlaylist(playlist)
             // modifying playlist in local storage
             LocalStorageProvider().deletePlaylist(playlist)
+            pageState.value = PageState.IS_LOADING
         }
     }
 }
