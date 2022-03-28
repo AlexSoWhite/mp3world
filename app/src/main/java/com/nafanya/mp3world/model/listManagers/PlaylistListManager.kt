@@ -46,6 +46,8 @@ object PlaylistListManager {
     }
 
     fun deletePlaylist(playlist: Playlist) {
-        playlists.value!!.remove(playlist)
+        val temp = playlists.value
+        temp?.remove(playlist)
+        playlists.value = temp
     }
 }

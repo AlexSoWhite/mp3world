@@ -2,7 +2,6 @@ package com.nafanya.mp3world.view.listActivities.playlists
 
 import android.content.Intent
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
@@ -28,11 +27,12 @@ class PlaylistListActivity : RecyclerHolderActivity() {
                         startActivity(intent)
                     }
                     ClickType.LONG -> {
-                        Toast.makeText(
-                            this,
-                            playlist.name,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        val intent = Intent(this, DeletePlaylistDialogActivity::class.java)
+                        DeletePlaylistDialogActivity.prepare(
+                            viewModel as PlaylistListViewModel,
+                            playlist
+                        )
+                        startActivity(intent)
                     }
                 }
             }
