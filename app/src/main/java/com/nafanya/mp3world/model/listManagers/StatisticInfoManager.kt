@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.localStorage.SongStatisticDao
 import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 
+// TODO: make it work
 object StatisticInfoManager {
 
     val info: MutableLiveData<MutableList<SongStatisticEntity>> by lazy {

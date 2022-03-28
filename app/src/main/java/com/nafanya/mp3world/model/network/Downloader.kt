@@ -8,6 +8,9 @@ import com.downloader.PRDownloader
 import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 import com.nafanya.mp3world.model.wrappers.Song
 
+/**
+ * Class that downloads song by PRDownloader.
+ */
 class Downloader {
 
     fun downLoad(song: Song, callback: () -> Unit): Int {

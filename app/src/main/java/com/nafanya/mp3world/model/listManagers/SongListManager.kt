@@ -8,6 +8,9 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+/**
+ * Object that holds all song data. The most important manager, favourites and playlists are populated based on its data.
+ */
 object SongListManager {
 
     val songList: MutableLiveData<MutableList<Song>> by lazy {

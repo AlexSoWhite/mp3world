@@ -6,18 +6,22 @@ import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
+import kotlinx.coroutines.DelicateCoroutinesApi
 
-// TODO delete redundant methods
+@DelicateCoroutinesApi
 class PlaylistListViewModel : ListViewModelInterface() {
 
-    val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
-        MutableLiveData<MutableList<Playlist>>()
-    }
-
     fun addEmptyPlaylistWithName(name: String, callback: () -> Unit) {
+        var id = 0
+        PlaylistListManager.playlists.value?.forEach {
+            if (id < it.id) {
+                id = it.id
+            }
+        }
+        id++
         val playlist = Playlist(
             songList = mutableListOf(),
-            id = PlaylistListManager.playlists.value!!.size,
+            id = id,
             name = name
         )
         // modifying LiveData
@@ -28,15 +32,9 @@ class PlaylistListViewModel : ListViewModelInterface() {
         pageState.value = PageState.IS_LOADING
     }
 
-//    fun subscribeToManager() {
-//        val observer = Observer<MutableList<Playlist>> {
-//            triggerTitle()
-//        }
-//    }
-
-//    private fun triggerTitle() {
-//        title.postValue("Мои плейлисты (${PlaylistListManager.playlists.value?.size})")
-//    }
+    val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
+        MutableLiveData<MutableList<Playlist>>()
+    }
 
     override fun onLoading() {
         title.value = "Мои плейлисты"

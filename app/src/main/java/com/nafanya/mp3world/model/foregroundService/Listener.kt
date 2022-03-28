@@ -43,8 +43,7 @@ class Listener : Player.Listener {
             date = it.mediaMetadata.extras!!.getLong("date"),
             url = it.mediaMetadata.extras!!.getString("url"),
             duration = it.mediaMetadata.extras!!.getLong("duration"),
-            artUrl = it.mediaMetadata.extras!!.getString("artUrl"),
-            path = it.mediaMetadata.extras!!.getString("path")
+            artUrl = it.mediaMetadata.extras!!.getString("artUrl")
         )
         PlayerLiveDataProvider.currentSong.value = song
     }

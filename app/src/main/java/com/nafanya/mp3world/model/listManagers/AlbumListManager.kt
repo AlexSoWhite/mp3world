@@ -4,6 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Song
 
+/**
+ * Object that holds albums data. Populated by MediaStoreReader.
+ */
 object AlbumListManager {
 
     val albums: MutableLiveData<MutableList<Album>> by lazy {

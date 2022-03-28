@@ -6,6 +6,9 @@ import android.util.Log
 import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 
+/**
+ * Class that adds song to MediaStore with all its metadata.
+ */
 class MetadataScanner {
 
     private var context = PlayerApplication.context()

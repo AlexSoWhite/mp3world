@@ -3,6 +3,9 @@ package com.nafanya.mp3world.model.timeConverters
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+/**
+ * Class that converts timestamp to date.
+ */
 class DateConverter {
 
     companion object {

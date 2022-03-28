@@ -17,7 +17,7 @@ open class SongListViewModel : ListViewModelInterface() {
     private var isInitialized = false
 
     private fun startLoading(query: String, callback: (Playlist) -> Unit) {
-        QueryExecutor.preLoad(query) { playlist ->
+        QueryExecutor().preLoad(query) { playlist ->
             playlist?.let {
                 callback(playlist)
             }

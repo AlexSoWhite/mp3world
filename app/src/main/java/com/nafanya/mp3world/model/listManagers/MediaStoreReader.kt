@@ -13,6 +13,11 @@ import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
 
 @Suppress("LongMethod")
+/**
+ * Class that reads local MediaStore. Populates SongListManager, AlbumListManager and ArtistListManager.
+ * When the app starts it populates lists on main thread, after that on background.
+ * @property context holds application context.
+ */
 class MediaStoreReader {
 
     var context = PlayerApplication.context()
@@ -66,7 +71,6 @@ class MediaStoreReader {
             val dateColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED)
             val albumIdColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
             val albumColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
-            val pathColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
             val durationColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
@@ -78,7 +82,6 @@ class MediaStoreReader {
                 val thisArtistId = cursor.getLong(artistIdColumn)
                 val thisAlbumId = cursor.getLong(albumIdColumn)
                 val thisAlbumName = cursor.getString(albumColumn)
-                val thisPath = cursor.getString(pathColumn)
                 val thisDuration = cursor.getLong(durationColumn)
                 // tracks with <unknown> artist are corrupted
                 if (thisArtist != "<unknown>") {
@@ -92,7 +95,6 @@ class MediaStoreReader {
                         date = thisDate,
                         url = null,
                         duration = thisDuration,
-                        path = thisPath,
                         art = bitmap
                     )
                     SongListManager.add(song)

@@ -3,6 +3,9 @@ package com.nafanya.mp3world.model.dependencies
 import android.app.Application
 import android.content.Context
 
+/**
+ * Class that provides access to the application context.
+ */
 class PlayerApplication : Application() {
 
     companion object {

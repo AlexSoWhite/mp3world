@@ -5,6 +5,9 @@ import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 
+/**
+ * Object that holds artists data. Populated by MediaStoreReader.
+ */
 object ArtistListManager {
 
     val artists: MutableLiveData<MutableList<Artist>> by lazy {

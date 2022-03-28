@@ -9,7 +9,9 @@ import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class PlaylistListActivity : RecyclerHolderActivity() {
 
     override fun setAdapter() {

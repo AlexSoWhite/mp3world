@@ -12,10 +12,15 @@ import okhttp3.Request
 import okhttp3.Response
 import org.jsoup.Jsoup
 
-object QueryExecutor {
+/**
+ * Class that makes calls to api.
+ */
+// TODO pagination
+// TODO result wrapping
+class QueryExecutor {
 
     private val client = OkHttpClient()
-    private const val prefix = "https://ru.hitmotop.com/search?q="
+    private val prefix = "https://ru.hitmotop.com/search?q="
 
     fun preLoad(query: String, callback: (Playlist?) -> Unit?) {
         val url = prefix + query

@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.view.listActivities.search
 
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
@@ -24,5 +25,14 @@ class SearchSongListActivity : RecyclerHolderActivity() {
             }
         }
         (viewModel as SearchSongListViewModel).playlist.observe(this, observer)
+    }
+
+    override fun onEmpty() {
+        super.onEmpty()
+        viewModel.onEmpty()
+        binding.loader.loader.visibility = View.INVISIBLE
+        binding.addSongToPlaylist.addSongToPlaylist.visibility = View.GONE
+        binding.addPlaylist.addPlaylist.visibility = View.GONE
+        binding.emptySongList.emptySongList.visibility = View.VISIBLE
     }
 }

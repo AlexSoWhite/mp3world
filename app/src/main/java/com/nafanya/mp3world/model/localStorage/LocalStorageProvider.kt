@@ -10,6 +10,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @DelicateCoroutinesApi
+/**
+ * Class that wraps DataBaseHolder work.
+ */
 class LocalStorageProvider {
 
     // playlist section

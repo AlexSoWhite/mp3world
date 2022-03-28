@@ -29,6 +29,7 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.MainActivity
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 class ForegroundService : LifecycleService() {
 
@@ -141,6 +142,7 @@ class ForegroundService : LifecycleService() {
         /**
          * Method triggered when notification clicked.
          */
+        @DelicateCoroutinesApi
         override fun createCurrentContentIntent(player: Player): PendingIntent? {
             val intentToMain = Intent(context, MainActivity::class.java)
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -211,7 +213,6 @@ class ForegroundService : LifecycleService() {
                 song.date?.let { it1 -> extras.putLong("date", it1) }
                 extras.putString("url", song.url)
                 extras.putLong("duration", song.duration!!)
-                extras.putString("path", song.path)
                 extras.putString("artUrl", song.artUrl)
                 // extracting uri: remote song (url) or song from the local MediaStore
                 val uri: Uri =
@@ -244,7 +245,7 @@ class ForegroundService : LifecycleService() {
 
     /**
      * Method that creates song observer.
-     * Expects that song exists in current playlist.
+     * Expects that song exists in the current playlist.
      */
     private fun subscribeSong() {
         val observer = Observer<Song> { song ->

@@ -10,8 +10,9 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 
 /**
- * Service responsible for starting foreground player service.
- * As the application catches ANR since Android 8 if we don't call startForeground() after few seconds from calling startForegroundService(), it's better to control service start.
+ * Service that is responsible for starting foreground player service.
+ * As the application catches ANR since Android 8 if we don't call startForeground() after few seconds from calling startForegroundService(), it's decided to control service start.
+ * Listens SongListManager state.
  */
 class ServiceInitializer : LifecycleService() {
 

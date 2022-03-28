@@ -13,6 +13,10 @@ import com.nafanya.mp3world.model.wrappers.PlaylistStorageEntity
 import com.nafanya.mp3world.model.wrappers.Song
 
 @Suppress("MagicNumber")
+/**
+ * Class that provides access to local Room database. Populates playlists, favourites and statistics.
+ * @property context holds application context.
+ */
 class DatabaseHolder {
 
     private var context = PlayerApplication.context()

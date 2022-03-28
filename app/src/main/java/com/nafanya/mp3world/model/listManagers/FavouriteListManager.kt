@@ -4,6 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.localStorage.FavouriteListDao
 import com.nafanya.mp3world.model.wrappers.Song
 
+/**
+ * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
+ */
 object FavouriteListManager {
 
     val favorites: MutableLiveData<MutableList<Song>> by lazy {

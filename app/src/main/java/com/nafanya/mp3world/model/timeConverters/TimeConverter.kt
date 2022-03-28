@@ -1,7 +1,8 @@
 package com.nafanya.mp3world.model.timeConverters
 
-import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
-
+/**
+ * Class that converts duration to string and string to duration.
+ */
 class TimeConverter {
 
     fun stringToDuration(value: String): Long {

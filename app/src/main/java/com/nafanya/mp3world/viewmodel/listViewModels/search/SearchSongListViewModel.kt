@@ -7,17 +7,17 @@ import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import java.lang.RuntimeException
+
+// TODO: error
 class SearchSongListViewModel : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()
     }
 
-    private fun startLoading(query: String, callback: (Playlist) -> Unit) {
-        QueryExecutor.preLoad(query) { playlist ->
-            playlist?.let {
-                callback(playlist)
-            }
+    private fun startLoading(query: String, callback: (Playlist?) -> Unit) {
+        QueryExecutor().preLoad(query) { playlist ->
+            callback(playlist)
         }
     }
 
@@ -29,7 +29,7 @@ class SearchSongListViewModel : ListViewModelInterface() {
                 title.postValue(initializingQuery)
                 startLoading(initializingQuery) {
                     playlist.postValue(it)
-                    if (it.songList.isEmpty()) {
+                    if (it == null || it.songList.isEmpty()) {
                         pageState.postValue(PageState.IS_EMPTY)
                     } else {
                         pageState.postValue(PageState.IS_LOADED)
