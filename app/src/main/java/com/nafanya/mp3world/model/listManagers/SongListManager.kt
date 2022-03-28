@@ -29,4 +29,14 @@ object SongListManager {
         }
         suspendedList = mutableListOf()
     }
+
+    fun resetDataOnMainThread() {
+        suspendedList.sortByDescending {
+            it.date
+        }
+        if (suspendedList.isNotEmpty()) {
+            songList.value = suspendedList
+        }
+        suspendedList = mutableListOf()
+    }
 }

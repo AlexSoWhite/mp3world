@@ -42,7 +42,7 @@ class FavouriteListActivity : RecyclerHolderActivity() {
             Playlist(
                 name = "Избранное",
                 id = 0,
-                songList = FavouriteListManager.songList.value!!
+                songList = FavouriteListManager.favorites.value!!
             )
         )
         (viewModel as SongListViewModel).start()

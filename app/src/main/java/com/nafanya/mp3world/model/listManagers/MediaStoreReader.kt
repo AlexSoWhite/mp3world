@@ -22,12 +22,18 @@ class MediaStoreReader {
         private const val artDimension = 1024
     }
 
+    /**
+     * Sets managers data on main thread.
+     */
     fun readMediaStore() {
         if (!isInitialized) {
             initialize()
         }
     }
 
+    /**
+     * Resets SongListManager and other managers data on background thread.
+     */
     fun reset() {
         initialize()
     }
@@ -104,10 +110,20 @@ class MediaStoreReader {
                 }
             }
         }
-        SongListManager.resetData()
-        ArtistListManager.resetData()
-        AlbumListManager.resetData()
+        dispatchThread()
         isInitialized = true
+    }
+
+    private fun dispatchThread() {
+        if (!isInitialized) {
+            SongListManager.resetDataOnMainThread()
+            ArtistListManager.resetData()
+            AlbumListManager.resetData()
+        } else {
+            SongListManager.resetData()
+            ArtistListManager.resetData()
+            AlbumListManager.resetData()
+        }
     }
 
     private fun getBitmap(contentResolver: ContentResolver, trackId: Long): Bitmap? {

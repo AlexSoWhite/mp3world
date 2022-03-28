@@ -77,7 +77,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 // favourite
                 if (song.url == null) {
                     var isFavourite = false
-                    FavouriteListManager.songList.value?.let { list ->
+                    FavouriteListManager.favorites.value?.let { list ->
                         if (list.contains(PlayerLiveDataProvider.currentSong.value)) {
                             isFavourite = true
                         }

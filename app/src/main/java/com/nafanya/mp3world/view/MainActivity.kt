@@ -17,7 +17,6 @@ import com.downloader.PRDownloader
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
-import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.foregroundService.ServiceInitializer
@@ -43,7 +42,9 @@ import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -162,7 +163,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(favouriteIntent)
             }
         }
-        FavouriteListManager.songList.observe(this, favouriteObserver)
+        FavouriteListManager.favorites.observe(this, favouriteObserver)
 
         // statistic
         val statisticObserver = Observer<MutableList<SongStatisticEntity>> {
