@@ -1,5 +1,9 @@
 package com.nafanya.mp3world.model.wrappers
 
+/**
+ * Class that wraps playlist.
+ * @property id is maximum of ids of all playlists + 1
+ */
 data class Playlist(
     var songList: MutableList<Song>,
     val id: Int = 0,

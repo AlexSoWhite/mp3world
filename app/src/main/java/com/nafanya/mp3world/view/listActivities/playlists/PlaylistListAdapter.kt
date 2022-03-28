@@ -8,9 +8,14 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlaylistListItemBinding
 import com.nafanya.mp3world.model.wrappers.Playlist
 
+enum class ClickType {
+    CLICK,
+    LONG
+}
+
 class PlaylistListAdapter(
     private val playlistList: List<Playlist>,
-    private val callback: (playlist: Playlist) -> Unit
+    private val callback: (Playlist, ClickType) -> Unit
 ) : RecyclerView.Adapter<PlaylistListAdapter.PlaylistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
@@ -30,7 +35,7 @@ class PlaylistListAdapter(
 
     class PlaylistViewHolder(
         itemView: View,
-        private val callback: (playlist: Playlist) -> Unit
+        private val callback: (Playlist, ClickType) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = PlaylistListItemBinding.bind(itemView)
@@ -39,7 +44,11 @@ class PlaylistListAdapter(
             binding.playlist = playlist
             binding.tracksCount = playlist.songList.size.toString()
             binding.playlistListItem.setOnClickListener {
-                callback(playlist)
+                callback(playlist, ClickType.CLICK)
+            }
+            binding.playlistListItem.setOnLongClickListener {
+                callback(playlist, ClickType.LONG)
+                true
             }
         }
     }

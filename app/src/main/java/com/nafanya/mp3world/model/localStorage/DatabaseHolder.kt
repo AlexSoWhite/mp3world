@@ -1,20 +1,25 @@
 package com.nafanya.mp3world.model.localStorage
 
-import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
+import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
-import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.listManagers.StatisticInfoManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.PlaylistStorageEntity
 import com.nafanya.mp3world.model.wrappers.Song
 
 @Suppress("MagicNumber")
-class DatabaseHolder(context: Context) {
+/**
+ * Class that provides access to local Room database. Populates playlists, favourites and statistics.
+ * @property context holds application context.
+ */
+class DatabaseHolder {
+
+    private var context = PlayerApplication.context()
 
     var db: AppDatabase
 
@@ -139,6 +144,12 @@ class DatabaseHolder(context: Context) {
         }
     }
 
+    private val migration78 = object : Migration(7, 8) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("DROP TABLE Song")
+        }
+    }
+
     init {
         db = Room.databaseBuilder(
             context,
@@ -150,12 +161,12 @@ class DatabaseHolder(context: Context) {
             migration34,
             migration45,
             migration56,
-            migration67
+            migration67,
+            migration78
         ).build()
     }
 
     fun populateLists() {
-        SongListManager.appendLocalSongs(db.songsListDao())
         PlaylistListManager.initialize(db.playlistDao())
         FavouriteListManager.initialize(db.favouriteListDao())
         StatisticInfoManager.initialize(db.songStatisticDao())

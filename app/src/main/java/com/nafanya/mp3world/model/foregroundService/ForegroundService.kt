@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.model.foregroundService
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.ContentUris
@@ -30,14 +29,39 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.MainActivity
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 class ForegroundService : LifecycleService() {
 
+    /**
+     * Player itself
+     */
     private var player: ExoPlayer? = null
+
+    /**
+     * Indicator fot preventing playing as the application opens
+     */
     private var isInitialized = false
+
+    /**
+     * Current playlist
+     */
     private lateinit var playlist: Playlist
+
+    /**
+     * Notification manager responsible for displaying player notification.
+     * Stored as a field to destroy it with the service.
+     */
     private lateinit var playerNotificationManager: PlayerNotificationManager
+
+    /**
+     * Object that connects player state with its LiveData
+     */
     private lateinit var listener: Listener
+
+    /**
+     * Field for navigating through playlist
+     */
     var currentIdx: Int = 0
 
     override fun onCreate() {
@@ -46,11 +70,11 @@ class ForegroundService : LifecycleService() {
         if (player == null) {
             // init player
             player = ExoPlayer.Builder(context).build()
-            // start playlist and current song observers
+            // init playlist and current song observers
             subscribePlaylist()
             subscribeSong()
-            // add listener that trigger observers to sync player state with classes throughout the app
-            listener = Listener(this)
+            // add listener that trigger observers to sync player state with other classes throughout the app
+            listener = Listener()
             player!!.addListener(listener)
             // add headphones unplugging handler
             player!!.setHandleAudioBecomingNoisy(true)
@@ -84,13 +108,41 @@ class ForegroundService : LifecycleService() {
         }
     }
 
-    inner class Adapter(private val context: Context) :
-        PlayerNotificationManager.MediaDescriptionAdapter {
+    /**
+     * Class responsible for displaying the song data in the notification.
+     */
+    inner class Adapter(
+        private val context: Context
+    ) : PlayerNotificationManager.MediaDescriptionAdapter {
+
+        /**
+         * Song title.
+         */
         override fun getCurrentContentTitle(player: Player): CharSequence {
             return playlist.songList[player.currentMediaItemIndex].title as CharSequence
         }
 
-        @SuppressLint("UnspecifiedImmutableFlag")
+        /**
+         * Song artist.
+         */
+        override fun getCurrentContentText(player: Player): CharSequence {
+            return playlist.songList[player.currentMediaItemIndex].artist as CharSequence
+        }
+
+        /**
+         * Song image.
+         */
+        override fun getCurrentLargeIcon(
+            player: Player,
+            callback: PlayerNotificationManager.BitmapCallback
+        ): Bitmap? {
+            return PlayerLiveDataProvider.currentSong.value!!.art
+        }
+
+        /**
+         * Method triggered when notification clicked.
+         */
+        @DelicateCoroutinesApi
         override fun createCurrentContentIntent(player: Player): PendingIntent? {
             val intentToMain = Intent(context, MainActivity::class.java)
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -109,19 +161,11 @@ class ForegroundService : LifecycleService() {
                 )
             }
         }
-
-        override fun getCurrentContentText(player: Player): CharSequence {
-            return playlist.songList[player.currentMediaItemIndex].artist as CharSequence
-        }
-
-        override fun getCurrentLargeIcon(
-            player: Player,
-            callback: PlayerNotificationManager.BitmapCallback
-        ): Bitmap? {
-            return PlayerLiveDataProvider.currentSong.value!!.art
-        }
     }
 
+    /**
+     * Support method.
+     */
     inner class NotificationListener : PlayerNotificationManager.NotificationListener {
 
         override fun onNotificationPosted(
@@ -139,9 +183,14 @@ class ForegroundService : LifecycleService() {
         }
     }
 
+    /**
+     * Method that creates playlist observer.
+     * TODO: modifying playlist at runtime
+     * TODO: start playing when there are no songs in the local storage
+     */
     private fun subscribePlaylist() {
         val observer = Observer<Playlist> {
-            // create copy of playlist to continue playing deleted from playlist songs
+            // creating copy of playlist to continue playing deleted from playlist songs
             val songList = mutableListOf<Song>()
             it?.songList?.forEach { song ->
                 songList.add(song)
@@ -151,24 +200,28 @@ class ForegroundService : LifecycleService() {
                 name = it.name,
                 songList = songList
             )
+            // clearing player
             player?.clearMediaItems()
+            // setting new playlist
             this.playlist = playlist
             this.playlist.songList.forEach { song ->
+                // creating bundle for listener to provide correct metadata
                 val extras = Bundle()
                 extras.putLong("id", song.id)
                 extras.putString("title", song.title)
                 extras.putString("artist", song.artist)
-                extras.putString("date", song.date)
+                song.date?.let { it1 -> extras.putLong("date", it1) }
                 extras.putString("url", song.url)
                 extras.putLong("duration", song.duration!!)
-                extras.putString("path", song.path)
                 extras.putString("artUrl", song.artUrl)
+                // extracting uri: remote song (url) or song from the local MediaStore
                 val uri: Uri =
                     song.url?.toUri()
                         ?: ContentUris.withAppendedId(
                             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                             song.id
                         )
+                // creating mediaItem to play and to provide data
                 val mediaItem = MediaItem.Builder()
                     .setUri(uri)
                     .setMediaMetadata(
@@ -176,7 +229,7 @@ class ForegroundService : LifecycleService() {
                             .setExtras(extras)
                             .build()
                     ).build()
-
+                // adding song to player
                 player?.addMediaItem(
                     mediaItem
                 )
@@ -190,6 +243,10 @@ class ForegroundService : LifecycleService() {
         PlayerLiveDataProvider.currentPlaylist.observe(this, observer)
     }
 
+    /**
+     * Method that creates song observer.
+     * Expects that song exists in the current playlist.
+     */
     private fun subscribeSong() {
         val observer = Observer<Song> { song ->
             currentIdx = playlist.songList.indexOf(song)
@@ -213,6 +270,9 @@ class ForegroundService : LifecycleService() {
         return START_STICKY
     }
 
+    /**
+     * Destroying service.
+     */
     override fun onDestroy() {
         super.onDestroy()
         playerNotificationManager.setPlayer(null)

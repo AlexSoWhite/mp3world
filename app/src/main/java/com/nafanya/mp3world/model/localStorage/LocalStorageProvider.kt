@@ -1,53 +1,38 @@
 package com.nafanya.mp3world.model.localStorage
 
-import android.content.Context
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.FavouriteListEntity
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
-import kotlin.concurrent.thread
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-object LocalStorageProvider {
-
-    // song section
-    /**
-     * adding song to the local storage, creates a thread
-     */
-    fun addSong(context: Context, song: Song) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
-            dbHolder.db.songsListDao().insert(song)
-            dbHolder.closeDataBase()
-        }
-    }
-
-    fun deleteSong(context: Context, song: Song) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
-            dbHolder.db.songsListDao().delete(song)
-            dbHolder.closeDataBase()
-        }
-    }
+@DelicateCoroutinesApi
+/**
+ * Class that wraps DataBaseHolder work.
+ */
+class LocalStorageProvider {
 
     // playlist section
     /**
-     * adding playlist to the local storage, creates a thread
+     * adding playlist to the local storage, creates a GlobalScope.launch
      */
-    fun addPlaylist(context: Context, playlist: Playlist) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
+    fun addPlaylist(playlist: Playlist) {
+        GlobalScope.launch {
+            val dbHolder = DatabaseHolder()
             dbHolder.db.playlistDao().insert(playlist.toStorageEntity())
             dbHolder.closeDataBase()
         }
     }
 
     /**
-     * updating playlist from the local storage, creates a thread
+     * updating playlist from the local storage, creates a GlobalScope.launch
      */
-    fun updatePlaylist(context: Context, playlist: Playlist) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
+    fun updatePlaylist(playlist: Playlist) {
+        GlobalScope.launch {
+            val dbHolder = DatabaseHolder()
             val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
             if (index != -1) {
                 dbHolder.db.playlistDao().update(playlist.toStorageEntity())
@@ -57,20 +42,20 @@ object LocalStorageProvider {
     }
 
     /**
-     * deleting playlist from a local storage, creates a thread
+     * deleting playlist from a local storage, creates a GlobalScope.launch
      */
-    fun deletePlaylist(context: Context, playlist: Playlist) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
+    fun deletePlaylist(playlist: Playlist) {
+        GlobalScope.launch {
+            val dbHolder = DatabaseHolder()
             dbHolder.db.playlistDao().delete(playlist.toStorageEntity())
             dbHolder.closeDataBase()
         }
     }
 
     // favourite list section
-    fun addFavourite(context: Context, song: Song) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
+    fun addFavourite(song: Song) {
+        GlobalScope.launch {
+            val dbHolder = DatabaseHolder()
             dbHolder.db.favouriteListDao().insert(
                 FavouriteListEntity(song.id)
             )
@@ -78,9 +63,9 @@ object LocalStorageProvider {
         }
     }
 
-    fun deleteFavourite(context: Context, song: Song) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
+    fun deleteFavourite(song: Song) {
+        GlobalScope.launch {
+            val dbHolder = DatabaseHolder()
             dbHolder.db.favouriteListDao().delete(
                 FavouriteListEntity(song.id)
             )
@@ -89,16 +74,16 @@ object LocalStorageProvider {
     }
 
     // statistic section
-    fun addStatisticEntity(context: Context, value: SongStatisticEntity) {
-//        thread {
+    fun addStatisticEntity(value: SongStatisticEntity) {
+//        GlobalScope.launch {
 //            val dbHolder = DatabaseHolder(context)
 //            dbHolder.db.songStatisticDao().insert(value)
 //            dbHolder.closeDataBase()
 //        }
     }
 
-    fun updateStatisticEntity(context: Context, value: SongStatisticEntity) {
-//        thread {
+    fun updateStatisticEntity(value: SongStatisticEntity) {
+//        GlobalScope.launch {
 //            val dbHolder = DatabaseHolder(context)
 //            dbHolder.db.songStatisticDao().update(value)
 //            dbHolder.closeDataBase()
@@ -109,9 +94,9 @@ object LocalStorageProvider {
     /**
      * populating lists
      */
-    fun populateLists(context: Context) {
-        thread {
-            val dbHolder = DatabaseHolder(context)
+    fun populateLists() {
+        GlobalScope.launch {
+            val dbHolder = DatabaseHolder()
             dbHolder.populateLists()
             dbHolder.closeDataBase()
         }

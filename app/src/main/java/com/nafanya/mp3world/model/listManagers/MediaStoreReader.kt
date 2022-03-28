@@ -2,32 +2,48 @@ package com.nafanya.mp3world.model.listManagers
 
 import android.content.ContentResolver
 import android.content.ContentUris
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
+import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @Suppress("LongMethod")
-object MediaStoreReader {
+/**
+ * Class that reads local MediaStore. Populates SongListManager, AlbumListManager and ArtistListManager.
+ * When the app starts it populates lists on main thread, after that on background.
+ * @property context holds application context.
+ */
+class MediaStoreReader {
 
-    private var isInitialized = false
-    private const val multiplier = 1000L
-    private const val artDimension = 1024
+    var context = PlayerApplication.context()
 
-    fun initializeSongList(context: Context, contentResolver: ContentResolver) {
+    companion object {
+        private var isInitialized = false
+        private const val artDimension = 1024
+    }
+
+    /**
+     * Sets managers data on main thread.
+     */
+    fun readMediaStore() {
         if (!isInitialized) {
-            initialize(context, contentResolver)
+            initialize()
         }
     }
 
-    private fun initialize(context: Context, contentResolver: ContentResolver) {
+    /**
+     * Resets SongListManager and other managers data on background thread.
+     */
+    fun reset() {
+        initialize()
+    }
+
+    private fun initialize() {
         // get all the fields from media storage
         val projection = null
         // select only music
@@ -55,34 +71,30 @@ object MediaStoreReader {
             val dateColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED)
             val albumIdColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
             val albumColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
-            val pathColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
             val durationColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
-            val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
             while (cursor.moveToNext()) {
                 // Use an ID column from the projection to get
                 // a URI representing the media item itself.
                 val thisId = cursor.getLong(idColumn)
                 val thisTitle = cursor.getString(titleColumn)
                 val thisArtist = cursor.getString(artistColumn)
-                val thisDate = cursor.getInt(dateColumn)
+                val thisDate = cursor.getLong(dateColumn)
                 val thisArtistId = cursor.getLong(artistIdColumn)
                 val thisAlbumId = cursor.getLong(albumIdColumn)
                 val thisAlbumName = cursor.getString(albumColumn)
-                val thisPath = cursor.getString(pathColumn)
                 val thisDuration = cursor.getLong(durationColumn)
                 // tracks with <unknown> artist are corrupted
                 if (thisArtist != "<unknown>") {
                     // set the song art
-                    val bitmap = getBitmap(contentResolver, thisId)
+                    val bitmap = getBitmap(context.contentResolver, thisId)
                     // build song object
                     val song = Song(
                         id = thisId,
                         title = thisTitle,
                         artist = thisArtist,
-                        date = simpleDateFormat.format(thisDate * multiplier),
+                        date = thisDate,
                         url = null,
                         duration = thisDuration,
-                        path = thisPath,
                         art = bitmap
                     )
                     SongListManager.add(song)
@@ -100,8 +112,20 @@ object MediaStoreReader {
                 }
             }
         }
-        SongListManager.resetData()
+        dispatchThread()
         isInitialized = true
+    }
+
+    private fun dispatchThread() {
+        if (!isInitialized) {
+            SongListManager.resetDataOnMainThread()
+            ArtistListManager.resetData()
+            AlbumListManager.resetData()
+        } else {
+            SongListManager.resetData()
+            ArtistListManager.resetData()
+            AlbumListManager.resetData()
+        }
     }
 
     private fun getBitmap(contentResolver: ContentResolver, trackId: Long): Bitmap? {

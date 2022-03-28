@@ -1,5 +1,9 @@
 package com.nafanya.mp3world.model.wrappers
 
+/**
+ * Class that wraps the album.
+ * @property id is taken from MediaStore.
+ */
 data class Album(
     val name: String = "",
     var songList: MutableList<Song>,

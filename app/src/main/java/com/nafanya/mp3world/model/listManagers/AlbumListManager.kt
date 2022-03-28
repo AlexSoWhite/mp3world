@@ -4,18 +4,27 @@ import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Song
 
+/**
+ * Object that holds albums data. Populated by MediaStoreReader.
+ */
 object AlbumListManager {
 
     val albums: MutableLiveData<MutableList<Album>> by lazy {
         MutableLiveData<MutableList<Album>>(mutableListOf())
     }
+    private var suspendedList = mutableListOf<Album>()
 
     fun add(element: Album, song: Song) {
-        if (albums.value?.indexOf(element) != -1) {
-            albums.value?.elementAt(albums.value?.indexOf(element)!!)!!.songList.add(song)
+        if (suspendedList.indexOf(element) != -1) {
+            suspendedList.elementAt(suspendedList.indexOf(element)).songList.add(song)
         } else {
             element.songList = mutableListOf(song)
-            albums.value?.add(element)
+            suspendedList.add(element)
         }
+    }
+
+    fun resetData() {
+        albums.postValue(suspendedList)
+        suspendedList = mutableListOf()
     }
 }

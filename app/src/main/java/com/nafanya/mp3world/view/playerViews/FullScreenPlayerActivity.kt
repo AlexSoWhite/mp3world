@@ -16,7 +16,7 @@ import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
-import com.nafanya.mp3world.model.network.DownloadService
+import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
@@ -77,7 +77,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 // favourite
                 if (song.url == null) {
                     var isFavourite = false
-                    FavouriteListManager.songList.value?.let { list ->
+                    FavouriteListManager.favorites.value?.let { list ->
                         if (list.contains(PlayerLiveDataProvider.currentSong.value)) {
                             isFavourite = true
                         }
@@ -92,8 +92,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                             FavouriteListManager.add(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
-                            LocalStorageProvider.addFavourite(
-                                activity,
+                            LocalStorageProvider().addFavourite(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
                             isFavourite = true
@@ -102,8 +101,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                             FavouriteListManager.delete(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
-                            LocalStorageProvider.deleteFavourite(
-                                activity,
+                            LocalStorageProvider().deleteFavourite(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
                             isFavourite = false
@@ -113,7 +111,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 } else {
                     binding.favouriteButton.setImageResource(R.drawable.download_icon)
                     binding.favouriteButton.setOnClickListener {
-                        DownloadService().downLoad(song) {
+                        Downloader().downLoad(song) {
                             Toast.makeText(
                                 activity,
                                 "${song.artist} - ${song.title} загружено",

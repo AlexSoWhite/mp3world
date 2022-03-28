@@ -42,7 +42,9 @@ import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -66,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
-        mainActivityViewModel.initializeLists(this, contentResolver)
+        mainActivityViewModel.initializeLists()
         initMainMenu()
         initInitializer()
         PRDownloader.initialize(applicationContext)
@@ -161,7 +163,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(favouriteIntent)
             }
         }
-        FavouriteListManager.songList.observe(this, favouriteObserver)
+        FavouriteListManager.favorites.observe(this, favouriteObserver)
 
         // statistic
         val statisticObserver = Observer<MutableList<SongStatisticEntity>> {

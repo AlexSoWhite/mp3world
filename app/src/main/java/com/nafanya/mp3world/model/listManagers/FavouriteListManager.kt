@@ -4,22 +4,25 @@ import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.localStorage.FavouriteListDao
 import com.nafanya.mp3world.model.wrappers.Song
 
+/**
+ * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
+ */
 object FavouriteListManager {
 
-    val songList: MutableLiveData<MutableList<Song>> by lazy {
-        MutableLiveData<MutableList<Song>>()
+    val favorites: MutableLiveData<MutableList<Song>> by lazy {
+        MutableLiveData<MutableList<Song>>(mutableListOf())
     }
 
     fun add(song: Song) {
-        val temp = songList.value
+        val temp = favorites.value
         temp?.add(song)
-        songList.postValue(temp)
+        favorites.postValue(temp)
     }
 
     fun delete(song: Song) {
-        val temp = songList.value
+        val temp = favorites.value
         temp?.remove(song)
-        songList.postValue(temp)
+        favorites.postValue(temp)
     }
 
     fun initialize(dao: FavouriteListDao) {
@@ -32,6 +35,6 @@ object FavouriteListManager {
                 }
             }
         }
-        songList.postValue(temp)
+        favorites.postValue(temp)
     }
 }

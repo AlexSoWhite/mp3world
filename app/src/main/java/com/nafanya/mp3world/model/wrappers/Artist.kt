@@ -1,5 +1,9 @@
 package com.nafanya.mp3world.model.wrappers
 
+/**
+ * Class that wraps the artist.
+ * @property id is taken from MediaStore.
+ */
 data class Artist(
     val name: String? = null,
     val id: Long? = null,

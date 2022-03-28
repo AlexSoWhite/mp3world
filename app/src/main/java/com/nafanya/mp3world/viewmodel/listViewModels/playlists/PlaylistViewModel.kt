@@ -1,14 +1,13 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
-import android.content.Context
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 
 class PlaylistViewModel : SongListViewModel() {
 
-    fun resetPlaylist(context: Context, playlist: Playlist) {
+    fun resetPlaylist(playlist: Playlist) {
         updateData(playlist)
-        parentViewModel.updatePlaylist(context, playlist)
+        parentViewModel.updatePlaylist(playlist)
     }
 
     companion object {

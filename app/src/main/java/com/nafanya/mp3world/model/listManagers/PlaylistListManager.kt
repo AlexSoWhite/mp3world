@@ -5,6 +5,9 @@ import com.nafanya.mp3world.model.localStorage.StoredPlaylistDao
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 
+/**
+ * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
+ */
 object PlaylistListManager {
 
     val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
@@ -42,16 +45,7 @@ object PlaylistListManager {
         }
     }
 
-//    fun deleteSongWithUrl(song: Song) {
-//        val temp = playlists.value
-//        temp?.forEach { playlist ->
-//            playlist.songList.forEach {
-//                if (it.url != null && it.url == song.url) {
-//                    playlist.songList.remove(song)
-//                    updatePlaylist(playlist)
-//                }
-//            }
-//        }
-//        playlists.postValue(temp)
-//    }
+    fun deletePlaylist(playlist: Playlist) {
+        playlists.value!!.remove(playlist)
+    }
 }
