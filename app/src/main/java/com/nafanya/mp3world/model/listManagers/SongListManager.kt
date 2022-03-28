@@ -1,15 +1,10 @@
 package com.nafanya.mp3world.model.listManagers
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-
 /**
- * Object that holds all song data. The most important manager, favourites and playlists are populated based on its data.
+ * Object that holds all song data.
+ * The most important manager, favourites and playlists are populated based on its data.
  */
 object SongListManager {
 

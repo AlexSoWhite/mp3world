@@ -35,8 +35,8 @@ class TimeConverter {
             minutes.toString() + ":" + seconds.toString().padStart(2, '0')
         } else {
             hours.toString() + ":" +
-                    minutes.toString().padStart(2, '0') + "" +
-                    seconds.toString().padStart(2, '0')
+                minutes.toString().padStart(2, '0') + "" +
+                seconds.toString().padStart(2, '0')
         }
     }
 

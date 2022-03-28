@@ -148,7 +148,6 @@ class DatabaseHolder {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("DROP TABLE Song")
         }
-
     }
 
     init {

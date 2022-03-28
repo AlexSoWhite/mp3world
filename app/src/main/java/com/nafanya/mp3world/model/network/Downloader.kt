@@ -5,7 +5,6 @@ import android.util.Log
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
-import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 import com.nafanya.mp3world.model.wrappers.Song
 
 /**

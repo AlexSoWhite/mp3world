@@ -1,16 +1,13 @@
 package com.nafanya.mp3world.model.foregroundService
 
-import android.content.Context
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.nafanya.mp3world.model.listManagers.SongListManager
-import com.nafanya.mp3world.model.listManagers.StatisticInfoManager
-import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.wrappers.Song
-import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
-import java.util.Date
 
-// TODO: statistic
+/**
+ TODO: statistic
+ */
 class Listener : Player.Listener {
 
     // statistic

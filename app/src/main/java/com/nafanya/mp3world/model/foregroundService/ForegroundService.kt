@@ -185,9 +185,9 @@ class ForegroundService : LifecycleService() {
 
     /**
      * Method that creates playlist observer.
+     * TODO: modifying playlist at runtime
+     * TODO: start playing when there are no songs in the local storage
      */
-    // TODO: modifying playlist at runtime
-    // TODO: start playing when there are no songs in the local storage
     private fun subscribePlaylist() {
         val observer = Observer<Playlist> {
             // creating copy of playlist to continue playing deleted from playlist songs
