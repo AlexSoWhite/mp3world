@@ -13,4 +13,6 @@
     <string name="no_playlists">создать плейлист</string>
     <string name="no_songs">нет песен</string>
     <string name="add_playlist">создать плейлист</string>
+    <string name="delete_playlist">удалить плейлист %1$s?</string>
+    <string name="enter_name">введите название</string>
 </resources>

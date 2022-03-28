@@ -44,4 +44,8 @@ object PlaylistListManager {
             playlists.value!![index] = playlist
         }
     }
+
+    fun deletePlaylist(playlist: Playlist) {
+        playlists.value!!.remove(playlist)
+    }
 }

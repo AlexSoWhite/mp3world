@@ -69,4 +69,14 @@ class PlaylistListViewModel : ListViewModelInterface() {
             }
         }
     }
+
+    fun deletePlaylist(playlist: Playlist) {
+        val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
+        if (index != -1) {
+            // modifying LiveData
+            PlaylistListManager.deletePlaylist(playlist)
+            // modifying playlist in local storage
+            LocalStorageProvider().deletePlaylist(playlist)
+        }
+    }
 }
