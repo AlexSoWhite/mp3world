@@ -166,13 +166,13 @@ class MainActivity : AppCompatActivity() {
         FavouriteListManager.favorites.observe(this, favouriteObserver)
 
         // statistic
-        val statisticObserver = Observer<MutableList<SongStatisticEntity>> {
-            binding.statistics.item.setOnClickListener {
-                val statisticIntent = Intent(this, StatisticActivity::class.java)
-                startActivity(statisticIntent)
-            }
-        }
-        StatisticInfoManager.info.observe(this, statisticObserver)
+//        val statisticObserver = Observer<MutableList<SongStatisticEntity>> {
+//            binding.statistics.item.setOnClickListener {
+//                val statisticIntent = Intent(this, StatisticActivity::class.java)
+//                startActivity(statisticIntent)
+//            }
+//        }
+//        StatisticInfoManager.info.observe(this, statisticObserver)
     }
 
     override fun onRequestPermissionsResult(

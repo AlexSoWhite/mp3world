@@ -70,11 +70,11 @@
             bind:description="@{&quot;Избранное&quot;}"
             bind:count="@{favouriteCount.toString()}" />
 
-        <include
-            android:id="@+id/statistics"
-            layout="@layout/main_menu_item"
-            bind:description="@{&quot;Статистика&quot;}"
-            bind:count="@{&quot;&quot;}" />
+<!--        <include-->
+<!--            android:id="@+id/statistics"-->
+<!--            layout="@layout/main_menu_item"-->
+<!--            bind:description="@{&quot;Статистика&quot;}"-->
+<!--            bind:count="@{&quot;&quot;}" />-->
     </LinearLayout>
 
     <include
