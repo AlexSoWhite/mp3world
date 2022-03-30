@@ -164,7 +164,7 @@ class ForegroundService : LifecycleService() {
     }
 
     /**
-     * Support method.
+     * Support class.
      */
     inner class NotificationListener : PlayerNotificationManager.NotificationListener {
 

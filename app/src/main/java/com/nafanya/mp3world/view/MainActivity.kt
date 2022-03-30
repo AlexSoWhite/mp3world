@@ -68,6 +68,13 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
+        val permissionWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
+        if (Build.VERSION.SDK_INT <= 29 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(permissionWrite) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(permissionWrite), 0)
+                return
+            }
+        }
         mainActivityViewModel.initializeLists()
         initMainMenu()
         initInitializer()

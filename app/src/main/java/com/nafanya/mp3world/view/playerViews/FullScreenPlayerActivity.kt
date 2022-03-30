@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.view.playerViews
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -20,7 +21,9 @@ import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class FullScreenPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: PlayerViewFullscreenBinding
@@ -111,6 +114,11 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 } else {
                     binding.favouriteButton.setImageResource(R.drawable.download_icon)
                     binding.favouriteButton.setOnClickListener {
+                        Toast.makeText(
+                            activity,
+                            "загрузка начата",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         Downloader().downLoad(song) {
                             Toast.makeText(
                                 activity,

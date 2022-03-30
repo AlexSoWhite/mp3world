@@ -28,7 +28,7 @@ class ServiceInitializer : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        val observer = Observer<MutableList<Song>> {
+        val observerLocal = Observer<MutableList<Song>> {
             if (!isServiceInitialized && it.isNotEmpty()) {
                 PlayerLiveDataProvider.currentPlaylist.value =
                     Playlist(
@@ -40,7 +40,14 @@ class ServiceInitializer : LifecycleService() {
                 isServiceInitialized = true
             }
         }
-        SongListManager.songList.observe(this, observer)
+        SongListManager.songList.observe(this, observerLocal)
+        val observerRemote = Observer<Playlist> {
+            if (!isServiceInitialized && it.songList.isNotEmpty()) {
+                initService()
+                isServiceInitialized = true
+            }
+        }
+        PlayerLiveDataProvider.currentPlaylist.observe(this, observerRemote)
     }
 
     override fun onBind(p0: Intent): IBinder? {
