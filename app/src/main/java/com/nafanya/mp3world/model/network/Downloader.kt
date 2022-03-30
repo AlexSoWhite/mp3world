@@ -47,10 +47,10 @@ class Downloader {
             .substring(url.lastIndexOf('/') + 1)
             .replace('_', ' ')
         fileName = fileName.substring(0, fileName.lastIndexOf(' ')) + ".mp3"
-        val dirPath =  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            DOWNLOAD_DIR
-        } else {
+        val dirPath =  if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
             context.filesDir.absolutePath
+        } else {
+            DOWNLOAD_DIR
         }
         return PRDownloader.download(url, dirPath, fileName)
             .build()
@@ -92,7 +92,7 @@ class Downloader {
         src.delete()
     }
 
-    fun File.copyTo(file: File) {
+    private fun File.copyTo(file: File) {
         inputStream().use { input ->
             file.outputStream().use { output ->
                 input.copyTo(output)

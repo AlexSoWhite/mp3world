@@ -84,6 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/controls"
+        android:gravity="center_horizontal"
         tools:text="название" />
 
     <TextView
@@ -93,6 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/track_title"
+        android:gravity="center_horizontal"
         tools:text="исполнитель" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
