@@ -34,6 +34,11 @@ class AlbumListAdapter(
         fun bind(album: Album, callback: (Album) -> Unit) {
             binding.album = album
             binding.tracksCount = album.songList.size
+            if (album.image != null) {
+                binding.albumImage.setImageBitmap(album.image)
+            } else {
+                binding.albumImage.setImageResource(R.drawable.album)
+            }
             binding.albumListItem.setOnClickListener {
                 callback(album)
             }

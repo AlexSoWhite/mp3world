@@ -1,5 +1,7 @@
 package com.nafanya.mp3world.model.wrappers
 
+import android.graphics.Bitmap
+
 /**
  * Class that wraps the artist.
  * @property id is taken from MediaStore.
@@ -7,7 +9,8 @@ package com.nafanya.mp3world.model.wrappers
 data class Artist(
     val name: String? = null,
     val id: Long? = null,
-    var playlist: Playlist? = null
+    var playlist: Playlist? = null,
+    var image: Bitmap?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this.id == (other as Artist).id) return true

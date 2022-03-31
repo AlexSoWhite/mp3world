@@ -43,6 +43,11 @@ class PlaylistListAdapter(
         fun bind(playlist: Playlist) {
             binding.playlist = playlist
             binding.tracksCount = playlist.songList.size.toString()
+            if (playlist.image != null) {
+                binding.playlistImage.setImageBitmap(playlist.image)
+            } else {
+                binding.playlistImage.setImageResource(R.drawable.playlist_play)
+            }
             binding.playlistListItem.setOnClickListener {
                 callback(playlist, ClickType.CLICK)
             }
