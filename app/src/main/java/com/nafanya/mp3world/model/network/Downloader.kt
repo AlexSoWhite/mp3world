@@ -26,10 +26,10 @@ class Downloader {
 
     private val context = PlayerApplication.context()
     private val builder = NotificationCompat.Builder(context, "download")
-    private lateinit var notificationManager: NotificationManager
     private var id = 0
 
     companion object {
+        private lateinit var notificationManager: NotificationManager
         private var lastId = 100
         private const val multiplicator = 100
         private var isChannelCreated = false
@@ -117,7 +117,7 @@ class Downloader {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "download"
             val descriptionText = "music downloading"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_LOW
             val channel = NotificationChannel("download", name, importance).apply {
                 description = descriptionText
             }
