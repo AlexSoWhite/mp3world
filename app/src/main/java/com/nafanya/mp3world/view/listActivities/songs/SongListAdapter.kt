@@ -122,7 +122,7 @@ open class SongListAdapter(
                         .into(binding.songIcon)
                 }
                 else -> {
-                    binding.songIcon.setImageResource(R.drawable.default_placeholder)
+                    binding.songIcon.setImageResource(R.drawable.music_menu_icon)
                 }
             }
             binding.duration.text = song.duration?.let { TimeConverter().durationToString(it) }

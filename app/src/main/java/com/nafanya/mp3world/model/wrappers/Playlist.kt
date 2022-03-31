@@ -1,5 +1,7 @@
 package com.nafanya.mp3world.model.wrappers
 
+import android.graphics.Bitmap
+
 /**
  * Class that wraps playlist.
  * @property id is maximum of ids of all playlists + 1
@@ -7,7 +9,8 @@ package com.nafanya.mp3world.model.wrappers
 data class Playlist(
     var songList: MutableList<Song>,
     val id: Int = 0,
-    var name: String = ""
+    var name: String = "",
+    var image: Bitmap? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this.id == (other as Playlist).id) return true

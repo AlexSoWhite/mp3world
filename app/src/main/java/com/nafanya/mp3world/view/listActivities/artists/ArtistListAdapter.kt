@@ -35,6 +35,11 @@ class ArtistListAdapter(
         fun bind(artist: Artist, callback: (artist: Artist) -> Unit) {
             binding.artist = artist
             binding.tracksCount = "(" + artist.playlist?.songList?.size.toString() + ")"
+            if (artist.image != null) {
+                binding.artistImage.setImageBitmap(artist.image)
+            } else {
+                binding.artistImage.setImageResource(R.drawable.artist)
+            }
             binding.artistListItem.setOnClickListener {
                 callback(artist)
             }

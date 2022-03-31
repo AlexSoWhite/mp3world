@@ -54,7 +54,7 @@ open class GenericPlayerControlView(
                         .into(songIcon)
                 }
                 else -> {
-                    songIcon.setImageResource(R.drawable.default_placeholder)
+                    songIcon.setImageResource(R.drawable.music_menu_icon)
                 }
             }
         }
