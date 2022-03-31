@@ -1,11 +1,15 @@
 package com.nafanya.mp3world.model.network
 
+import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Build
 import android.os.Environment
+import android.service.notification.NotificationListenerService
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
@@ -22,13 +26,13 @@ class Downloader {
 
     private val context = PlayerApplication.context()
     private val builder = NotificationCompat.Builder(context, "download")
-    private val notifyManager: NotificationManager =
-        context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    private lateinit var notificationManager: NotificationManager
     private var id = 0
 
     companion object {
         private var lastId = 100
         private const val multiplicator = 100
+        private var isChannelCreated = false
         private val DOWNLOAD_DIR = Environment
             .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             .absolutePath
@@ -41,6 +45,10 @@ class Downloader {
             .setSmallIcon(R.drawable.downloading_icon)
         id = lastId
         lastId++
+        if (!isChannelCreated) {
+            createNotificationChannel()
+        }
+        isChannelCreated = true
         downLoadL(song, callback)
     }
 
@@ -61,7 +69,7 @@ class Downloader {
                 val progressPercent = it.currentBytes * multiplicator / it.totalBytes
                 Log.d("Download", "progress: ${progressPercent.toInt()}")
                 builder.setProgress(multiplicator, progressPercent.toInt(), false)
-                notifyManager.notify(
+                notificationManager.notify(
                     id,
                     builder.build()
                 )
@@ -100,6 +108,23 @@ class Downloader {
             file.outputStream().use { output ->
                 input.copyTo(output)
             }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "download"
+            val descriptionText = "music downloading"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("download", name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            notificationManager =
+                getSystemService(context, NotificationManager::class.java) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 }
