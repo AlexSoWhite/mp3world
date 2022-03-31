@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(songListIntent)
             }
         }
-        binding.allSongs.menuItemIcon.setImageResource(R.drawable.music_menu_icon)
+        binding.allSongs.menuItemIcon.setImageResource(R.drawable.song_menu_icon)
         SongListManager.songList.observe(this, songListObserver)
 
         // playlists
