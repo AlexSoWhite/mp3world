@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.view.playerViews
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -19,8 +18,10 @@ import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Song
-import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrPosition
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
@@ -33,9 +34,10 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = DataBindingUtil.setContentView(this, R.layout.player_view_fullscreen)
-        OnSwipeListener(binding.root) {
-            finish()
-        }
+//        val config = SlidrConfig.Builder()
+//            .position(SlidrPosition.TOP)
+//            .build()
+        Slidr.attach(this)
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = FullScreenPlayerView(this, R.id.player_control_fullscreen_view)

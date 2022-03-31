@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
@@ -104,6 +105,11 @@ class MainActivity : AppCompatActivity() {
             this,
             observerPlayer
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("Slide", this.localClassName)
     }
 
     @Suppress("LongMethod")

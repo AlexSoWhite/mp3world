@@ -1,7 +1,9 @@
 package com.nafanya.mp3world.view.listActivities
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
@@ -20,6 +22,10 @@ import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrListener
+import com.r0adkll.slidr.model.SlidrPosition
 
 @Suppress("TooManyFunctions")
 abstract class RecyclerHolderActivity : AppCompatActivity() {
@@ -32,10 +38,24 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.recycler_holder_activity)
 
+        val config: SlidrConfig = SlidrConfig.Builder()
+            .position(SlidrPosition.LEFT)
+            .sensitivity(1f)
+            .scrimColor(Color.BLACK)
+            .scrimStartAlpha(0.8f)
+            .scrimEndAlpha(0f)
+            .build()
+
+        Slidr.attach(this, config)
         // subscribing to viewModel
         setViewModel()
         subscribeToViewModel()
         setTitle()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("Slide", this.localClassName)
     }
 
     // default for SongListActivity
@@ -95,10 +115,6 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
                 DividerItemDecoration.VERTICAL
             )
         )
-
-        OnSwipeListener(binding.recycler) {
-            this.finish()
-        }
 
         // custom options
         addCustomBehavior()
