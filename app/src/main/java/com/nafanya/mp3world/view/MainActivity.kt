@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(songListIntent)
             }
         }
+        binding.allSongs.menuItemIcon.setImageResource(R.drawable.music_menu_icon)
         SongListManager.songList.observe(this, songListObserver)
 
         // playlists
@@ -106,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(playlistIntent)
             }
         }
+        binding.playlists.menuItemIcon.setImageResource(R.drawable.playlist_play)
         PlaylistListManager.playlists.observe(this, playlistsObserver)
 
         // artists
@@ -116,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(artistsIntent)
             }
         }
+        binding.artists.menuItemIcon.setImageResource(R.drawable.artist)
         ArtistListManager.artists.observe(this, artistObserver)
 
         // albums
@@ -126,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(albumsIntent)
             }
         }
+        binding.albums.menuItemIcon.setImageResource(R.drawable.album)
         AlbumListManager.albums.observe(this, albumsObserver)
 
         // favourites
@@ -143,6 +147,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(favouriteIntent)
             }
         }
+        binding.favourite.menuItemIcon.setImageResource(R.drawable.favorite)
         FavouriteListManager.favorites.observe(this, favouriteObserver)
 
         // statistic

@@ -18,7 +18,15 @@
     android:clickable="true"
     android:focusable="true">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/menu_item_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        tools:src="@drawable/album"/>
+
     <TextView
+        android:layout_marginStart="10dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
