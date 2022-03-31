@@ -97,6 +97,7 @@ class ForegroundService : LifecycleService() {
                 .setChannelImportance(IMPORTANCE_DEFAULT)
                 .setMediaDescriptionAdapter(Adapter(this))
                 .setNotificationListener(NotificationListener())
+                .setSmallIconResourceId(R.drawable.music_notification_icon)
                 .build()
             playerNotificationManager.setUseFastForwardAction(false)
             playerNotificationManager.setUseRewindAction(false)
