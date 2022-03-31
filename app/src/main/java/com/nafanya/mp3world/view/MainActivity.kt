@@ -1,11 +1,7 @@
 package com.nafanya.mp3world.view
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
@@ -13,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.downloader.PRDownloader
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
@@ -38,7 +32,6 @@ import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
 import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
-import com.nafanya.mp3world.viewmodel.MainActivityViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -46,38 +39,15 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var mainActivityViewModel: MainActivityViewModel
     private var playerView: GenericPlayerControlView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.displayOptions = DISPLAY_SHOW_TITLE
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
-        checkPermissions()
-    }
-
-    // part of onCreate
-    private fun checkPermissions() {
-        val permissionRead = Manifest.permission.READ_EXTERNAL_STORAGE
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(permissionRead) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(permissionRead), 0) // triggers onPermissionResult
-                return
-            }
-        }
-        val permissionWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(permissionWrite) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(permissionWrite), 0)
-                return
-            }
-        }
-        mainActivityViewModel.initializeLists()
-        initMainMenu()
         initInitializer()
-        PRDownloader.initialize(applicationContext)
         subscribeToPlayerState()
+        initMainMenu()
     }
 
     private fun initInitializer() {
@@ -104,9 +74,9 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("Slide", this.localClassName)
+    override fun onBackPressed() {
+        super.onBackPressed()
+        InitialActivity.finish()
     }
 
     @Suppress("LongMethod")
@@ -183,15 +153,6 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 //        StatisticInfoManager.info.observe(this, statisticObserver)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        checkPermissions()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

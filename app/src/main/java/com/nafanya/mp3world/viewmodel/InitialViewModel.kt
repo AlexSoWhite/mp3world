@@ -7,17 +7,14 @@ import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel : ViewModel() {
+class InitialViewModel : ViewModel() {
 
-    @DelicateCoroutinesApi
     fun initializeLists() {
         if (!isInitialized) {
-            viewModelScope.launch {
-                isInitialized = true
-                // initialize songList
-                MediaStoreReader().readMediaStore()
-                LocalStorageProvider().populateLists()
-            }
+            isInitialized = true
+            // initialize songList
+            MediaStoreReader().readMediaStore()
+            LocalStorageProvider().populateLists()
         }
     }
 
