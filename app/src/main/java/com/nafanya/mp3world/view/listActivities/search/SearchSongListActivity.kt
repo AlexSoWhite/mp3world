@@ -29,10 +29,6 @@ class SearchSongListActivity : RecyclerHolderActivity() {
 
     override fun onEmpty() {
         super.onEmpty()
-        viewModel.onEmpty()
-        binding.loader.loader.visibility = View.INVISIBLE
-        binding.addSongToPlaylist.addSongToPlaylist.visibility = View.GONE
-        binding.addPlaylist.addPlaylist.visibility = View.GONE
-        binding.emptySongList.emptySongList.visibility = View.VISIBLE
+        binding.emptySearchResult.emptySearchResult.visibility = View.VISIBLE
     }
 }

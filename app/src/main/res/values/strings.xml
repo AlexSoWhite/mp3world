@@ -17,4 +17,7 @@
     <string name="enter_name">введите название</string>
     <string name="delete">удалить</string>
     <string name="cancel">отмена</string>
+    <string name="no_albums">нет альбомов</string>
+    <string name="no_artists">нет исполнителей</string>
+    <string name="nothing_found">ничего не найдено</string>
 </resources>
