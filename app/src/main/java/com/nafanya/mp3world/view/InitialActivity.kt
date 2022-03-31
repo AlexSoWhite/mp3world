@@ -10,9 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.viewmodel.InitialViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.Timer
 import java.util.TimerTask
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
 class InitialActivity : AppCompatActivity() {
@@ -34,7 +34,10 @@ class InitialActivity : AppCompatActivity() {
             }
         }
         val permissionWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.P &&
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        ) {
             if (checkSelfPermission(permissionWrite) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(permissionWrite), 0)
                 return
@@ -43,25 +46,24 @@ class InitialActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this)[InitialViewModel::class.java]
         viewModel.initializeLists()
         PRDownloader.initialize(applicationContext)
-        Timer().schedule(object : TimerTask() {
-            override fun run() {
-                val intent = Intent(this@InitialActivity, MainActivity::class.java)
-                startActivity(intent)
-            }
-        }, 1000L)
+        Timer().schedule(
+            object : TimerTask() {
+                override fun run() {
+                    val intent = Intent(this@InitialActivity, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            },
+            startDelay
+        )
     }
 
     companion object {
+        private const val startDelay = 1000L
         private lateinit var activity: InitialActivity
 
         fun finish() {
             activity.finish()
         }
-    }
-
-    override fun finish() {
-        super.finish()
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
     }
 
     override fun onRequestPermissionsResult(
