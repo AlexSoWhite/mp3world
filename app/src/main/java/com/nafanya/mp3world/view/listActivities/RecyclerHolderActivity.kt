@@ -2,6 +2,7 @@ package com.nafanya.mp3world.view.listActivities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
@@ -15,11 +16,11 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.RecyclerHolderActivityBinding
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
+import com.r0adkll.slidr.Slidr
 
 @Suppress("TooManyFunctions")
 abstract class RecyclerHolderActivity : AppCompatActivity() {
@@ -32,10 +33,16 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.recycler_holder_activity)
 
+        Slidr.attach(this)
         // subscribing to viewModel
         setViewModel()
         subscribeToViewModel()
         setTitle()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("Slide", this.localClassName)
     }
 
     // default for SongListActivity
@@ -82,6 +89,9 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         binding.emptyPlaylist.emptyPlaylist.visibility = View.INVISIBLE
         binding.emptyPlaylistList.emptyPlaylistList.visibility = View.INVISIBLE
         binding.emptySongList.emptySongList.visibility = View.INVISIBLE
+        binding.emptyAlbumList.emptyAlbumList.visibility = View.INVISIBLE
+        binding.emptyArtistList.emptyArtistList.visibility = View.INVISIBLE
+        binding.emptySearchResult.emptySearchResult.visibility = View.INVISIBLE
 
         // subscribing to playerState
         subscribeToPlayerState()
@@ -95,10 +105,6 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
                 DividerItemDecoration.VERTICAL
             )
         )
-
-        OnSwipeListener(binding.recycler) {
-            this.finish()
-        }
 
         // custom options
         addCustomBehavior()

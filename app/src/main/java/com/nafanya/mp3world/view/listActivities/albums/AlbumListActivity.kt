@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.view.listActivities.albums
 
 import android.content.Intent
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.model.wrappers.Album
@@ -31,5 +32,10 @@ class AlbumListActivity : RecyclerHolderActivity() {
             }
         }
         (viewModel as AlbumListViewModel).albumsList.observe(this, observer)
+    }
+
+    override fun onEmpty() {
+        super.onEmpty()
+        binding.emptyAlbumList.emptyAlbumList.visibility = View.VISIBLE
     }
 }

@@ -18,9 +18,11 @@ import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Song
-import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
+import com.r0adkll.slidr.Slidr
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 class FullScreenPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: PlayerViewFullscreenBinding
@@ -30,9 +32,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = DataBindingUtil.setContentView(this, R.layout.player_view_fullscreen)
-        OnSwipeListener(binding.root) {
-            finish()
-        }
+        Slidr.attach(this)
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = FullScreenPlayerView(this, R.id.player_control_fullscreen_view)
@@ -111,6 +111,11 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 } else {
                     binding.favouriteButton.setImageResource(R.drawable.download_icon)
                     binding.favouriteButton.setOnClickListener {
+                        Toast.makeText(
+                            activity,
+                            "загрузка начата",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         Downloader().downLoad(song) {
                             Toast.makeText(
                                 activity,
