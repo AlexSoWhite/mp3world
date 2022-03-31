@@ -17,14 +17,12 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.RecyclerHolderActivityBinding
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.view.OnSwipeListener
 import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.r0adkll.slidr.Slidr
 import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrListener
 import com.r0adkll.slidr.model.SlidrPosition
 
 @Suppress("TooManyFunctions")
@@ -38,15 +36,7 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.recycler_holder_activity)
 
-        val config: SlidrConfig = SlidrConfig.Builder()
-            .position(SlidrPosition.LEFT)
-            .sensitivity(1f)
-            .scrimColor(Color.BLACK)
-            .scrimStartAlpha(0.8f)
-            .scrimEndAlpha(0f)
-            .build()
-
-        Slidr.attach(this, config)
+        Slidr.attach(this)
         // subscribing to viewModel
         setViewModel()
         subscribeToViewModel()

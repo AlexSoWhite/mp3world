@@ -26,19 +26,16 @@ import com.nafanya.mp3world.model.listManagers.ArtistListManager
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
-import com.nafanya.mp3world.model.listManagers.StatisticInfoManager
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
-import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 import com.nafanya.mp3world.view.listActivities.albums.AlbumListActivity
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.favourite.FavouriteListActivity
 import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
 import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
-import com.nafanya.mp3world.view.listActivities.statistic.StatisticActivity
 import com.nafanya.mp3world.view.playerViews.FullScreenPlayerActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import com.nafanya.mp3world.viewmodel.MainActivityViewModel
@@ -70,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         val permissionWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
-        if (Build.VERSION.SDK_INT <= 29 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(permissionWrite) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(permissionWrite), 0)
                 return

@@ -13,7 +13,7 @@ class MetadataScanner(
     private val path: String
 ) {
 
-    inner class ScannerClient() : MediaScannerConnection.MediaScannerConnectionClient {
+    inner class ScannerClient : MediaScannerConnection.MediaScannerConnectionClient {
         override fun onScanCompleted(p0: String?, p1: Uri?) {
             p1?.toString()?.let {
                 MediaStoreReader().reset()
@@ -24,7 +24,6 @@ class MetadataScanner(
         override fun onMediaScannerConnected() {
             scan()
         }
-
     }
 
     private var context = PlayerApplication.context()

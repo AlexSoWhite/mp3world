@@ -5,6 +5,6 @@ enum class ResultType {
     ERROR
 }
 
-data class DownloadResult (
+data class DownloadResult(
     val type: ResultType,
 )

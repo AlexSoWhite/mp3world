@@ -17,15 +17,18 @@ import java.io.File
 /**
  * Class that downloads song by PRDownloader.
  */
+@Suppress("TooGenericExceptionCaught")
 class Downloader {
 
     private val context = PlayerApplication.context()
     private val builder = NotificationCompat.Builder(context, "download")
-    private val notifyManager: NotificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    private val notifyManager: NotificationManager =
+        context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     private var id = 0
 
     companion object {
         private var lastId = 100
+        private const val multiplicator = 100
         private val DOWNLOAD_DIR = Environment
             .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             .absolutePath
@@ -47,7 +50,7 @@ class Downloader {
             .substring(url.lastIndexOf('/') + 1)
             .replace('_', ' ')
         fileName = fileName.substring(0, fileName.lastIndexOf(' ')) + ".mp3"
-        val dirPath =  if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+        val dirPath = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
             context.filesDir.absolutePath
         } else {
             DOWNLOAD_DIR
@@ -55,9 +58,9 @@ class Downloader {
         return PRDownloader.download(url, dirPath, fileName)
             .build()
             .setOnProgressListener {
-                val progressPercent = it.currentBytes * 100/ it.totalBytes
+                val progressPercent = it.currentBytes * multiplicator / it.totalBytes
                 Log.d("Download", "progress: ${progressPercent.toInt()}")
-                builder.setProgress(100, progressPercent.toInt(), false)
+                builder.setProgress(multiplicator, progressPercent.toInt(), false)
                 notifyManager.notify(
                     id,
                     builder.build()
