@@ -28,6 +28,7 @@ import com.google.android.exoplayer2.util.NotificationUtil.createNotificationCha
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.view.InitialActivity
 import com.nafanya.mp3world.view.MainActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -145,7 +146,7 @@ class ForegroundService : LifecycleService() {
          */
         @DelicateCoroutinesApi
         override fun createCurrentContentIntent(player: Player): PendingIntent? {
-            val intentToMain = Intent(context, MainActivity::class.java)
+            val intentToMain = Intent(context, InitialActivity::class.java)
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 PendingIntent.getActivity(
                     context,
