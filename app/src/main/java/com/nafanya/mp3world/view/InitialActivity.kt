@@ -18,11 +18,11 @@ class InitialActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
+        activity = this
     }
 
     override fun onStart() {
         super.onStart()
-        activity = this
         checkPermissions()
     }
 
@@ -61,10 +61,10 @@ class InitialActivity : AppCompatActivity() {
 
     companion object {
         private const val startDelay = 1000L
-        private lateinit var activity: InitialActivity
+        private var activity: InitialActivity? = null
 
         fun finish() {
-            activity.finish()
+            activity!!.finish()
         }
     }
 
