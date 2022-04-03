@@ -12,15 +12,17 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.viewmodel.InitialViewModel
 import java.util.Timer
 import java.util.TimerTask
-import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 class InitialActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity = this
         setContentView(R.layout.splash_screen)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        activity = this
         checkPermissions()
     }
 
