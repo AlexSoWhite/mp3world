@@ -26,10 +26,11 @@ class Downloader {
 
     private val context = PlayerApplication.context()
     private val builder = NotificationCompat.Builder(context, "download")
+    private val notificationManager =
+    getSystemService(context, NotificationManager::class.java) as NotificationManager
     private var id = 0
 
     companion object {
-        private lateinit var notificationManager: NotificationManager
         private var lastId = 100
         private const val multiplicator = 100
         private var isChannelCreated = false
@@ -122,8 +123,6 @@ class Downloader {
                 description = descriptionText
             }
             // Register the channel with the system
-            notificationManager =
-                getSystemService(context, NotificationManager::class.java) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
