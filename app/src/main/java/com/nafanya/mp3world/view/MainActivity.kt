@@ -1,9 +1,14 @@
 package com.nafanya.mp3world.view
 
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Pair
 import android.view.Menu
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -62,9 +67,8 @@ class MainActivity : AppCompatActivity() {
                 playerView = GenericPlayerControlView(this, R.id.player_control_view)
                 playerView!!.setSongObserver()
                 playerView!!.playerControlView.visibility = View.VISIBLE
-                findViewById<ShapeableImageView>(R.id.fullscreen).setOnClickListener {
-                    val intent = Intent(this, FullScreenPlayerActivity::class.java)
-                    startActivity(intent)
+                findViewById<LinearLayout>(R.id.controls_view).setOnClickListener {
+                    playerView!!.toFullScreen()
                 }
             }
         }
