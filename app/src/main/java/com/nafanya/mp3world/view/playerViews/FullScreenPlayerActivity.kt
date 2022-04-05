@@ -20,9 +20,7 @@ import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Song
-import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
