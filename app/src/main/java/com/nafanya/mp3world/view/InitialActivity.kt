@@ -18,7 +18,7 @@ class InitialActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
-        activity = this
+        // activity = this
     }
 
     override fun onStart() {
@@ -53,19 +53,19 @@ class InitialActivity : AppCompatActivity() {
                 override fun run() {
                     val intent = Intent(this@InitialActivity, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
             },
             startDelay
         )
     }
 
+    override fun finish() {
+        super.finish()
+    }
+
     companion object {
         private const val startDelay = 1000L
-        private var activity: InitialActivity? = null
-
-        fun finish() {
-            activity!!.finish()
-        }
     }
 
     override fun onRequestPermissionsResult(
