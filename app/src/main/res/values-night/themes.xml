@@ -41,5 +41,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    <style name="Theme.Mp3world.Launcher">
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 </resources>

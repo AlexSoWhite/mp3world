@@ -72,11 +72,6 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        InitialActivity.finish()
-    }
-
     @Suppress("LongMethod")
     private fun initMainMenu() {
         // all songs
