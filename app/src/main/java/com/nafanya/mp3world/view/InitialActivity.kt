@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
+import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.viewmodel.InitialViewModel
 import java.util.Timer
 import java.util.TimerTask
@@ -18,7 +19,7 @@ class InitialActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
-        // activity = this
+        PlayerApplication.application = application
     }
 
     override fun onStart() {
@@ -58,10 +59,6 @@ class InitialActivity : AppCompatActivity() {
             },
             startDelay
         )
-    }
-
-    override fun finish() {
-        super.finish()
     }
 
     companion object {
