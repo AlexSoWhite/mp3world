@@ -6,19 +6,11 @@ import android.content.Context
 /**
  * Class that provides access to the application context.
  */
-class PlayerApplication : Application() {
+object PlayerApplication {
 
-    companion object {
+    lateinit var application: Application
 
-        private var application: Application? = null
-
-        fun context(): Context {
-            return application!!.applicationContext
-        }
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        application = this
+    fun context(): Context {
+        return application.applicationContext
     }
 }
