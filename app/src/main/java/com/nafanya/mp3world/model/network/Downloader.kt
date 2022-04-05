@@ -24,7 +24,7 @@ class Downloader {
     private val context = PlayerApplication.context()
     private val builder = NotificationCompat.Builder(context, "download")
     private val notificationManager =
-    getSystemService(context, NotificationManager::class.java) as NotificationManager
+        getSystemService(context, NotificationManager::class.java) as NotificationManager
     private var id = 0
 
     companion object {
