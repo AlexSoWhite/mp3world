@@ -54,6 +54,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         alphaAnimation.duration = duration
         alphaAnimation.startOffset = startOffset
         findViewById<ConstraintLayout>(R.id.controls_fullscreen).startAnimation(alphaAnimation)
+        binding.favouriteButton.startAnimation(alphaAnimation)
     }
 
     inner class FullScreenPlayerView(

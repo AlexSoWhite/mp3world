@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <transitionSet
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:transitionOrdering="sequential">
-    <changeBounds>
+    android:transitionOrdering="together">
+    <changeBounds
+        android:duration="150">
         <targets>
             <target android:targetId="@+id/control_song_icon"/>
         </targets>
     </changeBounds>
-    <changeImageTransform>
+    <changeImageTransform
+        android:duration="150">
         <targets>
             <target android:targetId="@+id/control_song_icon"/>
         </targets>
