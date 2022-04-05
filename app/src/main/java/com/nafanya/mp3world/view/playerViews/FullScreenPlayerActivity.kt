@@ -3,10 +3,12 @@ package com.nafanya.mp3world.view.playerViews
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.animation.AlphaAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -19,7 +21,6 @@ import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
-import com.r0adkll.slidr.Slidr
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
@@ -32,7 +33,6 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = DataBindingUtil.setContentView(this, R.layout.player_view_fullscreen)
-        Slidr.attach(this)
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = FullScreenPlayerView(this, R.id.player_control_fullscreen_view)
@@ -47,6 +47,12 @@ class FullScreenPlayerActivity : AppCompatActivity() {
             this,
             observerPlayer
         )
+        // animate elements arrive in list
+        val alphaAnimation = AlphaAnimation(0.0f, 1.0f)
+        alphaAnimation.duration = duration
+        alphaAnimation.startOffset = startOffset
+        findViewById<ConstraintLayout>(R.id.controls_fullscreen).startAnimation(alphaAnimation)
+        binding.favouriteButton.startAnimation(alphaAnimation)
     }
 
     inner class FullScreenPlayerView(
@@ -137,5 +143,10 @@ class FullScreenPlayerActivity : AppCompatActivity() {
             return true
         }
         return false
+    }
+
+    companion object {
+        private const val duration = 500L
+        private const val startOffset = 350L
     }
 }

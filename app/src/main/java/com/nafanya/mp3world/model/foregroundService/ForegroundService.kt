@@ -29,7 +29,6 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.InitialActivity
-import com.nafanya.mp3world.view.MainActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 class ForegroundService : LifecycleService() {

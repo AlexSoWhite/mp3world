@@ -20,4 +20,5 @@
     <string name="no_albums">нет альбомов</string>
     <string name="no_artists">нет исполнителей</string>
     <string name="nothing_found">ничего не найдено</string>
+    <string name="player_transition">player_transition</string>
 </resources>
