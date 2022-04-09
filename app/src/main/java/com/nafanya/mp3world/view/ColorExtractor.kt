@@ -2,12 +2,12 @@ package com.nafanya.mp3world.view
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.ColorMatrixColorFilter
-import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.RequiresApi
 
 object ColorExtractor {
+
+    private const val colorTakingThreshold = 2.4f
 
     @RequiresApi(Build.VERSION_CODES.Q)
     fun getAverageColorWithNoWhiteComponent(bitmap: Bitmap): Int {
@@ -20,7 +20,7 @@ object ColorExtractor {
         for (i in 0 until width) {
             for (j in 0 until height) {
                 val color = bitmap.getColor(i, j)
-                if (color.red() + color.green() + color.blue() < 2.4f) {
+                if (color.red() + color.green() + color.blue() < colorTakingThreshold) {
                     count++
                     averageRed += color.red()
                     averageGreen += color.green()
@@ -31,17 +31,10 @@ object ColorExtractor {
         averageRed /= count
         averageGreen /= count
         averageBlue /= count
-        return Color.valueOf(averageRed.toFloat(), averageGreen.toFloat(), averageBlue.toFloat()).toArgb()
-    }
-
-    private val negative = floatArrayOf(
-        -1.0f,     .0f,     .0f,    .0f,  255.0f,
-        .0f,   -1.0f,     .0f,    .0f,  255.0f,
-        .0f,     .0f,   -1.0f,    .0f,  255.0f,
-        .0f,     .0f,     .0f,   1.0f,     .0f
-    )
-
-    fun Drawable.toNegative() {
-        this.colorFilter = ColorMatrixColorFilter(negative)
+        return Color.valueOf(
+            averageRed.toFloat(),
+            averageGreen.toFloat(),
+            averageBlue.toFloat()
+        ).toArgb()
     }
 }
