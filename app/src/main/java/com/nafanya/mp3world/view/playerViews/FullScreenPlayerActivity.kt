@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.ImageView
 import android.widget.TextView
@@ -87,30 +88,6 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                         binding.fullScreenPlayerView.setBackgroundColor(
                             Color.parseColor(defaultBackgroundColor)
                         )
-//                        bitmap.addListener(object : RequestListener<Bitmap> {
-//                            override fun onLoadFailed(
-//                                e: GlideException?,
-//                                model: Any?,
-//                                target: Target<Bitmap>?,
-//                                isFirstResource: Boolean
-//                            ): Boolean {
-//                                Log.d("Image", e.toString())
-//                                return false
-//                            }
-//
-//                            override fun onResourceReady(
-//                                resource: Bitmap?,
-//                                model: Any?,
-//                                target: Target<Bitmap>?,
-//                                dataSource: DataSource?,
-//                                isFirstResource: Boolean
-//                            ): Boolean {
-//                                songIcon.setImageBitmap(resource!!)
-//                                animateChanges(resource)
-//                                return true
-//                            }
-//                        })
-//                        bitmap.load(song.artUrl).into(songIcon)
                     }
                     else -> {
                         songIcon.setImageResource(R.drawable.default_placeholder)
@@ -171,6 +148,12 @@ class FullScreenPlayerActivity : AppCompatActivity() {
             }
             PlayerLiveDataProvider.currentSong.observe(activity, songObserver)
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        binding.playerControlFullscreenView.visibility = View.INVISIBLE
+        binding.favouriteButton.visibility = View.INVISIBLE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
