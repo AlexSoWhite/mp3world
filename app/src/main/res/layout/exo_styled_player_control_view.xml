@@ -9,7 +9,6 @@
     android:focusable="true"
     android:paddingHorizontal="10dp"
     android:paddingTop="5dp"
-    android:theme="@style/exoPlayer"
     android:visibility="invisible"
     tools:visibility="visible"
     android:orientation="vertical">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <transitionSet
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:transitionOrdering="together">
+    android:transitionOrdering="sequential">
     <changeBounds
         android:duration="150">
         <targets>
@@ -14,5 +14,4 @@
             <target android:targetId="@+id/control_song_icon"/>
         </targets>
     </changeImageTransform>
-
 </transitionSet>

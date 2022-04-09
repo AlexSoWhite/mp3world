@@ -1,7 +1,12 @@
 package com.nafanya.mp3world.view.playerViews
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.Intent
+import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.animation.AlphaAnimation
 import android.widget.ImageView
@@ -12,6 +17,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
@@ -20,6 +29,7 @@ import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.view.ColorExtractor
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -28,6 +38,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: PlayerViewFullscreenBinding
     private var playerView: FullScreenPlayerView? = null
+    private var previousColor: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +60,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         )
         // animate elements arrive in list
         val alphaAnimation = AlphaAnimation(0.0f, 1.0f)
-        alphaAnimation.duration = duration
+        alphaAnimation.duration = alphaDuration
         alphaAnimation.startOffset = startOffset
         findViewById<ConstraintLayout>(R.id.controls_fullscreen).startAnimation(alphaAnimation)
         binding.favouriteButton.startAnimation(alphaAnimation)
@@ -70,11 +81,73 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 when {
                     song.art != null -> {
                         songIcon.setImageBitmap(song.art)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            val averageColor = ColorExtractor.getAverageColor(song.art).toArgb()
+                            val colorFrom =
+                                if (previousColor != -1) {
+                                    previousColor
+                                } else {
+                                    previousColor = averageColor
+                                    getColor(android.R.color.transparent)
+                                }
+                            val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, averageColor)
+                            colorAnimation.duration = backgroundDuration
+                            colorAnimation.addUpdateListener {
+                                binding.fullScreenPlayerView.setBackgroundColor(it.animatedValue as Int)
+                            }
+                            colorAnimation.start()
+                        }
                     }
                     song.artUrl != null -> {
-                        Glide.with(songIcon)
-                            .load(song.artUrl)
-                            .into(songIcon)
+                        val bitmap = Glide.with(songIcon).asBitmap()
+                        bitmap.addListener(object : RequestListener<Bitmap> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Bitmap>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                Log.d("Image", e.toString())
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Bitmap?,
+                                model: Any?,
+                                target: Target<Bitmap>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                    songIcon.setImageBitmap(resource)
+                                    val averageColor = ColorExtractor.getAverageColor(resource!!).toArgb()
+                                    val colorFrom =
+                                    if (previousColor != -1) {
+                                        previousColor
+                                    } else {
+                                        previousColor = averageColor
+                                        getColor(android.R.color.transparent)
+                                    }
+                                    val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, averageColor)
+                                    colorAnimation.duration = backgroundDuration
+                                    colorAnimation.addUpdateListener {
+                                        binding.fullScreenPlayerView.setBackgroundColor(it.animatedValue as Int)
+                                    }
+                                    colorAnimation.start()
+                                    return true
+                                }
+                                return false
+                            }
+                        })
+                        bitmap.load(song.artUrl).into(songIcon)
+//                        val bitmap = Glide.with(songIcon).asBitmap()
+//                        bitmap.load(song.artUrl).into(songIcon)
+//                        Glide.with(songIcon).load(song.artUrl).into(songIcon)
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                            val averageColor = ColorExtractor.getAverageColor(bitmap)
+//                            binding.fullScreenPlayerView.setBackgroundColor(averageColor.toArgb())
+//                            songIcon.setImageBitmap(bitmap)
+//                        }
                     }
                     else -> {
                         songIcon.setImageResource(R.drawable.default_placeholder)
@@ -146,7 +219,8 @@ class FullScreenPlayerActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val duration = 500L
+        private const val alphaDuration = 500L
+        private const val backgroundDuration = 500L
         private const val startOffset = 350L
     }
 }
