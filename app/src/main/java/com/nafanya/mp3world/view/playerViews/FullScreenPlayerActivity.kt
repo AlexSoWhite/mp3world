@@ -27,6 +27,7 @@ import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.network.Downloader
+import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.ColorExtractor
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
@@ -77,6 +78,13 @@ class FullScreenPlayerActivity : AppCompatActivity() {
             val songObserver = Observer<Song> { song ->
                 activity.findViewById<TextView>(R.id.track_title).text = song.title
                 activity.findViewById<TextView>(R.id.track_artist).text = song.artist
+                val timeConverter = TimeConverter()
+                val duration = song.duration!!
+                activity.findViewById<TextView>(R.id.duration).text = timeConverter.durationToString(duration)
+                playerControlView.setProgressUpdateListener { position, _ ->
+                    activity.findViewById<TextView>(R.id.time).text = timeConverter.durationToString(position)
+                }
+                activity.findViewById<TextView>(R.id.time).text
                 val songIcon = activity.findViewById<ImageView>(R.id.control_song_icon)
                 when {
                     song.art != null -> {
