@@ -43,6 +43,11 @@ open class GenericPlayerControlView(
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
             RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
+        if (activity !is FullScreenPlayerActivity) {
+            activity.findViewById<LinearLayout>(R.id.controls_view).setOnClickListener {
+                this.toFullScreen()
+            }
+        }
     }
 
     open fun setSongObserver() {
@@ -65,6 +70,7 @@ open class GenericPlayerControlView(
             }
             song.artUrl != null -> {
                 Glide.with(songIcon)
+                    .asBitmap()
                     .load(song.artUrl)
                     .into(songIcon)
             }
@@ -86,6 +92,7 @@ open class GenericPlayerControlView(
             )
             bundle = options.toBundle()
         }
+
         val intent = Intent(activity, FullScreenPlayerActivity::class.java)
         startActivity(activity, intent, bundle)
         setSongIcon()

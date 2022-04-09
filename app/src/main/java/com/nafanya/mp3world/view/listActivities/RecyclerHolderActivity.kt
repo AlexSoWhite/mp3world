@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
-import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -129,9 +128,6 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
             if (it) {
                 playerView = GenericPlayerControlView(this, R.id.player_control_view)
                 playerView!!.setSongObserver()
-                findViewById<LinearLayout>(R.id.controls_view).setOnClickListener {
-                    playerView!!.toFullScreen()
-                }
             }
         }
         PlayerLiveDataProvider.isPlayerInitialized.observe(

@@ -3,13 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/full_screen_player_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true"
-    android:paddingHorizontal="20dp"
-    android:theme="@style/exoPlayer"
-    android:animateLayoutChanges="true">
+    android:paddingHorizontal="20dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/control_song_icon"

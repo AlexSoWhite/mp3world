@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -61,9 +60,6 @@ class MainActivity : AppCompatActivity() {
                 playerView = GenericPlayerControlView(this, R.id.player_control_view)
                 playerView!!.setSongObserver()
                 playerView!!.playerControlView.visibility = View.VISIBLE
-                findViewById<LinearLayout>(R.id.controls_view).setOnClickListener {
-                    playerView!!.toFullScreen()
-                }
             }
         }
         PlayerLiveDataProvider.isPlayerInitialized.observe(
