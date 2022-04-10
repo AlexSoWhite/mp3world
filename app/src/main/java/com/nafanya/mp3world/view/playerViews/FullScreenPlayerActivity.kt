@@ -32,7 +32,6 @@ import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.ColorExtractor
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
-import org.w3c.dom.Text
 
 @DelicateCoroutinesApi
 class FullScreenPlayerActivity : AppCompatActivity() {
@@ -81,9 +80,11 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 activity.findViewById<TextView>(R.id.track_artist).text = song.artist
                 val timeConverter = TimeConverter()
                 val duration = song.duration!!
-                activity.findViewById<TextView>(R.id.duration).text = timeConverter.durationToString(duration)
+                activity.findViewById<TextView>(R.id.duration).text =
+                    timeConverter.durationToString(duration)
                 playerControlView.setProgressUpdateListener { position, _ ->
-                    activity.findViewById<TextView>(R.id.time).text = timeConverter.durationToString(position)
+                    activity.findViewById<TextView>(R.id.time).text =
+                        timeConverter.durationToString(position)
                 }
                 activity.findViewById<TextView>(R.id.time).text
                 val songIcon = activity.findViewById<ImageView>(R.id.control_song_icon)
@@ -104,7 +105,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                     }
                 }
                 // favourite
-                val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite)
+                val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite_button)
                 if (song.url == null) {
                     var isFavourite = false
                     FavouriteListManager.favorites.value?.let { list ->
@@ -193,7 +194,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
             val nextButton = findViewById<ShapeableImageView>(R.id.exo_next)
             val repeatButton = findViewById<ShapeableImageView>(R.id.exo_repeat_toggle)
             val playlistButton = findViewById<ShapeableImageView>(R.id.current_playlist)
-            val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite)
+            val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite_button)
             val shuffleButton = findViewById<ShapeableImageView>(R.id.exo_shuffle)
             val progressBar = findViewById<DefaultTimeBar>(R.id.exo_progress)
             val title = findViewById<TextView>(R.id.track_title)

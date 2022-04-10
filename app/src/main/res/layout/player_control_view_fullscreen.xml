@@ -26,7 +26,7 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_marginEnd="10dp"
-        android:id="@+id/favourite"
+        android:id="@+id/favourite_button"
         android:layout_width="25dp"
         android:layout_height="25dp"
         tools:src="@drawable/done"

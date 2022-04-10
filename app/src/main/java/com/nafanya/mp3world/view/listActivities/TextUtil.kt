@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.view.listActivities
 
+@Suppress("MagicNumber")
 object TextUtil {
 
     fun getCompositionsCountString(amount: Int): String {

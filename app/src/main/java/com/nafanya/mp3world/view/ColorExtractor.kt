@@ -20,7 +20,11 @@ object ColorExtractor {
         for (i in 0 until width) {
             for (j in 0 until height) {
                 val color = bitmap.getColor(i, j)
-                if (color.red() < colorTakingThreshold && color.green() < colorTakingThreshold && color.blue() < colorTakingThreshold) {
+                if (
+                    color.red() < colorTakingThreshold &&
+                    color.green() < colorTakingThreshold &&
+                    color.blue() < colorTakingThreshold
+                ) {
                     count++
                     averageRed += color.red()
                     averageGreen += color.green()

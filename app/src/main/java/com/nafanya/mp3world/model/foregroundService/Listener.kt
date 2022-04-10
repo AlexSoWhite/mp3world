@@ -2,7 +2,6 @@ package com.nafanya.mp3world.model.foregroundService
 
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Timeline
 import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Song
 
