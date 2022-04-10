@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi
 
 object ColorExtractor {
 
-    private const val colorTakingThreshold = 0.9f
+    private const val colorTakingThreshold = 0.8f
 
     @RequiresApi(Build.VERSION_CODES.Q)
     fun getAverageColorWithNoWhiteComponent(bitmap: Bitmap): Int {
