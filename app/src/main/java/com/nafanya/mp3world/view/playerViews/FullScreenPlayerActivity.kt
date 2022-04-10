@@ -32,6 +32,7 @@ import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.ColorExtractor
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
 import kotlinx.coroutines.DelicateCoroutinesApi
+import org.w3c.dom.Text
 
 @DelicateCoroutinesApi
 class FullScreenPlayerActivity : AppCompatActivity() {
@@ -53,6 +54,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                     val intent = Intent(this, CurrentPlaylistDialogActivity::class.java)
                     startActivity(intent)
                 }
+                playerView!!.playerControlView.showShuffleButton = true
             }
         }
         PlayerLiveDataProvider.isPlayerInitialized.observe(
@@ -64,7 +66,6 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         alphaAnimation.duration = alphaDuration
         alphaAnimation.startOffset = startOffset
         findViewById<ConstraintLayout>(R.id.controls_fullscreen).startAnimation(alphaAnimation)
-        binding.favouriteButton.startAnimation(alphaAnimation)
     }
 
     inner class FullScreenPlayerView(
@@ -103,6 +104,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                     }
                 }
                 // favourite
+                val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite)
                 if (song.url == null) {
                     var isFavourite = false
                     FavouriteListManager.favorites.value?.let { list ->
@@ -111,11 +113,11 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                         }
                     }
                     if (!isFavourite) {
-                        binding.favouriteButton.setImageResource(R.drawable.favorite_border)
+                        favouriteButton.setImageResource(R.drawable.favorite_border)
                     } else {
-                        binding.favouriteButton.setImageResource(R.drawable.favorite)
+                        favouriteButton.setImageResource(R.drawable.favorite)
                     }
-                    binding.favouriteButton.setOnClickListener {
+                    favouriteButton.setOnClickListener {
                         if (!isFavourite) {
                             FavouriteListManager.add(
                                 PlayerLiveDataProvider.currentSong.value!!
@@ -124,7 +126,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
                             isFavourite = true
-                            binding.favouriteButton.setImageResource(R.drawable.favorite)
+                            favouriteButton.setImageResource(R.drawable.favorite)
                         } else {
                             FavouriteListManager.delete(
                                 PlayerLiveDataProvider.currentSong.value!!
@@ -133,12 +135,12 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
                             isFavourite = false
-                            binding.favouriteButton.setImageResource(R.drawable.favorite_border)
+                            favouriteButton.setImageResource(R.drawable.favorite_border)
                         }
                     }
                 } else {
-                    binding.favouriteButton.setImageResource(R.drawable.download_icon)
-                    binding.favouriteButton.setOnClickListener {
+                    favouriteButton.setImageResource(R.drawable.download_icon)
+                    favouriteButton.setOnClickListener {
                         Toast.makeText(
                             activity,
                             "загрузка начата",
@@ -161,7 +163,6 @@ class FullScreenPlayerActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         binding.playerControlFullscreenView.visibility = View.INVISIBLE
-        binding.favouriteButton.visibility = View.INVISIBLE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -192,10 +193,13 @@ class FullScreenPlayerActivity : AppCompatActivity() {
             val nextButton = findViewById<ShapeableImageView>(R.id.exo_next)
             val repeatButton = findViewById<ShapeableImageView>(R.id.exo_repeat_toggle)
             val playlistButton = findViewById<ShapeableImageView>(R.id.current_playlist)
-            val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite_button)
+            val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite)
+            val shuffleButton = findViewById<ShapeableImageView>(R.id.exo_shuffle)
             val progressBar = findViewById<DefaultTimeBar>(R.id.exo_progress)
             val title = findViewById<TextView>(R.id.track_title)
             val artist = findViewById<TextView>(R.id.track_artist)
+            val duration = findViewById<TextView>(R.id.duration)
+            val time = findViewById<TextView>(R.id.time)
             val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, averageColor)
             colorAnimation.duration = backgroundDuration
             colorAnimation.addUpdateListener {
@@ -215,9 +219,12 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 repeatButton.setColorFilter(controlsColor)
                 playlistButton.setColorFilter(controlsColor)
                 favouriteButton.setColorFilter(controlsColor)
-                progressBar.setBufferedColor(controlsColor)
+                shuffleButton.setColorFilter(controlsColor)
+                progressBar.setScrubberColor(controlsColor)
                 title.setTextColor(controlsColor)
                 artist.setTextColor(controlsColor)
+                duration.setTextColor(controlsColor)
+                time.setTextColor(controlsColor)
             }
             colorAnimation.start()
         } else {
