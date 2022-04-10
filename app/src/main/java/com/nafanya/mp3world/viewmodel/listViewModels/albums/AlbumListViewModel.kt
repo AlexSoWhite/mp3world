@@ -20,7 +20,7 @@ class AlbumListViewModel : ListViewModelInterface() {
     }
 
     override fun onLoaded() {
-        title.value = "Альбомы ${albumsList.value?.size}"
+        title.value = "Альбомы (${albumsList.value?.size})"
     }
 
     override fun onEmpty() {
