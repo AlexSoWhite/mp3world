@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.AlbumListItemBinding
 import com.nafanya.mp3world.model.wrappers.Album
+import com.nafanya.mp3world.view.listActivities.TextUtil
 
 class AlbumListAdapter(
     private val list: MutableList<Album>,
@@ -33,7 +34,9 @@ class AlbumListAdapter(
 
         fun bind(album: Album, callback: (Album) -> Unit) {
             binding.album = album
-            binding.tracksCount = album.songList.size
+            binding.tracksCount = TextUtil.getCompositionsCountString(
+                album.songList.size
+            )
             if (album.image != null) {
                 binding.albumImage.setImageBitmap(album.image)
             } else {

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlaylistListItemBinding
 import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.view.listActivities.TextUtil
 
 enum class ClickType {
     CLICK,
@@ -42,7 +43,9 @@ class PlaylistListAdapter(
 
         fun bind(playlist: Playlist) {
             binding.playlist = playlist
-            binding.tracksCount = playlist.songList.size.toString()
+            binding.tracksCount = TextUtil.getCompositionsCountString(
+                playlist.songList.size
+            )
             if (playlist.image != null) {
                 binding.playlistImage.setImageBitmap(playlist.image)
             } else {

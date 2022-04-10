@@ -8,9 +8,9 @@
         type="com.nafanya.mp3world.model.wrappers.Album" />
     <variable
         name="tracksCount"
-        type="Integer" />
+        type="String" />
 </data>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     android:id="@+id/album_list_item"
     android:layout_width="match_parent"
     android:layout_height="60dp"
@@ -21,42 +21,48 @@
         android:id="@+id/album_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/album_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_gravity="center_vertical"
         tools:src="@drawable/album"/>
 
-    <TextView
-        android:layout_marginStart="10dp"
-        android:id="@+id/album_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxWidth="200dp"
-        android:maxLines="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/album_image"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@{album.name}"
-        tools:text="Альбом"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{album.name}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Альбом"/>
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{tracksCount}'
+            android:textSize="14sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="5 композиций"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="5dp"
+        android:src="@drawable/arrow_forward_ios"
+        android:layout_gravity="center_vertical"
         />
 
-    <TextView
-        android:layout_marginStart="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/album_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@{'('+tracksCount.toString()+')'}"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:ellipsize="end"
-        android:maxLines="1"
-        tools:text="(5)"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 </layout>
