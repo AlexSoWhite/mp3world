@@ -11,6 +11,12 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @DelicateCoroutinesApi
 class PlaylistListViewModel : ListViewModelInterface() {
 
+    private var query = ""
+
+    val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
+        MutableLiveData<MutableList<Playlist>>()
+    }
+
     fun addEmptyPlaylistWithName(name: String, callback: () -> Unit) {
         var id = 0
         PlaylistListManager.playlists.value?.forEach {
@@ -32,10 +38,6 @@ class PlaylistListViewModel : ListViewModelInterface() {
         pageState.value = PageState.IS_LOADING
     }
 
-    val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
-        MutableLiveData<MutableList<Playlist>>()
-    }
-
     override fun onLoading() {
         title.value = "Мои плейлисты"
         playlists.value = PlaylistListManager.playlists.value
@@ -47,11 +49,19 @@ class PlaylistListViewModel : ListViewModelInterface() {
     }
 
     override fun onLoaded() {
-        title.postValue("Мои плейлисты (${PlaylistListManager.playlists.value?.size})")
+        if (query != "") {
+            title.value = "$query (${PlaylistListManager.playlists.value?.size})"
+        } else {
+            title.value = "Мои плейлисты (${PlaylistListManager.playlists.value?.size})"
+        }
     }
 
     override fun onEmpty() {
-        title.value = "Мои плейлисты"
+        if (query != "") {
+            title.value = "Мои плейлисты"
+        } else {
+            title.value = query
+        }
     }
 
     fun updatePlaylist(playlist: Playlist) {
@@ -79,5 +89,28 @@ class PlaylistListViewModel : ListViewModelInterface() {
             LocalStorageProvider().deletePlaylist(playlist)
             pageState.value = PageState.IS_LOADING
         }
+    }
+
+    fun search(query: String) {
+        val newList = mutableListOf<Playlist>()
+        this.query = query
+        PlaylistListManager.playlists.value!!.forEach {
+            if (
+                it.name.lowercase().contains(query.lowercase())
+            ) {
+                newList.add(it)
+            }
+        }
+        playlists.value = newList
+        if (playlists.value!!.isEmpty()) {
+            pageState.value = PageState.IS_EMPTY
+        } else {
+            pageState.value = PageState.IS_LOADED
+        }
+    }
+
+    fun reset() {
+        query = ""
+        pageState.value = PageState.IS_LOADING
     }
 }

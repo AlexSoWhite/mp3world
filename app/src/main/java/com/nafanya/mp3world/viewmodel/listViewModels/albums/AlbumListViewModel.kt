@@ -8,10 +8,14 @@ import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 
 class AlbumListViewModel : ListViewModelInterface() {
 
-    var albumsList: MutableLiveData<MutableList<Album>> = MutableLiveData<MutableList<Album>>()
+    private var query = ""
+
+    val albumsList: MutableLiveData<MutableList<Album>> by lazy {
+        MutableLiveData<MutableList<Album>>()
+    }
 
     override fun onLoading() {
-        albumsList = AlbumListManager.albums
+        albumsList.value = AlbumListManager.albums.value
         if (albumsList.value!!.isEmpty()) {
             pageState.value = PageState.IS_EMPTY
         } else {
@@ -20,10 +24,41 @@ class AlbumListViewModel : ListViewModelInterface() {
     }
 
     override fun onLoaded() {
-        title.value = "Альбомы (${albumsList.value?.size})"
+        if (query != "") {
+            title.value = "$query (${albumsList.value?.size})"
+        } else {
+            title.value = "Альбомы (${albumsList.value?.size})"
+        }
     }
 
     override fun onEmpty() {
-        title.value = "Альбомы"
+        if (query != "") {
+            title.value = "Альбомы"
+        } else {
+            title.value = query
+        }
+    }
+
+    fun search(query: String) {
+        val newList = mutableListOf<Album>()
+        this.query = query
+        AlbumListManager.albums.value!!.forEach {
+            if (
+                it.name.lowercase().contains(query.lowercase())
+            ) {
+                newList.add(it)
+            }
+        }
+        albumsList.value = newList
+        if (albumsList.value!!.isEmpty()) {
+            pageState.value = PageState.IS_EMPTY
+        } else {
+            pageState.value = PageState.IS_LOADED
+        }
+    }
+
+    fun reset() {
+        query = ""
+        pageState.value = PageState.IS_LOADING
     }
 }

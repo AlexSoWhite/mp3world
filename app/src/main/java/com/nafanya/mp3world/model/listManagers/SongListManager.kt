@@ -2,6 +2,8 @@ package com.nafanya.mp3world.model.listManagers
 
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.wrappers.Song
+import java.util.*
+
 /**
  * Object that holds all song data.
  * The most important manager, favourites and playlists are populated based on its data.
@@ -36,5 +38,18 @@ object SongListManager {
             songList.value = suspendedList
         }
         suspendedList = mutableListOf()
+    }
+
+    fun searchForSongs(query: String): List<Song> {
+        val result = mutableListOf<Song>()
+        songList.value!!.forEach {
+            if (
+                it.title!!.lowercase().contains(query.lowercase()) ||
+                it.artist!!.lowercase().contains(query.lowercase())
+            ) {
+                result.add(it)
+            }
+        }
+        return result
     }
 }

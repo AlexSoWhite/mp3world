@@ -1,8 +1,10 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.search
 
 import androidx.lifecycle.MutableLiveData
+import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.network.QueryExecutor
 import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
@@ -17,9 +19,9 @@ class SearchSongListViewModel : ListViewModelInterface() {
         MutableLiveData<Playlist>()
     }
 
-    private fun startLoading(query: String, callback: (Playlist?) -> Unit) {
-        QueryExecutor().preLoad(query) { playlist ->
-            callback(playlist)
+    private fun startLoading(query: String, callback: (List<Song>?) -> Unit) {
+        QueryExecutor().preLoad(query) { songList ->
+            callback(songList)
         }
     }
 
@@ -29,11 +31,20 @@ class SearchSongListViewModel : ListViewModelInterface() {
         when {
             initializingQuery != null -> {
                 title.postValue(initializingQuery)
+                val songList = mutableListOf<Song>()
+                songList.addAll(SongListManager.searchForSongs(initializingQuery))
                 startLoading(initializingQuery) {
-                    playlist.postValue(it)
-                    if (it == null || it.songList.isEmpty()) {
+                    if ((it == null || it.isEmpty()) && songList.isEmpty()) {
                         pageState.postValue(PageState.IS_EMPTY)
-                    } else {
+                    } else if (it != null && it.isNotEmpty() || songList.isNotEmpty()){
+                        it?.let { it1 -> songList.addAll(it1) }
+                        playlist.postValue(
+                            Playlist(
+                                name = initializingQuery,
+                                songList = songList,
+                                id = -1
+                            )
+                        )
                         pageState.postValue(PageState.IS_LOADED)
                     }
                 }

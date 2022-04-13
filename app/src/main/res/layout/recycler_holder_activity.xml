@@ -45,10 +45,13 @@
         android:id="@+id/player_control_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:controller_layout_id="@layout/player_control_view"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:controller_layout_id="@layout/player_control_view"/>
 
     <include
         layout="@layout/loader"

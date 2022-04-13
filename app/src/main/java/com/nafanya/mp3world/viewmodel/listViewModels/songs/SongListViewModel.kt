@@ -1,66 +1,57 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.songs
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.model.network.QueryExecutor
+import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
 import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
-import java.lang.RuntimeException
 
+/**
+ * TODO refactor initializing and reloading
+ */
 open class SongListViewModel : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()
     }
-
     private var isInitialized = false
-
-    private fun startLoading(query: String, callback: (Playlist) -> Unit) {
-        QueryExecutor().preLoad(query) { playlist ->
-            playlist?.let {
-                callback(playlist)
-            }
-        }
-    }
+    private var query = ""
 
     override fun onLoading() {
-        val initializingQuery = SourceProvider.getQuery()
         val initializingPlaylist = SourceProvider.getPlaylist()
-        when {
-            initializingQuery != null -> {
-                title.postValue(initializingQuery)
-                startLoading(initializingQuery) {
-                    playlist.postValue(it)
-                    if (it.songList.isEmpty()) {
-                        pageState.postValue(PageState.IS_EMPTY)
-                    } else {
-                        pageState.postValue(PageState.IS_LOADED)
-                    }
-                }
+        if (initializingPlaylist != null) {
+            title.value = initializingPlaylist.name
+            playlist.value = initializingPlaylist
+            if (playlist.value?.songList!!.isEmpty()) {
+                pageState.value = PageState.IS_EMPTY
+            } else {
+                pageState.value = PageState.IS_LOADED
             }
-            initializingPlaylist != null -> {
-                title.value = initializingPlaylist.name
-                playlist.value = initializingPlaylist
-                if (playlist.value?.songList!!.isEmpty()) {
-                    pageState.value = PageState.IS_EMPTY
-                } else {
-                    pageState.value = PageState.IS_LOADED
-                }
-            }
-            else -> {
-                throw(RuntimeException("song list must be initialized with query or playlist"))
-            }
+        } else if (playlist.value!!.songList.isNotEmpty()) {
+            pageState.value = PageState.IS_LOADED
+        } else {
+            pageState.value = PageState.IS_EMPTY
         }
     }
 
     override fun onLoaded() {
-        title.value =
-            "${playlist.value!!.name} ${'(' + playlist.value!!.songList.size.toString() + ')'}"
+        if (query != "") {
+            title.value =
+                "$query (${playlist.value!!.songList.size})"
+        } else {
+            title.value =
+                "${playlist.value!!.name} (${playlist.value!!.songList.size})"
+        }
     }
 
     override fun onEmpty() {
-        title.value = playlist.value!!.name
+        if (query != "") {
+            title.value = query
+        } else {
+            title.value = playlist.value!!.name
+        }
     }
 
     fun start() {
@@ -78,5 +69,26 @@ open class SongListViewModel : ListViewModelInterface() {
         } else {
             pageState.value = PageState.IS_LOADED
         }
+    }
+
+    fun search(query: String) {
+        val newList = mutableListOf<Song>()
+        newList.addAll(SongListManager.searchForSongs(query))
+        this.query = query
+        playlist.value = Playlist(
+            songList = newList,
+            name = query,
+            id = -1
+        )
+        if (playlist.value!!.songList.isEmpty()) {
+            pageState.value = PageState.IS_EMPTY
+        } else {
+            pageState.value = PageState.IS_LOADED
+        }
+    }
+
+    fun reset() {
+        query = ""
+        pageState.value = PageState.IS_LOADING
     }
 }
