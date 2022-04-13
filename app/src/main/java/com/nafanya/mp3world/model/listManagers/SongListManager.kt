@@ -44,8 +44,8 @@ object SongListManager {
         val result = mutableListOf<Song>()
         songList.value!!.forEach {
             if (
-                it.title!!.lowercase() == query.lowercase() ||
-                it.artist!!.lowercase() == query.lowercase()
+                it.title!!.lowercase().contains(query.lowercase()) ||
+                it.artist!!.lowercase().contains(query.lowercase())
             ) {
                 result.add(it)
             }
