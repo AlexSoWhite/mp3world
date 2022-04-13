@@ -97,8 +97,11 @@ class Downloader {
     fun copyFileToDownloads(filename: String) {
         val src = File(context.filesDir, filename)
         val dst = File(DOWNLOAD_DIR, filename)
-        src.copyTo(dst)
-        src.delete()
+        try {
+            src.copyTo(dst)
+        } finally {
+            src.delete()
+        }
     }
 
     private fun File.copyTo(file: File) {
