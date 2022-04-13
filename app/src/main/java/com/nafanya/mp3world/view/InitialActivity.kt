@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.downloader.PRDownloader
@@ -19,11 +20,13 @@ class InitialActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
-        PlayerApplication.application = application
+        Log.d("TIME", "created")
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
+        Log.d("TIME", "resumed")
+        PlayerApplication.application = application
         checkPermissions()
     }
 
@@ -62,7 +65,7 @@ class InitialActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val startDelay = 1000L
+        private const val startDelay = 1500L
     }
 
     override fun onRequestPermissionsResult(
