@@ -22,7 +22,7 @@ class QueryExecutor {
     private val client = OkHttpClient()
     private val prefix = "https://ru.hitmotop.com/search?q="
 
-    fun preLoad(query: String, callback: (Playlist?) -> Unit?) {
+    fun preLoad(query: String, callback: (List<Song>?) -> Unit?) {
         val url = prefix + query
         val request = Request.Builder()
             .url(url)
@@ -37,7 +37,7 @@ class QueryExecutor {
                 override fun onResponse(call: Call, response: Response) {
                     response.body?.let Playlist@{
                         val doc = Jsoup.parseBodyFragment(it.string())
-                        val songList: ArrayList<Song> = arrayListOf()
+                        val songList = mutableListOf<Song>()
                         val arts = doc.getElementsByClass("track__img")
                         val info = doc.getElementsByClass("track__info")
                         for (i in info.indices) {
@@ -73,7 +73,7 @@ class QueryExecutor {
                         if (songList.isEmpty()) {
                             callback(null)
                         } else {
-                            callback(Playlist(songList, id = -1, name = query))
+                            callback(songList)
                         }
                     }
                 }
