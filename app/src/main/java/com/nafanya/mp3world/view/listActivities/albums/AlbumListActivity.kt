@@ -65,5 +65,4 @@ class AlbumListActivity : RecyclerHolderActivity() {
         )
         return super.onCreateOptionsMenu(menu)
     }
-
 }

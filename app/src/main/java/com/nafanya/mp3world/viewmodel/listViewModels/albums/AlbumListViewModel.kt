@@ -41,6 +41,7 @@ class AlbumListViewModel : ListViewModelInterface() {
 
     fun search(query: String) {
         val newList = mutableListOf<Album>()
+        this.query = query
         AlbumListManager.albums.value!!.forEach {
             if (
                 it.name.lowercase().contains(query.lowercase())
@@ -57,6 +58,7 @@ class AlbumListViewModel : ListViewModelInterface() {
     }
 
     fun reset() {
+        query = ""
         pageState.value = PageState.IS_LOADING
     }
 }
