@@ -5,8 +5,8 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 @Deprecated(message = "Use inject")
 object SourceProvider {
 
-    var initializingPlaylist: Playlist? = null
-    var initializingQuery: String? = null
+    private var initializingPlaylist: Playlist? = null
+    private var initializingQuery: String? = null
 
     fun newInstanceWithPlaylist(
         playlist: Playlist
