@@ -16,14 +16,17 @@ object ArtistListManager {
     private var suspendedList = mutableListOf<Artist>()
 
     fun add(element: Artist, song: Song) {
-        if (suspendedList.indexOf(element) != -1) {
-            suspendedList.elementAt(suspendedList.indexOf(element))
-                .playlist?.songList?.add(song)
+        val index = suspendedList.indexOf(element)
+        if (index != -1) {
+            suspendedList
+                .elementAt(index)
+                .playlist
+                ?.songList
+                ?.add(song)
         } else {
             element.playlist = Playlist(
                 arrayListOf(song),
-                id = 0,
-                name = element.name!!
+                name = element.name
             )
             suspendedList.add(element)
         }

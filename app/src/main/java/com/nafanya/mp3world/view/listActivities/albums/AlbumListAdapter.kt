@@ -35,7 +35,7 @@ class AlbumListAdapter(
         fun bind(album: Album, callback: (Album) -> Unit) {
             binding.album = album
             binding.tracksCount = TextUtil.getCompositionsCountString(
-                album.songList.size
+                album.playlist!!.songList.size
             )
             if (album.image != null) {
                 binding.albumImage.setImageBitmap(album.image)

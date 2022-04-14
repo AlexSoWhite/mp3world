@@ -14,6 +14,7 @@ import org.jsoup.Jsoup
 
 /**
  * Class that makes calls to api.
+ * Will be replaced with SoundCloud API call when it opens.
  */
 // TODO pagination
 // TODO result wrapping

@@ -108,7 +108,7 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite_button)
                 if (song.url == null) {
                     var isFavourite = false
-                    FavouriteListManager.favorites.value?.let { list ->
+                    FavouriteListManager.favorites.value?.songList?.let { list ->
                         if (list.contains(PlayerLiveDataProvider.currentSong.value)) {
                             isFavourite = true
                         }

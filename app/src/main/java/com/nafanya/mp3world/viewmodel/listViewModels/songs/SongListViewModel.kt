@@ -11,17 +11,22 @@ import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 /**
  * TODO refactor initializing and reloading
  */
-open class SongListViewModel : ListViewModelInterface() {
+open class SongListViewModel(
+    //private val initializingPlaylist: Playlist
+) : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()
     }
+    private lateinit var initializingPlaylist: Playlist
     private var isInitialized = false
     private var query = ""
 
     override fun onLoading() {
-        val initializingPlaylist = SourceProvider.getPlaylist()
-        if (initializingPlaylist != null) {
+        if (!this::initializingPlaylist.isInitialized) {
+            initializingPlaylist = SourceProvider.getPlaylist()!!
+        }
+        if (query == "") {
             title.value = initializingPlaylist.name
             playlist.value = initializingPlaylist
             if (playlist.value?.songList!!.isEmpty()) {

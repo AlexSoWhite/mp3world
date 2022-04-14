@@ -8,9 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.view.ActivityCreator
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
-import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
-import com.nafanya.mp3world.viewmodel.listViewModels.albums.AlbumListViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -25,10 +24,11 @@ class PlaylistListActivity : RecyclerHolderActivity() {
             ) { playlist, clickType ->
                 when (clickType) {
                     ClickType.CLICK -> {
-                        val intent = Intent(this, PlaylistActivity::class.java)
-                        SourceProvider.newInstanceWithPlaylist(playlist)
                         PlaylistViewModel.newInstance(viewModel as PlaylistListViewModel)
-                        startActivity(intent)
+                        ActivityCreator()
+                            .with(this)
+                            .createActivityWithPlaylist(playlist, PlaylistActivity::class.java)
+                            .start()
                     }
                     ClickType.LONG -> {
                         val intent = Intent(this, DeletePlaylistDialogActivity::class.java)

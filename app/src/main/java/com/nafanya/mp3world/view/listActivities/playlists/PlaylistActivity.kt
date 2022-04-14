@@ -1,15 +1,14 @@
 package com.nafanya.mp3world.view.listActivities.playlists
 
-import android.content.Intent
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.view.ActivityCreator
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
-import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.AddSongToListViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
@@ -33,8 +32,7 @@ class PlaylistActivity : RecyclerHolderActivity() {
         super.addCustomBehavior()
         binding.addSongToPlaylist.addSongToPlaylist.visibility = View.VISIBLE
         binding.addSongToPlaylist.addSongToPlaylist.setOnClickListener {
-            val intent = createIntentToAddSong()
-            startActivity(intent)
+            startAddSongActivity()
         }
     }
 
@@ -42,21 +40,21 @@ class PlaylistActivity : RecyclerHolderActivity() {
         super.onEmpty()
         binding.emptyPlaylist.emptyPlaylist.visibility = View.VISIBLE
         binding.emptyPlaylist.emptyPlaylist.setOnClickListener {
-            val intent = createIntentToAddSong()
-            startActivity(intent)
+            startAddSongActivity()
         }
     }
 
-    private fun createIntentToAddSong(): Intent {
-        val intent = Intent(this, AddSongToListActivity::class.java)
-        SourceProvider.newInstanceWithPlaylist(
-            Playlist(
-                SongListManager.songList.value!!,
-                id = 0,
-                name = (viewModel as SongListViewModel).playlist.value!!.name
-            )
-        )
+    // TODO inject viewModel
+    private fun startAddSongActivity() {
         AddSongToListViewModel.newInstance(viewModel as PlaylistViewModel)
-        return intent
+        ActivityCreator()
+            .createActivityWithPlaylist(
+                Playlist(
+                    SongListManager.songList.value!!,
+                    name = (viewModel as SongListViewModel).playlist.value!!.name
+                ),
+                AddSongToListActivity::class.java
+            )
+            .start()
     }
 }
