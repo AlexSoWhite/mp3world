@@ -7,7 +7,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.wrappers.Album
-import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.ActivityCreator
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity

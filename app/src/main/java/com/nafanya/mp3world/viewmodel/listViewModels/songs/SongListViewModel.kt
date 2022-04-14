@@ -11,9 +11,7 @@ import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 /**
  * TODO refactor initializing and reloading
  */
-open class SongListViewModel(
-    //private val initializingPlaylist: Playlist
-) : ListViewModelInterface() {
+open class SongListViewModel : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()

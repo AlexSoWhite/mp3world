@@ -36,7 +36,7 @@ class SearchSongListViewModel : ListViewModelInterface() {
                 startLoading(initializingQuery) {
                     if ((it == null || it.isEmpty()) && songList.isEmpty()) {
                         pageState.postValue(PageState.IS_EMPTY)
-                    } else if (it != null && it.isNotEmpty() || songList.isNotEmpty()){
+                    } else if (it != null && it.isNotEmpty() || songList.isNotEmpty()) {
                         it?.let { it1 -> songList.addAll(it1) }
                         playlist.postValue(
                             Playlist(
