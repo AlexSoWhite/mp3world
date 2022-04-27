@@ -12,9 +12,7 @@ import com.nafanya.mp3world.view.ActivityCreator
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 @AndroidEntryPoint
 class PlaylistListActivity : RecyclerHolderActivity() {
 

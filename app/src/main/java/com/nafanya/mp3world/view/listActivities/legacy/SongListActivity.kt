@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.view.listActivities.songs
+package com.nafanya.mp3world.view.listActivities.legacy
 
 import android.view.Menu
 import android.view.View
@@ -10,10 +10,10 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
+import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+@Deprecated(message = "Use PlaylistActivity")
 class SongListActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {

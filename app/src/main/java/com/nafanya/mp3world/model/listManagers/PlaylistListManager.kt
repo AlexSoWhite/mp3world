@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.localStorage.StoredPlaylistDao
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
+import kotlinx.coroutines.runBlocking
 
 /**
  * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
@@ -16,7 +17,7 @@ object PlaylistListManager {
     }
 
     @Suppress("NestedBlockDepth")
-    fun initialize(playlistDao: StoredPlaylistDao) {
+    fun initialize(playlistDao: StoredPlaylistDao) = runBlocking {
         val storedPlaylists = playlistDao.getAll()
         val temp = mutableListOf<Playlist>()
         var bitmap: Bitmap? = null

@@ -9,11 +9,11 @@ import com.nafanya.mp3world.model.wrappers.FavouriteListEntity
 @Dao
 interface FavouriteListDao {
     @Query("SELECT * FROM favouriteListEntity")
-    fun getAll(): MutableList<Long>
+    suspend fun getAll(): MutableList<Long>
 
     @Insert
-    fun insert(value: FavouriteListEntity)
+    suspend fun insert(value: FavouriteListEntity)
 
     @Delete
-    fun delete(value: FavouriteListEntity)
+    suspend fun delete(value: FavouriteListEntity)
 }
