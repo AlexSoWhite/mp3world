@@ -8,7 +8,9 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
 import com.nafanya.mp3world.viewmodel.listViewModels.search.SearchSongListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchSongListActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {

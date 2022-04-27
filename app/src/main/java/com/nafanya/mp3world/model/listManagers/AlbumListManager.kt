@@ -2,6 +2,7 @@ package com.nafanya.mp3world.model.listManagers
 
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.wrappers.Album
+import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 
 /**
@@ -15,10 +16,18 @@ object AlbumListManager {
     private var suspendedList = mutableListOf<Album>()
 
     fun add(element: Album, song: Song) {
-        if (suspendedList.indexOf(element) != -1) {
-            suspendedList.elementAt(suspendedList.indexOf(element)).songList.add(song)
+        val index = suspendedList.indexOf(element)
+        if (index != -1) {
+            suspendedList
+                .elementAt(index)
+                .playlist
+                ?.songList
+                ?.add(song)
         } else {
-            element.songList = mutableListOf(song)
+            element.playlist = Playlist(
+                arrayListOf(song),
+                name = element.name
+            )
             suspendedList.add(element)
         }
     }

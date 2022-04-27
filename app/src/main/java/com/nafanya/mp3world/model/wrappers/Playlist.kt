@@ -9,7 +9,7 @@ import android.graphics.Bitmap
 data class Playlist(
     var songList: MutableList<Song>,
     val id: Int = 0,
-    var name: String = "",
+    var name: String = "Мои песни",
     var image: Bitmap? = null
 ) {
     override fun equals(other: Any?): Boolean {

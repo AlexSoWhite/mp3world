@@ -29,7 +29,6 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.InitialActivity
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class ForegroundService : LifecycleService() {
 
@@ -143,7 +142,6 @@ class ForegroundService : LifecycleService() {
         /**
          * Method triggered when notification clicked.
          */
-        @DelicateCoroutinesApi
         override fun createCurrentContentIntent(player: Player): PendingIntent? {
             val intentToMain = Intent(context, InitialActivity::class.java)
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -14,7 +14,9 @@ import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.AddSongToListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddSongToListActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {
@@ -63,9 +65,9 @@ class AddSongToListActivity : RecyclerHolderActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.add_songs_to_playlist_menu, menu)
-        val confirm = menu?.findItem(R.id.confirm_adding)
+        val confirm = menu.findItem(R.id.confirm_adding)
         confirm?.setOnMenuItemClickListener {
             (viewModel as AddSongToListViewModel).confirmChanges()
             finish()

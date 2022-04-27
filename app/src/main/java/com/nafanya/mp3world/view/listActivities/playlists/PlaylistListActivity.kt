@@ -8,14 +8,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.view.ActivityCreator
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
-import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
-import com.nafanya.mp3world.viewmodel.listViewModels.albums.AlbumListViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
-import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
+@AndroidEntryPoint
 class PlaylistListActivity : RecyclerHolderActivity() {
 
     override fun setAdapter() {
@@ -25,10 +25,12 @@ class PlaylistListActivity : RecyclerHolderActivity() {
             ) { playlist, clickType ->
                 when (clickType) {
                     ClickType.CLICK -> {
-                        val intent = Intent(this, PlaylistActivity::class.java)
-                        SourceProvider.newInstanceWithPlaylist(playlist)
-                        PlaylistViewModel.newInstance(viewModel as PlaylistListViewModel)
-                        startActivity(intent)
+                        ActivityCreator()
+                            .with(this)
+                            .createMutablePlaylistActivity(
+                                playlist,
+                                viewModel as PlaylistListViewModel
+                            ).start()
                     }
                     ClickType.LONG -> {
                         val intent = Intent(this, DeletePlaylistDialogActivity::class.java)
@@ -68,10 +70,10 @@ class PlaylistListActivity : RecyclerHolderActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // setting appBar search view
         menuInflater.inflate(R.menu.search_menu, menu)
-        val searchItem = menu?.findItem(R.id.search)
+        val searchItem = menu.findItem(R.id.search)
         val searchView: SearchView = searchItem?.actionView as SearchView
         // setting search dispatcher
         searchView.setOnQueryTextListener(

@@ -5,13 +5,13 @@ import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
-import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavouriteListActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {
@@ -38,14 +38,14 @@ class FavouriteListActivity : RecyclerHolderActivity() {
 
     override fun onStart() {
         super.onStart()
-        SourceProvider.newInstanceWithPlaylist(
-            Playlist(
-                name = "Избранное",
-                id = 0,
-                songList = FavouriteListManager.favorites.value!!
-            )
-        )
-        (viewModel as SongListViewModel).start()
+//        SourceProvider.newInstanceWithPlaylist(
+//            Playlist(
+//                name = "Избранное",
+//                id = 0,
+//                songList = FavouriteListManager.favorites.value!!
+//            )
+//        )
+//        (viewModel as SongListViewModel).start()
     }
 
     override fun onEmpty() {

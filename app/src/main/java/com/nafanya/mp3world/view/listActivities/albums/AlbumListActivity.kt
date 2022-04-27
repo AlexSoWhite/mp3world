@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.view.listActivities.albums
 
-import android.content.Intent
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.SearchView
@@ -8,13 +7,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.wrappers.Album
-import com.nafanya.mp3world.model.wrappers.Playlist
+import com.nafanya.mp3world.view.ActivityCreator
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
-import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
-import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
-import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import com.nafanya.mp3world.viewmodel.listViewModels.albums.AlbumListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AlbumListActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {
@@ -24,15 +22,10 @@ class AlbumListActivity : RecyclerHolderActivity() {
     override fun setAdapter() {
         val observer = Observer<MutableList<Album>> {
             binding.recycler.adapter = AlbumListAdapter(it) { album ->
-                val intent = Intent(this, SongListActivity::class.java)
-                SourceProvider.newInstanceWithPlaylist(
-                    Playlist(
-                        album.songList,
-                        0,
-                        album.name
-                    )
-                )
-                startActivity(intent)
+                ActivityCreator()
+                    .with(this)
+                    .createPlaylistActivity(album.playlist!!)
+                    .start()
             }
         }
         (viewModel as AlbumListViewModel).albumsList.observe(this, observer)
@@ -43,10 +36,10 @@ class AlbumListActivity : RecyclerHolderActivity() {
         binding.emptyAlbumList.emptyAlbumList.visibility = View.VISIBLE
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // setting appBar search view
         menuInflater.inflate(R.menu.search_menu, menu)
-        val searchItem = menu?.findItem(R.id.search)
+        val searchItem = menu.findItem(R.id.search)
         val searchView: SearchView = searchItem?.actionView as SearchView
         // setting search dispatcher
         searchView.setOnQueryTextListener(

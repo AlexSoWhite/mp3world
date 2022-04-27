@@ -2,6 +2,7 @@ package com.nafanya.mp3world.model.listManagers
 
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.localStorage.FavouriteListDao
+import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 
 /**
@@ -9,29 +10,32 @@ import com.nafanya.mp3world.model.wrappers.Song
  */
 object FavouriteListManager {
 
-    val favorites: MutableLiveData<MutableList<Song>> by lazy {
-        MutableLiveData<MutableList<Song>>(mutableListOf())
+    val favorites: MutableLiveData<Playlist> by lazy {
+        MutableLiveData<Playlist>()
     }
 
     fun add(song: Song) {
         val temp = favorites.value
-        temp?.add(song)
+        temp?.songList?.add(song)
         favorites.postValue(temp)
     }
 
     fun delete(song: Song) {
         val temp = favorites.value
-        temp?.remove(song)
+        temp?.songList?.remove(song)
         favorites.postValue(temp)
     }
 
     fun initialize(dao: FavouriteListDao) {
         val ids = dao.getAll()
-        val temp = mutableListOf<Song>()
+        val temp = Playlist(
+            songList = mutableListOf(),
+            name = "Избранное"
+        )
         ids.forEach { id ->
             SongListManager.songList.value?.forEach { song ->
                 if (id == song.id) {
-                    temp.add(song)
+                    temp.songList.add(song)
                 }
             }
         }

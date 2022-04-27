@@ -7,9 +7,9 @@ import android.graphics.Bitmap
  * @property id is taken from MediaStore.
  */
 data class Album(
-    val name: String = "",
-    var songList: MutableList<Song>,
-    val id: Long = 0,
+    val name: String,
+    val id: Long,
+    var playlist: Playlist? = null,
     var image: Bitmap?
 ) {
     override fun equals(other: Any?): Boolean {
@@ -19,7 +19,7 @@ data class Album(
 
     override fun hashCode(): Int {
         var result = name.hashCode()
-        result = 31 * result + songList.hashCode()
+        result = 31 * result + playlist.hashCode()
         result = 31 * result + id.hashCode()
         return result
     }

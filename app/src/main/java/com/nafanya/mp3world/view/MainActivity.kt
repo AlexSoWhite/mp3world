@@ -23,14 +23,7 @@ import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
-import com.nafanya.mp3world.view.listActivities.albums.AlbumListActivity
-import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
-import com.nafanya.mp3world.view.listActivities.favourite.FavouriteListActivity
-import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
-import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
-import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
-import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
@@ -74,15 +67,10 @@ class MainActivity : AppCompatActivity() {
         val songListObserver = Observer<MutableList<Song>> { songList ->
             binding.songCount = songList.size
             binding.allSongs.item.setOnClickListener {
-                val songListIntent = Intent(this, SongListActivity::class.java)
-                SourceProvider.newInstanceWithPlaylist(
-                    Playlist(
-                        songList,
-                        id = -1,
-                        name = "Мои песни"
-                    )
-                )
-                startActivity(songListIntent)
+                ActivityCreator()
+                    .with(this)
+                    .createSongListActivity()
+                    .start()
             }
         }
         binding.allSongs.menuItemIcon.setImageResource(R.drawable.song_menu_icon)
@@ -92,8 +80,10 @@ class MainActivity : AppCompatActivity() {
         val playlistsObserver = Observer<MutableList<Playlist>> {
             binding.playlistCount = it.size
             binding.playlists.item.setOnClickListener {
-                val playlistIntent = Intent(this, PlaylistListActivity::class.java)
-                startActivity(playlistIntent)
+                ActivityCreator()
+                    .with(this)
+                    .createPlaylistListActivity()
+                    .start()
             }
         }
         binding.playlists.menuItemIcon.setImageResource(R.drawable.playlist_play)
@@ -103,8 +93,10 @@ class MainActivity : AppCompatActivity() {
         val artistObserver = Observer<MutableList<Artist>> {
             binding.artistCount = it.size
             binding.artists.item.setOnClickListener {
-                val artistsIntent = Intent(this, ArtistListActivity::class.java)
-                startActivity(artistsIntent)
+                ActivityCreator()
+                    .with(this)
+                    .createArtistListActivity()
+                    .start()
             }
         }
         binding.artists.menuItemIcon.setImageResource(R.drawable.artist)
@@ -114,26 +106,23 @@ class MainActivity : AppCompatActivity() {
         val albumsObserver = Observer<MutableList<Album>> {
             binding.albumCount = it.size
             binding.albums.item.setOnClickListener {
-                val albumsIntent = Intent(this, AlbumListActivity::class.java)
-                startActivity(albumsIntent)
+                ActivityCreator()
+                    .with(this)
+                    .createAlbumListActivity()
+                    .start()
             }
         }
         binding.albums.menuItemIcon.setImageResource(R.drawable.album)
         AlbumListManager.albums.observe(this, albumsObserver)
 
         // favourites
-        val favouriteObserver = Observer<MutableList<Song>> { songList ->
-            binding.favouriteCount = songList.size
+        val favouriteObserver = Observer<Playlist> { playlist ->
+            binding.favouriteCount = playlist.songList.size
             binding.favourite.item.setOnClickListener {
-                val favouriteIntent = Intent(this, FavouriteListActivity::class.java)
-                SourceProvider.newInstanceWithPlaylist(
-                    Playlist(
-                        songList,
-                        id = -1,
-                        name = "Избранное"
-                    )
-                )
-                startActivity(favouriteIntent)
+                ActivityCreator()
+                    .with(this)
+                    .createFavouriteListActivity()
+                    .start()
             }
         }
         binding.favourite.menuItemIcon.setImageResource(R.drawable.favorite)
@@ -149,18 +138,19 @@ class MainActivity : AppCompatActivity() {
 //        StatisticInfoManager.info.observe(this, statisticObserver)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // setting appBar search view
         menuInflater.inflate(R.menu.search_menu, menu)
-        val searchItem = menu?.findItem(R.id.search)
+        val searchItem = menu.findItem(R.id.search)
         val searchView: SearchView = searchItem?.actionView as SearchView
         // setting search dispatcher
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    val intent = Intent(this@MainActivity, SearchSongListActivity::class.java)
-                    SourceProvider.newInstanceWithQuery(query)
-                    startActivity(intent)
+                    ActivityCreator()
+                        .with(this@MainActivity)
+                        .createSearchSongListActivity(query)
+                        .start()
                     return false
                 }
                 override fun onQueryTextChange(newText: String): Boolean {

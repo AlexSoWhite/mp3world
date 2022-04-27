@@ -1,9 +1,7 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.artists
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.model.listManagers.AlbumListManager
 import com.nafanya.mp3world.model.listManagers.ArtistListManager
-import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
@@ -40,7 +38,6 @@ class ArtistListViewModel : ListViewModelInterface() {
             title.value = query
         }
     }
-
 
     fun search(query: String) {
         val newList = mutableListOf<Artist>()

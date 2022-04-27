@@ -1,10 +1,29 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
+import com.nafanya.mp3world.model.dependencies.PlaylistViewModelProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AddSongToListViewModel : SongListViewModel() {
+@HiltViewModel
+class AddSongToListViewModel @Inject constructor(
+    initializingPlaylist: Playlist
+) : SongListViewModel(initializingPlaylist) {
+
+    private var passedPlaylist: Playlist
+    private var playlistListViewModel = PlaylistViewModelProvider.takePlaylistViewModel()
+
+    init {
+        val tempSongList: MutableList<Song> = mutableListOf()
+        playlistListViewModel?.playlist?.value?.songList?.forEach {
+            tempSongList.add(it)
+        }
+        this.passedPlaylist = playlistListViewModel?.playlist?.value?.copy(
+            songList = tempSongList
+        )!!
+    }
 
     fun isAdded(song: Song): Boolean {
         passedPlaylist.songList.forEach {
@@ -36,23 +55,6 @@ class AddSongToListViewModel : SongListViewModel() {
     }
 
     fun confirmChanges() {
-        passedViewModel.resetPlaylist(passedPlaylist)
-    }
-
-    companion object {
-
-        private lateinit var passedViewModel: PlaylistViewModel
-        private lateinit var passedPlaylist: Playlist
-
-        fun newInstance(passedViewModel: PlaylistViewModel) {
-            this.passedViewModel = passedViewModel
-            val tempSongList: MutableList<Song> = mutableListOf()
-            passedViewModel.playlist.value!!.songList.forEach {
-                tempSongList.add(it)
-            }
-            this.passedPlaylist = passedViewModel.playlist.value!!.copy(
-                songList = tempSongList
-            )
-        }
+        playlistListViewModel?.resetPlaylist(passedPlaylist)
     }
 }

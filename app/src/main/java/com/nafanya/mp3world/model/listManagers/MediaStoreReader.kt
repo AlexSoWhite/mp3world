@@ -99,15 +99,14 @@ class MediaStoreReader {
                     )
                     SongListManager.add(song)
                     val artist = Artist(
-                        name = thisArtist,
                         id = thisArtistId,
+                        name = thisArtist,
                         image = bitmap
                     )
                     ArtistListManager.add(artist, song)
                     val album = Album(
                         id = thisAlbumId,
                         name = thisAlbumName,
-                        songList = mutableListOf(),
                         image = bitmap
                     )
                     AlbumListManager.add(album, song)
