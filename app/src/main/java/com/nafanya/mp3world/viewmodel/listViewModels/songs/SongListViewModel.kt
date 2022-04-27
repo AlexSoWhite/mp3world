@@ -6,24 +6,24 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
-import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * TODO refactor initializing and reloading
  */
-open class SongListViewModel : ListViewModelInterface() {
+@HiltViewModel
+open class SongListViewModel @Inject constructor(
+    val initializingPlaylist: Playlist
+) : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()
     }
-    private lateinit var initializingPlaylist: Playlist
     private var isInitialized = false
     private var query = ""
 
     override fun onLoading() {
-        if (!this::initializingPlaylist.isInitialized) {
-            initializingPlaylist = SourceProvider.getPlaylist()!!
-        }
         if (query == "") {
             title.value = initializingPlaylist.name
             playlist.value = initializingPlaylist

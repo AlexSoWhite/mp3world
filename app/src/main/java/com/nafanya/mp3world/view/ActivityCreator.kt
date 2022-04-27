@@ -3,7 +3,7 @@ package com.nafanya.mp3world.view
 import android.content.Context
 import android.content.Intent
 import com.nafanya.mp3world.model.wrappers.Playlist
-import com.nafanya.mp3world.viewmodel.listViewModels.SourceProvider
+import com.nafanya.mp3world.model.dependencies.SourceProvider
 
 class ActivityCreator {
 
@@ -23,7 +23,7 @@ class ActivityCreator {
         activityClass: Class<*>?
     ): ActivityCreator {
         intent = Intent(context, activityClass)
-        SourceProvider.newInstanceWithPlaylist(playlist)
+        SourceProvider.putPlaylist(playlist)
         return this
     }
 
@@ -32,7 +32,7 @@ class ActivityCreator {
         activityClass: Class<*>?
     ): ActivityCreator {
         intent = Intent(context, activityClass)
-        SourceProvider.newInstanceWithQuery(query)
+        SourceProvider.putQuery(query)
         return this
     }
 

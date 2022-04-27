@@ -3,8 +3,13 @@ package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AddSongToListViewModel : SongListViewModel() {
+@HiltViewModel
+class AddSongToListViewModel @Inject constructor(
+    initializingPlaylist: Playlist
+) : SongListViewModel(initializingPlaylist) {
 
     fun isAdded(song: Song): Boolean {
         passedPlaylist.songList.forEach {

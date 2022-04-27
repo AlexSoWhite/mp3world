@@ -143,7 +143,6 @@ class ForegroundService : LifecycleService() {
         /**
          * Method triggered when notification clicked.
          */
-        @DelicateCoroutinesApi
         override fun createCurrentContentIntent(player: Player): PendingIntent? {
             val intentToMain = Intent(context, InitialActivity::class.java)
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

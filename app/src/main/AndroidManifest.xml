@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mp3world"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+        android:name=".model.dependencies.PlayerApplication">
         <activity
             android:name=".view.InitialActivity"
             android:exported="true"
