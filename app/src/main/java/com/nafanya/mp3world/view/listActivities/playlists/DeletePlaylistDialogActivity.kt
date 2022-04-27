@@ -7,7 +7,6 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.DeletePlaylistDialogBinding
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
 
 class DeletePlaylistDialogActivity : AppCompatActivity() {
 
