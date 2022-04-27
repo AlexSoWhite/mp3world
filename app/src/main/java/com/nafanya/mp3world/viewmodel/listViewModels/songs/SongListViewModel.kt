@@ -14,7 +14,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 open class SongListViewModel @Inject constructor(
-    val initializingPlaylist: Playlist
+    private val initializingPlaylist: Playlist
 ) : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {

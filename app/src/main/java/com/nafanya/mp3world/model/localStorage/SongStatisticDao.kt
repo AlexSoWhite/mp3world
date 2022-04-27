@@ -10,14 +10,14 @@ import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
 @Dao
 interface SongStatisticDao {
     @Query("SELECT * FROM SongStatisticEntity")
-    fun getAll(): MutableList<SongStatisticEntity>
+    suspend fun getAll(): MutableList<SongStatisticEntity>
 
     @Insert
-    fun insert(value: SongStatisticEntity)
+    suspend fun insert(value: SongStatisticEntity)
 
     @Update
-    fun update(value: SongStatisticEntity)
+    suspend fun update(value: SongStatisticEntity)
 
     @Delete
-    fun delete(value: SongStatisticEntity)
+    suspend fun delete(value: SongStatisticEntity)
 }

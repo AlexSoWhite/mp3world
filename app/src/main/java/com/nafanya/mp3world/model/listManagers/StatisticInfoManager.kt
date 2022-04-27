@@ -3,6 +3,7 @@ package com.nafanya.mp3world.model.listManagers
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.model.localStorage.SongStatisticDao
 import com.nafanya.mp3world.model.wrappers.SongStatisticEntity
+import kotlinx.coroutines.runBlocking
 
 /**
  * TODO: make it work
@@ -13,7 +14,7 @@ object StatisticInfoManager {
         MutableLiveData<MutableList<SongStatisticEntity>>()
     }
 
-    fun initialize(songStatisticDao: SongStatisticDao) {
+    fun initialize(songStatisticDao: SongStatisticDao) = runBlocking {
         val list = songStatisticDao.getAll()
         list.sortByDescending {
             it.time

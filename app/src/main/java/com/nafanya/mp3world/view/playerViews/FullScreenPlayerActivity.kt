@@ -31,9 +31,7 @@ import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.ColorExtractor
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
-import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 class FullScreenPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: PlayerViewFullscreenBinding

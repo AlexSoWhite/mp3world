@@ -41,9 +41,6 @@
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name=".view.listActivities.songs.SongListActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"/>
         <activity android:name=".view.listActivities.playlists.PlaylistListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
