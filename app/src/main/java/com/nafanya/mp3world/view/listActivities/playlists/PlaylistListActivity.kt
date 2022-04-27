@@ -3,6 +3,7 @@ package com.nafanya.mp3world.view.listActivities.playlists
 import android.content.Intent
 import android.view.Menu
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,9 +13,11 @@ import com.nafanya.mp3world.view.ActivityCreator
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 @DelicateCoroutinesApi
+@AndroidEntryPoint
 class PlaylistListActivity : RecyclerHolderActivity() {
 
     override fun setAdapter() {
@@ -24,10 +27,9 @@ class PlaylistListActivity : RecyclerHolderActivity() {
             ) { playlist, clickType ->
                 when (clickType) {
                     ClickType.CLICK -> {
-                        PlaylistViewModel.newInstance(viewModel as PlaylistListViewModel)
                         ActivityCreator()
                             .with(this)
-                            .createActivityWithPlaylist(playlist, PlaylistActivity::class.java)
+                            .createMutablePlaylistActivity(playlist, viewModel as PlaylistListViewModel)
                             .start()
                     }
                     ClickType.LONG -> {
@@ -68,10 +70,10 @@ class PlaylistListActivity : RecyclerHolderActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // setting appBar search view
         menuInflater.inflate(R.menu.search_menu, menu)
-        val searchItem = menu?.findItem(R.id.search)
+        val searchItem = menu.findItem(R.id.search)
         val searchView: SearchView = searchItem?.actionView as SearchView
         // setting search dispatcher
         searchView.setOnQueryTextListener(

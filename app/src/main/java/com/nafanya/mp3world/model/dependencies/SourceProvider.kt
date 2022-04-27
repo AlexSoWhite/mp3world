@@ -2,7 +2,6 @@ package com.nafanya.mp3world.model.dependencies
 
 import com.nafanya.mp3world.model.wrappers.Playlist
 
-@Deprecated(message = "Use inject")
 object SourceProvider {
 
     private var initializingPlaylist: Playlist? = null

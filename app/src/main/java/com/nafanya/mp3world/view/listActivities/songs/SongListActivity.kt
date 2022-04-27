@@ -43,10 +43,10 @@ class SongListActivity : RecyclerHolderActivity() {
         binding.emptySongList.emptySongList.visibility = View.VISIBLE
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // setting appBar search view
         menuInflater.inflate(R.menu.search_menu, menu)
-        val searchItem = menu?.findItem(R.id.search)
+        val searchItem = menu.findItem(R.id.search)
         val searchView: SearchView = searchItem?.actionView as SearchView
         // setting search dispatcher
         searchView.setOnQueryTextListener(

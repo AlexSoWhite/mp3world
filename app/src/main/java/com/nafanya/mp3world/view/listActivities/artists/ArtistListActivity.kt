@@ -11,7 +11,9 @@ import com.nafanya.mp3world.view.ActivityCreator
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
 import com.nafanya.mp3world.viewmodel.listViewModels.artists.ArtistListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ArtistListActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {
@@ -23,7 +25,7 @@ class ArtistListActivity : RecyclerHolderActivity() {
             binding.recycler.adapter = ArtistListAdapter(it) { artist ->
                 ActivityCreator()
                     .with(this)
-                    .createActivityWithPlaylist(artist.playlist!!, SongListActivity::class.java)
+                    .createPlaylistActivity(artist.playlist!!)
                     .start()
             }
         }
@@ -35,10 +37,10 @@ class ArtistListActivity : RecyclerHolderActivity() {
         binding.emptyArtistList.emptyArtistList.visibility = View.VISIBLE
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // setting appBar search view
         menuInflater.inflate(R.menu.search_menu, menu)
-        val searchItem = menu?.findItem(R.id.search)
+        val searchItem = menu.findItem(R.id.search)
         val searchView: SearchView = searchItem?.actionView as SearchView
         // setting search dispatcher
         searchView.setOnQueryTextListener(

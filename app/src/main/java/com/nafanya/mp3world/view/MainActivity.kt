@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             binding.allSongs.item.setOnClickListener {
                 ActivityCreator()
                     .with(this)
-                    .createActivityWithPlaylist(Playlist(songList), SongListActivity::class.java)
+                    .createSongListActivity()
                     .start()
             }
         }
@@ -86,8 +86,10 @@ class MainActivity : AppCompatActivity() {
         val playlistsObserver = Observer<MutableList<Playlist>> {
             binding.playlistCount = it.size
             binding.playlists.item.setOnClickListener {
-                val playlistIntent = Intent(this, PlaylistListActivity::class.java)
-                startActivity(playlistIntent)
+                ActivityCreator()
+                    .with(this)
+                    .createPlaylistListActivity()
+                    .start()
             }
         }
         binding.playlists.menuItemIcon.setImageResource(R.drawable.playlist_play)
@@ -97,8 +99,10 @@ class MainActivity : AppCompatActivity() {
         val artistObserver = Observer<MutableList<Artist>> {
             binding.artistCount = it.size
             binding.artists.item.setOnClickListener {
-                val artistsIntent = Intent(this, ArtistListActivity::class.java)
-                startActivity(artistsIntent)
+                ActivityCreator()
+                    .with(this)
+                    .createArtistListActivity()
+                    .start()
             }
         }
         binding.artists.menuItemIcon.setImageResource(R.drawable.artist)
@@ -108,8 +112,10 @@ class MainActivity : AppCompatActivity() {
         val albumsObserver = Observer<MutableList<Album>> {
             binding.albumCount = it.size
             binding.albums.item.setOnClickListener {
-                val albumsIntent = Intent(this, AlbumListActivity::class.java)
-                startActivity(albumsIntent)
+                ActivityCreator()
+                    .with(this)
+                    .createAlbumListActivity()
+                    .start()
             }
         }
         binding.albums.menuItemIcon.setImageResource(R.drawable.album)
@@ -121,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             binding.favourite.item.setOnClickListener {
                 ActivityCreator()
                     .with(this)
-                    .createActivityWithPlaylist(playlist, FavouriteListActivity::class.java)
+                    .createFavouriteListActivity()
                     .start()
             }
         }
@@ -138,10 +144,10 @@ class MainActivity : AppCompatActivity() {
 //        StatisticInfoManager.info.observe(this, statisticObserver)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // setting appBar search view
         menuInflater.inflate(R.menu.search_menu, menu)
-        val searchItem = menu?.findItem(R.id.search)
+        val searchItem = menu.findItem(R.id.search)
         val searchView: SearchView = searchItem?.actionView as SearchView
         // setting search dispatcher
         searchView.setOnQueryTextListener(
@@ -149,7 +155,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     ActivityCreator()
                         .with(this@MainActivity)
-                        .createActivityWithQuery(query, SearchSongListActivity::class.java)
+                        .createSearchSongListActivity(query)
                         .start()
                     return false
                 }
