@@ -16,7 +16,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class PlaylistActivity : RecyclerHolderActivity() {
 
     override fun setViewModel() {
-        viewModel = if (intent.hasExtra("isMutable") && intent.getBooleanExtra("isMutable", false)) {
+        viewModel = if (
+            intent.hasExtra("isMutable") &&
+            intent.getBooleanExtra("isMutable", false)
+        ) {
             ViewModelProvider(this)[PlaylistViewModel::class.java]
         } else {
             ViewModelProvider(this)[SongListViewModel::class.java]

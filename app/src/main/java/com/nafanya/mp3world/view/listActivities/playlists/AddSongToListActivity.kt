@@ -2,7 +2,6 @@ package com.nafanya.mp3world.view.listActivities.playlists
 
 import android.view.Menu
 import android.view.View
-import androidx.activity.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,8 +14,6 @@ import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.view.listActivities.songs.SongListAdapter
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.AddSongToListViewModel
-import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
-import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

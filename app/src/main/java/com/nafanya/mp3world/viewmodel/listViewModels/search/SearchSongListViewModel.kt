@@ -7,9 +7,7 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
-import com.nafanya.mp3world.model.dependencies.SourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.lang.RuntimeException
 import javax.inject.Inject
 
 /**
@@ -17,7 +15,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SearchSongListViewModel @Inject constructor(
-  val initializingQuery: String
+    val initializingQuery: String
 ) : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {

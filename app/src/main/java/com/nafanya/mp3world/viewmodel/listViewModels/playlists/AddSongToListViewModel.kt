@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
-import com.nafanya.mp3world.model.dependencies.PlaylistListViewModelProvider
 import com.nafanya.mp3world.model.dependencies.PlaylistViewModelProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song

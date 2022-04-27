@@ -3,7 +3,6 @@ package com.nafanya.mp3world.view.listActivities.playlists
 import android.content.Intent
 import android.view.Menu
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,7 +11,6 @@ import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.ActivityCreator
 import com.nafanya.mp3world.view.listActivities.RecyclerHolderActivity
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
-import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -29,8 +27,10 @@ class PlaylistListActivity : RecyclerHolderActivity() {
                     ClickType.CLICK -> {
                         ActivityCreator()
                             .with(this)
-                            .createMutablePlaylistActivity(playlist, viewModel as PlaylistListViewModel)
-                            .start()
+                            .createMutablePlaylistActivity(
+                                playlist,
+                                viewModel as PlaylistListViewModel
+                            ).start()
                     }
                     ClickType.LONG -> {
                         val intent = Intent(this, DeletePlaylistDialogActivity::class.java)

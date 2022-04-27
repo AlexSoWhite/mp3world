@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import com.nafanya.mp3world.model.dependencies.PlaylistListViewModelProvider
 import com.nafanya.mp3world.model.dependencies.PlaylistViewModelProvider
-import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.dependencies.SourceProvider
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.SongListManager
+import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.view.listActivities.albums.AlbumListActivity
 import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
 import com.nafanya.mp3world.view.listActivities.favourite.FavouriteListActivity
@@ -18,6 +18,7 @@ import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistViewModel
 
+@Suppress("TooManyFunctions")
 class ActivityCreator {
 
     private lateinit var context: Context

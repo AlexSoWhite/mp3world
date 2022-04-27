@@ -23,12 +23,6 @@ import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
-import com.nafanya.mp3world.view.listActivities.albums.AlbumListActivity
-import com.nafanya.mp3world.view.listActivities.artists.ArtistListActivity
-import com.nafanya.mp3world.view.listActivities.favourite.FavouriteListActivity
-import com.nafanya.mp3world.view.listActivities.playlists.PlaylistListActivity
-import com.nafanya.mp3world.view.listActivities.search.SearchSongListActivity
-import com.nafanya.mp3world.view.listActivities.songs.SongListActivity
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import kotlinx.coroutines.DelicateCoroutinesApi
 
