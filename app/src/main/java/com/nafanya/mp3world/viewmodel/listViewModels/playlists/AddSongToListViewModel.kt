@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
-import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.model.dependencies.PlaylistListViewModelProvider
 import com.nafanya.mp3world.model.dependencies.PlaylistViewModelProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
@@ -15,15 +14,16 @@ class AddSongToListViewModel @Inject constructor(
 ) : SongListViewModel(initializingPlaylist) {
 
     private var passedPlaylist: Playlist
+    private var playlistListViewModel = PlaylistViewModelProvider.takePlaylistViewModel()
 
     init {
         val tempSongList: MutableList<Song> = mutableListOf()
-        initializingPlaylist.songList.forEach {
+        playlistListViewModel?.playlist?.value?.songList?.forEach {
             tempSongList.add(it)
         }
-        this.passedPlaylist = initializingPlaylist.copy(
+        this.passedPlaylist = playlistListViewModel?.playlist?.value?.copy(
             songList = tempSongList
-        )
+        )!!
     }
 
     fun isAdded(song: Song): Boolean {
@@ -56,7 +56,6 @@ class AddSongToListViewModel @Inject constructor(
     }
 
     fun confirmChanges() {
-        PlaylistViewModelProvider.takePlaylistViewModel()?.resetPlaylist(passedPlaylist)
-        PlaylistListViewModelProvider.takePlaylistListViewModel()?.updatePlaylist(passedPlaylist)
+        playlistListViewModel?.resetPlaylist(passedPlaylist)
     }
 }

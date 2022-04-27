@@ -2,7 +2,6 @@ package com.nafanya.mp3world.model.dependencies
 
 import com.nafanya.mp3world.viewmodel.listViewModels.playlists.PlaylistListViewModel
 
-@Deprecated(message = "deprecated")
 object PlaylistListViewModelProvider {
 
     private var playlistListViewModel: PlaylistListViewModel? = null

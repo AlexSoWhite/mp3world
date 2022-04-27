@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.viewmodel.listViewModels.playlists
 
+import com.nafanya.mp3world.model.dependencies.PlaylistListViewModelProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.songs.SongListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,5 +13,6 @@ class PlaylistViewModel @Inject constructor(
 
     fun resetPlaylist(playlist: Playlist) {
         updateData(playlist)
+        PlaylistListViewModelProvider.takePlaylistListViewModel()?.updatePlaylist(playlist)
     }
 }
