@@ -4,6 +4,7 @@ import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
+import javax.inject.Inject
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -17,9 +18,10 @@ import org.jsoup.Jsoup
  */
 // TODO pagination
 // TODO result wrapping
-class QueryExecutor {
+class QueryExecutor @Inject constructor(
+    private val client: OkHttpClient
+) {
 
-    private val client = OkHttpClient()
     private val prefix = "https://ru.hitmotop.com/search?q="
 
     fun preLoad(query: String, callback: (List<Song>?) -> Unit?) {

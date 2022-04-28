@@ -4,13 +4,16 @@ import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.FavouriteListEntity
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 /**
  * Class that wraps DataBaseHolder work.
  */
-class LocalStorageProvider {
+class LocalStorageProvider @Inject constructor(
+    var dbHolder: DatabaseHolder
+) {
 
     // playlist section
     /**
@@ -18,7 +21,6 @@ class LocalStorageProvider {
      */
     fun addPlaylist(playlist: Playlist) = runBlocking {
         launch {
-            val dbHolder = DatabaseHolder()
             dbHolder.db.playlistDao().insert(playlist.toStorageEntity())
             dbHolder.closeDataBase()
         }
@@ -29,7 +31,6 @@ class LocalStorageProvider {
      */
     fun updatePlaylist(playlist: Playlist) = runBlocking {
         launch {
-            val dbHolder = DatabaseHolder()
             val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
             if (index != -1) {
                 dbHolder.db.playlistDao().update(playlist.toStorageEntity())
@@ -43,7 +44,6 @@ class LocalStorageProvider {
      */
     fun deletePlaylist(playlist: Playlist) = runBlocking {
         launch {
-            val dbHolder = DatabaseHolder()
             dbHolder.db.playlistDao().delete(playlist.toStorageEntity())
             dbHolder.closeDataBase()
         }
@@ -52,7 +52,6 @@ class LocalStorageProvider {
     // favourite list section
     fun addFavourite(song: Song) = runBlocking {
         launch {
-            val dbHolder = DatabaseHolder()
             dbHolder.db.favouriteListDao().insert(
                 FavouriteListEntity(song.id)
             )
@@ -62,7 +61,6 @@ class LocalStorageProvider {
 
     fun deleteFavourite(song: Song) = runBlocking {
         launch {
-            val dbHolder = DatabaseHolder()
             dbHolder.db.favouriteListDao().delete(
                 FavouriteListEntity(song.id)
             )
@@ -93,7 +91,6 @@ class LocalStorageProvider {
      */
     fun populateLists() = runBlocking {
         launch {
-            val dbHolder = DatabaseHolder()
             dbHolder.populateLists()
             dbHolder.closeDataBase()
         }

@@ -15,7 +15,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SearchSongListViewModel @Inject constructor(
-    private val initializingQuery: String
+    private val initializingQuery: String,
+    private val queryExecutor: QueryExecutor
 ) : ListViewModelInterface() {
 
     val playlist: MutableLiveData<Playlist> by lazy {
@@ -23,7 +24,7 @@ class SearchSongListViewModel @Inject constructor(
     }
 
     private fun startLoading(query: String, callback: (List<Song>?) -> Unit) {
-        QueryExecutor().preLoad(query) { songList ->
+        queryExecutor.preLoad(query) { songList ->
             callback(songList)
         }
     }

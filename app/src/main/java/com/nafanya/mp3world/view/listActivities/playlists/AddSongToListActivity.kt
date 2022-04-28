@@ -41,7 +41,7 @@ class AddSongToListActivity : RecyclerHolderActivity() {
         list: MutableList<Song>,
         context: LifecycleOwner,
         callback: () -> Unit
-    ) : SongListAdapter(list, context, callback) {
+    ) : SongListAdapter(list, context, null, callback) {
 
         override fun decorateItem(binding: SongListItemBinding, song: Song) {
             var isAdded = viewModel.isAdded(song)

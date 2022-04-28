@@ -2,6 +2,7 @@ package com.nafanya.mp3world.model.network
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.util.Log
@@ -11,7 +12,7 @@ import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.model.dependencies.PlayerApplication
+import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.File
 
@@ -21,24 +22,30 @@ import java.io.File
  * TODO: API 29
  */
 @Suppress("TooGenericExceptionCaught")
-class Downloader {
+class Downloader(
+    private var context: Context
+) {
 
-    private val context = PlayerApplication.context()
     private val builder = NotificationCompat.Builder(context, "download")
+    private val mediaStoreReader = MediaStoreReader.Builder().withContext(context).build()
     private val notificationManager =
         getSystemService(context, NotificationManager::class.java) as NotificationManager
+
     private var id = 0
 
     companion object {
         private var lastId = 100
-        private const val multiplicator = 100
+        private const val multiplier = 100
         private var isChannelCreated = false
         private val DOWNLOAD_DIR = Environment
             .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             .absolutePath
     }
 
-    fun downLoad(song: Song, callback: (DownloadResult) -> Unit) {
+    fun download(
+        song: Song,
+        callback: (DownloadResult) -> Unit
+    ) {
         builder
             .setContentTitle("${song.artist} - ${song.title}")
             .setContentText("загрузка")
@@ -52,7 +59,10 @@ class Downloader {
         downLoadL(song, callback)
     }
 
-    private fun downLoadL(song: Song, callback: (DownloadResult) -> Unit): Int {
+    private fun downLoadL(
+        song: Song,
+        callback: (DownloadResult) -> Unit
+    ): Int {
         val url = song.url!!
         var fileName = url
             .substring(url.lastIndexOf('/') + 1)
@@ -66,9 +76,9 @@ class Downloader {
         return PRDownloader.download(url, dirPath, fileName)
             .build()
             .setOnProgressListener {
-                val progressPercent = it.currentBytes * multiplicator / it.totalBytes
+                val progressPercent = it.currentBytes * multiplier / it.totalBytes
                 Log.d("Download", "progress: ${progressPercent.toInt()}")
-                builder.setProgress(multiplicator, progressPercent.toInt(), false)
+                builder.setProgress(multiplier, progressPercent.toInt(), false)
                 notificationManager.notify(
                     id,
                     builder.build()
@@ -81,7 +91,7 @@ class Downloader {
                             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
                                 copyFileToDownloads(fileName)
                             }
-                            MetadataScanner("$DOWNLOAD_DIR/$fileName")
+                            MetadataScanner(context, "$DOWNLOAD_DIR/$fileName", mediaStoreReader)
                             callback(DownloadResult(ResultType.SUCCESS))
                         } catch (exception: Exception) {
                             callback(DownloadResult(ResultType.ERROR))
