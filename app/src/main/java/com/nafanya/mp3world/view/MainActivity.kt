@@ -1,6 +1,9 @@
 package com.nafanya.mp3world.view
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -9,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.ActivityMainBinding
 import com.nafanya.mp3world.model.foregroundService.ForegroundService
@@ -24,7 +29,11 @@ import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
+import com.nafanya.mp3world.viewmodel.InitialViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -34,6 +43,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.displayOptions = DISPLAY_SHOW_TITLE
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        checkPermissions()
+    }
+
+    // part of onCreate
+    private fun checkPermissions() {
+        val permissionRead = Manifest.permission.READ_EXTERNAL_STORAGE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(permissionRead) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(permissionRead), 0) // triggers onPermissionResult
+                return
+            }
+        }
+        val permissionWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
+        if (
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.P &&
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        ) {
+            if (checkSelfPermission(permissionWrite) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(permissionWrite), 0)
+                return
+            }
+        }
+        val viewModel = ViewModelProvider(this)[InitialViewModel::class.java]
+        viewModel.initializeLists()
+        PRDownloader.initialize(applicationContext)
         initInitializer()
         subscribeToPlayerState()
         initMainMenu()
@@ -157,6 +191,15 @@ class MainActivity : AppCompatActivity() {
             }
         )
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        checkPermissions()
     }
 
     override fun onDestroy() {
