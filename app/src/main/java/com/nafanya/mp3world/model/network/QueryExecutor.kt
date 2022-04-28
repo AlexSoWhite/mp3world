@@ -4,13 +4,13 @@ import com.nafanya.mp3world.model.listManagers.SongListManager
 import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Song
 import java.io.IOException
+import javax.inject.Inject
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.jsoup.Jsoup
-import javax.inject.Inject
 
 /**
  * Class that makes calls to api.

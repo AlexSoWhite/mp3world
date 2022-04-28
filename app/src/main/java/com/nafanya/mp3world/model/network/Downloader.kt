@@ -27,6 +27,7 @@ class Downloader(
 ) {
 
     private val builder = NotificationCompat.Builder(context, "download")
+    private val mediaStoreReader = MediaStoreReader.Builder().withContext(context).build()
     private val notificationManager =
         getSystemService(context, NotificationManager::class.java) as NotificationManager
 
@@ -41,7 +42,10 @@ class Downloader(
             .absolutePath
     }
 
-    fun download(song: Song, mediaStoreReader: MediaStoreReader, callback: (DownloadResult) -> Unit) {
+    fun download(
+        song: Song,
+        callback: (DownloadResult) -> Unit
+    ) {
         builder
             .setContentTitle("${song.artist} - ${song.title}")
             .setContentText("загрузка")
@@ -52,12 +56,11 @@ class Downloader(
             createNotificationChannel()
         }
         isChannelCreated = true
-        downLoadL(song, mediaStoreReader, callback)
+        downLoadL(song, callback)
     }
 
     private fun downLoadL(
         song: Song,
-        mediaStoreReader: MediaStoreReader,
         callback: (DownloadResult) -> Unit
     ): Int {
         val url = song.url!!
@@ -88,7 +91,7 @@ class Downloader(
                             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
                                 copyFileToDownloads(fileName)
                             }
-                            MetadataScanner(context,"$DOWNLOAD_DIR/$fileName", mediaStoreReader)
+                            MetadataScanner(context, "$DOWNLOAD_DIR/$fileName", mediaStoreReader)
                             callback(DownloadResult(ResultType.SUCCESS))
                         } catch (exception: Exception) {
                             callback(DownloadResult(ResultType.ERROR))

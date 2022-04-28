@@ -2,7 +2,6 @@ package com.nafanya.mp3world.model.dependencies
 
 import android.content.Context
 import com.nafanya.mp3world.model.network.Downloader
-import com.nafanya.mp3world.model.network.MetadataScanner
 import com.nafanya.mp3world.model.network.QueryExecutor
 import dagger.Module
 import dagger.Provides

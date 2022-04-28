@@ -10,7 +10,7 @@ import javax.inject.Inject
 class InitialViewModel @Inject constructor(
     private val mediaStoreReader: MediaStoreReader,
     private val localStorageProvider: LocalStorageProvider
-): ViewModel() {
+) : ViewModel() {
 
     fun initializeLists() {
         if (!isInitialized) {

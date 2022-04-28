@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FavouriteListViewModel @Inject constructor(
     var localStorageProvider: LocalStorageProvider
-): ViewModel() {
+) : ViewModel() {
 
     fun addFavourite(song: Song) {
         FavouriteListManager.add(song)

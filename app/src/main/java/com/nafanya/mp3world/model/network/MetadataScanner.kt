@@ -4,12 +4,7 @@ import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.ViewModelProvider
-import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.listManagers.MediaStoreReader
-import com.nafanya.mp3world.viewmodel.DownloadViewModel
-import javax.inject.Inject
-
 /**
  * Class that adds song to MediaStore with all its metadata.
  */

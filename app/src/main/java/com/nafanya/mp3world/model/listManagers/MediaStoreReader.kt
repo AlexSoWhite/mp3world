@@ -7,13 +7,10 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
-import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Song
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
-import javax.inject.Inject
 
 @Suppress("LongMethod")
 /**

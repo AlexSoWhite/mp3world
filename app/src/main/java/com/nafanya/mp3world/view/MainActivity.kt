@@ -31,7 +31,6 @@ import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.playerViews.GenericPlayerControlView
 import com.nafanya.mp3world.viewmodel.InitialViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

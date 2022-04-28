@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.network.ResultType
 import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Song

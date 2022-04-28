@@ -4,9 +4,9 @@ import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.wrappers.FavouriteListEntity
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.Song
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
 
 /**
  * Class that wraps DataBaseHolder work.

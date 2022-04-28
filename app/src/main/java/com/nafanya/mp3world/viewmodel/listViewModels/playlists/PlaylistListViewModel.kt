@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlaylistListViewModel @Inject constructor(
     var localStorageProvider: LocalStorageProvider
-): ListViewModelInterface() {
+) : ListViewModelInterface() {
 
     private var query = ""
 
