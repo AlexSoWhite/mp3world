@@ -18,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.toColor
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.material.imageview.ShapeableImageView
@@ -25,16 +26,22 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
 import com.nafanya.mp3world.model.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
-import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.network.Downloader
+import com.nafanya.mp3world.model.network.ResultType
 import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Song
 import com.nafanya.mp3world.view.ColorExtractor
 import com.nafanya.mp3world.view.listActivities.playlists.CurrentPlaylistDialogActivity
+import com.nafanya.mp3world.viewmodel.DownloadViewModel
+import com.nafanya.mp3world.viewmodel.FavouriteListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FullScreenPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: PlayerViewFullscreenBinding
+    private lateinit var favoriteViewModel: FavouriteListViewModel
+    private lateinit var downloadViewModel: DownloadViewModel
     private var playerView: FullScreenPlayerView? = null
     private var previousColor: Int = -1
     private var isColorInitialized = false
@@ -43,6 +50,8 @@ class FullScreenPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = DataBindingUtil.setContentView(this, R.layout.player_view_fullscreen)
+        favoriteViewModel = ViewModelProvider(this)[FavouriteListViewModel::class.java]
+        downloadViewModel = ViewModelProvider(this)[DownloadViewModel::class.java]
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = FullScreenPlayerView(this, R.id.player_control_fullscreen_view)
@@ -118,19 +127,13 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                     }
                     favouriteButton.setOnClickListener {
                         if (!isFavourite) {
-                            FavouriteListManager.add(
-                                PlayerLiveDataProvider.currentSong.value!!
-                            )
-                            LocalStorageProvider().addFavourite(
+                            favoriteViewModel.addFavourite(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
                             isFavourite = true
                             favouriteButton.setImageResource(R.drawable.favorite)
                         } else {
-                            FavouriteListManager.delete(
-                                PlayerLiveDataProvider.currentSong.value!!
-                            )
-                            LocalStorageProvider().deleteFavourite(
+                            favoriteViewModel.deleteFavourite(
                                 PlayerLiveDataProvider.currentSong.value!!
                             )
                             isFavourite = false
@@ -145,12 +148,20 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                             "загрузка начата",
                             Toast.LENGTH_SHORT
                         ).show()
-                        Downloader().downLoad(song) {
-                            Toast.makeText(
-                                activity,
-                                "${song.artist} - ${song.title} загружено",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        downloadViewModel.download(song) {
+                            if (it.type == ResultType.SUCCESS) {
+                                Toast.makeText(
+                                    activity,
+                                    "${song.artist} - ${song.title} загружено",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    activity,
+                                    "ошибка",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 }

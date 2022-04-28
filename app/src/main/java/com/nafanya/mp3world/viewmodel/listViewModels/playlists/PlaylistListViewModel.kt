@@ -6,8 +6,13 @@ import com.nafanya.mp3world.model.localStorage.LocalStorageProvider
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.viewmodel.listViewModels.ListViewModelInterface
 import com.nafanya.mp3world.viewmodel.listViewModels.PageState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PlaylistListViewModel : ListViewModelInterface() {
+@HiltViewModel
+class PlaylistListViewModel @Inject constructor(
+    var localStorageProvider: LocalStorageProvider
+): ListViewModelInterface() {
 
     private var query = ""
 
@@ -31,7 +36,7 @@ class PlaylistListViewModel : ListViewModelInterface() {
         // modifying LiveData
         PlaylistListManager.addPlaylist(playlist)
         // adding playlist to the local storage
-        LocalStorageProvider().addPlaylist(playlist)
+        localStorageProvider.addPlaylist(playlist)
         callback()
         pageState.value = PageState.IS_LOADING
     }
@@ -68,7 +73,7 @@ class PlaylistListViewModel : ListViewModelInterface() {
             // modifying LiveData
             PlaylistListManager.updatePlaylist(playlist)
             // modifying playlist in local storage
-            LocalStorageProvider().updatePlaylist(playlist)
+            localStorageProvider.updatePlaylist(playlist)
             playlists.value = PlaylistListManager.playlists.value
             if (PlaylistListManager.playlists.value!!.isEmpty()) {
                 pageState.value = PageState.IS_EMPTY
@@ -84,7 +89,7 @@ class PlaylistListViewModel : ListViewModelInterface() {
             // modifying LiveData
             PlaylistListManager.deletePlaylist(playlist)
             // modifying playlist in local storage
-            LocalStorageProvider().deletePlaylist(playlist)
+            localStorageProvider.deletePlaylist(playlist)
             pageState.value = PageState.IS_LOADING
         }
     }

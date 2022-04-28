@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.jsoup.Jsoup
+import javax.inject.Inject
 
 /**
  * Class that makes calls to api.
@@ -17,9 +18,10 @@ import org.jsoup.Jsoup
  */
 // TODO pagination
 // TODO result wrapping
-class QueryExecutor {
+class QueryExecutor @Inject constructor(
+    private val client: OkHttpClient
+) {
 
-    private val client = OkHttpClient()
     private val prefix = "https://ru.hitmotop.com/search?q="
 
     fun preLoad(query: String, callback: (List<Song>?) -> Unit?) {

@@ -1,25 +1,26 @@
 package com.nafanya.mp3world.model.localStorage
 
+import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
-import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.listManagers.FavouriteListManager
 import com.nafanya.mp3world.model.listManagers.PlaylistListManager
 import com.nafanya.mp3world.model.listManagers.StatisticInfoManager
 import com.nafanya.mp3world.model.wrappers.Playlist
 import com.nafanya.mp3world.model.wrappers.PlaylistStorageEntity
 import com.nafanya.mp3world.model.wrappers.Song
+import javax.inject.Inject
 
 @Suppress("MagicNumber")
 /**
  * Class that provides access to local Room database. Populates playlists, favourites and statistics.
  * @property context holds application context.
  */
-class DatabaseHolder {
-
-    private var context = PlayerApplication.context()
+class DatabaseHolder @Inject constructor(
+    private val context: Context
+) {
 
     var db: AppDatabase
 

@@ -10,11 +10,11 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class PlayerApplication : Application() {
 
-    companion object {
-        lateinit var application: Application
-
-        fun context(): Context {
-            return application.applicationContext
-        }
-    }
+//    companion object {
+//        lateinit var application: Application
+//
+//        fun context(): Context {
+//            return application.applicationContext
+//        }
+//    }
 }

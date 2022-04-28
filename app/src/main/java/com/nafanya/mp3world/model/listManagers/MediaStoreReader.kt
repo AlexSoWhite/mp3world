@@ -2,6 +2,7 @@ package com.nafanya.mp3world.model.listManagers
 
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
@@ -10,7 +11,9 @@ import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.model.wrappers.Album
 import com.nafanya.mp3world.model.wrappers.Artist
 import com.nafanya.mp3world.model.wrappers.Song
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
+import javax.inject.Inject
 
 @Suppress("LongMethod")
 /**
@@ -18,9 +21,25 @@ import java.io.IOException
  * When the app starts it populates lists on main thread, after that on background.
  * @property context holds application context.
  */
-class MediaStoreReader {
+class MediaStoreReader private constructor(builder: Builder) {
 
-    var context = PlayerApplication.context()
+    var context: Context
+
+    init {
+        this.context = builder.context
+    }
+
+    class Builder {
+
+        lateinit var context: Context
+
+        fun withContext(context: Context): Builder {
+            this.context = context
+            return this
+        }
+
+        fun build() = MediaStoreReader(this)
+    }
 
     companion object {
         private var isInitialized = false

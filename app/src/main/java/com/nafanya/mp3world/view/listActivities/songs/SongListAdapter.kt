@@ -16,10 +16,12 @@ import com.nafanya.mp3world.model.network.Downloader
 import com.nafanya.mp3world.model.network.ResultType
 import com.nafanya.mp3world.model.timeConverters.TimeConverter
 import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.viewmodel.DownloadViewModel
 
 open class SongListAdapter(
     private val list: MutableList<Song>,
     private val context: LifecycleOwner,
+    private val downloadViewModel: DownloadViewModel? = null,
     private val callback: () -> Unit
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {
 
@@ -52,7 +54,7 @@ open class SongListAdapter(
                     "загрузка начата...",
                     Toast.LENGTH_SHORT
                 ).show()
-                Downloader().downLoad(song) {
+                downloadViewModel?.download(song) {
                     when (it.type) {
                         ResultType.SUCCESS -> Toast.makeText(
                             context as Context,

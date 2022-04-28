@@ -12,9 +12,11 @@ import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.dependencies.PlayerApplication
 import com.nafanya.mp3world.viewmodel.InitialViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Timer
 import java.util.TimerTask
 
+@AndroidEntryPoint
 class InitialActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +28,6 @@ class InitialActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d("TIME", "resumed")
-        PlayerApplication.application = application
         checkPermissions()
     }
 
