@@ -8,7 +8,8 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true"
-    android:paddingHorizontal="20dp">
+    android:paddingHorizontal="20dp"
+    android:theme="@style/exoPlayer">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/control_song_icon"
@@ -26,6 +27,7 @@
         android:id="@+id/player_control_fullscreen_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/control_song_icon"

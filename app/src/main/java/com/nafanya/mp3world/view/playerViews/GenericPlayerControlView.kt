@@ -80,7 +80,7 @@ open class GenericPlayerControlView(
         }
     }
 
-    fun toFullScreen() {
+    private fun toFullScreen() {
         var bundle: Bundle? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             val options = ActivityOptions.makeSceneTransitionAnimation(

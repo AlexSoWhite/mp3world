@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.toColor
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -193,22 +194,10 @@ class FullScreenPlayerActivity : AppCompatActivity() {
             val colorFrom = if (isColorInitialized) {
                 previousColor
             } else {
-                getColor(android.R.color.transparent)
+                Color.parseColor(defaultBackgroundColor)
             }
             previousColor = averageColor
             isColorInitialized = true
-            val playPauseButton = findViewById<ShapeableImageView>(R.id.exo_play_pause)
-            val prevButton = findViewById<ShapeableImageView>(R.id.exo_prev)
-            val nextButton = findViewById<ShapeableImageView>(R.id.exo_next)
-            val repeatButton = findViewById<ShapeableImageView>(R.id.exo_repeat_toggle)
-            val playlistButton = findViewById<ShapeableImageView>(R.id.current_playlist)
-            val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite_button)
-            val shuffleButton = findViewById<ShapeableImageView>(R.id.exo_shuffle)
-            val progressBar = findViewById<DefaultTimeBar>(R.id.exo_progress)
-            val title = findViewById<TextView>(R.id.track_title)
-            val artist = findViewById<TextView>(R.id.track_artist)
-            val duration = findViewById<TextView>(R.id.duration)
-            val time = findViewById<TextView>(R.id.time)
             val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, averageColor)
             colorAnimation.duration = backgroundDuration
             colorAnimation.addUpdateListener {
@@ -222,22 +211,21 @@ class FullScreenPlayerActivity : AppCompatActivity() {
                 val controlsColor = Color.valueOf(controlsRed, controlsGreen, controlsBlue).toArgb()
                 val backgroundColor = it.animatedValue as Int
                 binding.fullScreenPlayerView.setBackgroundColor(backgroundColor)
-                playPauseButton.setColorFilter(controlsColor)
-                prevButton.setColorFilter(controlsColor)
-                nextButton.setColorFilter(controlsColor)
-                repeatButton.setColorFilter(controlsColor)
-                playlistButton.setColorFilter(controlsColor)
-                favouriteButton.setColorFilter(controlsColor)
-                shuffleButton.setColorFilter(controlsColor)
-                progressBar.setScrubberColor(controlsColor)
-                title.setTextColor(controlsColor)
-                artist.setTextColor(controlsColor)
-                duration.setTextColor(controlsColor)
-                time.setTextColor(controlsColor)
+                findViewById<ConstraintLayout>(R.id.controls_fullscreen).children.forEach { view ->
+                    when (view) {
+                        is ShapeableImageView -> {
+                            view.setColorFilter(controlsColor)
+                        }
+                        is DefaultTimeBar -> {
+                            view.setScrubberColor(controlsColor)
+                        }
+                        is TextView -> {
+                            view.setTextColor(controlsColor)
+                        }
+                    }
+                }
             }
             colorAnimation.start()
-        } else {
-            setTheme(R.style.exoPlayer)
         }
     }
 

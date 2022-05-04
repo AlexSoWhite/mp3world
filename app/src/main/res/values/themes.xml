@@ -25,6 +25,9 @@
     <style name="exoPlayer">
         <item name="android:background">#373232</item>
     </style>
+    <style name="controlFullscreen">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
     <style name="ActionBar">
         <item name="android:background">@null</item>
         <!-- Support library compatibility -->
