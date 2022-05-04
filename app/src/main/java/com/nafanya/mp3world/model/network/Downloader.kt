@@ -2,10 +2,13 @@ package com.nafanya.mp3world.model.network
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ContentValues
 import android.content.Context
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import com.downloader.Error
@@ -14,7 +17,9 @@ import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.model.listManagers.MediaStoreReader
 import com.nafanya.mp3world.model.wrappers.Song
+import java.io.BufferedInputStream
 import java.io.File
+import java.io.FileInputStream
 
 /**
  * Class that downloads song by PRDownloader.
@@ -88,8 +93,11 @@ class Downloader(
                 object : OnDownloadListener {
                     override fun onDownloadComplete() {
                         try {
-                            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                                 copyFileToDownloads(fileName)
+                            }
+                            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
+                                copyFileToDownloadsAPI29(fileName)
                             }
                             MetadataScanner(context, "$DOWNLOAD_DIR/$fileName", mediaStoreReader)
                             callback(DownloadResult(ResultType.SUCCESS))
@@ -106,7 +114,7 @@ class Downloader(
             )
     }
 
-    fun copyFileToDownloads(filename: String) {
+    private fun copyFileToDownloads(filename: String) {
         val src = File(context.filesDir, filename)
         val dst = File(DOWNLOAD_DIR, filename)
         try {
@@ -121,6 +129,33 @@ class Downloader(
             file.outputStream().use { output ->
                 input.copyTo(output)
             }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun copyFileToDownloadsAPI29(filename: String) {
+        try {
+            val downloadedFile = File(context.filesDir, filename)
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, downloadedFile.name)
+                put(MediaStore.MediaColumns.MIME_TYPE, "mp3")
+            }
+            val uri = context.contentResolver.insert(
+                MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+                contentValues
+            )
+            context.contentResolver.openOutputStream(uri!!).use { outputStream ->
+                val brr = ByteArray(1024)
+                var len: Int
+                val bufferedInputStream = BufferedInputStream(FileInputStream(File(context.filesDir, filename).absoluteFile))
+                while ((bufferedInputStream.read(brr, 0, brr.size).also { len = it }) != -1) {
+                    outputStream?.write(brr, 0, len)
+                }
+                outputStream?.flush()
+                bufferedInputStream.close()
+            }
+        } finally {
+            File(context.filesDir, filename).delete()
         }
     }
 
