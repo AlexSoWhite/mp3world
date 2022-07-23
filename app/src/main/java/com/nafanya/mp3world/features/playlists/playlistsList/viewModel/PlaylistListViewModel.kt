@@ -2,13 +2,13 @@ package com.nafanya.mp3world.features.playlists.playlistsList.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.features.playlists.playlistsList.model.PlaylistListManager
-import com.nafanya.mp3world.features.localStorage.LocalStorageProvider
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
-import kotlinx.coroutines.launch
+import com.nafanya.mp3world.features.localStorage.LocalStorageProvider
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 class PlaylistListViewModel @Inject constructor(
     var localStorageProvider: LocalStorageProvider

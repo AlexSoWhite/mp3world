@@ -1,11 +1,11 @@
 package com.nafanya.mp3world.features.localStorage
 
-import com.nafanya.mp3world.features.playlists.playlistsList.model.PlaylistListManager
-import com.nafanya.mp3world.features.favorites.FavouriteListEntity
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.domain.Song
-import kotlinx.coroutines.Dispatchers
+import com.nafanya.mp3world.features.favorites.FavouriteListEntity
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -25,7 +25,6 @@ class LocalStorageProvider @Inject constructor(
         withContext(Dispatchers.IO) {
             launch {
                 dbHolder.db.playlistDao().insert(playlist.toStorageEntity())
-                //dbHolder.closeDataBase()
             }
         }
     }
@@ -40,7 +39,6 @@ class LocalStorageProvider @Inject constructor(
                 if (index != -1) {
                     dbHolder.db.playlistDao().update(playlist.toStorageEntity())
                 }
-                //dbHolder.closeDataBase()
             }
         }
     }
@@ -52,7 +50,6 @@ class LocalStorageProvider @Inject constructor(
         withContext(Dispatchers.IO) {
             launch {
                 dbHolder.db.playlistDao().delete(playlist.toStorageEntity())
-                //dbHolder.closeDataBase()
             }
         }
     }
@@ -64,7 +61,6 @@ class LocalStorageProvider @Inject constructor(
                 dbHolder.db.favouriteListDao().insert(
                     FavouriteListEntity(song.id)
                 )
-                //dbHolder.closeDataBase()
             }
         }
     }
@@ -75,7 +71,6 @@ class LocalStorageProvider @Inject constructor(
                 dbHolder.db.favouriteListDao().delete(
                     FavouriteListEntity(song.id)
                 )
-                //dbHolder.closeDataBase()
             }
         }
     }
@@ -105,7 +100,6 @@ class LocalStorageProvider @Inject constructor(
         withContext(Dispatchers.IO) {
             launch {
                 dbHolder.populateLists()
-                //dbHolder.closeDataBase()
             }
         }
     }

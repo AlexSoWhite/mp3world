@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nafanya.mp3world.features.favorites.FavouriteListEntity
-import com.nafanya.mp3world.features.playlists.playlist.model.PlaylistStorageEntity
+import com.nafanya.mp3world.features.playlists.playlist.PlaylistStorageEntity
 import com.nafanya.mp3world.features.statistics.SongStatisticEntity
 
 @Database(

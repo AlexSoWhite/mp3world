@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.albums
 
 import android.graphics.Bitmap
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 
 /**
  * Class that wraps the album.

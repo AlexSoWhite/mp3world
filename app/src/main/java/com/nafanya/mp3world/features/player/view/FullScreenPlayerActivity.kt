@@ -23,16 +23,16 @@ import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.features.favorites.FavouriteListManager
-import com.nafanya.mp3world.features.downloading.ResultType
-import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.utils.ColorExtractor
-import com.nafanya.mp3world.features.playlists.playlist.view.CurrentPlaylistDialogActivity
+import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
+import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
+import com.nafanya.mp3world.features.downloading.ResultType
+import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
+import com.nafanya.mp3world.features.playlists.playlist.view.CurrentPlaylistDialogActivity
 import javax.inject.Inject
 
 class FullScreenPlayerActivity : AppCompatActivity() {
@@ -48,12 +48,12 @@ class FullScreenPlayerActivity : AppCompatActivity() {
     lateinit var downloadViewModel: DownloadViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as PlayerApplication).applicationComponent.fullScreenPlayerComponent().inject(this)
+        (application as PlayerApplication).applicationComponent
+            .fullScreenPlayerComponent()
+            .inject(this)
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding = DataBindingUtil.setContentView(this, R.layout.player_view_fullscreen)
-        //favoriteViewModel = factory.create(FavouriteListViewModel::class.java)
-        //downloadViewModel = factory.create(DownloadViewModel::class.java)
         val observerPlayer = Observer<Boolean> {
             if (it) {
                 playerView = FullScreenPlayerView(this, R.id.player_control_fullscreen_view)

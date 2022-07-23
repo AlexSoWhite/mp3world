@@ -1,10 +1,10 @@
 package com.nafanya.mp3world.features.allSongs
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import javax.inject.Inject
 
 /**

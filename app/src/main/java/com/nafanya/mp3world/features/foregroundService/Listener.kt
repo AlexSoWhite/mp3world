@@ -2,8 +2,8 @@ package com.nafanya.mp3world.features.foregroundService
 
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
-import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.features.allSongs.SongListManager
 
 /**
  TODO: statistic

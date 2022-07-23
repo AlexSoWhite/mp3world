@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.features.playlists.playlistsList.model
+package com.nafanya.mp3world.features.playlists.playlistsList
 
 import com.nafanya.mp3world.features.playlists.playlistsList.viewModel.PlaylistListViewModel
 

@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.features.playlists.playlist.viewModel
 
-import com.nafanya.mp3world.features.playlists.playlistsList.model.PlaylistListViewModelProvider
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.features.allSongs.SongListViewModel
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListViewModelProvider
 import javax.inject.Inject
 
 class PlaylistViewModel @Inject constructor(

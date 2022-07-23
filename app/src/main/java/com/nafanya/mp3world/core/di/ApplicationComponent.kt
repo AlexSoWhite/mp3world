@@ -2,12 +2,10 @@ package com.nafanya.mp3world.core.di
 
 import android.content.Context
 import com.nafanya.mp3world.core.entrypoint.di.EntrypointComponentProvider
-import com.nafanya.mp3world.core.entrypoint.di.EntrypointModule
-import com.nafanya.mp3world.core.source.di.SourceModule
 import com.nafanya.mp3world.core.mediaStore.di.MediaStoreModule
+import com.nafanya.mp3world.core.source.di.SourceModule
 import com.nafanya.mp3world.features.albums.di.AlbumComponentProvider
 import com.nafanya.mp3world.features.artists.di.ArtistsComponentProvider
-import com.nafanya.mp3world.features.downloading.di.DownloadComponentProvider
 import com.nafanya.mp3world.features.downloading.di.DownloadModule
 import com.nafanya.mp3world.features.favorites.di.FavouritesComponentProvider
 import com.nafanya.mp3world.features.localStorage.di.DatabaseModule
@@ -38,8 +36,7 @@ interface ApplicationComponent :
     PlaylistComponentProvider,
     PlaylistListComponentProvider,
     FullScreenPlayerComponentProvider,
-    SearchSongsComponentProvider
-{
+    SearchSongsComponentProvider {
 
     fun context(): Context
 

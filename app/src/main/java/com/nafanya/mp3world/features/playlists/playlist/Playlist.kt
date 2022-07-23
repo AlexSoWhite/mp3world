@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.features.playlists.playlist.model
+package com.nafanya.mp3world.features.playlists.playlist
 
 import android.graphics.Bitmap
 import com.nafanya.mp3world.core.domain.Song

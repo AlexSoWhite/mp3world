@@ -10,12 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.features.downloading.ResultType
-import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
+import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
+import com.nafanya.mp3world.features.downloading.ResultType
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
 
 open class SongListAdapter(
     private val list: MutableList<Song>,

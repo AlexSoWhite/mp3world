@@ -1,10 +1,10 @@
 package com.nafanya.mp3world.features.albums.viewModel
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.features.albums.AlbumListManager
-import com.nafanya.mp3world.features.albums.Album
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
+import com.nafanya.mp3world.features.albums.Album
+import com.nafanya.mp3world.features.albums.AlbumListManager
 import javax.inject.Inject
 
 class AlbumListViewModel @Inject constructor() : ListViewModelInterface() {

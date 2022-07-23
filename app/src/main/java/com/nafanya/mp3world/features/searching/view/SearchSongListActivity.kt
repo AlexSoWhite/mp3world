@@ -3,14 +3,13 @@ package com.nafanya.mp3world.features.searching.view
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.features.allSongs.SongListAdapter
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import com.nafanya.mp3world.features.searching.viewModel.SearchSongListViewModel
 import javax.inject.Inject
 

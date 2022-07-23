@@ -1,10 +1,11 @@
 package com.nafanya.mp3world.core.entrypoint
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.mp3world.features.localStorage.LocalStorageProvider
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 class InitialViewModel @Inject constructor(
     private val mediaStoreReader: MediaStoreReader,

@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.core.source.di
 
 import com.nafanya.mp3world.core.source.SourceProvider
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import dagger.Module
 import dagger.Provides
 

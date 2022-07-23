@@ -17,8 +17,8 @@ import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
 
 open class GenericPlayerControlView(
     private val activity: AppCompatActivity,

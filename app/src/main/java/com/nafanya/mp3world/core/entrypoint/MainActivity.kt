@@ -12,26 +12,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
+import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.view.ActivityCreator
+import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.databinding.ActivityMainBinding
+import com.nafanya.mp3world.features.albums.Album
+import com.nafanya.mp3world.features.albums.AlbumListManager
+import com.nafanya.mp3world.features.allSongs.SongListManager
+import com.nafanya.mp3world.features.artists.Artist
+import com.nafanya.mp3world.features.artists.ArtistListManager
+import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.foregroundService.ForegroundService
 import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.features.foregroundService.ServiceInitializer
-import com.nafanya.mp3world.features.albums.AlbumListManager
-import com.nafanya.mp3world.features.artists.ArtistListManager
-import com.nafanya.mp3world.features.favorites.FavouriteListManager
-import com.nafanya.mp3world.features.playlists.playlistsList.model.PlaylistListManager
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.albums.Album
-import com.nafanya.mp3world.features.artists.Artist
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
-import com.nafanya.mp3world.core.domain.Song
-import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.features.player.view.GenericPlayerControlView
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {

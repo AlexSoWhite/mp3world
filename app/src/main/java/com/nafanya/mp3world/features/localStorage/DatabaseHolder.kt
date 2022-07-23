@@ -5,12 +5,12 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
-import com.nafanya.mp3world.features.favorites.FavouriteListManager
-import com.nafanya.mp3world.features.playlists.playlistsList.model.PlaylistListManager
-import com.nafanya.mp3world.features.statistics.StatisticInfoManager
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
-import com.nafanya.mp3world.features.playlists.playlist.model.PlaylistStorageEntity
 import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.features.favorites.FavouriteListManager
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.mp3world.features.playlists.playlist.PlaylistStorageEntity
+import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
+import com.nafanya.mp3world.features.statistics.StatisticInfoManager
 import javax.inject.Inject
 
 @Suppress("MagicNumber")

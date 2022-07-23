@@ -1,9 +1,9 @@
 package com.nafanya.mp3world.features.playlists.playlist.viewModel
 
-import com.nafanya.mp3world.features.playlists.playlist.model.PlaylistViewModelProvider
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.features.allSongs.SongListViewModel
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.mp3world.features.playlists.playlist.PlaylistViewModelProvider
 import javax.inject.Inject
 
 class AddSongToListViewModel @Inject constructor(

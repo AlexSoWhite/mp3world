@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.databinding.PlaylistListItemBinding
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.utils.TextUtil
+import com.nafanya.mp3world.databinding.PlaylistListItemBinding
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 
 enum class ClickType {
     CLICK,

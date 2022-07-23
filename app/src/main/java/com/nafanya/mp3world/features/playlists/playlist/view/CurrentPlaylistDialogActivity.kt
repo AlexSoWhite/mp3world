@@ -8,8 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.PlaylistPopupActivityBinding
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.features.allSongs.SongListAdapter
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
 
 // TODO redesign it
 class CurrentPlaylistDialogActivity : AppCompatActivity() {

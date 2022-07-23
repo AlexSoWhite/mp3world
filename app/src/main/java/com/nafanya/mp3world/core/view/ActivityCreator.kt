@@ -3,20 +3,20 @@ package com.nafanya.mp3world.core.view
 import android.content.Context
 import android.content.Intent
 import com.nafanya.mp3world.core.source.SourceProvider
-import com.nafanya.mp3world.features.playlists.playlistsList.model.PlaylistListViewModelProvider
-import com.nafanya.mp3world.features.playlists.playlist.model.PlaylistViewModelProvider
-import com.nafanya.mp3world.features.favorites.FavouriteListManager
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.features.albums.view.AlbumListActivity
+import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.artists.view.ArtistListActivity
+import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.favorites.view.FavouriteListActivity
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.mp3world.features.playlists.playlist.PlaylistViewModelProvider
 import com.nafanya.mp3world.features.playlists.playlist.view.AddSongToListActivity
 import com.nafanya.mp3world.features.playlists.playlist.view.PlaylistActivity
-import com.nafanya.mp3world.features.playlists.playlistsList.view.PlaylistListActivity
-import com.nafanya.mp3world.features.searching.view.SearchSongListActivity
-import com.nafanya.mp3world.features.playlists.playlistsList.viewModel.PlaylistListViewModel
 import com.nafanya.mp3world.features.playlists.playlist.viewModel.PlaylistViewModel
+import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListViewModelProvider
+import com.nafanya.mp3world.features.playlists.playlistsList.view.PlaylistListActivity
+import com.nafanya.mp3world.features.playlists.playlistsList.viewModel.PlaylistListViewModel
+import com.nafanya.mp3world.features.searching.view.SearchSongListActivity
 
 // TODO consider refactoring
 @Suppress("TooManyFunctions")

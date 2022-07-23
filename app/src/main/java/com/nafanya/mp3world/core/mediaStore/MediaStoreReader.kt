@@ -7,14 +7,13 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
-import com.nafanya.mp3world.features.albums.AlbumListManager
-import com.nafanya.mp3world.features.artists.ArtistListManager
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.albums.Album
-import com.nafanya.mp3world.features.artists.Artist
 import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.features.albums.Album
+import com.nafanya.mp3world.features.albums.AlbumListManager
+import com.nafanya.mp3world.features.allSongs.SongListManager
+import com.nafanya.mp3world.features.artists.Artist
+import com.nafanya.mp3world.features.artists.ArtistListManager
 import java.io.IOException
-
 
 // TODO refactor list managers
 @Suppress("LongMethod")

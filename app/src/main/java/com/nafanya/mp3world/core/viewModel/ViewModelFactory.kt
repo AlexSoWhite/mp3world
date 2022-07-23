@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -21,8 +20,10 @@ class ViewModelFactory @Inject constructor(
     }
 }
 
-inline fun <reified VM: ViewModel> ViewModelProvider.Factory.getViewModel(activity: FragmentActivity) =
-    ViewModelProvider(activity, this)[VM::class.java]
+inline fun <reified VM : ViewModel> ViewModelProvider.Factory.getViewModel(
+    activity: FragmentActivity
+) = ViewModelProvider(activity, this)[VM::class.java]
 
-inline fun <reified VM: ViewModel> ViewModelProvider.Factory.getViewModel(fragment: Fragment) =
-    ViewModelProvider(fragment, this)[VM::class.java]
+inline fun <reified VM : ViewModel> ViewModelProvider.Factory.getViewModel(
+    fragment: Fragment
+) = ViewModelProvider(fragment, this)[VM::class.java]

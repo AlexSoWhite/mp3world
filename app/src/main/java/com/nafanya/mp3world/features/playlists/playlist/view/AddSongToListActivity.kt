@@ -5,17 +5,16 @@ import android.view.Menu
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.databinding.SongListItemBinding
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
+import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.features.allSongs.SongListAdapter
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import com.nafanya.mp3world.features.playlists.playlist.viewModel.AddSongToListViewModel
 import javax.inject.Inject
 

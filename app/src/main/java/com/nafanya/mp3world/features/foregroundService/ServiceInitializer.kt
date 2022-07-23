@@ -5,9 +5,9 @@ import android.os.IBinder
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.features.allSongs.SongListManager
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 
 /**
  * Service that is responsible for starting foreground player service.

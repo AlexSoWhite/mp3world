@@ -1,11 +1,11 @@
-package com.nafanya.mp3world.features.playlists.playlistsList.model
+package com.nafanya.mp3world.features.playlists.playlistsList
 
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.features.localStorage.StoredPlaylistDao
-import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.core.domain.Song
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
+import com.nafanya.mp3world.features.allSongs.SongListManager
+import com.nafanya.mp3world.features.localStorage.StoredPlaylistDao
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import kotlinx.coroutines.runBlocking
 
 /**

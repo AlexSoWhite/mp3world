@@ -12,8 +12,8 @@ import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import java.io.File
 import javax.inject.Inject
 

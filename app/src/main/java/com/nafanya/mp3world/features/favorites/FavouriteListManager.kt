@@ -1,10 +1,10 @@
 package com.nafanya.mp3world.features.favorites
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.features.localStorage.FavouriteListDao
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.features.allSongs.SongListManager
+import com.nafanya.mp3world.features.localStorage.FavouriteListDao
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import kotlinx.coroutines.runBlocking
 
 /**

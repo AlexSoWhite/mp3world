@@ -26,9 +26,9 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_DEFAULT
 import com.google.android.exoplayer2.util.NotificationUtil.createNotificationChannel
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.entrypoint.InitialActivity
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 
 class ForegroundService : LifecycleService() {
 

@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
+import com.nafanya.mp3world.core.utils.TextUtil
 import com.nafanya.mp3world.databinding.ArtistListItemBinding
 import com.nafanya.mp3world.features.artists.Artist
-import com.nafanya.mp3world.core.utils.TextUtil
 
 class ArtistListAdapter(
     private val list: MutableList<Artist>,

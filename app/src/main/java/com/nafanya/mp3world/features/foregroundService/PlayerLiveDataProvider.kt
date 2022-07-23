@@ -2,8 +2,13 @@ package com.nafanya.mp3world.features.foregroundService
 
 import androidx.lifecycle.MutableLiveData
 import com.google.android.exoplayer2.ExoPlayer
-import com.nafanya.mp3world.features.playlists.playlist.model.Playlist
 import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider.currentPlaylist
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider.currentSong
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider.isPlayerInitialized
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider.isPlaying
+import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider.player
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
 
 /**
  * Object that holds player data.
