@@ -3,7 +3,7 @@
     <data>
         <variable
             name="playlist"
-            type="com.nafanya.mp3world.model.wrappers.Playlist" />
+            type="com.nafanya.mp3world.features.playlists.playlist.model.Playlist" />
         <variable
             name="tracksCount"
             type="String" />
