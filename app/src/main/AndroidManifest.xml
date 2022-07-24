@@ -16,9 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Mp3world"
         android:requestLegacyExternalStorage="true"
-        android:name=".model.dependencies.PlayerApplication">
+        android:name=".core.di.PlayerApplication">
         <activity
-            android:name=".view.InitialActivity"
+            android:name=".core.entrypoint.InitialActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.MainActivity"
+            android:name=".core.entrypoint.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Mp3world.Launcher"
@@ -40,43 +40,43 @@
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name=".view.listActivities.playlists.PlaylistListActivity"
+        <activity android:name=".features.playlists.playlistsList.view.PlaylistListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.listActivities.playlists.AddPlaylistDialogActivity"
+        <activity android:name=".features.playlists.playlistsList.view.AddPlaylistDialogActivity"
             android:exported="true"
             android:theme="@style/Theme.CreatePlaylistDialog"/>
-        <activity android:name=".view.listActivities.playlists.CurrentPlaylistDialogActivity"
+        <activity android:name=".features.playlists.playlist.view.CurrentPlaylistDialogActivity"
             android:exported="true"
             android:theme="@style/Theme.CurrentPlaylistDialog"/>
-        <activity android:name=".view.listActivities.playlists.DeletePlaylistDialogActivity"
+        <activity android:name=".features.playlists.playlistsList.view.DeletePlaylistDialogActivity"
             android:exported="true"
             android:theme="@style/Theme.CreatePlaylistDialog"/>
-        <activity android:name=".view.listActivities.playlists.AddSongToListActivity"
+        <activity android:name=".features.playlists.playlist.view.AddSongToListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.listActivities.playlists.PlaylistActivity"
+        <activity android:name=".features.playlists.playlist.view.PlaylistActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.listActivities.artists.ArtistListActivity"
+        <activity android:name=".features.artists.view.ArtistListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.listActivities.albums.AlbumListActivity"
+        <activity android:name=".features.albums.view.AlbumListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.listActivities.search.SearchSongListActivity"
+        <activity android:name=".features.searching.view.SearchSongListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.listActivities.favourite.FavouriteListActivity"
+        <activity android:name=".features.favorites.view.FavouriteListActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.listActivities.statistic.StatisticActivity"
+        <activity android:name=".features.statistics.StatisticActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.playerViews.FullScreenPlayerActivity"
+        <activity android:name=".features.player.view.FullScreenPlayerActivity"
             android:screenOrientation="portrait"/>
-        <service android:name=".model.foregroundService.ForegroundService" />
-        <service android:name=".model.foregroundService.ServiceInitializer" />
+        <service android:name=".features.foregroundService.ForegroundService" />
+        <service android:name=".features.foregroundService.ServiceInitializer" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

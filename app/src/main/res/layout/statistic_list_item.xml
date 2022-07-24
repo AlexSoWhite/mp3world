@@ -4,7 +4,7 @@
     <data>
         <variable
             name="song"
-            type="com.nafanya.mp3world.model.wrappers.SongStatisticEntity"
+            type="com.nafanya.mp3world.features.statistics.SongStatisticEntity"
             />
     </data>
     <LinearLayout

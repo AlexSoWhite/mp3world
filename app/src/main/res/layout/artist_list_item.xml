@@ -5,7 +5,7 @@
     <data>
         <variable
             name="artist"
-            type="com.nafanya.mp3world.model.wrappers.Artist" />
+            type="com.nafanya.mp3world.features.artists.Artist" />
         <variable
             name="tracksCount"
             type="String" />

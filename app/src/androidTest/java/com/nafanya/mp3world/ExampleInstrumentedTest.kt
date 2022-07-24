@@ -7,11 +7,11 @@ import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.gson.Gson
-import com.nafanya.mp3world.model.localStorage.AppDatabase
-import com.nafanya.mp3world.model.localStorage.DatabaseHolder
-import com.nafanya.mp3world.model.wrappers.Playlist
-import com.nafanya.mp3world.model.wrappers.PlaylistStorageEntity
-import com.nafanya.mp3world.model.wrappers.Song
+import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.features.localStorage.AppDatabase
+import com.nafanya.mp3world.features.localStorage.DatabaseHolder
+import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.mp3world.features.playlists.playlist.PlaylistStorageEntity
 import java.io.IOException
 import org.junit.Assert.assertEquals
 import org.junit.Rule
