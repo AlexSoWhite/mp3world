@@ -82,6 +82,7 @@ internal class PlaylistPlayer(context: Context) {
         val idx = _playlist.songList.indexOf(song)
         try {
             player?.seekToDefaultPosition(idx)
+            player?.play()
         } catch (e: IllegalSeekPositionException) {
             throw e
         }
