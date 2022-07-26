@@ -5,14 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
 import com.nafanya.mp3world.features.localStorage.LocalStorageProvider
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.player.Playlist
 import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
+import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 class PlaylistListViewModel @Inject constructor(
-    var localStorageProvider: LocalStorageProvider
-) : ListViewModelInterface() {
+    var localStorageProvider: LocalStorageProvider,
+    playerInteractor: PlayerInteractor
+) : ListViewModelInterface(playerInteractor) {
 
     private var query = ""
 

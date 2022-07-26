@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.features.artists
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.core.domain.Song
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 
 // TODO consider refactoring
 /**

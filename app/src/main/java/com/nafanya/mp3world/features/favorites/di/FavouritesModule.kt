@@ -10,7 +10,7 @@ import dagger.multibindings.IntoMap
 @Module
 interface FavouritesModule {
 
-    @Binds
-    @[IntoMap ViewModelKey(SongListViewModel::class)]
-    fun provideSongListViewModel(songListViewModel: SongListViewModel): ViewModel
+//    @Binds
+//    @[IntoMap ViewModelKey(SongListViewModel::class)]
+//    fun provideSongListViewModel(songListViewModel: SongListViewModel): ViewModel
 }

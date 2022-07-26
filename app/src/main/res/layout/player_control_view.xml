@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,7 +10,6 @@
     android:focusable="true"
     android:paddingHorizontal="10dp"
     android:paddingTop="5dp"
-    android:visibility="invisible"
     tools:visibility="visible"
     android:orientation="vertical">
 
@@ -36,7 +36,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/track_title"
+                android:id="@+id/control_track_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -50,7 +50,7 @@
                 tools:text="название" />
 
             <TextView
-                android:id="@+id/track_artist"
+                android:id="@+id/control_track_artist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -114,3 +114,4 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </LinearLayout>
+</layout>

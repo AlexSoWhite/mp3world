@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.utils.TextUtil
 import com.nafanya.mp3world.databinding.PlaylistListItemBinding
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.player.Playlist
 
 enum class ClickType {
     CLICK,
@@ -15,8 +15,8 @@ enum class ClickType {
 }
 
 class PlaylistListAdapter(
-    private val playlistList: List<Playlist>,
-    private val callback: (Playlist, ClickType) -> Unit
+    private val playlistList: List<com.nafanya.player.Playlist>,
+    private val callback: (com.nafanya.player.Playlist, ClickType) -> Unit
 ) : RecyclerView.Adapter<PlaylistListAdapter.PlaylistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
@@ -36,12 +36,12 @@ class PlaylistListAdapter(
 
     class PlaylistViewHolder(
         itemView: View,
-        private val callback: (Playlist, ClickType) -> Unit
+        private val callback: (com.nafanya.player.Playlist, ClickType) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = PlaylistListItemBinding.bind(itemView)
 
-        fun bind(playlist: Playlist) {
+        fun bind(playlist: com.nafanya.player.Playlist) {
             binding.playlist = playlist
             binding.tracksCount = TextUtil.getCompositionsCountString(
                 playlist.songList.size

@@ -5,10 +5,11 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
-import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.player.Song
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.player.Playlist
 import com.nafanya.mp3world.features.playlists.playlist.PlaylistStorageEntity
+import com.nafanya.mp3world.features.playlists.playlist.toStorageEntity
 import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
 import com.nafanya.mp3world.features.statistics.StatisticInfoManager
 import javax.inject.Inject
@@ -67,7 +68,7 @@ class DatabaseHolder @Inject constructor(
     private val migration34 = object : Migration(3, 4) {
         override fun migrate(database: SupportSQLiteDatabase) {
             val cursor = database.query("SELECT * FROM playlist")
-            val playlists = mutableListOf<Playlist>()
+            val playlists = mutableListOf<com.nafanya.player.Playlist>()
             val songListColumn = cursor.getColumnIndex("songList")
             val idColumn = cursor.getColumnIndex("id")
             val nameColumn = cursor.getColumnIndex("name")
@@ -76,7 +77,7 @@ class DatabaseHolder @Inject constructor(
                 val songList = jsonToListOfSong(string)
                 val thisId = cursor.getInt(idColumn)
                 val thisName = cursor.getString(nameColumn)
-                playlists.add(Playlist(songList, thisId, thisName))
+                playlists.add(com.nafanya.player.Playlist(songList, thisId, thisName))
             }
             val newPlaylists = mutableListOf<PlaylistStorageEntity>()
             playlists.forEach {
@@ -102,12 +103,12 @@ class DatabaseHolder @Inject constructor(
             database.execSQL("DROP TABLE Playlist")
         }
 
-        private fun jsonToListOfSong(value: String): MutableList<Song> {
+        private fun jsonToListOfSong(value: String): MutableList<com.nafanya.player.Song> {
             val list = Gson().fromJson(
                 value,
-                Array<Song>::class.java
+                Array<com.nafanya.player.Song>::class.java
             ).toList()
-            return if (list.isNotEmpty()) list as MutableList<Song>
+            return if (list.isNotEmpty()) list as MutableList<com.nafanya.player.Song>
             else mutableListOf()
         }
     }

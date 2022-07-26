@@ -5,9 +5,12 @@ import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
 import com.nafanya.mp3world.features.albums.Album
 import com.nafanya.mp3world.features.albums.AlbumListManager
+import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
-class AlbumListViewModel @Inject constructor() : ListViewModelInterface() {
+class AlbumListViewModel @Inject constructor(
+    playerInteractor: PlayerInteractor
+) : ListViewModelInterface(playerInteractor) {
 
     private var query = ""
 

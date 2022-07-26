@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.features.localStorage
 
-import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.features.favorites.FavouriteListEntity
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.mp3world.features.playlists.playlist.toStorageEntity
+import com.nafanya.player.Playlist
 import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // TODO refactor it
+// TODO update comments
 /**
  * Class that wraps DataBaseHolder work.
  */
@@ -55,7 +56,7 @@ class LocalStorageProvider @Inject constructor(
     }
 
     // favourite list section
-    suspend fun addFavourite(song: Song) {
+    suspend fun addFavourite(song: com.nafanya.player.Song) {
         withContext(Dispatchers.IO) {
             launch {
                 dbHolder.db.favouriteListDao().insert(
@@ -65,7 +66,7 @@ class LocalStorageProvider @Inject constructor(
         }
     }
 
-    suspend fun deleteFavourite(song: Song) {
+    suspend fun deleteFavourite(song: com.nafanya.player.Song) {
         withContext(Dispatchers.IO) {
             launch {
                 dbHolder.db.favouriteListDao().delete(

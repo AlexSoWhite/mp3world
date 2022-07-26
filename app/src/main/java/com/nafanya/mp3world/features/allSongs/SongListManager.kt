@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.allSongs
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.player.Song
 
 /**
  * Object that holds all song data.

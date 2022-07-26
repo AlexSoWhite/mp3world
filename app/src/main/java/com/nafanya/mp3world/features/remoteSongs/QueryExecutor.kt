@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.remoteSongs
 
-import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.player.Song
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import java.io.IOException
@@ -24,7 +24,7 @@ class QueryExecutor @Inject constructor(
 
     private val prefix = "https://ru.hitmotop.com/search?q="
 
-    fun preLoad(query: String, callback: (List<Song>?) -> Unit?) {
+    fun preLoad(query: String, callback: (List<com.nafanya.player.Song>?) -> Unit?) {
         val url = prefix + query
         val request = Request.Builder()
             .url(url)
@@ -39,7 +39,7 @@ class QueryExecutor @Inject constructor(
                 override fun onResponse(call: Call, response: Response) {
                     response.body?.let Playlist@{
                         val doc = Jsoup.parseBodyFragment(it.string())
-                        val songList = mutableListOf<Song>()
+                        val songList = mutableListOf<com.nafanya.player.Song>()
                         val arts = doc.getElementsByClass("track__img")
                         val info = doc.getElementsByClass("track__info")
                         for (i in info.indices) {
@@ -62,7 +62,7 @@ class QueryExecutor @Inject constructor(
                                 .attr("href")
                                 .toString()
                             songList.add(
-                                Song(
+                                com.nafanya.player.Song(
                                     id = SongListManager.urlBasedCount++,
                                     title = title,
                                     artist = artist,

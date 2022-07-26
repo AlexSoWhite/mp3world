@@ -1,10 +1,11 @@
 package com.nafanya.mp3world.features.allSongs
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 import javax.inject.Inject
 
 /**
@@ -12,8 +13,9 @@ import javax.inject.Inject
  * TODO separate logic and replace this class
  */
 open class SongListViewModel @Inject constructor(
-    private val initializingPlaylist: Playlist
-) : ListViewModelInterface() {
+    private val initializingPlaylist: Playlist,
+    playerInteractor: PlayerInteractor
+) : ListViewModelInterface(playerInteractor) {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()

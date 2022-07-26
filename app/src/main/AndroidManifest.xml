@@ -73,7 +73,7 @@
         <activity android:name=".features.statistics.StatisticActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.player.view.FullScreenPlayerActivity"
+        <activity android:name=".features.playerView.view.FullScreenPlayerActivity"
             android:screenOrientation="portrait"/>
         <service android:name=".features.foregroundService.ForegroundService" />
         <service android:name=".features.foregroundService.ServiceInitializer" />

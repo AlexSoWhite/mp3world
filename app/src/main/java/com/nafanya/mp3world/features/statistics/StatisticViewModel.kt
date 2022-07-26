@@ -2,8 +2,9 @@ package com.nafanya.mp3world.features.statistics
 
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
+import com.nafanya.player.PlayerInteractor
 
-class StatisticViewModel : ListViewModelInterface() {
+class StatisticViewModel(playerInteractor: PlayerInteractor) : ListViewModelInterface(playerInteractor) {
 
     override fun onLoading() {
         if (StatisticInfoManager.info.value!!.isEmpty()) {

@@ -21,15 +21,16 @@
         tools:src="@drawable/default_placeholder"
         android:transitionName="@string/player_transition"/>
 
-    <com.google.android.exoplayer2.ui.StyledPlayerControlView
+    <include
         android:layout_marginTop="20dp"
-        android:id="@+id/player_control_fullscreen_view"
+        android:id="@+id/controls_fullscreen"
+        layout="@layout/player_control_view_fullscreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/control_song_icon"
-        app:controller_layout_id="@layout/player_control_view_fullscreen" />
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

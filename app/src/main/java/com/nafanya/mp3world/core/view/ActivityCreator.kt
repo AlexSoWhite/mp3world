@@ -8,7 +8,7 @@ import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.artists.view.ArtistListActivity
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.favorites.view.FavouriteListActivity
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.player.Playlist
 import com.nafanya.mp3world.features.playlists.playlist.PlaylistViewModelProvider
 import com.nafanya.mp3world.features.playlists.playlist.view.AddSongToListActivity
 import com.nafanya.mp3world.features.playlists.playlist.view.PlaylistActivity
@@ -73,6 +73,7 @@ class ActivityCreator {
         intent = Intent(context, AddSongToListActivity::class.java)
         SourceProvider.putPlaylist(
             Playlist(
+                name = "",
                 songList = SongListManager.songList.value ?: mutableListOf()
             )
         )
