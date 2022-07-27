@@ -7,10 +7,8 @@ import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.gson.Gson
-import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.features.localStorage.AppDatabase
 import com.nafanya.mp3world.features.localStorage.DatabaseHolder
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import com.nafanya.mp3world.features.playlists.playlist.PlaylistStorageEntity
 import java.io.IOException
 import org.junit.Assert.assertEquals
@@ -54,7 +52,7 @@ class MigrationTest {
             close()
         }
 
-        val song = Song(
+        val song = com.nafanya.player.Song(
             id = 5,
             title = "testSong",
             artist = "testArtist",
@@ -94,7 +92,7 @@ class MigrationTest {
 
     @Test
     fun migrate2To3() {
-        val song = Song(
+        val song = com.nafanya.player.Song(
             id = 5,
             title = "testSong",
             artist = "testArtist",
@@ -132,7 +130,7 @@ class MigrationTest {
     fun migrate3to4() {
         val migration34 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                val song1 = Song(
+                val song1 = com.nafanya.player.Song(
                     id = 1,
                     title = "testSong1",
                     artist = "testArtist",
@@ -141,7 +139,7 @@ class MigrationTest {
                     duration = 100,
                     path = "asdas"
                 )
-                val song2 = Song(
+                val song2 = com.nafanya.player.Song(
                     id = 2,
                     title = "testSong2",
                     artist = "testArtist",
@@ -150,7 +148,7 @@ class MigrationTest {
                     duration = 100,
                     path = "asdas"
                 )
-                val song3 = Song(
+                val song3 = com.nafanya.player.Song(
                     id = 3,
                     title = "testSong3",
                     artist = "testArtist",
@@ -159,7 +157,7 @@ class MigrationTest {
                     duration = 100,
                     path = "asdas"
                 )
-                val song4 = Song(
+                val song4 = com.nafanya.player.Song(
                     id = 5,
                     title = "testSong4",
                     artist = "testArtist",
@@ -168,7 +166,7 @@ class MigrationTest {
                     duration = 100,
                     path = "asdas"
                 )
-                val song5 = Song(
+                val song5 = com.nafanya.player.Song(
                     id = 6,
                     title = "testSong5",
                     artist = "testArtist",
@@ -177,7 +175,7 @@ class MigrationTest {
                     duration = 100,
                     path = "asdas"
                 )
-                val song6 = Song(
+                val song6 = com.nafanya.player.Song(
                     id = 7,
                     title = "testSong6",
                     artist = "testArtist",
@@ -186,12 +184,12 @@ class MigrationTest {
                     duration = 100,
                     path = "asdas"
                 )
-                val playlist1 = Playlist(
+                val playlist1 = com.nafanya.player.Playlist(
                     songList = mutableListOf(song1, song2, song3),
                     id = 1,
                     name = "playlist1"
                 )
-                val playlist2 = Playlist(
+                val playlist2 = com.nafanya.player.Playlist(
                     songList = mutableListOf(song4, song5, song6),
                     id = 2,
                     name = "playlist2"
@@ -209,7 +207,7 @@ class MigrationTest {
                     """.trimIndent()
                 )
                 val cursor = database.query("SELECT * FROM playlist")
-                val playlists = mutableListOf<Playlist>()
+                val playlists = mutableListOf<com.nafanya.player.Playlist>()
                 val songListColumn = cursor.getColumnIndex("songList")
                 val idColumn = cursor.getColumnIndex("id")
                 val nameColumn = cursor.getColumnIndex("name")
@@ -217,7 +215,7 @@ class MigrationTest {
                     var string = cursor.getString(songListColumn)
                     string = string.slice(1 until string.length - 1)
                     val rawSongs = string.split("),")
-                    val songList = mutableListOf<Song>()
+                    val songList = mutableListOf<com.nafanya.player.Song>()
                     rawSongs.forEach {
                         songList.add(
                             jsonToSong(
@@ -231,7 +229,7 @@ class MigrationTest {
                     }
                     val thisId = cursor.getInt(idColumn)
                     val thisName = cursor.getString(nameColumn)
-                    playlists.add(Playlist(songList, thisId, thisName))
+                    playlists.add(com.nafanya.player.Playlist(songList, thisId, thisName))
                 }
                 val newPlaylists = mutableListOf<PlaylistStorageEntity>()
                 playlists.forEach {
@@ -257,19 +255,19 @@ class MigrationTest {
                 database.execSQL("DROP TABLE Playlist")
             }
 
-            private fun jsonToListOfSong(value: String): MutableList<Song> {
+            private fun jsonToListOfSong(value: String): MutableList<com.nafanya.player.Song> {
                 val list = Gson().fromJson(
                     value,
-                    Array<Song>::class.java
+                    Array<com.nafanya.player.Song>::class.java
                 ).toList()
-                return if (list.isNotEmpty()) list as MutableList<Song>
+                return if (list.isNotEmpty()) list as MutableList<com.nafanya.player.Song>
                 else mutableListOf()
             }
 
-            private fun jsonToSong(value: String): Song {
+            private fun jsonToSong(value: String): com.nafanya.player.Song {
                 return Gson().fromJson(
                     value,
-                    Song::class.java
+                    com.nafanya.player.Song::class.java
                 )
             }
         }
@@ -323,7 +321,7 @@ class SongListStorageTest {
     ).db
     private var songListDao: SongDao = db.songsListDao()
 
-    fun testAdd(song: Song) {
+    fun testAdd(song: com.nafanya.player.Song) {
         songListDao.insert(song)
     }
 }

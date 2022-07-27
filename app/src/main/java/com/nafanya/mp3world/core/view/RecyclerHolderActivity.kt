@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
+import androidx.annotation.CallSuper
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -15,8 +16,6 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
 import com.nafanya.mp3world.databinding.RecyclerHolderActivityBinding
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.features.player.view.GenericPlayerControlView
 import com.r0adkll.slidr.Slidr
 
 @Suppress("TooManyFunctions")
@@ -24,7 +23,6 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
 
     protected lateinit var binding: RecyclerHolderActivityBinding
     protected lateinit var viewModel: ListViewModelInterface
-    private var playerView: GenericPlayerControlView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +68,7 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         viewModel.pageState.observe(this, observer)
     }
 
+    @CallSuper
     open fun onLoading() {
         viewModel.onLoading()
         binding.recyclerWrapper.visibility = View.INVISIBLE
@@ -77,6 +76,7 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         binding.loader.loader.visibility = View.VISIBLE
     }
 
+    @CallSuper
     open fun onLoaded() {
         viewModel.onLoaded()
         binding.recyclerWrapper.visibility = View.VISIBLE
@@ -89,9 +89,6 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         binding.emptyAlbumList.emptyAlbumList.visibility = View.INVISIBLE
         binding.emptyArtistList.emptyArtistList.visibility = View.INVISIBLE
         binding.emptySearchResult.emptySearchResult.visibility = View.INVISIBLE
-
-        // subscribing to playerState
-        subscribeToPlayerState()
 
         // list setting
         setAdapter()
@@ -113,27 +110,13 @@ abstract class RecyclerHolderActivity : AppCompatActivity() {
         binding.recycler.startAnimation(alphaAnimation)
     }
 
+    @CallSuper
     open fun onEmpty() {
         viewModel.onEmpty()
         binding.loader.loader.visibility = View.INVISIBLE
         binding.addSongToPlaylist.addSongToPlaylist.visibility = View.GONE
         binding.addPlaylist.addPlaylist.visibility = View.GONE
         binding.playerControlView.visibility = View.VISIBLE
-        subscribeToPlayerState()
-    }
-
-    private fun subscribeToPlayerState() {
-        // observe player state
-        val observerPlayer = Observer<Boolean> {
-            if (it) {
-                playerView = GenericPlayerControlView(this, R.id.player_control_view)
-                playerView!!.setSongObserver()
-            }
-        }
-        PlayerLiveDataProvider.isPlayerInitialized.observe(
-            this,
-            observerPlayer
-        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

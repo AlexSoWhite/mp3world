@@ -1,40 +1,37 @@
 package com.nafanya.mp3world.features.allSongs
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
-import com.nafanya.mp3world.features.downloading.ResultType
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
+import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 
+/**
+ * TODO: change to list adapter and separate logic
+ */
 open class SongListAdapter(
-    private val list: MutableList<Song>,
-    private val context: LifecycleOwner,
+    private val playlist: Playlist,
     private val downloadViewModel: DownloadViewModel? = null,
-    private val callback: () -> Unit
+    private val callback: (Playlist, Song) -> Unit
 ) : RecyclerView.Adapter<SongListAdapter.SongViewHolder>() {
+
+    private val list = playlist.songList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.song_list_item, parent, false)
-        return SongViewHolder(itemView, context) { binding, song ->
-            decorateItem(binding, song)
-        }
+        return SongViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
-        holder.bind(list[position], callback)
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int {
@@ -46,73 +43,68 @@ open class SongListAdapter(
         song: Song
     ) {
         if (song.url != null) {
-            binding.action.visibility = View.VISIBLE
-            binding.action.setOnClickListener {
-                Toast.makeText(
-                    context as Context,
-                    "загрузка начата...",
-                    Toast.LENGTH_SHORT
-                ).show()
-                downloadViewModel?.download(song) {
-                    when (it.type) {
-                        ResultType.SUCCESS -> Toast.makeText(
-                            context as Context,
-                            "${song.artist} - ${song.title} загружено",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        ResultType.ERROR -> Toast.makeText(
-                            context as Context,
-                            "ошибка",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-            Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
+            // binding.action.visibility = View.VISIBLE
+            // TODO move to viewModel
+//            binding.action.setOnClickListener {
+//                Toast.makeText(
+//                    context as Context,
+//                    "загрузка начата...",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                downloadViewModel?.download(song) {
+//                    when (it.type) {
+//                        ResultType.SUCCESS -> Toast.makeText(
+//                            context as Context,
+//                            "${song.artist} - ${song.title} загружено",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                        ResultType.ERROR -> Toast.makeText(
+//                            context as Context,
+//                            "ошибка",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//            }
+            // Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
         } else {
             binding.action.visibility = View.GONE
         }
     }
 
-    class SongViewHolder(
-        itemView: View,
-        private val context: LifecycleOwner,
-        private val decorateItem: (
-            binding: SongListItemBinding,
-            song: Song
-        ) -> Unit
+    inner class SongViewHolder(
+        itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = SongListItemBinding.bind(itemView)
 
         @Suppress("ComplexCondition")
         fun bind(
-            song: Song,
-            callback: () -> Unit
+            song: Song
         ) {
             binding.song = song
-            val isPlayingObserver = Observer<Boolean> { isPlaying ->
-                val playingSong = PlayerLiveDataProvider.currentSong.value
-                if (isPlaying &&
-                    (
-                        playingSong?.id == song.id && playingSong.url == null ||
-                            playingSong?.url != null && playingSong.url == song.url
-                        )
-                ) {
-                    Glide.with(binding.playingIndicator)
-                        .load(R.drawable.pause)
-                        .into(binding.playingIndicator)
-                } else if (!isPlaying) {
-                    Glide.with(binding.playingIndicator)
-                        .load(R.drawable.play)
-                        .into(binding.playingIndicator)
-                } else {
-                    Glide.with(binding.playingIndicator)
-                        .load(R.drawable.play)
-                        .into(binding.playingIndicator)
-                }
-            }
-            PlayerLiveDataProvider.isPlaying.observe(context, isPlayingObserver)
+//            val isPlayingObserver = Observer<Boolean> { isPlaying ->
+//                val playingSong = PlayerLiveDataProvider.currentSong.value
+//                if (isPlaying &&
+//                    (
+//                        playingSong?.id == song.id && playingSong.url == null ||
+//                            playingSong?.url != null && playingSong.url == song.url
+//                        )
+//                ) {
+//                    Glide.with(binding.playingIndicator)
+//                        .load(R.drawable.pause)
+//                        .into(binding.playingIndicator)
+//                } else if (!isPlaying) {
+//                    Glide.with(binding.playingIndicator)
+//                        .load(R.drawable.play)
+//                        .into(binding.playingIndicator)
+//                } else {
+//                    Glide.with(binding.playingIndicator)
+//                        .load(R.drawable.play)
+//                        .into(binding.playingIndicator)
+//                }
+//            }
+//            PlayerLiveDataProvider.isPlaying.observe(context, isPlayingObserver)
             when {
                 song.art != null -> {
                     binding.songIcon.setImageBitmap(song.art)
@@ -128,8 +120,7 @@ open class SongListAdapter(
             }
             binding.duration.text = song.duration?.let { TimeConverter().durationToString(it) }
             binding.songListItem.setOnClickListener {
-                callback()
-                PlayerLiveDataProvider.currentSong.value = song
+                callback(playlist, song)
             }
             decorateItem(
                 binding,

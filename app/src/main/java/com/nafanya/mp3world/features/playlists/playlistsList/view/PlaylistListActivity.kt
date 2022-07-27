@@ -11,8 +11,8 @@ import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.view.ActivityCreator
 import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import com.nafanya.mp3world.features.playlists.playlistsList.viewModel.PlaylistListViewModel
+import com.nafanya.player.Playlist
 import javax.inject.Inject
 
 class PlaylistListActivity : RecyclerHolderActivity() {

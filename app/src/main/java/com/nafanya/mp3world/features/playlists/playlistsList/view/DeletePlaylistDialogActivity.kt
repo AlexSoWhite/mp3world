@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.databinding.DeletePlaylistDialogBinding
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import com.nafanya.mp3world.features.playlists.playlistsList.viewModel.PlaylistListViewModel
+import com.nafanya.player.Playlist
 
 class DeletePlaylistDialogActivity : AppCompatActivity() {
 

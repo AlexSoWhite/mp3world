@@ -8,9 +8,11 @@ import com.nafanya.mp3world.features.albums.di.AlbumComponentProvider
 import com.nafanya.mp3world.features.artists.di.ArtistsComponentProvider
 import com.nafanya.mp3world.features.downloading.di.DownloadModule
 import com.nafanya.mp3world.features.favorites.di.FavouritesComponentProvider
+import com.nafanya.mp3world.features.foregroundService.di.ForegroundServiceComponentProvider
 import com.nafanya.mp3world.features.localStorage.di.DatabaseModule
-import com.nafanya.mp3world.features.player.di.FullScreenPlayerComponentProvider
+import com.nafanya.mp3world.features.playerView.di.PlayerViewComponentProvider
 import com.nafanya.mp3world.features.playlists.playlist.di.PlaylistComponentProvider
+import com.nafanya.mp3world.features.playlists.playlist.di.PlaylistModule
 import com.nafanya.mp3world.features.playlists.playlistsList.di.PlaylistListComponentProvider
 import com.nafanya.mp3world.features.remoteSongs.di.RemoteSongsModule
 import com.nafanya.mp3world.features.searching.di.SearchSongsComponentProvider
@@ -24,7 +26,9 @@ import javax.inject.Singleton
         DatabaseModule::class,
         RemoteSongsModule::class,
         SourceModule::class,
-        DownloadModule::class
+        DownloadModule::class,
+        PlaylistModule::class,
+        PlayerModule::class
     ]
 )
 @Singleton
@@ -35,8 +39,9 @@ interface ApplicationComponent :
     FavouritesComponentProvider,
     PlaylistComponentProvider,
     PlaylistListComponentProvider,
-    FullScreenPlayerComponentProvider,
-    SearchSongsComponentProvider {
+    PlayerViewComponentProvider,
+    SearchSongsComponentProvider,
+    ForegroundServiceComponentProvider {
 
     fun context(): Context
 

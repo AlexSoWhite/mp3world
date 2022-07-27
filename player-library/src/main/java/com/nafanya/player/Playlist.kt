@@ -1,7 +1,6 @@
-package com.nafanya.mp3world.features.playlists.playlist
+package com.nafanya.player
 
 import android.graphics.Bitmap
-import com.nafanya.mp3world.core.domain.Song
 
 /**
  * Class that wraps playlist.
@@ -10,7 +9,7 @@ import com.nafanya.mp3world.core.domain.Song
 data class Playlist(
     var songList: MutableList<Song>,
     val id: Int = 0,
-    var name: String = "Мои песни",
+    var name: String,
     var image: Bitmap? = null
 ) {
     override fun equals(other: Any?): Boolean {
@@ -23,13 +22,5 @@ data class Playlist(
         result = 31 * result + id
         result = 31 * result + name.hashCode()
         return result
-    }
-
-    fun toStorageEntity(): PlaylistStorageEntity {
-        val songIds = mutableListOf<Long>()
-        songList.forEach {
-            songIds.add(it.id)
-        }
-        return PlaylistStorageEntity(songIds, id, name)
     }
 }

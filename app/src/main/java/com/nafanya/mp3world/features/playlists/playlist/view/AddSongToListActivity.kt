@@ -3,19 +3,17 @@ package com.nafanya.mp3world.features.playlists.playlist.view
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.features.allSongs.SongListAdapter
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import com.nafanya.mp3world.features.playlists.playlist.viewModel.AddSongToListViewModel
+import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 import javax.inject.Inject
 
 class AddSongToListActivity : RecyclerHolderActivity() {
@@ -31,10 +29,9 @@ class AddSongToListActivity : RecyclerHolderActivity() {
         val observer = Observer<Playlist> {
             binding.recycler.adapter = AddToPlaylistAdapter(
                 viewModel as AddSongToListViewModel,
-                it.songList,
-                this
-            ) {
-                PlayerLiveDataProvider.currentPlaylist.value = it
+                it
+            ) { playlist, song ->
+                viewModel.onClick(playlist, song)
             }
         }
         (viewModel as AddSongToListViewModel).playlist.observe(this, observer)
@@ -47,10 +44,9 @@ class AddSongToListActivity : RecyclerHolderActivity() {
 
     class AddToPlaylistAdapter(
         private val viewModel: AddSongToListViewModel,
-        list: MutableList<Song>,
-        context: LifecycleOwner,
-        callback: () -> Unit
-    ) : SongListAdapter(list, context, null, callback) {
+        playlist: Playlist,
+        callback: (Playlist, Song) -> Unit
+    ) : SongListAdapter(playlist, null, callback) {
 
         override fun decorateItem(binding: SongListItemBinding, song: Song) {
             var isAdded = viewModel.isAdded(song)

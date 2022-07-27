@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
-import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.features.albums.Album
 import com.nafanya.mp3world.features.albums.AlbumListManager
 import com.nafanya.mp3world.features.allSongs.SongListManager
@@ -108,7 +107,7 @@ class MediaStoreReader private constructor(builder: Builder) {
                     // set the song art
                     val bitmap = getBitmap(context.contentResolver, thisId)
                     // build song object
-                    val song = Song(
+                    val song = com.nafanya.player.Song(
                         id = thisId,
                         title = thisTitle,
                         artist = thisArtist,

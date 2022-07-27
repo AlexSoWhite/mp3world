@@ -1,35 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/full_screen_player_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true"
-    android:paddingHorizontal="20dp">
+    android:focusable="true">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/control_song_icon"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="50dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/controls_fullscreen_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.nafanya.mp3world.features.playerView.view.FullscreenControlsFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/default_placeholder"
-        android:transitionName="@string/player_transition"/>
-
-    <com.google.android.exoplayer2.ui.StyledPlayerControlView
-        android:layout_marginTop="20dp"
-        android:id="@+id/player_control_fullscreen_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/control_song_icon"
-        app:controller_layout_id="@layout/player_control_view_fullscreen" />
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

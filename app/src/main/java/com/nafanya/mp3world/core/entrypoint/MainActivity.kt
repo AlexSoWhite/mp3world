@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -15,7 +14,6 @@ import androidx.lifecycle.Observer
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.view.ActivityCreator
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.databinding.ActivityMainBinding
@@ -26,17 +24,15 @@ import com.nafanya.mp3world.features.artists.Artist
 import com.nafanya.mp3world.features.artists.ArtistListManager
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.foregroundService.ForegroundService
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
 import com.nafanya.mp3world.features.foregroundService.ServiceInitializer
-import com.nafanya.mp3world.features.player.view.GenericPlayerControlView
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
+import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var playerView: GenericPlayerControlView? = null
 
     @Inject
     lateinit var factory: ViewModelFactory
@@ -72,28 +68,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.initializeLists()
         PRDownloader.initialize(applicationContext)
         initInitializer()
-        subscribeToPlayerState()
         initMainMenu()
     }
 
     private fun initInitializer() {
         val intent = Intent(applicationContext, ServiceInitializer::class.java)
         startService(intent)
-    }
-
-    private fun subscribeToPlayerState() {
-        // observe player state
-        val observerPlayer = Observer<Boolean> {
-            if (it) {
-                playerView = GenericPlayerControlView(this, R.id.player_control_view)
-                playerView!!.setSongObserver()
-                playerView!!.playerControlView.visibility = View.VISIBLE
-            }
-        }
-        PlayerLiveDataProvider.isPlayerInitialized.observe(
-            this,
-            observerPlayer
-        )
     }
 
     @Suppress("LongMethod")

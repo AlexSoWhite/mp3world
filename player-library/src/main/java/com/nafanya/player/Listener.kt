@@ -1,14 +1,16 @@
-package com.nafanya.mp3world.features.foregroundService
+package com.nafanya.player
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
-import com.nafanya.mp3world.core.domain.Song
-import com.nafanya.mp3world.features.allSongs.SongListManager
 
 /**
  TODO: statistic
  */
-class Listener : Player.Listener {
+internal class Listener(
+    private val playerInteractor: PlayerInteractor
+) : Player.Listener {
 
     // statistic
 //    private var startPlayingSongTime: Date? = null
@@ -21,6 +23,18 @@ class Listener : Player.Listener {
 //        private const val addingSongToStatisticEntityThreshold = 5000
 //    }
 
+    private val _currentSong: MutableLiveData<Song> by lazy {
+        MutableLiveData<Song>()
+    }
+    internal val currentSong: LiveData<Song>
+        get() = _currentSong
+
+    private val _isPlaying: MutableLiveData<Boolean> by lazy {
+        MutableLiveData(false)
+    }
+    internal val isPlaying: LiveData<Boolean>
+        get() = _isPlaying
+
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         super.onMediaItemTransition(mediaItem, reason)
         mediaItem?.let {
@@ -29,6 +43,15 @@ class Listener : Player.Listener {
             } else {
                 postLocalSong(it)
             }
+        }
+    }
+
+    /**
+     * search song in current playlist to save image
+     */
+    private fun postLocalSong(mediaItem: MediaItem) {
+        _currentSong.value = playerInteractor.currentPlaylist.value?.songList?.first {
+            it.id == mediaItem.mediaMetadata.extras!!.getLong("id")
         }
     }
 
@@ -42,21 +65,11 @@ class Listener : Player.Listener {
             duration = it.mediaMetadata.extras!!.getLong("duration"),
             artUrl = it.mediaMetadata.extras!!.getString("artUrl")
         )
-        PlayerLiveDataProvider.currentSong.value = song
-    }
-
-    private fun postLocalSong(it: MediaItem) {
-        SongListManager.songList.value?.forEach { elem ->
-            if (elem.id == it.mediaMetadata.extras!!.getLong("id")) {
-                PlayerLiveDataProvider.currentSong.value = elem
-                // logStatistic()
-                // previousSong = elem
-            }
-        }
+        _currentSong.value = song
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
-        PlayerLiveDataProvider.isPlaying.value = isPlaying
+        _isPlaying.value = isPlaying
 //        if (!isPlaying) {
 //            playingTime = Date().time - startPlayingSongTime!!.time
 //            startPlayingSongTime?.time = 0

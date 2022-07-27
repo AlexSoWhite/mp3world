@@ -1,12 +1,13 @@
 package com.nafanya.mp3world.features.searching.viewModel
 
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.core.domain.Song
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
 import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import com.nafanya.mp3world.features.remoteSongs.QueryExecutor
+import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 import javax.inject.Inject
 
 /**
@@ -14,8 +15,9 @@ import javax.inject.Inject
  */
 class SearchSongListViewModel @Inject constructor(
     private val initializingQuery: String,
-    private val queryExecutor: QueryExecutor
-) : ListViewModelInterface() {
+    private val queryExecutor: QueryExecutor,
+    playerInteractor: PlayerInteractor
+) : ListViewModelInterface(playerInteractor) {
 
     val playlist: MutableLiveData<Playlist> by lazy {
         MutableLiveData<Playlist>()

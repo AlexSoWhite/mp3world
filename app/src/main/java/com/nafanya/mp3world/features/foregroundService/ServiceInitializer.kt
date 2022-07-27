@@ -5,9 +5,12 @@ import android.os.IBinder
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
-import com.nafanya.mp3world.core.domain.Song
+import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
+import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.Playlist
+import com.nafanya.player.Song
+import javax.inject.Inject
 
 /**
  * Service that is responsible for starting foreground player service.
@@ -18,6 +21,9 @@ import com.nafanya.mp3world.features.playlists.playlist.Playlist
  */
 class ServiceInitializer : LifecycleService() {
 
+    @Inject
+    lateinit var playerInteractor: PlayerInteractor
+
     private var isServiceInitialized = false
 
     private fun initService() {
@@ -27,27 +33,32 @@ class ServiceInitializer : LifecycleService() {
     }
 
     override fun onCreate() {
+        (application as PlayerApplication)
+            .applicationComponent
+            .foregroundServiceComponent()
+            .inject(this)
         super.onCreate()
         val observerLocal = Observer<MutableList<Song>> {
             if (!isServiceInitialized && it.isNotEmpty()) {
-                PlayerLiveDataProvider.currentPlaylist.value =
+                playerInteractor.setPlaylist(
                     Playlist(
                         songList = it,
                         id = -1,
                         name = "Мои песни"
                     )
+                )
                 initService()
                 isServiceInitialized = true
             }
         }
         SongListManager.songList.observe(this, observerLocal)
-        val observerRemote = Observer<Playlist> {
+        val observerRemote = Observer<Playlist?> {
             if (!isServiceInitialized && it.songList.isNotEmpty()) {
                 initService()
                 isServiceInitialized = true
             }
         }
-        PlayerLiveDataProvider.currentPlaylist.observe(this, observerRemote)
+        playerInteractor.currentPlaylist.observe(this, observerRemote)
     }
 
     override fun onBind(p0: Intent): IBinder? {

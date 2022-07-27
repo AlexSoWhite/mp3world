@@ -9,8 +9,6 @@ import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.features.allSongs.SongListAdapter
 import com.nafanya.mp3world.features.allSongs.SongListViewModel
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import javax.inject.Inject
 
 class FavouriteListActivity : RecyclerHolderActivity() {
@@ -23,12 +21,11 @@ class FavouriteListActivity : RecyclerHolderActivity() {
     }
 
     override fun setAdapter() {
-        val observer = Observer<Playlist> {
-            binding.recycler.adapter = SongListAdapter(it.songList, this) {
-                PlayerLiveDataProvider.currentPlaylist.value = it
+        (viewModel as SongListViewModel).playlist.observe(this) {
+            binding.recycler.adapter = SongListAdapter(it, null) { playlist, song ->
+                viewModel.onClick(playlist, song)
             }
         }
-        (viewModel as SongListViewModel).playlist.observe(this, observer)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

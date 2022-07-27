@@ -2,14 +2,11 @@ package com.nafanya.mp3world.features.searching.view
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.features.allSongs.SongListAdapter
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
-import com.nafanya.mp3world.features.foregroundService.PlayerLiveDataProvider
-import com.nafanya.mp3world.features.playlists.playlist.Playlist
 import com.nafanya.mp3world.features.searching.viewModel.SearchSongListViewModel
 import javax.inject.Inject
 
@@ -25,16 +22,14 @@ class SearchSongListActivity : RecyclerHolderActivity() {
     }
 
     override fun setAdapter() {
-        val observer = Observer<Playlist> {
+        (viewModel as SearchSongListViewModel).playlist.observe(this) {
             binding.recycler.adapter = SongListAdapter(
-                it.songList,
-                this,
-                downloadViewModel
-            ) {
-                PlayerLiveDataProvider.currentPlaylist.value = it
+                it,
+                null
+            ) { playlist, song ->
+                viewModel.onClick(playlist, song)
             }
         }
-        (viewModel as SearchSongListViewModel).playlist.observe(this, observer)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
