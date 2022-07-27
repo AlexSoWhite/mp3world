@@ -43,7 +43,7 @@ open class SongListAdapter(
         song: Song
     ) {
         if (song.url != null) {
-            binding.action.visibility = View.VISIBLE
+            // binding.action.visibility = View.VISIBLE
             // TODO move to viewModel
 //            binding.action.setOnClickListener {
 //                Toast.makeText(
@@ -66,7 +66,7 @@ open class SongListAdapter(
 //                    }
 //                }
 //            }
-            Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
+           // Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
         } else {
             binding.action.visibility = View.GONE
         }
