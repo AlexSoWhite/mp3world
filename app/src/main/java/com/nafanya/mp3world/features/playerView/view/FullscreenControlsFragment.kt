@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
@@ -48,6 +47,7 @@ class FullscreenControlsFragment : Fragment() {
     lateinit var playerInteractor: PlayerInteractor
 
     private lateinit var controlsFullScreen: StyledPlayerControlView
+    private lateinit var controls: MutableSet<View>
 
     override fun onAttach(context: Context) {
         (requireActivity().application as PlayerApplication)
@@ -87,7 +87,25 @@ class FullscreenControlsFragment : Fragment() {
         val alphaAnimation = AlphaAnimation(0.0f, 1.0f)
         alphaAnimation.duration = alphaDuration
         alphaAnimation.startOffset = startOffset
-        requireActivity().findViewById<ConstraintLayout>(R.id.controls_wrapper).startAnimation(alphaAnimation)
+        with(requireActivity()) {
+            controls.addAll(
+                listOf(
+                    findViewById<ShapeableImageView>(R.id.exo_play_pause),
+                    findViewById<ShapeableImageView>(R.id.exo_prev),
+                    findViewById<ShapeableImageView>(R.id.exo_next),
+                    findViewById<ShapeableImageView>(R.id.exo_repeat_toggle),
+                    findViewById<ShapeableImageView>(R.id.current_playlist),
+                    findViewById<ShapeableImageView>(R.id.favourite_button),
+                    findViewById<ShapeableImageView>(R.id.exo_shuffle),
+                    findViewById<DefaultTimeBar>(R.id.exo_progress),
+                    findViewById<TextView>(R.id.control_fullscreen_track_title),
+                    findViewById<TextView>(R.id.control_fullscreen_track_artist),
+                    findViewById<TextView>(R.id.duration),
+                    findViewById<TextView>(R.id.time)
+                )
+            )
+            findViewById<ConstraintLayout>(R.id.controls_wrapper).startAnimation(alphaAnimation)
+        }
     }
 
     private fun renderSong(song: Song) {
@@ -114,7 +132,7 @@ class FullscreenControlsFragment : Fragment() {
                 }
                 song.artUrl != null -> {
                     Glide.with(songIcon).load(song.artUrl).into(songIcon)
-                    findViewById<FragmentContainerView>(R.id.controls_fullscreen).setBackgroundColor(
+                    requireActivity().findViewById<ConstraintLayout>(R.id.root).setBackgroundColor(
                         Color.parseColor(defaultBackgroundColor)
                     )
                 }
@@ -196,18 +214,6 @@ class FullscreenControlsFragment : Fragment() {
                 previousColor = averageColor
                 isColorInitialized = true
                 val root = findViewById<ConstraintLayout>(R.id.root)
-                val playPauseButton = findViewById<ShapeableImageView>(R.id.exo_play_pause)
-                val prevButton = findViewById<ShapeableImageView>(R.id.exo_prev)
-                val nextButton = findViewById<ShapeableImageView>(R.id.exo_next)
-                val repeatButton = findViewById<ShapeableImageView>(R.id.exo_repeat_toggle)
-                val playlistButton = findViewById<ShapeableImageView>(R.id.current_playlist)
-                val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite_button)
-                val shuffleButton = findViewById<ShapeableImageView>(R.id.exo_shuffle)
-                val progressBar = findViewById<DefaultTimeBar>(R.id.exo_progress)
-                val title = findViewById<TextView>(R.id.control_fullscreen_track_title)
-                val artist = findViewById<TextView>(R.id.control_fullscreen_track_artist)
-                val duration = findViewById<TextView>(R.id.duration)
-                val time = findViewById<TextView>(R.id.time)
                 val colorAnimation =
                     ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, averageColor)
                 colorAnimation.duration = backgroundDuration
@@ -223,18 +229,13 @@ class FullscreenControlsFragment : Fragment() {
                         Color.valueOf(controlsRed, controlsGreen, controlsBlue).toArgb()
                     val backgroundColor = it.animatedValue as Int
                     root.setBackgroundColor(backgroundColor)
-                    playPauseButton.setColorFilter(controlsColor)
-                    prevButton.setColorFilter(controlsColor)
-                    nextButton.setColorFilter(controlsColor)
-                    repeatButton.setColorFilter(controlsColor)
-                    playlistButton.setColorFilter(controlsColor)
-                    favouriteButton.setColorFilter(controlsColor)
-                    shuffleButton.setColorFilter(controlsColor)
-                    progressBar.setScrubberColor(controlsColor)
-                    title.setTextColor(controlsColor)
-                    artist.setTextColor(controlsColor)
-                    duration.setTextColor(controlsColor)
-                    time.setTextColor(controlsColor)
+                    controls.forEach { view ->
+                        when (view) {
+                            is ShapeableImageView -> view.setColorFilter(controlsColor)
+                            is DefaultTimeBar -> view.setScrubberColor(controlsColor)
+                            is TextView -> view.setTextColor(controlsColor)
+                        }
+                    }
                 }
                 colorAnimation.start()
             } else {
