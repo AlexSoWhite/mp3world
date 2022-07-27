@@ -14,7 +14,7 @@ import com.nafanya.player.Song
 
 /**
  * TODO: change to list adapter and separate logic
-  */
+ */
 open class SongListAdapter(
     private val playlist: Playlist,
     private val downloadViewModel: DownloadViewModel? = null,
@@ -66,7 +66,7 @@ open class SongListAdapter(
 //                    }
 //                }
 //            }
-           // Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
+            // Glide.with(binding.songListItem).load(R.drawable.download_icon).into(binding.action)
         } else {
             binding.action.visibility = View.GONE
         }
