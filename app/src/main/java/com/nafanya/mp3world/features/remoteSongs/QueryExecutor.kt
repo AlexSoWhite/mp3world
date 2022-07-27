@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.features.remoteSongs
 
-import com.nafanya.player.Song
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.features.allSongs.SongListManager
+import com.nafanya.player.Song
 import java.io.IOException
 import javax.inject.Inject
 import okhttp3.Call
@@ -24,7 +24,7 @@ class QueryExecutor @Inject constructor(
 
     private val prefix = "https://ru.hitmotop.com/search?q="
 
-    fun preLoad(query: String, callback: (List<com.nafanya.player.Song>?) -> Unit?) {
+    fun preLoad(query: String, callback: (List<Song>?) -> Unit?) {
         val url = prefix + query
         val request = Request.Builder()
             .url(url)
@@ -62,7 +62,7 @@ class QueryExecutor @Inject constructor(
                                 .attr("href")
                                 .toString()
                             songList.add(
-                                com.nafanya.player.Song(
+                                Song(
                                     id = SongListManager.urlBasedCount++,
                                     title = title,
                                     artist = artist,

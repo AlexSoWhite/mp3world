@@ -6,10 +6,10 @@ import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.player.Song
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.player.PlayerInteractor
 import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 import javax.inject.Inject
 
 /**
@@ -33,7 +33,10 @@ class ServiceInitializer : LifecycleService() {
     }
 
     override fun onCreate() {
-        (application as PlayerApplication).applicationComponent.foregroundServiceComponent().inject(this)
+        (application as PlayerApplication)
+            .applicationComponent
+            .foregroundServiceComponent()
+            .inject(this)
         super.onCreate()
         val observerLocal = Observer<MutableList<Song>> {
             if (!isServiceInitialized && it.isNotEmpty()) {

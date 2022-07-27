@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.player.Song
 import com.nafanya.mp3world.core.view.ActivityCreator
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.databinding.ActivityMainBinding
@@ -28,6 +27,7 @@ import com.nafanya.mp3world.features.foregroundService.ForegroundService
 import com.nafanya.mp3world.features.foregroundService.ServiceInitializer
 import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
 import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {

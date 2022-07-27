@@ -11,8 +11,8 @@ import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.view.ActivityCreator
 import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.player.Playlist
 import com.nafanya.mp3world.features.playlists.playlistsList.viewModel.PlaylistListViewModel
+import com.nafanya.player.Playlist
 import javax.inject.Inject
 
 class PlaylistListActivity : RecyclerHolderActivity() {
@@ -25,7 +25,7 @@ class PlaylistListActivity : RecyclerHolderActivity() {
     }
 
     override fun setAdapter() {
-        val observer = Observer<MutableList<com.nafanya.player.Playlist>> {
+        val observer = Observer<MutableList<Playlist>> {
             binding.recycler.adapter = PlaylistListAdapter(
                 it
             ) { playlist, clickType ->

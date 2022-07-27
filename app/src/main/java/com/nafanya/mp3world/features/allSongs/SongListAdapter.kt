@@ -1,23 +1,20 @@
 package com.nafanya.mp3world.features.allSongs
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
-import com.nafanya.player.Song
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.databinding.SongListItemBinding
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
-import com.nafanya.mp3world.features.downloading.ResultType
 import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 
-// TODO: change to list adapter and separate logic
+/**
+ * TODO: change to list adapter and separate logic
+  */
 open class SongListAdapter(
     private val playlist: Playlist,
     private val downloadViewModel: DownloadViewModel? = null,

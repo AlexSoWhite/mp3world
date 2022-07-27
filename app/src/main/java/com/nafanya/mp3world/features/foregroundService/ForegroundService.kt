@@ -32,7 +32,9 @@ class ForegroundService : LifecycleService() {
         get() = playerInteractor.player
 
     override fun onCreate() {
-        (application as PlayerApplication).applicationComponent.foregroundServiceComponent().inject(this)
+        (application as PlayerApplication).applicationComponent
+            .foregroundServiceComponent()
+            .inject(this)
         super.onCreate()
         playerNotificationManager = PlayerNotificationManager
             .Builder(this, 1, "playback_channel")
@@ -46,7 +48,6 @@ class ForegroundService : LifecycleService() {
         playerNotificationManager.setUseNextActionInCompactView(true)
         playerNotificationManager.setUsePreviousActionInCompactView(true)
         playerNotificationManager.setPlayer(player)
-
     }
 
     /**
@@ -60,14 +61,24 @@ class ForegroundService : LifecycleService() {
          * Song title.
          */
         override fun getCurrentContentTitle(player: Player): CharSequence {
-            return playerInteractor!!.currentPlaylist.value?.songList?.get(player.currentMediaItemIndex)?.title as CharSequence
+            return playerInteractor
+                .currentPlaylist
+                .value
+                ?.songList
+                ?.get(player.currentMediaItemIndex)
+                ?.title as CharSequence
         }
 
         /**
          * Song artist.
          */
         override fun getCurrentContentText(player: Player): CharSequence {
-            return playerInteractor!!.currentPlaylist.value?.songList?.get(player.currentMediaItemIndex)?.artist as CharSequence
+            return playerInteractor
+                .currentPlaylist
+                .value
+                ?.songList
+                ?.get(player.currentMediaItemIndex)
+                ?.artist as CharSequence
         }
 
         /**

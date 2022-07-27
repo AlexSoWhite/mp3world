@@ -18,7 +18,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.util.RepeatModeUtil
@@ -75,17 +74,22 @@ class FullscreenControlsFragment : Fragment() {
         controlsFullScreen.player = playerInteractor.player
         controlsFullScreen.repeatToggleModes =
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
-                RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
-                RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
+            RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
+            RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
         playerInteractor.isPlayerInitialised.observe(viewLifecycleOwner) {
             if (it) {
                 playerInteractor.currentSong.observe(viewLifecycleOwner) { song ->
                     renderSong(song)
                 }
-                requireActivity().findViewById<ShapeableImageView>(R.id.current_playlist).setOnClickListener {
-                    val intent = Intent(requireActivity(), CurrentPlaylistDialogActivity::class.java)
-                    startActivity(intent)
-                }
+                requireActivity()
+                    .findViewById<ShapeableImageView>(R.id.current_playlist)
+                    .setOnClickListener {
+                        val intent = Intent(
+                            requireActivity(),
+                            CurrentPlaylistDialogActivity::class.java
+                        )
+                        startActivity(intent)
+                    }
                 controlsFullScreen.showShuffleButton = true
             }
         }
@@ -114,6 +118,7 @@ class FullscreenControlsFragment : Fragment() {
         }
     }
 
+    @Suppress("LongMethod", "NestedBlockDepth")
     private fun renderSong(song: Song) {
         requireActivity().findViewById<TextView>(
             R.id.control_fullscreen_track_title
@@ -130,7 +135,8 @@ class FullscreenControlsFragment : Fragment() {
             controlsFullScreen.setProgressUpdateListener { position, _ ->
                 timeView.text = timeConverter.durationToString(position)
             }
-            val songIcon = requireActivity().findViewById<ShapeableImageView>(R.id.control_song_icon)
+            val songIcon = requireActivity()
+                .findViewById<ShapeableImageView>(R.id.control_song_icon)
             when {
                 song.art != null -> {
                     songIcon.setImageBitmap(song.art)
