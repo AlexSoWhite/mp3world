@@ -18,7 +18,7 @@ open class SongListViewModel @Inject constructor(
 ) : ListViewModelInterface(playerInteractor) {
 
     val playlist: MutableLiveData<Playlist> by lazy {
-        MutableLiveData<Playlist>()
+        MutableLiveData<Playlist>(initializingPlaylist)
     }
     private var isInitialized = false
     private var query = ""

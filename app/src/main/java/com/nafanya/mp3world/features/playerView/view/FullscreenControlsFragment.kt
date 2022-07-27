@@ -24,6 +24,7 @@ import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
+import com.nafanya.mp3world.core.source.SourceProvider
 import com.nafanya.mp3world.core.utils.ColorExtractor
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
@@ -84,6 +85,7 @@ class FullscreenControlsFragment : Fragment() {
                 requireActivity()
                     .findViewById<ShapeableImageView>(R.id.current_playlist)
                     .setOnClickListener {
+                        SourceProvider.putPlaylist(playerInteractor.currentPlaylist.value!!)
                         val intent = Intent(
                             requireActivity(),
                             CurrentPlaylistDialogActivity::class.java

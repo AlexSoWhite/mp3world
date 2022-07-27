@@ -10,7 +10,7 @@ import dagger.Provides
 class SourceModule {
 
     @Provides
-    fun providePlaylist(): com.nafanya.player.Playlist {
+    fun providePlaylist(): Playlist {
         return SourceProvider.takePlaylist()!!
     }
 
