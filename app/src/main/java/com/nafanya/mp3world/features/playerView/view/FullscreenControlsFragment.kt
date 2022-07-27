@@ -47,7 +47,7 @@ class FullscreenControlsFragment : Fragment() {
     lateinit var playerInteractor: PlayerInteractor
 
     private lateinit var controlsFullScreen: StyledPlayerControlView
-    private lateinit var controls: MutableSet<View>
+    private val controls = mutableListOf<View>()
 
     override fun onAttach(context: Context) {
         (requireActivity().application as PlayerApplication)
