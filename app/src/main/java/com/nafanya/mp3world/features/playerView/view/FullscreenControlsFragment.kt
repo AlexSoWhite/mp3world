@@ -18,8 +18,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
+import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
@@ -71,6 +73,10 @@ class FullscreenControlsFragment : Fragment() {
         controlsFullScreen = requireActivity().findViewById(R.id.controls_fullscreen)
         controlsFullScreen.showTimeoutMs = 0
         controlsFullScreen.player = playerInteractor.player
+        controlsFullScreen.repeatToggleModes =
+            RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
+                RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
+                RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
         playerInteractor.isPlayerInitialised.observe(viewLifecycleOwner) {
             if (it) {
                 playerInteractor.currentSong.observe(viewLifecycleOwner) { song ->
