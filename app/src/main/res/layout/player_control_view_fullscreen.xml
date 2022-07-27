@@ -5,17 +5,32 @@
             name="song"
             type="com.nafanya.player.Song" />
     </data>
-<com.google.android.exoplayer2.ui.StyledPlayerControlView
-    android:id="@+id/controls_fullscreen"
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="10dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/control_song_icon"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/default_placeholder"
+        android:transitionName="@string/player_transition"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/controls_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/control_song_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <FrameLayout
             android:id="@+id/support_buttons_wrapper"
@@ -23,24 +38,24 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/progress_wrapper"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="15dp">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_marginStart="10dp"
-            android:id="@+id/exo_shuffle"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            tools:src="@drawable/done"
-            android:layout_gravity="start"/>
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_marginStart="10dp"
+                android:id="@+id/exo_shuffle"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                tools:src="@drawable/done"
+                android:layout_gravity="start"/>
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_marginEnd="10dp"
-            android:id="@+id/favourite_button"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            tools:src="@drawable/done"
-            android:layout_gravity="end"/>
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_marginEnd="10dp"
+                android:id="@+id/favourite_button"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                tools:src="@drawable/done"
+                android:layout_gravity="end"/>
 
         </FrameLayout>
 
@@ -136,7 +151,7 @@
             android:src="@drawable/playlist_play"/>
 
         <TextView
-            android:id="@+id/track_title"
+            android:id="@+id/control_fullscreen_track_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -144,7 +159,7 @@
             android:layout_marginHorizontal="20dp"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/track_artist"
+            app:layout_constraintBottom_toTopOf="@id/control_fullscreen_track_artist"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/controls"
@@ -153,16 +168,16 @@
             tools:text="название" />
 
         <TextView
-            android:id="@+id/track_artist"
+            android:id="@+id/control_fullscreen_track_artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@{song.artist}'
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/track_title"
+            app:layout_constraintTop_toBottomOf="@id/control_fullscreen_track_title"
             android:gravity="center_horizontal"
             tools:text="исполнитель" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.exoplayer2.ui.StyledPlayerControlView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

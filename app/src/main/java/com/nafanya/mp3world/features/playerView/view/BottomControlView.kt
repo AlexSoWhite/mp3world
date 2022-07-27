@@ -91,7 +91,7 @@ class BottomControlView : Fragment() {
         val intent = Intent(activity, FullScreenPlayerActivity::class.java)
         ContextCompat.startActivity(requireContext(), intent, bundle)
         // TODO for what purpose
-        setSongIcon()
+        //setSongIcon()
     }
 
     private fun setSongIcon() {
