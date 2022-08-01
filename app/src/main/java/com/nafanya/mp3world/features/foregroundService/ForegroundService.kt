@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.os.IBinder
 import androidx.lifecycle.LifecycleService
-import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_DEFAULT
@@ -28,7 +27,7 @@ class ForegroundService : LifecycleService() {
 
     @Inject
     lateinit var playerInteractor: PlayerInteractor
-    private val player: ExoPlayer?
+    private val player: Player?
         get() = playerInteractor.player
 
     override fun onCreate() {

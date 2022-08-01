@@ -20,7 +20,7 @@ internal class PlaylistPlayer(context: Context) {
     /**
      * player itself
      */
-    internal var player: ExoPlayer? = null
+    internal var player: SmoothlyPausablePlayer? = null
 
     /**
      * sets to true when first mediaItem is loaded
@@ -30,15 +30,17 @@ internal class PlaylistPlayer(context: Context) {
     /**
      * current playlist, to navigate between items in it
      */
-    private val _currentPlaylist: MutableLiveData<Playlist?> = MutableLiveData(null)
-    private val _playlist: Playlist
-        get() = _currentPlaylist.value!!
+    private val mCurrentPlaylist: MutableLiveData<Playlist?> = MutableLiveData(null)
+    private val mPlaylist: Playlist
+        get() = mCurrentPlaylist.value!!
     internal val currentPlaylist: LiveData<Playlist?>
-        get() = _currentPlaylist
+        get() = mCurrentPlaylist
 
     init {
-        player = ExoPlayer.Builder(context).build()
-        player?.apply {
+        player = SmoothlyPausablePlayer(
+            ExoPlayer.Builder(context).build()
+        )
+        player?.exoPlayer?.apply {
             setHandleAudioBecomingNoisy(true)
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
@@ -66,8 +68,8 @@ internal class PlaylistPlayer(context: Context) {
             songList = songList
         )
         player?.clearMediaItems()
-        _currentPlaylist.value = pendingPlaylist
-        _playlist.songList.forEach {
+        mCurrentPlaylist.value = pendingPlaylist
+        mPlaylist.songList.forEach {
             player?.addMediaItem(it.toMediaItem())
         }
         if (isInitialized) {
@@ -83,7 +85,7 @@ internal class PlaylistPlayer(context: Context) {
      * @throws IllegalSeekPositionException if song isn't a member of playlist
      */
     internal fun setSong(song: Song) {
-        val idx = _playlist.songList.indexOf(song)
+        val idx = mPlaylist.songList.indexOf(song)
         try {
             player?.seekToDefaultPosition(idx)
             player?.play()

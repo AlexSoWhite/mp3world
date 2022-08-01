@@ -3,7 +3,7 @@ package com.nafanya.player
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.Player
 
 class PlayerInteractor(
     context: Context
@@ -11,9 +11,9 @@ class PlayerInteractor(
     /**
      * Player itself
      */
-    private var _player: PlaylistPlayer = PlaylistPlayer(context)
-    val player: ExoPlayer?
-        get() = _player.player
+    private var mPlayer: PlaylistPlayer = PlaylistPlayer(context)
+    val player: Player?
+        get() = mPlayer.player
     /**
      * Object that connects player state with its LiveData
      */
@@ -23,27 +23,27 @@ class PlayerInteractor(
     val isPlaying: LiveData<Boolean>
         get() = listener.isPlaying
     val currentPlaylist: LiveData<Playlist?>
-        get() = _player.currentPlaylist
-    private val _isPlayerInitialised: MutableLiveData<Boolean> = MutableLiveData(false)
+        get() = mPlayer.currentPlaylist
+    private val mIsPlayerInitialised: MutableLiveData<Boolean> = MutableLiveData(false)
     val isPlayerInitialised: LiveData<Boolean>
-        get() = _isPlayerInitialised
+        get() = mIsPlayerInitialised
 
     init {
-        _player.addListener(listener)
-        _isPlayerInitialised.value = true
+        mPlayer.addListener(listener)
+        mIsPlayerInitialised.value = true
     }
 
     fun setPlaylist(playlist: Playlist) {
-        _player.setPlaylist(playlist)
+        mPlayer.setPlaylist(playlist)
     }
 
     fun setSong(song: Song) {
-        _player.setSong(song)
+        mPlayer.setSong(song)
     }
 
     fun destroy() {
-        _player.player?.removeListener(listener)
-        _player.destroy()
+        mPlayer.player?.removeListener(listener)
+        mPlayer.destroy()
         listener.destroy()
     }
 }
