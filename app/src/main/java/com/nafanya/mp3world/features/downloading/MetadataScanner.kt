@@ -4,36 +4,46 @@ import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.util.Log
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+
+enum class ScannerResult {
+    SUCCESS,
+    FAILED
+}
+
 /**
  * Class that adds song to MediaStore with all its metadata.
  */
 class MetadataScanner(
-    var context: Context,
-    var path: String,
-    var mediaStoreReader: MediaStoreReader
+    context: Context,
+    private val path: String,
+    private val onCompleteCallback: (ScannerResult) -> Unit
 ) {
 
-    inner class ScannerClient : MediaScannerConnection.MediaScannerConnectionClient {
-        override fun onScanCompleted(p0: String?, p1: Uri?) {
-            p1?.toString()?.let {
-                mediaStoreReader.reset()
-                Log.d("Scan", it)
-            }
-        }
-
-        override fun onMediaScannerConnected() {
-            scan(path)
-        }
+    private val scanner: MediaScannerConnection by lazy {
+        MediaScannerConnection(
+            context,
+            ScannerClient(onCompleteCallback)
+        )
     }
-
-    private var scanner: MediaScannerConnection = MediaScannerConnection(
-        context,
-        ScannerClient()
-    )
 
     init {
         scanner.connect()
+    }
+
+    inner class ScannerClient(
+        private val onCompleteCallback: (ScannerResult) -> Unit
+    ) : MediaScannerConnection.MediaScannerConnectionClient {
+        override fun onScanCompleted(p0: String?, p1: Uri?) {
+            if (p1 != null) {
+                Log.d("Scan", p1.toString())
+                onCompleteCallback(ScannerResult.SUCCESS)
+            } else {
+                onCompleteCallback(ScannerResult.FAILED)
+            }
+        }
+        override fun onMediaScannerConnected() {
+            scan(path)
+        }
     }
 
     private fun scan(path: String) {

@@ -58,11 +58,15 @@ internal class Listener(
     private fun postUrlBasedSong(it: MediaItem) {
         val song = Song(
             id = it.mediaMetadata.extras!!.getLong("id"),
-            title = it.mediaMetadata.extras!!.getString("title"),
-            artist = it.mediaMetadata.extras!!.getString("artist"),
+            title = it.mediaMetadata.extras!!.getString("title") ?: "mp3unknownTitle",
+            artistId = it.mediaMetadata.extras!!.getLong("artistId"),
+            artist = it.mediaMetadata.extras!!.getString("artist") ?: "mp3unknownArtist",
+            albumId = it.mediaMetadata.extras!!.getLong("albumId"),
+            album = it.mediaMetadata.extras!!.getString("album") ?: "mp3UnknownAlbum",
             date = it.mediaMetadata.extras!!.getLong("date"),
             url = it.mediaMetadata.extras!!.getString("url"),
             duration = it.mediaMetadata.extras!!.getLong("duration"),
+            art = null,
             artUrl = it.mediaMetadata.extras!!.getString("artUrl")
         )
         _currentSong.value = song

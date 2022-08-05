@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.IBinder
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.Observer
 import com.nafanya.mp3world.core.di.PlayerApplication
+import com.nafanya.mp3world.core.entrypoint.Initializer
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.player.PlayerInteractor
 import com.nafanya.player.Playlist
@@ -24,6 +24,9 @@ class ServiceInitializer : LifecycleService() {
     @Inject
     lateinit var playerInteractor: PlayerInteractor
 
+    @Inject
+    lateinit var songListManager: SongListManager
+
     private var isServiceInitialized = false
 
     private fun initService() {
@@ -38,11 +41,11 @@ class ServiceInitializer : LifecycleService() {
             .foregroundServiceComponent()
             .inject(this)
         super.onCreate()
-        val observerLocal = Observer<MutableList<Song>> {
+        songListManager.songList.observe(this) {
             if (!isServiceInitialized && it.isNotEmpty()) {
                 playerInteractor.setPlaylist(
                     Playlist(
-                        songList = it,
+                        songList = it as MutableList<Song>,
                         id = -1,
                         name = "Мои песни"
                     )
@@ -51,14 +54,12 @@ class ServiceInitializer : LifecycleService() {
                 isServiceInitialized = true
             }
         }
-        SongListManager.songList.observe(this, observerLocal)
-        val observerRemote = Observer<Playlist?> {
-            if (!isServiceInitialized && it.songList.isNotEmpty()) {
+        playerInteractor.currentPlaylist.observe(this) {
+            if (!isServiceInitialized && it?.songList?.isNotEmpty() == true) {
                 initService()
                 isServiceInitialized = true
             }
         }
-        playerInteractor.currentPlaylist.observe(this, observerRemote)
     }
 
     override fun onBind(p0: Intent): IBinder? {

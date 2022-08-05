@@ -12,29 +12,29 @@ import javax.inject.Inject
  * Class that wraps DataBaseHolder work.
  */
 class LocalStorageProvider @Inject constructor(
-    var dbHolder: DatabaseHolder
+    val dbHolder: DatabaseHolder
 ) {
 
     // playlist section
     /**
-     * adding playlist to the local storage, creates a GlobalScope.launch
+     * adding playlist to the local storage
      */
     suspend fun addPlaylist(playlist: Playlist) {
         dbHolder.db.playlistDao().insert(playlist.toStorageEntity())
     }
 
     /**
-     * updating playlist from the local storage, creates a GlobalScope.launch
+     * updating playlist from the local storage
      */
-    suspend fun updatePlaylist(playlist: Playlist) {
-        val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
+    suspend fun updatePlaylist(playlist: Playlist, playlistListManager: PlaylistListManager) {
+        val index = playlistListManager.playlists.value!!.indexOf(playlist)
         if (index != -1) {
             dbHolder.db.playlistDao().update(playlist.toStorageEntity())
         }
     }
 
     /**
-     * deleting playlist from a local storage, creates a GlobalScope.launch
+     * deleting playlist from a local storage
      */
     suspend fun deletePlaylist(playlist: Playlist) {
         dbHolder.db.playlistDao().delete(playlist.toStorageEntity())
@@ -69,12 +69,4 @@ class LocalStorageProvider @Inject constructor(
 //            dbHolder.closeDataBase()
 //        }
 //    }
-
-    // all list section
-    /**
-     * populating lists
-     */
-    suspend fun populateLists() {
-        dbHolder.populateLists()
-    }
 }

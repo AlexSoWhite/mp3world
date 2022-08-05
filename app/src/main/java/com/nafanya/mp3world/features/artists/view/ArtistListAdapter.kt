@@ -10,7 +10,7 @@ import com.nafanya.mp3world.databinding.ArtistListItemBinding
 import com.nafanya.mp3world.features.artists.Artist
 
 class ArtistListAdapter(
-    private val list: MutableList<Artist>,
+    private val list: List<Artist>,
     private val callback: (artist: Artist) -> Unit
 ) : RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolder>() {
 

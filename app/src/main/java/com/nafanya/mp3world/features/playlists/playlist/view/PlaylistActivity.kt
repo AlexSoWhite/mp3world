@@ -7,6 +7,7 @@ import com.nafanya.mp3world.core.view.ActivityCreator
 import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.features.allSongs.SongListAdapter
+import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.allSongs.SongListViewModel
 import com.nafanya.mp3world.features.playlists.playlist.viewModel.PlaylistViewModel
 import javax.inject.Inject
@@ -16,6 +17,9 @@ class PlaylistActivity : RecyclerHolderActivity() {
 
     @Inject
     lateinit var factory: ViewModelFactory
+
+    @Inject
+    lateinit var songListManager: SongListManager
 
     override fun setViewModel() {
         viewModel = if (
@@ -66,7 +70,10 @@ class PlaylistActivity : RecyclerHolderActivity() {
     private fun startAddSongActivity() {
         ActivityCreator()
             .with(this)
-            .createAddSongToListActivity(viewModel as PlaylistViewModel)
+            .createAddSongToListActivity(
+                viewModel as PlaylistViewModel,
+                songListManager.songList.value
+            )
             .start()
     }
 }

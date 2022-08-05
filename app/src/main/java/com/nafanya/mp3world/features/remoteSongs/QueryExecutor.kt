@@ -63,12 +63,17 @@ class QueryExecutor @Inject constructor(
                                 .toString()
                             songList.add(
                                 Song(
-                                    id = SongListManager.urlBasedCount++,
+                                    id = -1,
                                     title = title,
+                                    artistId = -1,
                                     artist = artist,
                                     duration = duration,
                                     url = downloadUrl,
-                                    artUrl = artUrl
+                                    artUrl = artUrl,
+                                    albumId = -1,
+                                    album = "",
+                                    date = null,
+                                    art = null
                                 )
                             )
                         }

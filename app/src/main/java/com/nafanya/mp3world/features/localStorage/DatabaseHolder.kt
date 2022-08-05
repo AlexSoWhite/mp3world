@@ -166,9 +166,7 @@ class DatabaseHolder @Inject constructor(
         ).build()
     }
 
-    suspend fun populateLists() {
-        PlaylistListManager.initialize(db.playlistDao())
-        FavouriteListManager.initialize(db.favouriteListDao())
+    fun populateLists() {
         StatisticInfoManager.initialize(db.songStatisticDao())
     }
 

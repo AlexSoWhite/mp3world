@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.features.playlists.playlistsList.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
@@ -13,19 +14,20 @@ import kotlinx.coroutines.launch
 
 class PlaylistListViewModel @Inject constructor(
     var localStorageProvider: LocalStorageProvider,
+    private val playlistListManager: PlaylistListManager,
     playerInteractor: PlayerInteractor
 ) : ListViewModelInterface(playerInteractor) {
 
     private var query = ""
 
-    val playlists: MutableLiveData<MutableList<Playlist>> by lazy {
-        MutableLiveData<MutableList<Playlist>>()
-    }
+    private val mPlaylists = MutableLiveData<List<Playlist>>()
+    val playlists: LiveData<List<Playlist>>
+        get() = mPlaylists
 
     fun addEmptyPlaylistWithName(name: String, callback: () -> Unit) {
         viewModelScope.launch {
             var id = 0
-            PlaylistListManager.playlists.value?.forEach {
+            playlistListManager.playlists.value?.forEach {
                 if (id < it.id) {
                     id = it.id
                 }
@@ -37,7 +39,7 @@ class PlaylistListViewModel @Inject constructor(
                 name = name
             )
             // modifying LiveData
-            PlaylistListManager.addPlaylist(playlist)
+            playlistListManager.addPlaylist(playlist)
             // adding playlist to the local storage
             localStorageProvider.addPlaylist(playlist)
             callback()
@@ -47,7 +49,7 @@ class PlaylistListViewModel @Inject constructor(
 
     override fun onLoading() {
         title.value = "Мои плейлисты"
-        playlists.value = PlaylistListManager.playlists.value
+        mPlaylists.value = playlistListManager.playlists.value
         if (playlists.value!!.isEmpty()) {
             pageState.value = PageState.IS_EMPTY
         } else {
@@ -57,9 +59,9 @@ class PlaylistListViewModel @Inject constructor(
 
     override fun onLoaded() {
         if (query != "") {
-            title.value = "$query (${PlaylistListManager.playlists.value?.size})"
+            title.value = "$query (${playlistListManager.playlists.value?.size})"
         } else {
-            title.value = "Мои плейлисты (${PlaylistListManager.playlists.value?.size})"
+            title.value = "Мои плейлисты (${playlistListManager.playlists.value?.size})"
         }
     }
 
@@ -73,14 +75,14 @@ class PlaylistListViewModel @Inject constructor(
 
     fun updatePlaylist(playlist: Playlist) {
         viewModelScope.launch {
-            val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
+            val index = playlistListManager.playlists.value!!.indexOf(playlist)
             if (index != -1) {
                 // modifying LiveData
-                PlaylistListManager.updatePlaylist(playlist)
+                playlistListManager.updatePlaylist(playlist)
                 // modifying playlist in local storage
-                localStorageProvider.updatePlaylist(playlist)
-                playlists.value = PlaylistListManager.playlists.value
-                if (PlaylistListManager.playlists.value!!.isEmpty()) {
+                localStorageProvider.updatePlaylist(playlist, playlistListManager)
+                mPlaylists.value = playlistListManager.playlists.value
+                if (playlistListManager.playlists.value!!.isEmpty()) {
                     pageState.value = PageState.IS_EMPTY
                 } else {
                     pageState.value = PageState.IS_LOADED
@@ -91,10 +93,10 @@ class PlaylistListViewModel @Inject constructor(
 
     fun deletePlaylist(playlist: Playlist) {
         viewModelScope.launch {
-            val index = PlaylistListManager.playlists.value!!.indexOf(playlist)
+            val index = playlistListManager.playlists.value!!.indexOf(playlist)
             if (index != -1) {
                 // modifying LiveData
-                PlaylistListManager.deletePlaylist(playlist)
+                playlistListManager.deletePlaylist(playlist)
                 // modifying playlist in local storage
                 localStorageProvider.deletePlaylist(playlist)
                 pageState.value = PageState.IS_LOADING
@@ -105,14 +107,14 @@ class PlaylistListViewModel @Inject constructor(
     fun search(query: String) {
         val newList = mutableListOf<Playlist>()
         this.query = query
-        PlaylistListManager.playlists.value!!.forEach {
+        playlistListManager.playlists.value!!.forEach {
             if (
                 it.name.lowercase().contains(query.lowercase())
             ) {
                 newList.add(it)
             }
         }
-        playlists.value = newList
+        mPlaylists.value = newList
         if (playlists.value!!.isEmpty()) {
             pageState.value = PageState.IS_EMPTY
         } else {

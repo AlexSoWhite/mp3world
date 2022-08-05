@@ -14,6 +14,7 @@ import javax.inject.Inject
  */
 open class SongListViewModel @Inject constructor(
     private val initializingPlaylist: Playlist,
+    private val songListManager: SongListManager,
     playerInteractor: PlayerInteractor
 ) : ListViewModelInterface(playerInteractor) {
 
@@ -76,7 +77,7 @@ open class SongListViewModel @Inject constructor(
 
     fun search(query: String) {
         val newList = mutableListOf<Song>()
-        newList.addAll(SongListManager.searchForSongs(query))
+        newList.addAll(songListManager.searchForSongs(query))
         this.query = query
         playlist.value = Playlist(
             songList = newList,

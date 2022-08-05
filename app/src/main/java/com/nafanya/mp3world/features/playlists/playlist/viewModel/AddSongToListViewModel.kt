@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.features.playlists.playlist.viewModel
 
+import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.allSongs.SongListViewModel
 import com.nafanya.mp3world.features.playlists.playlist.PlaylistViewModelProvider
 import com.nafanya.player.PlayerInteractor
@@ -9,8 +10,9 @@ import javax.inject.Inject
 
 class AddSongToListViewModel @Inject constructor(
     initializingPlaylist: Playlist,
-    playerInteractor: PlayerInteractor
-) : SongListViewModel(initializingPlaylist, playerInteractor) {
+    playerInteractor: PlayerInteractor,
+    songListManager: SongListManager
+) : SongListViewModel(initializingPlaylist, songListManager, playerInteractor) {
 
     private var passedPlaylist: Playlist
     private var playlistListViewModel = PlaylistViewModelProvider.takePlaylistViewModel()

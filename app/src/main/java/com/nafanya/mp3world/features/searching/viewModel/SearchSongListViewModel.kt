@@ -16,6 +16,7 @@ import javax.inject.Inject
 class SearchSongListViewModel @Inject constructor(
     private val initializingQuery: String,
     private val queryExecutor: QueryExecutor,
+    private val songListManager: SongListManager,
     playerInteractor: PlayerInteractor
 ) : ListViewModelInterface(playerInteractor) {
 
@@ -32,7 +33,7 @@ class SearchSongListViewModel @Inject constructor(
     override fun onLoading() {
         title.postValue(initializingQuery)
         val songList = mutableListOf<Song>()
-        songList.addAll(SongListManager.searchForSongs(initializingQuery))
+        songList.addAll(songListManager.searchForSongs(initializingQuery))
         startLoading(initializingQuery) {
             if ((it == null || it.isEmpty()) && songList.isEmpty()) {
                 pageState.postValue(PageState.IS_EMPTY)

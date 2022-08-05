@@ -24,11 +24,10 @@ import javax.inject.Inject
  */
 @Suppress("TooGenericExceptionCaught")
 class Downloader @Inject constructor(
-    private var context: Context
+    private val context: Context
 ) {
 
     private val builder = NotificationCompat.Builder(context, "download")
-    private val mediaStoreReader = MediaStoreReader.Builder().withContext(context).build()
     private val notificationManager =
         getSystemService(context, NotificationManager::class.java) as NotificationManager
 
@@ -92,8 +91,12 @@ class Downloader @Inject constructor(
                             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
                                 copyFileToDownloads(fileName)
                             }
-                            MetadataScanner(context, "$DOWNLOAD_DIR/$fileName", mediaStoreReader)
-                            callback(DownloadResult(ResultType.SUCCESS))
+                            MetadataScanner(context, "$DOWNLOAD_DIR/$fileName") {
+                                when (it) {
+                                    ScannerResult.SUCCESS -> callback(DownloadResult(ResultType.SUCCESS))
+                                    ScannerResult.FAILED -> callback(DownloadResult(ResultType.ERROR))
+                                }
+                            }
                         } catch (exception: Exception) {
                             callback(DownloadResult(ResultType.ERROR))
                         }

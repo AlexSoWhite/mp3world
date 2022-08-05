@@ -24,7 +24,7 @@ class ArtistListActivity : RecyclerHolderActivity() {
     }
 
     override fun setAdapter() {
-        val observer = Observer<MutableList<Artist>> {
+        (viewModel as ArtistListViewModel).artistList.observe(this) {
             binding.recycler.adapter = ArtistListAdapter(it) { artist ->
                 ActivityCreator()
                     .with(this)
@@ -32,7 +32,6 @@ class ArtistListActivity : RecyclerHolderActivity() {
                     .start()
             }
         }
-        (viewModel as ArtistListViewModel).artistList.observe(this, observer)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

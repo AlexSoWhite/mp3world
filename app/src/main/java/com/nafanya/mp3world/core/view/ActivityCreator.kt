@@ -17,6 +17,7 @@ import com.nafanya.mp3world.features.playlists.playlistsList.view.PlaylistListAc
 import com.nafanya.mp3world.features.playlists.playlistsList.viewModel.PlaylistListViewModel
 import com.nafanya.mp3world.features.searching.view.SearchSongListActivity
 import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 
 // TODO consider refactoring
 @Suppress("TooManyFunctions")
@@ -30,13 +31,13 @@ class ActivityCreator {
         return this
     }
 
-    fun createSongListActivity(): ActivityCreator {
+    fun createSongListActivity(songList: List<Song>): ActivityCreator {
         intent = Intent(context, PlaylistActivity::class.java)
         intent.putExtra("isMutable", false)
         SourceProvider.putPlaylist(
             Playlist(
                 name = "Мои песни",
-                songList = SongListManager.songList.value ?: mutableListOf()
+                songList = songList as MutableList<Song>
             )
         )
         return this
@@ -68,13 +69,14 @@ class ActivityCreator {
     }
 
     fun createAddSongToListActivity(
-        playlistViewModel: PlaylistViewModel
+        playlistViewModel: PlaylistViewModel,
+        songList: List<Song>?
     ): ActivityCreator {
         intent = Intent(context, AddSongToListActivity::class.java)
         SourceProvider.putPlaylist(
             Playlist(
                 name = "",
-                songList = SongListManager.songList.value ?: mutableListOf()
+                songList = songList as MutableList<Song>
             )
         )
         PlaylistViewModelProvider.putPlaylistViewModel(playlistViewModel)
@@ -91,9 +93,9 @@ class ActivityCreator {
         return this
     }
 
-    fun createFavouriteListActivity(): ActivityCreator {
+    fun createFavouriteListActivity(playlist: Playlist): ActivityCreator {
         intent = Intent(context, FavouriteListActivity::class.java)
-        SourceProvider.putPlaylist(FavouriteListManager.favorites.value!!)
+        SourceProvider.putPlaylist(playlist)
         return this
     }
 
