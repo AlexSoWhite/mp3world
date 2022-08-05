@@ -5,25 +5,19 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.view.ActivityCreator
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.databinding.ActivityMainBinding
-import com.nafanya.mp3world.features.albums.Album
-import com.nafanya.mp3world.features.artists.Artist
 import com.nafanya.mp3world.features.foregroundService.ForegroundService
 import com.nafanya.mp3world.features.foregroundService.ServiceInitializer
-import com.nafanya.player.Playlist
-import com.nafanya.player.Song
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -73,14 +67,11 @@ class MainActivity : AppCompatActivity() {
         startService(intent)
     }
 
-    private val TAG = "AllSongsList"
-
     @Suppress("LongMethod")
     private fun initMainMenu() {
         // all songs
         binding.allSongs.menuItemIcon.setImageResource(R.drawable.song_menu_icon)
         viewModel.songList.observeForever { songList ->
-            Log.d(TAG, "in activity ${songList.size}")
             binding.root.post {
                 binding.songCount = songList.size
                 binding.allSongs.item.setOnClickListener {

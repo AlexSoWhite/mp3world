@@ -5,7 +5,6 @@ import android.os.IBinder
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.LifecycleService
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.entrypoint.Initializer
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.player.PlayerInteractor
 import com.nafanya.player.Playlist

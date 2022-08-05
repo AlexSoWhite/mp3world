@@ -12,6 +12,7 @@ import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
+@Suppress("LongParameterList")
 class InitialViewModel @Inject constructor(
     private val mediaStoreReader: MediaStoreReader,
     private val localStorageProvider: LocalStorageProvider,

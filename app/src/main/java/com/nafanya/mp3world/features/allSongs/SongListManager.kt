@@ -1,15 +1,14 @@
 package com.nafanya.mp3world.features.allSongs
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.player.Song
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Class that holds all songs data
@@ -42,8 +41,8 @@ class SongListManager @Inject constructor() : ListManager {
         result.addAll(
             songList.value!!.filter {
                 it.title.lowercase().contains(query.lowercase()) ||
-                it.artist.lowercase().contains(query.lowercase()) ||
-                it.album.lowercase().contains(query.lowercase())
+                    it.artist.lowercase().contains(query.lowercase()) ||
+                    it.album.lowercase().contains(query.lowercase())
             }
         )
         return result

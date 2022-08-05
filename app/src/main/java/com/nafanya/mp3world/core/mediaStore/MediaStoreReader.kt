@@ -8,18 +8,16 @@ import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import android.util.Size
 import com.nafanya.mp3world.core.listManagers.ListManagerContainer
 import com.nafanya.player.Song
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-// TODO refactor list managers
 @Suppress("LongMethod")
 /**
  * Class that reads local MediaStore.
@@ -54,8 +52,6 @@ class MediaStoreReader @Inject constructor(
     suspend fun reset() {
         initialize()
     }
-
-    val TAG = "AllSongsList"
 
     private suspend fun initialize() = withContext(Dispatchers.IO) {
         // get all the fields from media storage
@@ -122,7 +118,6 @@ class MediaStoreReader @Inject constructor(
             }
         }
         mAllSongs = allSongsList
-        Log.d(TAG, "in reader ${allSongsList.size}")
         listManagerContainer.populateAll(this@MediaStoreReader)
         isInitialized = true
     }

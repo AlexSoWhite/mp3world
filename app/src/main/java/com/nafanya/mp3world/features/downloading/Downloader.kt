@@ -12,7 +12,6 @@ import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.player.Song
 import java.io.File
 import javax.inject.Inject
@@ -93,8 +92,12 @@ class Downloader @Inject constructor(
                             }
                             MetadataScanner(context, "$DOWNLOAD_DIR/$fileName") {
                                 when (it) {
-                                    ScannerResult.SUCCESS -> callback(DownloadResult(ResultType.SUCCESS))
-                                    ScannerResult.FAILED -> callback(DownloadResult(ResultType.ERROR))
+                                    ScannerResult.SUCCESS -> {
+                                        callback(DownloadResult(ResultType.SUCCESS))
+                                    }
+                                    ScannerResult.FAILED -> {
+                                        callback(DownloadResult(ResultType.ERROR))
+                                    }
                                 }
                             }
                         } catch (exception: Exception) {

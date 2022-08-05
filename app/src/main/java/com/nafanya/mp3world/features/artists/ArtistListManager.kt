@@ -60,6 +60,8 @@ class ArtistListManager @Inject constructor() : ListManager {
     }
 
     fun search(query: String): List<Artist> {
-        return mArtists.value?.filter { it.name.lowercase().contains(query.lowercase()) } ?: listOf()
+        return mArtists.value?.filter {
+            it.name.lowercase().contains(query.lowercase())
+        } ?: listOf()
     }
 }

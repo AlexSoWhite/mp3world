@@ -4,10 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.player.Song
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 class DownloadViewModel @Inject constructor(
     private val downloader: Downloader,

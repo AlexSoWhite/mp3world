@@ -4,15 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.localStorage.FavouriteListDao
 import com.nafanya.mp3world.features.localStorage.LocalStorageProvider
 import com.nafanya.player.Playlist
 import com.nafanya.player.Song
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.

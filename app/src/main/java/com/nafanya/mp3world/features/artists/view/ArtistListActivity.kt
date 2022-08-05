@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.view.ActivityCreator
 import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.mp3world.features.artists.Artist
 import com.nafanya.mp3world.features.artists.viewModel.ArtistListViewModel
 import javax.inject.Inject
 
