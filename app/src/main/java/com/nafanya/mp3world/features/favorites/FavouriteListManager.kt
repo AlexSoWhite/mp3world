@@ -1,46 +1,50 @@
 package com.nafanya.mp3world.features.favorites
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.localStorage.FavouriteListDao
+import com.nafanya.mp3world.core.listManagers.ListManager
+import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.features.localStorage.LocalStorageProvider
 import com.nafanya.player.Playlist
 import com.nafanya.player.Song
-import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
  */
-object FavouriteListManager {
+@Singleton
+class FavouriteListManager @Inject constructor(
+    private val localStorageProvider: LocalStorageProvider
+) : ListManager {
 
-    val favorites: MutableLiveData<Playlist> by lazy {
-        MutableLiveData<Playlist>()
-    }
+    private val mFavourites = MutableLiveData<Playlist>()
+    val favorites: LiveData<Playlist>
+        get() = mFavourites
 
     fun add(song: Song) {
-        val temp = favorites.value
+        val temp = mFavourites.value?.copy()
         temp?.songList?.add(song)
-        favorites.postValue(temp)
+        mFavourites.postValue(temp)
     }
 
     fun delete(song: Song) {
-        val temp = favorites.value
+        val temp = mFavourites.value?.copy()
         temp?.songList?.remove(song)
-        favorites.postValue(temp)
+        mFavourites.postValue(temp)
     }
 
-    fun initialize(dao: FavouriteListDao) = runBlocking {
-        val ids = dao.getAll()
-        val temp = Playlist(
-            songList = mutableListOf(),
-            name = "Избранное"
-        )
-        ids.forEach { id ->
-            SongListManager.songList.value?.forEach { song ->
-                if (id == song.id) {
-                    temp.songList.add(song)
-                }
-            }
+    override suspend fun populate(mediaStoreReader: MediaStoreReader) {
+        withContext(Dispatchers.IO) {
+            val ids = localStorageProvider.dbHolder.db.favouriteListDao().getAll()
+            val temp = Playlist(
+                songList = mutableListOf(),
+                name = "Избранное"
+            )
+            temp.songList.addAll(mediaStoreReader.allSongs.filter { ids.contains(it.id) })
+            mFavourites.postValue(temp)
         }
-        favorites.postValue(temp)
     }
 }

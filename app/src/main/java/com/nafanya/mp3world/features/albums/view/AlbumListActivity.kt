@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.view.ActivityCreator
 import com.nafanya.mp3world.core.view.RecyclerHolderActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.mp3world.features.albums.Album
 import com.nafanya.mp3world.features.albums.viewModel.AlbumListViewModel
 import javax.inject.Inject
 
@@ -24,7 +22,7 @@ class AlbumListActivity : RecyclerHolderActivity() {
     }
 
     override fun setAdapter() {
-        val observer = Observer<MutableList<Album>> {
+        (viewModel as AlbumListViewModel).albumsList.observe(this) {
             binding.recycler.adapter = AlbumListAdapter(it) { album ->
                 ActivityCreator()
                     .with(this)
@@ -32,7 +30,6 @@ class AlbumListActivity : RecyclerHolderActivity() {
                     .start()
             }
         }
-        (viewModel as AlbumListViewModel).albumsList.observe(this, observer)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

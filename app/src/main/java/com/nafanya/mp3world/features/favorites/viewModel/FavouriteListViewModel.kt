@@ -9,19 +9,22 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 class FavouriteListViewModel @Inject constructor(
-    var localStorageProvider: LocalStorageProvider
+    private val localStorageProvider: LocalStorageProvider,
+    private val favouriteListManager: FavouriteListManager
 ) : ViewModel() {
+
+    val playlist = favouriteListManager.favorites
 
     fun addFavourite(song: Song) {
         viewModelScope.launch {
-            FavouriteListManager.add(song)
+            favouriteListManager.add(song)
             localStorageProvider.addFavourite(song)
         }
     }
 
     fun deleteFavourite(song: Song) {
         viewModelScope.launch {
-            FavouriteListManager.delete(song)
+            favouriteListManager.delete(song)
             localStorageProvider.deleteFavourite(song)
         }
     }

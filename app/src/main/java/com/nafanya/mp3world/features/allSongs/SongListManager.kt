@@ -1,54 +1,50 @@
 package com.nafanya.mp3world.features.allSongs
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.nafanya.mp3world.core.listManagers.ListManager
+import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.player.Song
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
- * Object that holds all song data.
- * The most important manager, favourites and playlists are populated based on its data.
+ * Class that holds all songs data
  */
-object SongListManager {
+@Singleton
+class SongListManager @Inject constructor() : ListManager {
 
-    val songList: MutableLiveData<MutableList<Song>> by lazy {
-        MutableLiveData<MutableList<Song>>(mutableListOf())
-    }
-    private var suspendedList = mutableListOf<Song>()
-    var urlBasedCount: Long = 0
+    private val mSongList: MutableLiveData<List<Song>> = MutableLiveData(listOf())
+    val songList: LiveData<List<Song>>
+        get() = mSongList
 
-    fun add(song: Song) {
-        suspendedList.add(song)
-    }
+    private var isInitialized = false
 
-    fun resetData() {
-        suspendedList.sortByDescending {
-            it.date
+    override suspend fun populate(
+        mediaStoreReader: MediaStoreReader
+    ) {
+        if (isInitialized) {
+            mSongList.postValue(mediaStoreReader.allSongs)
+        } else {
+            // postValue doesn't trigger anything if there are no subscribers
+            // so initialization Service normally handle only setValue
+            withContext(Dispatchers.Main) {
+                mSongList.value = mediaStoreReader.allSongs
+            }
         }
-        if (suspendedList.isNotEmpty()) {
-            songList.postValue(suspendedList)
-        }
-        suspendedList = mutableListOf()
-    }
-
-    fun resetDataOnMainThread() {
-        suspendedList.sortByDescending {
-            it.date
-        }
-        if (suspendedList.isNotEmpty()) {
-            songList.value = suspendedList
-        }
-        suspendedList = mutableListOf()
     }
 
     fun searchForSongs(query: String): List<Song> {
         val result = mutableListOf<Song>()
-        songList.value!!.forEach {
-            if (
-                it.title!!.lowercase().contains(query.lowercase()) ||
-                it.artist!!.lowercase().contains(query.lowercase())
-            ) {
-                result.add(it)
+        result.addAll(
+            songList.value!!.filter {
+                it.title.lowercase().contains(query.lowercase()) ||
+                    it.artist.lowercase().contains(query.lowercase()) ||
+                    it.album.lowercase().contains(query.lowercase())
             }
-        }
+        )
         return result
     }
 }

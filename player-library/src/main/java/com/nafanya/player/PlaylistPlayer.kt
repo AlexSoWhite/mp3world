@@ -30,7 +30,9 @@ internal class PlaylistPlayer(context: Context) {
     /**
      * current playlist, to navigate between items in it
      */
-    private val mCurrentPlaylist: MutableLiveData<Playlist?> = MutableLiveData(null)
+    private val mCurrentPlaylist: MutableLiveData<Playlist?> by lazy {
+        MutableLiveData(null)
+    }
     private val mPlaylist: Playlist
         get() = mCurrentPlaylist.value!!
     internal val currentPlaylist: LiveData<Playlist?>
@@ -115,13 +117,18 @@ internal class PlaylistPlayer(context: Context) {
     private fun Song.toBundle(): Bundle {
         // creating bundle for listener to provide correct metadata
         val extras = Bundle()
-        extras.putLong("id", this.id)
-        extras.putString("title", this.title)
-        extras.putString("artist", this.artist)
-        this.date?.let { it1 -> extras.putLong("date", it1) }
-        extras.putString("url", this.url)
-        extras.putLong("duration", this.duration!!)
-        extras.putString("artUrl", this.artUrl)
+        extras.apply {
+            putLong("id", this@toBundle.id)
+            putString("title", this@toBundle.title)
+            putLong("artistId", this@toBundle.artistId)
+            putString("artist", this@toBundle.artist)
+            putLong("albumId", this@toBundle.albumId)
+            putString("album", this@toBundle.album)
+            this@toBundle.date?.let { putLong("date", it) }
+            putString("url", this@toBundle.url)
+            putLong("duration", this@toBundle.duration)
+            putString("artUrl", this@toBundle.artUrl)
+        }
         return extras
     }
 

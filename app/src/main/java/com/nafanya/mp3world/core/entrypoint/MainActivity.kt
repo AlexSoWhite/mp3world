@@ -10,24 +10,14 @@ import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.view.ActivityCreator
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.databinding.ActivityMainBinding
-import com.nafanya.mp3world.features.albums.Album
-import com.nafanya.mp3world.features.albums.AlbumListManager
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.artists.Artist
-import com.nafanya.mp3world.features.artists.ArtistListManager
-import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.foregroundService.ForegroundService
 import com.nafanya.mp3world.features.foregroundService.ServiceInitializer
-import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
-import com.nafanya.player.Playlist
-import com.nafanya.player.Song
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var factory: ViewModelFactory
+    private lateinit var viewModel: InitialViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as PlayerApplication).applicationComponent.entrypointComponent().inject(this)
@@ -64,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
-        val viewModel = factory.create(InitialViewModel::class.java)
+        viewModel = factory.create(InitialViewModel::class.java)
         viewModel.initializeLists()
         PRDownloader.initialize(applicationContext)
         initInitializer()
@@ -79,69 +70,74 @@ class MainActivity : AppCompatActivity() {
     @Suppress("LongMethod")
     private fun initMainMenu() {
         // all songs
-        val songListObserver = Observer<MutableList<Song>> { songList ->
-            binding.songCount = songList.size
-            binding.allSongs.item.setOnClickListener {
-                ActivityCreator()
-                    .with(this)
-                    .createSongListActivity()
-                    .start()
+        binding.allSongs.menuItemIcon.setImageResource(R.drawable.song_menu_icon)
+        viewModel.songList.observeForever { songList ->
+            binding.root.post {
+                binding.songCount = songList.size
+                binding.allSongs.item.setOnClickListener {
+                    ActivityCreator()
+                        .with(this)
+                        .createSongListActivity(songList)
+                        .start()
+                }
             }
         }
-        binding.allSongs.menuItemIcon.setImageResource(R.drawable.song_menu_icon)
-        SongListManager.songList.observe(this, songListObserver)
 
         // playlists
-        val playlistsObserver = Observer<MutableList<Playlist>> {
-            binding.playlistCount = it.size
-            binding.playlists.item.setOnClickListener {
-                ActivityCreator()
-                    .with(this)
-                    .createPlaylistListActivity()
-                    .start()
+        binding.playlists.menuItemIcon.setImageResource(R.drawable.playlist_play)
+        viewModel.playlists.observeForever { playlists ->
+            binding.root.post {
+                binding.playlistCount = playlists.size
+                binding.playlists.item.setOnClickListener {
+                    ActivityCreator()
+                        .with(this)
+                        .createPlaylistListActivity()
+                        .start()
+                }
             }
         }
-        binding.playlists.menuItemIcon.setImageResource(R.drawable.playlist_play)
-        PlaylistListManager.playlists.observe(this, playlistsObserver)
 
         // artists
-        val artistObserver = Observer<MutableList<Artist>> {
-            binding.artistCount = it.size
-            binding.artists.item.setOnClickListener {
-                ActivityCreator()
-                    .with(this)
-                    .createArtistListActivity()
-                    .start()
+        binding.artists.menuItemIcon.setImageResource(R.drawable.artist)
+        viewModel.artists.observeForever { artists ->
+            binding.root.post {
+                binding.artistCount = artists.size
+                binding.artists.item.setOnClickListener {
+                    ActivityCreator()
+                        .with(this)
+                        .createArtistListActivity()
+                        .start()
+                }
             }
         }
-        binding.artists.menuItemIcon.setImageResource(R.drawable.artist)
-        ArtistListManager.artists.observe(this, artistObserver)
 
         // albums
-        val albumsObserver = Observer<MutableList<Album>> {
-            binding.albumCount = it.size
-            binding.albums.item.setOnClickListener {
-                ActivityCreator()
-                    .with(this)
-                    .createAlbumListActivity()
-                    .start()
+        binding.albums.menuItemIcon.setImageResource(R.drawable.album)
+        viewModel.albums.observeForever { albums ->
+            binding.root.post {
+                binding.albumCount = albums.size
+                binding.albums.item.setOnClickListener {
+                    ActivityCreator()
+                        .with(this)
+                        .createAlbumListActivity()
+                        .start()
+                }
             }
         }
-        binding.albums.menuItemIcon.setImageResource(R.drawable.album)
-        AlbumListManager.albums.observe(this, albumsObserver)
 
         // favourites
-        val favouriteObserver = Observer<Playlist> { playlist ->
-            binding.favouriteCount = playlist.songList.size
-            binding.favourite.item.setOnClickListener {
-                ActivityCreator()
-                    .with(this)
-                    .createFavouriteListActivity()
-                    .start()
+        binding.favourite.menuItemIcon.setImageResource(R.drawable.favorite)
+        viewModel.favourites.observeForever { playlist ->
+            binding.root.post {
+                binding.favouriteCount = playlist.songList.size
+                binding.favourite.item.setOnClickListener {
+                    ActivityCreator()
+                        .with(this)
+                        .createFavouriteListActivity(playlist)
+                        .start()
+                }
             }
         }
-        binding.favourite.menuItemIcon.setImageResource(R.drawable.favorite)
-        FavouriteListManager.favorites.observe(this, favouriteObserver)
 
         // statistic
 //        val statisticObserver = Observer<MutableList<SongStatisticEntity>> {

@@ -2,6 +2,7 @@ package com.nafanya.mp3world.features.playerView.view
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -29,7 +30,6 @@ import com.nafanya.mp3world.core.utils.ColorExtractor
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
 import com.nafanya.mp3world.features.downloading.ResultType
-import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playlists.playlist.view.CurrentPlaylistDialogActivity
 import com.nafanya.player.PlayerInteractor
@@ -49,10 +49,12 @@ class FullscreenControlsFragment : Fragment() {
     lateinit var playerInteractor: PlayerInteractor
 
     private lateinit var controlsFullScreen: StyledPlayerControlView
+    private lateinit var application: Application
     private val controls = mutableListOf<View>()
 
     override fun onAttach(context: Context) {
-        (requireActivity().application as PlayerApplication)
+        application = requireActivity().application
+        (application as PlayerApplication)
             .applicationComponent
             .playerViewComponent()
             .inject(this)
@@ -129,7 +131,7 @@ class FullscreenControlsFragment : Fragment() {
             R.id.control_fullscreen_track_artist
         ).text = song.artist
         val timeConverter = TimeConverter()
-        val durationValue = song.duration!!
+        val durationValue = song.duration
         val durationView = requireActivity().findViewById<TextView>(R.id.duration)
         val timeView = requireActivity().findViewById<TextView>(R.id.time)
         controlsFullScreen.apply {
@@ -159,7 +161,7 @@ class FullscreenControlsFragment : Fragment() {
             val favouriteButton = findViewById<ShapeableImageView>(R.id.favourite_button)
             if (song.url == null) {
                 var isFavourite = false
-                FavouriteListManager.favorites.value?.songList?.let { list ->
+                favoriteViewModel.playlist.value?.songList?.let { list ->
                     if (list.contains(playerInteractor.currentSong.value)) {
                         isFavourite = true
                     }
@@ -195,17 +197,18 @@ class FullscreenControlsFragment : Fragment() {
                     downloadViewModel.download(song) {
                         if (it.type == ResultType.SUCCESS) {
                             Toast.makeText(
-                                requireActivity(),
+                                application,
                                 "${song.artist} - ${song.title} загружено",
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             Toast.makeText(
-                                requireActivity(),
+                                application,
                                 "ошибка",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+                        downloadViewModel.updateSongList(it)
                     }
                 }
             }

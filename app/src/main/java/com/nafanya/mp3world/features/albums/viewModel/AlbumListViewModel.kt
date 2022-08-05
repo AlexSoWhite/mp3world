@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.features.albums.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
@@ -9,18 +10,18 @@ import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
 class AlbumListViewModel @Inject constructor(
-    playerInteractor: PlayerInteractor
+    playerInteractor: PlayerInteractor,
+    private val albumListManager: AlbumListManager
 ) : ListViewModelInterface(playerInteractor) {
 
     private var query = ""
-
-    val albumsList: MutableLiveData<MutableList<Album>> by lazy {
-        MutableLiveData<MutableList<Album>>()
-    }
+    private val mAlbumsList: MutableLiveData<List<Album>> = MutableLiveData(listOf())
+    val albumsList: LiveData<List<Album>>
+        get() = mAlbumsList
 
     override fun onLoading() {
-        albumsList.value = AlbumListManager.albums.value
-        if (albumsList.value!!.isEmpty()) {
+        mAlbumsList.value = albumListManager.albums.value
+        if (mAlbumsList.value!!.isEmpty()) {
             pageState.value = PageState.IS_EMPTY
         } else {
             pageState.value = PageState.IS_LOADED
@@ -29,9 +30,9 @@ class AlbumListViewModel @Inject constructor(
 
     override fun onLoaded() {
         if (query != "") {
-            title.value = "$query (${albumsList.value?.size})"
+            title.value = "$query (${mAlbumsList.value?.size})"
         } else {
-            title.value = "Альбомы (${albumsList.value?.size})"
+            title.value = "Альбомы (${mAlbumsList.value?.size})"
         }
     }
 
@@ -44,17 +45,9 @@ class AlbumListViewModel @Inject constructor(
     }
 
     fun search(query: String) {
-        val newList = mutableListOf<Album>()
         this.query = query
-        AlbumListManager.albums.value!!.forEach {
-            if (
-                it.name.lowercase().contains(query.lowercase())
-            ) {
-                newList.add(it)
-            }
-        }
-        albumsList.value = newList
-        if (albumsList.value!!.isEmpty()) {
+        mAlbumsList.value = albumListManager.search(query)
+        if (mAlbumsList.value!!.isEmpty()) {
             pageState.value = PageState.IS_EMPTY
         } else {
             pageState.value = PageState.IS_LOADED

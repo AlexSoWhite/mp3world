@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.features.artists.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
 import com.nafanya.mp3world.core.viewModel.PageState
@@ -9,18 +10,19 @@ import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
 class ArtistListViewModel @Inject constructor(
-    playerInteractor: PlayerInteractor
+    playerInteractor: PlayerInteractor,
+    private val artistListManager: ArtistListManager
 ) : ListViewModelInterface(playerInteractor) {
 
     private var query = ""
 
-    val artistList: MutableLiveData<MutableList<Artist>> by lazy {
-        MutableLiveData<MutableList<Artist>>()
-    }
+    private val mArtistList: MutableLiveData<List<Artist>> = MutableLiveData(listOf())
+    val artistList: LiveData<List<Artist>>
+        get() = mArtistList
 
     override fun onLoading() {
-        artistList.value = ArtistListManager.artists.value
-        if (artistList.value!!.isEmpty()) {
+        mArtistList.value = artistListManager.artists.value
+        if (mArtistList.value!!.isEmpty()) {
             pageState.value = PageState.IS_EMPTY
         } else {
             pageState.value = PageState.IS_LOADED
@@ -29,9 +31,9 @@ class ArtistListViewModel @Inject constructor(
 
     override fun onLoaded() {
         if (query != "") {
-            title.value = "$query (${artistList.value?.size})"
+            title.value = "$query (${mArtistList.value?.size})"
         } else {
-            title.value = "Исполнители (${artistList.value?.size})"
+            title.value = "Исполнители (${mArtistList.value?.size})"
         }
     }
 
@@ -44,17 +46,9 @@ class ArtistListViewModel @Inject constructor(
     }
 
     fun search(query: String) {
-        val newList = mutableListOf<Artist>()
         this.query = query
-        ArtistListManager.artists.value!!.forEach {
-            if (
-                it.name!!.lowercase().contains(query.lowercase())
-            ) {
-                newList.add(it)
-            }
-        }
-        artistList.value = newList
-        if (artistList.value!!.isEmpty()) {
+        mArtistList.value = artistListManager.search(query)
+        if (mArtistList.value!!.isEmpty()) {
             pageState.value = PageState.IS_EMPTY
         } else {
             pageState.value = PageState.IS_LOADED

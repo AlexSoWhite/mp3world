@@ -1,7 +1,6 @@
 package com.nafanya.mp3world.features.remoteSongs
 
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
-import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.player.Song
 import java.io.IOException
 import javax.inject.Inject
@@ -63,12 +62,17 @@ class QueryExecutor @Inject constructor(
                                 .toString()
                             songList.add(
                                 Song(
-                                    id = SongListManager.urlBasedCount++,
+                                    id = -1,
                                     title = title,
+                                    artistId = -1,
                                     artist = artist,
                                     duration = duration,
                                     url = downloadUrl,
-                                    artUrl = artUrl
+                                    artUrl = artUrl,
+                                    albumId = -1,
+                                    album = "",
+                                    date = null,
+                                    art = null
                                 )
                             )
                         }

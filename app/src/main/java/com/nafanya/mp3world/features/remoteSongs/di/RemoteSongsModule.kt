@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.features.remoteSongs.di
 
-import com.nafanya.mp3world.features.remoteSongs.QueryExecutor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -9,7 +8,7 @@ import okhttp3.OkHttpClient
 class RemoteSongsModule {
 
     @Provides
-    fun provideQueryExecutor(): QueryExecutor {
-        return QueryExecutor(OkHttpClient())
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient()
     }
 }

@@ -4,9 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.nafanya.mp3world.core.source.SourceProvider
 import com.nafanya.mp3world.features.albums.view.AlbumListActivity
-import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.artists.view.ArtistListActivity
-import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.favorites.view.FavouriteListActivity
 import com.nafanya.mp3world.features.playlists.playlist.PlaylistViewModelProvider
 import com.nafanya.mp3world.features.playlists.playlist.view.AddSongToListActivity
@@ -17,6 +15,7 @@ import com.nafanya.mp3world.features.playlists.playlistsList.view.PlaylistListAc
 import com.nafanya.mp3world.features.playlists.playlistsList.viewModel.PlaylistListViewModel
 import com.nafanya.mp3world.features.searching.view.SearchSongListActivity
 import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 
 // TODO consider refactoring
 @Suppress("TooManyFunctions")
@@ -30,13 +29,13 @@ class ActivityCreator {
         return this
     }
 
-    fun createSongListActivity(): ActivityCreator {
+    fun createSongListActivity(songList: List<Song>): ActivityCreator {
         intent = Intent(context, PlaylistActivity::class.java)
         intent.putExtra("isMutable", false)
         SourceProvider.putPlaylist(
             Playlist(
                 name = "Мои песни",
-                songList = SongListManager.songList.value ?: mutableListOf()
+                songList = songList as MutableList<Song>
             )
         )
         return this
@@ -68,13 +67,14 @@ class ActivityCreator {
     }
 
     fun createAddSongToListActivity(
-        playlistViewModel: PlaylistViewModel
+        playlistViewModel: PlaylistViewModel,
+        songList: List<Song>?
     ): ActivityCreator {
         intent = Intent(context, AddSongToListActivity::class.java)
         SourceProvider.putPlaylist(
             Playlist(
                 name = "",
-                songList = SongListManager.songList.value ?: mutableListOf()
+                songList = songList as MutableList<Song>
             )
         )
         PlaylistViewModelProvider.putPlaylistViewModel(playlistViewModel)
@@ -91,9 +91,9 @@ class ActivityCreator {
         return this
     }
 
-    fun createFavouriteListActivity(): ActivityCreator {
+    fun createFavouriteListActivity(playlist: Playlist): ActivityCreator {
         intent = Intent(context, FavouriteListActivity::class.java)
-        SourceProvider.putPlaylist(FavouriteListManager.favorites.value!!)
+        SourceProvider.putPlaylist(playlist)
         return this
     }
 

@@ -5,10 +5,8 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
-import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.playlists.playlist.PlaylistStorageEntity
 import com.nafanya.mp3world.features.playlists.playlist.toStorageEntity
-import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
 import com.nafanya.mp3world.features.statistics.StatisticInfoManager
 import javax.inject.Inject
 
@@ -166,9 +164,7 @@ class DatabaseHolder @Inject constructor(
         ).build()
     }
 
-    suspend fun populateLists() {
-        PlaylistListManager.initialize(db.playlistDao())
-        FavouriteListManager.initialize(db.favouriteListDao())
+    fun populateLists() {
         StatisticInfoManager.initialize(db.songStatisticDao())
     }
 
