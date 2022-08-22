@@ -17,7 +17,7 @@
         android:gravity="center_horizontal"
         android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/dismiss"
+        app:layout_constraintBottom_toTopOf="@+id/discard_changes_cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         tools:text="удалить плейлист name?" />
 
     <Button
-        android:id="@+id/dismiss"
+        android:id="@+id/discard_changes_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -50,7 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/dismiss"
+        app:layout_constraintStart_toEndOf="@+id/discard_changes_cancel"
         app:layout_constraintTop_toBottomOf="@+id/message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

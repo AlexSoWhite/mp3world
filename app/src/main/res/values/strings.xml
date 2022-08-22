@@ -6,8 +6,6 @@
     <string name="albums">Альбомы</string>
     <string name="favourites">Избранное</string>
     <string name="recycler_behavior">com.google.android.material.transition.MaterialContainerTransform</string>
-    <string name="playlists">плейлисты</string>
-    <string name="songs">песни</string>
     <string name="name">mp3world</string>
     <string name="description">mp3world</string>
     <string name="loading">загрузка</string>
@@ -15,7 +13,6 @@
     <string name="no_playlists">создать плейлист</string>
     <string name="no_songs">нет песен</string>
     <string name="add_playlist">создать плейлист</string>
-    <string name="delete_playlist">удалить плейлист %1$s?</string>
     <string name="enter_name">введите название</string>
     <string name="delete">удалить</string>
     <string name="cancel">отмена</string>
@@ -23,18 +20,17 @@
     <string name="no_artists">нет исполнителей</string>
     <string name="nothing_found">ничего не найдено</string>
     <string name="player_transition">player_transition</string>
-    <string name="deny">отмена</string>
     <string name="create">создать</string>
-    <string name="delete_playlist_message">удалить плейлист %1$s?</string>
+    <string name="delete_playlist_message">Удалить плейлист %1$s?</string>
     <string name="confirm_changes">сохранить изменения</string>
     <string name="add_to_favourites">добавить в избранное</string>
     <string name="remove_from_favourites">удалить из избранного</string>
     <string name="go_to_album">перейти к альбому %1$s</string>
     <string name="go_to_artist">перейти к исполнителю %1$s</string>
     <string name="song_description">%1$s - %2$s</string>
-    <string name="decline">отмена</string>
     <string name="modify_compositions">изменить композиции</string>
     <string name="download_song">загрузить песню %1$s - %2$s</string>
-    <string name="changes_will_be_discarded">изменения не будут сохранены. продолжить?</string>
+    <string name="changes_will_be_discarded">Изменения не будут сохранены. Продолжить?</string>
     <string name="string_continue">продолжить</string>
+    <string name="ready">готово</string>
 </resources>

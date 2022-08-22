@@ -47,7 +47,7 @@ class LocalSongActionDialog(
             songDescription.text =
                 context.getString(R.string.song_description, song.artist, song.title)
             songDescription.isSelected = true
-            dismissActionDialog.setOnClickListener {
+            dismissLocalActionDialog.setOnClickListener {
                 this@LocalSongActionDialog.dismiss()
             }
         }

@@ -63,10 +63,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/go_to_album"
-        app:layout_constraintBottom_toTopOf="@id/dismiss_action_dialog" />
+        app:layout_constraintBottom_toTopOf="@id/dismiss_local_action_dialog" />
 
     <Button
-        android:id="@+id/dismiss_action_dialog"
+        android:id="@+id/dismiss_local_action_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
@@ -77,6 +77,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:text="@string/decline" />
+        android:text="@string/ready" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

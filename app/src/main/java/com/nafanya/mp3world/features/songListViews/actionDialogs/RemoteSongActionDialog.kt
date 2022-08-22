@@ -54,7 +54,7 @@ class RemoteSongActionDialog(
                     downloadViewModel.updateSongList(it)
                 }
             }
-            dismissActionDialog.setOnClickListener {
+            dismissRemoteActionDialog.setOnClickListener {
                 this@RemoteSongActionDialog.dismiss()
             }
         }

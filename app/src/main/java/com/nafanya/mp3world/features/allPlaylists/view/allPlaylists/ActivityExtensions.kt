@@ -32,7 +32,7 @@ fun AppCompatActivity.createAddPlaylistDialog(
                 false
             }
         )
-        view.findViewById<Button>(R.id.deny).setOnClickListener {
+        view.findViewById<Button>(R.id.playlist_add_cancel).setOnClickListener {
             dialog.dismiss()
         }
         view.findViewById<Button>(R.id.create).setOnClickListener {
@@ -76,7 +76,7 @@ fun AppCompatActivity.createDeletePlaylistDialog(
                 R.string.delete_playlist_message,
                 playlistName
             )
-        view.findViewById<Button>(R.id.dismiss).setOnClickListener {
+        view.findViewById<Button>(R.id.discard_changes_cancel).setOnClickListener {
             dialog.dismiss()
         }
         view.findViewById<Button>(R.id.delete).setOnClickListener {

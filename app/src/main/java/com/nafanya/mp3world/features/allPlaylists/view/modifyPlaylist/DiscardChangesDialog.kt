@@ -17,7 +17,7 @@ class DiscardChangesDialog(
 
     init {
         setContentView(binding.root)
-        binding.dismiss.setOnClickListener {
+        binding.discardChangesCancel.setOnClickListener {
             this.dismiss()
         }
         binding.discard.setOnClickListener {
