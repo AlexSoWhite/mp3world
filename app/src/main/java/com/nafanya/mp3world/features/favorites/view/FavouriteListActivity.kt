@@ -8,6 +8,7 @@ import com.nafanya.mp3world.core.view.BaseActivity
 import com.nafanya.mp3world.databinding.ActivityImmutablePlaylistLayoutBinding
 import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity.Companion.LIST_MANAGER_KEY
 import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistFragment
+import com.r0adkll.slidr.Slidr
 
 class FavouriteListActivity : BaseActivity<ActivityImmutablePlaylistLayoutBinding>() {
 
@@ -17,6 +18,7 @@ class FavouriteListActivity : BaseActivity<ActivityImmutablePlaylistLayoutBindin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Slidr.attach(this)
         val arguments = Bundle()
         arguments.putInt(LIST_MANAGER_KEY, FAVOURITE_LIST_MANAGER_KEY)
         val fragment = ImmutablePlaylistFragment()

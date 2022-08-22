@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.view.BaseActivity
 import com.nafanya.mp3world.databinding.ActivityImmutablePlaylistLayoutBinding
+import com.r0adkll.slidr.Slidr
 
 class ImmutablePlaylistActivity : BaseActivity<ActivityImmutablePlaylistLayoutBinding>() {
 
@@ -19,6 +20,7 @@ class ImmutablePlaylistActivity : BaseActivity<ActivityImmutablePlaylistLayoutBi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Slidr.attach(this)
         val arguments = Bundle()
         arguments.putInt(LIST_MANAGER_KEY, intent.getIntExtra(LIST_MANAGER_KEY, -1))
         arguments.putLong(CONTAINER_ID, intent.getLongExtra(CONTAINER_ID, -1))
