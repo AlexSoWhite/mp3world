@@ -53,12 +53,8 @@ class MediaStoreReader @Inject constructor(
         // get all the fields from media storage
         val projection = null
         // select only music
-        var selection: String? = MediaStore.Audio.Media.IS_MUSIC + "=1"
+        val selection: String = MediaStore.Audio.Media.IS_MUSIC + "=1"
         val selectionArgs = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            selection =
-                MediaStore.Audio.Media.IS_DOWNLOAD
-        }
         // sort based on date
         val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
         val allSongsList = mutableListOf<LocalSong>()

@@ -174,4 +174,9 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
         super.onDestroy()
         applicationContext.stopService(Intent(this, ForegroundService::class.java))
     }
+
+    override fun onBackPressed() {
+        finishAfterTransition()
+        super.onBackPressed()
+    }
 }

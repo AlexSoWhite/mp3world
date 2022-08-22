@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.features.songListViews.actionDialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.view.LayoutInflater
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.navigation.ActivityStarter
@@ -11,10 +11,10 @@ import com.nafanya.mp3world.databinding.DialogLocalSongActionBinding
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 
 class LocalSongActionDialog(
-    context: Context,
+    private val activity: FragmentActivity,
     private val song: LocalSong,
     private val favouriteListViewModel: FavouriteListViewModel
-) : Dialog(context, R.style.Dialog) {
+) : Dialog(activity, R.style.Dialog) {
 
     private var binding: DialogLocalSongActionBinding =
         DialogLocalSongActionBinding.inflate(LayoutInflater.from(context))
@@ -54,7 +54,10 @@ class LocalSongActionDialog(
     }
 
     private fun manageFavourite() = binding.apply {
-        favouriteListViewModel.isSongInFavourite(song).observeForever(favouriteObserver)
+        favouriteListViewModel.isSongInFavourite(song).observe(
+            activity,
+            favouriteObserver
+        )
     }
 
     private fun manageAlbums() = binding.apply {
