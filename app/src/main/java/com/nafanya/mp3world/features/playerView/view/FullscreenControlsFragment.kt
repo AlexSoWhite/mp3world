@@ -50,6 +50,12 @@ class FullscreenControlsFragment : BaseFragment<FullScreenPlayerControlsFragment
     private lateinit var application: Application
     private val controls = mutableListOf<View>()
 
+    companion object {
+        private const val backgroundDuration = 600L
+        private const val defaultBackgroundColor = "#373232"
+        private const val componentsAmount = 3
+    }
+
     override fun inflate(
         inflater: LayoutInflater,
         parent: ViewGroup?,
@@ -236,9 +242,8 @@ class FullscreenControlsFragment : BaseFragment<FullScreenPlayerControlsFragment
         requireActivity().window.navigationBarColor = color
     }
 
-    companion object {
-        private const val backgroundDuration = 600L
-        private const val defaultBackgroundColor = "#373232"
-        private const val componentsAmount = 3
+    override fun onDestroyView() {
+        binding.controlsFullscreen.player = null
+        super.onDestroyView()
     }
 }

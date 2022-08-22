@@ -97,4 +97,9 @@ class BottomControlViewFragment : BaseFragment<BottomControlViewBinding>() {
     private fun setSongIcon() {
         view?.findViewById<ImageView>(R.id.control_song_icon)?.setImageBitmap(currentSong!!.art)
     }
+
+    override fun onDestroyView() {
+        binding.playerControlView.player = null
+        super.onDestroyView()
+    }
 }
