@@ -108,7 +108,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
                 .build()
                 .startActivity()
         }
-        viewModel.artists.observeForever { artistsList ->
+        viewModel.artists.observe(context) { artistsList ->
             artists.count.text = artistsList.size.toString()
         }
 
@@ -132,18 +132,9 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
                 .build()
                 .startActivity()
         }
-        viewModel.favourites.observeForever { playlist ->
+        viewModel.favourites.observe(context) { playlist ->
             favourite.count.text = playlist?.songList?.size.toString()
         }
-
-        // statistic
-//        val statisticObserver = Observer<MutableList<SongStatisticEntity>> {
-//            binding.statistics.item.setOnClickListener {
-//                val statisticIntent = Intent(this, StatisticActivity::class.java)
-//                startActivity(statisticIntent)
-//            }
-//        }
-//        StatisticInfoManager.info.observe(this, statisticObserver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
