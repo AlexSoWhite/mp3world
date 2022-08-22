@@ -12,5 +12,5 @@ interface EntrypointModule {
 
     @Binds
     @[IntoMap ViewModelKey(InitialViewModel::class)]
-    fun providesFavouriteViewModel(favouriteListViewModel: InitialViewModel): ViewModel
+    fun initialViewModel(initialViewModel: InitialViewModel): ViewModel
 }
