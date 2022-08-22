@@ -18,7 +18,7 @@ class AddableRemovableSongView @JvmOverloads constructor(
 ) : SongView(context, attributeSet, defStyle) {
 
     companion object {
-        const val ACTION_PADDING_START = 25
+        const val DURATION_PADDING_END = 25
     }
 
     override val binding: SongViewBinding =
@@ -30,11 +30,11 @@ class AddableRemovableSongView @JvmOverloads constructor(
     private lateinit var onRemoveCallback: (SongWrapper) -> Unit
 
     init {
-        binding.action.setContentPadding(
-            ACTION_PADDING_START.dpToPx(),
-            binding.action.contentPaddingTop,
-            binding.action.contentPaddingRight,
-            binding.action.contentPaddingBottom
+        binding.duration.setPadding(
+            binding.duration.paddingLeft,
+            binding.duration.paddingTop,
+            DURATION_PADDING_END.dpToPx(),
+            binding.duration.paddingTop
         )
     }
 

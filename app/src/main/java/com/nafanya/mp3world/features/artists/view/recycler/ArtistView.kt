@@ -7,7 +7,7 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseListItemView
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
 import com.nafanya.mp3world.core.utils.TextUtil
-import com.nafanya.mp3world.databinding.ArtistViewBinding
+import com.nafanya.mp3world.databinding.PlaylistContainerViewBinding
 import com.nafanya.mp3world.features.artists.Artist
 
 class ArtistView @JvmOverloads constructor(
@@ -16,20 +16,20 @@ class ArtistView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : BaseListItemView(context, attributeSet, defStyle) {
 
-    private val binding: ArtistViewBinding =
-        ArtistViewBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding: PlaylistContainerViewBinding =
+        PlaylistContainerViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun setArtist(artist: Artist, onClickCallback: () -> Unit) {
-        binding.artistName.text = artist.name
-        binding.tracksCount.text = TextUtil.getCompositionsCountString(
+    fun setArtist(artist: Artist, onClickCallback: () -> Unit) = binding.apply {
+        itemTitle.text = artist.name
+        tracksCount.text = TextUtil.getCompositionsCountString(
             artist.playlist!!.songList.size
         )
         if (artist.image != null) {
-            binding.artistImage.setImageBitmap(artist.image)
+            itemImage.setImageBitmap(artist.image)
         } else {
-            binding.artistImage.setImageResource(R.drawable.artist)
+            itemImage.setImageResource(R.drawable.artist)
         }
-        binding.artistListItem.setOnClickListener {
+        setOnClickListener {
             onClickCallback()
         }
     }

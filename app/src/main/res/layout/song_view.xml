@@ -5,6 +5,7 @@
     android:id="@+id/song_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingHorizontal="10dp"
     android:clickable="true"
     android:focusable="true">
 
@@ -126,6 +127,8 @@
         android:layout_gravity="center_vertical"
         android:clickable="true"
         android:focusable="true"
+        android:layout_marginStart="5dp"
+        android:background="?selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="icon" format="reference"/>
+    <attr name="description" format="string"/>
+
     <declare-styleable name="DialogOptionView">
-        <attr name="icon" format="reference"/>
-        <attr name="description" format="string"/>
+        <attr name="icon"/>
+        <attr name="description"/>
+    </declare-styleable>
+
+    <declare-styleable name="MainMenuOptionView">
+        <attr name="icon"/>
+        <attr name="description"/>
     </declare-styleable>
 </resources>

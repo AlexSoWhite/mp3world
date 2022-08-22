@@ -72,9 +72,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
     private fun initMainMenu() = binding.apply {
         val context = this@MainActivity
         // all songs
-        allSongs.menuItemIcon.setImageResource(R.drawable.song_icon)
-        allSongs.description.text = getString(R.string.my_songs)
-        allSongs.item.setOnClickListener {
+        allSongs.setOnClickListener {
             ActivityStarter.Builder()
                 .with(context)
                 .createIntentToAllSongsActivity()
@@ -86,9 +84,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
         }
 
         // playlists
-        playlists.menuItemIcon.setImageResource(R.drawable.playlist_play)
-        playlists.description.text = getString(R.string.my_playlists)
-        playlists.item.setOnClickListener {
+        playlists.setOnClickListener {
             ActivityStarter.Builder()
                 .with(context)
                 .createIntentToAllPlaylistsActivity()
@@ -100,9 +96,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
         }
 
         // artists
-        artists.menuItemIcon.setImageResource(R.drawable.artist)
-        artists.description.text = getString(R.string.artists)
-        artists.item.setOnClickListener {
+        artists.setOnClickListener {
             ActivityStarter.Builder()
                 .with(context)
                 .createIntentToArtistListActivity()
@@ -114,9 +108,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
         }
 
         // albums
-        albums.menuItemIcon.setImageResource(R.drawable.album)
-        albums.description.text = getString(R.string.albums)
-        albums.item.setOnClickListener {
+        albums.setOnClickListener {
             ActivityStarter.Builder()
                 .with(context)
                 .createIntentToAlbumListActivity()
@@ -128,9 +120,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
         }
 
         // favourites
-        favourite.menuItemIcon.setImageResource(R.drawable.favorite)
-        favourite.description.text = getString(R.string.favourites)
-        binding.favourite.item.setOnClickListener {
+        favourite.setOnClickListener {
             ActivityStarter.Builder()
                 .with(context)
                 .createIntentToFavouritesActivity()
@@ -138,7 +128,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
                 .startActivity()
         }
         viewModel.favourites.observeForever { playlist ->
-            binding.favourite.count.text = playlist?.songList?.size.toString()
+            favourite.count.text = playlist?.songList?.size.toString()
         }
 
         // statistic

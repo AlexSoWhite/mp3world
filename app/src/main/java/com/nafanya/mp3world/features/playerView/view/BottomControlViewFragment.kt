@@ -10,8 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.nafanya.mp3world.R
@@ -64,7 +64,7 @@ class BottomControlViewFragment : BaseFragment<BottomControlViewBinding>() {
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
             RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
-        view.findViewById<LinearLayout>(R.id.controls_view).setOnClickListener {
+        view.findViewById<ConstraintLayout>(R.id.controls_view).setOnClickListener {
             toFullScreen()
         }
     }

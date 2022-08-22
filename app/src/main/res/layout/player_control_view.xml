@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/controls_view"
@@ -12,105 +12,124 @@
     tools:visibility="visible"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/control_song_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="10dp"
+        android:transitionName="@string/player_transition"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/exo_progress">
+        app:layout_constraintBottom_toTopOf="@id/exo_progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/song_info_wrapper"
+        tools:src = "@drawable/song_icon_preview"/>
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/control_song_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_gravity="center_vertical"
-            android:transitionName="@string/player_transition"
-            tools:src = "@drawable/song_icon_preview"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/song_info_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/exo_progress"
+        app:layout_constraintStart_toEndOf="@id/control_song_icon"
+        app:layout_constraintEnd_toStartOf="@id/exo_repeat_toggle">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/control_track_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:ellipsize="end"
+            android:maxWidth="180dp"
+            android:maxLines="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/control_track_artist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="название" />
 
-            <TextView
-                android:id="@+id/control_track_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxWidth="180dp"
-                android:maxLines="1"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/control_track_artist"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="название" />
+        <TextView
+            android:id="@+id/control_track_artist"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxWidth="160dp"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/control_track_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="исполнитель" />
 
-            <TextView
-                android:id="@+id/control_track_artist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxWidth="160dp"
-                android:maxLines="1"
-                app:layout_constraintBottom_toTopOf="@id/exo_progress"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/control_track_title"
-                tools:text="исполнитель" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/exo_repeat_toggle"
+        android:layout_gravity="center_vertical"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toStartOf="@id/controls"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/exo_progress"
+        app:layout_constraintStart_toEndOf="@id/song_info_wrapper"
+        tools:src="@drawable/repeat_one" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_gravity="center_vertical|end"
+        android:id="@+id/controls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/exo_repeat_toggle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/exo_progress"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/exo_prev"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_gravity="center_vertical"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:layout_constraintEnd_toStartOf="@id/controls"
+            android:background="@android:color/transparent"
+            android:src="@drawable/skip_previous"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/exo_progress"
-            android:id="@+id/exo_repeat_toggle"
-            tools:src="@drawable/done" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/exo_play_pause"/>
 
-        <LinearLayout
-            android:layout_gravity="center_vertical|end"
-            android:id="@+id/controls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@id/exo_play_pause"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toEndOf="@id/exo_prev"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/exo_next"
+            tools:src="@drawable/play" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/exo_prev"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:src="@drawable/skip_previous" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/exo_next"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toEndOf="@id/exo_play_pause"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/skip_next" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@id/exo_play_pause"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                tools:src="@drawable/play" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/exo_next"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:src="@drawable/skip_next" />
-
-        </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.exoplayer2.ui.DefaultTimeBar
         android:id="@+id/exo_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/song_info_wrapper"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

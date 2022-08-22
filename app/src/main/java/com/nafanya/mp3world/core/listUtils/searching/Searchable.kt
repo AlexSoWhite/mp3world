@@ -58,6 +58,6 @@ class QueryFilter<T>(
     }
 }
 
-val SongQueryFilter = QueryFilter<SongWrapper> { songWrapper, s ->
+val songQueryFilterCallback = { songWrapper: SongWrapper, s: String ->
     songWrapper.title.contains(s, true) || songWrapper.artist.contains(s, true)
 }

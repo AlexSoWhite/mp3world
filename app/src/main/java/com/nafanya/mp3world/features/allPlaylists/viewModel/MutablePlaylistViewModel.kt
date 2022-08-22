@@ -6,7 +6,7 @@ import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
-import com.nafanya.mp3world.core.listUtils.searching.SongQueryFilter
+import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
@@ -28,7 +28,7 @@ class MutablePlaylistViewModel(
 ),
     Searchable<SongWrapper> {
 
-    override val filter: QueryFilter<SongWrapper> = SongQueryFilter
+    override val filter: QueryFilter<SongWrapper> = QueryFilter(songQueryFilterCallback)
 
     override fun List<SongWrapper>.asListItems(): List<SongListItem> {
         val list = mutableListOf<SongListItem>()

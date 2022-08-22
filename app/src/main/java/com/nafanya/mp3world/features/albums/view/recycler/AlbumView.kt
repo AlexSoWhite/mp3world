@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseListItemView
 import com.nafanya.mp3world.core.utils.TextUtil
-import com.nafanya.mp3world.databinding.AlbumViewBinding
+import com.nafanya.mp3world.databinding.PlaylistContainerViewBinding
 import com.nafanya.mp3world.features.albums.Album
 
 class AlbumView @JvmOverloads constructor(
@@ -15,20 +15,20 @@ class AlbumView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : BaseListItemView(context, attributeSet, defStyle) {
 
-    private val binding: AlbumViewBinding =
-        AlbumViewBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding: PlaylistContainerViewBinding =
+        PlaylistContainerViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun setAlbum(album: Album, onClickCallback: () -> Unit) {
-        binding.albumName.text = album.name
-        binding.tracksCount.text = TextUtil.getCompositionsCountString(
+    fun setAlbum(album: Album, onClickCallback: () -> Unit) = binding.apply {
+        itemTitle.text = album.name
+        tracksCount.text = TextUtil.getCompositionsCountString(
             album.playlist!!.songList.size
         )
         if (album.image != null) {
-            binding.albumImage.setImageBitmap(album.image)
+            itemImage.setImageBitmap(album.image)
         } else {
-            binding.albumImage.setImageResource(R.drawable.album)
+            itemImage.setImageResource(R.drawable.album)
         }
-        binding.albumListItem.setOnClickListener {
+        setOnClickListener {
             onClickCallback()
         }
     }

@@ -3,7 +3,7 @@ package com.nafanya.mp3world.features.allSongs.viewModel
 import androidx.lifecycle.map
 import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
-import com.nafanya.mp3world.core.listUtils.searching.SongQueryFilter
+import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.utils.timeConverters.DateConverter
 import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
 import com.nafanya.mp3world.core.wrappers.SongWrapper
@@ -25,7 +25,7 @@ class AllSongsViewModel @Inject constructor(
 ),
     Searchable<SongWrapper> {
 
-    override val filter: QueryFilter<SongWrapper> = SongQueryFilter
+    override val filter: QueryFilter<SongWrapper> = QueryFilter(songQueryFilterCallback)
 
     init {
         applyFilter(this)

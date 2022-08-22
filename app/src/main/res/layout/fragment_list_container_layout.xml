@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingTop="50dp"
     android:paddingBottom="100dp"
-    android:paddingHorizontal="20dp">
+    android:paddingHorizontal="10dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"

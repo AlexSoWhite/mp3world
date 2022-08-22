@@ -3,60 +3,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".core.entrypoint.MainActivity"
     android:background="@drawable/background_gradient"
     android:paddingTop="50dp">
 
-    <LinearLayout
-        android:id="@+id/main_menu"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menu_items_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="20dp"
+        android:paddingHorizontal="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3">
 
-        <include
+        <com.nafanya.mp3world.core.entrypoint.MainMenuOptionView
             android:id="@+id/all_songs"
-            layout="@layout/main_menu_item" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/playlists"
+            app:icon="@drawable/song_icon"
+            app:description="@string/my_songs" />
 
-        <include
+        <com.nafanya.mp3world.core.entrypoint.MainMenuOptionView
             android:id="@+id/playlists"
-            layout="@layout/main_menu_item" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintTop_toBottomOf="@id/all_songs"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/artists"
+            app:icon="@drawable/playlist_play"
+            app:description="@string/my_playlists" />
 
-        <include
+        <com.nafanya.mp3world.core.entrypoint.MainMenuOptionView
             android:id="@+id/artists"
-            layout="@layout/main_menu_item" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintTop_toBottomOf="@id/playlists"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/albums"
+            app:icon="@drawable/artist"
+            app:description="@string/artists" />
 
-        <include
+        <com.nafanya.mp3world.core.entrypoint.MainMenuOptionView
             android:id="@+id/albums"
-            layout="@layout/main_menu_item" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintTop_toBottomOf="@id/artists"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/favourite"
+            app:icon="@drawable/album"
+            app:description="@string/albums" />
 
-        <include
+        <com.nafanya.mp3world.core.entrypoint.MainMenuOptionView
             android:id="@+id/favourite"
-            layout="@layout/main_menu_item" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            app:layout_constraintTop_toBottomOf="@id/albums"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:icon="@drawable/favorite"
+            app:description="@string/favourites" />
 
 <!--        <include-->
 <!--            android:id="@+id/statistics"-->
 <!--            layout="@layout/main_menu_item"-->
 <!--            bind:description="@{&quot;Статистика&quot;}"-->
 <!--            bind:count="@{&quot;&quot;}" />-->
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        android:id="@+id/loader"
-        layout="@layout/loader"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+<!--    <include-->
+<!--        android:id="@+id/loader"-->
+<!--        layout="@layout/loader"-->
+<!--        android:visibility="invisible"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"/>-->
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/player_control_view"

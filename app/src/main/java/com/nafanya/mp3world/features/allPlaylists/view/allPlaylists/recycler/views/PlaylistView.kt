@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.utils.TextUtil
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
-import com.nafanya.mp3world.databinding.PlaylistListItemBinding
+import com.nafanya.mp3world.databinding.PlaylistContainerViewBinding
 import com.nafanya.mp3world.features.allPlaylists.view.allPlaylists.recycler.AllPlaylistsItemViewHolder
 import com.nafanya.mp3world.features.allPlaylists.view.allPlaylists.recycler.AllPlaylistsListItemView
 import com.nafanya.mp3world.features.allPlaylists.view.allPlaylists.recycler.ClickType
@@ -17,23 +17,30 @@ class PlaylistView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : AllPlaylistsListItemView(context, attributeSet, defStyle) {
 
-    private val binding: PlaylistListItemBinding =
-        PlaylistListItemBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding: PlaylistContainerViewBinding =
+        PlaylistContainerViewBinding.inflate(
+            LayoutInflater.from(context),
+            this,
+            true
+        )
 
-    fun setPlaylist(playlist: PlaylistWrapper, onClickCallback: (ClickType) -> Unit) {
-        binding.playlistName.text = playlist.name
-        binding.tracksCount.text = TextUtil.getCompositionsCountString(
+    fun setPlaylist(
+        playlist: PlaylistWrapper,
+        onClickCallback: (ClickType) -> Unit
+    ) = binding.apply {
+        itemTitle.text = playlist.name
+        tracksCount.text = TextUtil.getCompositionsCountString(
             playlist.songList.size
         )
         if (playlist.image != null) {
-            binding.playlistImage.setImageBitmap(playlist.image)
+            itemImage.setImageBitmap(playlist.image)
         } else {
-            binding.playlistImage.setImageResource(R.drawable.playlist_play)
+            itemImage.setImageResource(R.drawable.playlist_play)
         }
-        binding.playlistListItem.setOnClickListener {
+        setOnClickListener {
             onClickCallback(ClickType.CLICK)
         }
-        binding.playlistListItem.setOnLongClickListener {
+        setOnLongClickListener {
             onClickCallback(ClickType.LONG)
             true
         }
