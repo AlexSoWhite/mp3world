@@ -21,6 +21,7 @@ import javax.inject.Inject
  * Class that downloads song by PRDownloader.
  * Will be replaced with SoundCloud API call when it opens.
  * TODO: API 29
+ * TODO: Fix older API's
  */
 @Suppress("TooGenericExceptionCaught")
 class Downloader @Inject constructor(

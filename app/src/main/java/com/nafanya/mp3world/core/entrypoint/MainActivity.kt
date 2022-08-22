@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
@@ -17,7 +18,6 @@ import com.nafanya.mp3world.core.view.BaseActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.databinding.ActivityMainLayoutBinding
 import com.nafanya.mp3world.features.foregroundService.ForegroundService
-import com.nafanya.mp3world.features.foregroundService.ServiceInitializer
 import javax.inject.Inject
 
 class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
@@ -59,13 +59,18 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
         viewModel = factory.create(InitialViewModel::class.java)
         viewModel.initializeLists()
         PRDownloader.initialize(applicationContext)
-        initInitializer()
+        observeInitialization()
         initMainMenu()
     }
 
-    private fun initInitializer() {
-        val intent = Intent(applicationContext, ServiceInitializer::class.java)
-        startService(intent)
+    // TODO consider systematizing
+    private fun observeInitialization() {
+        viewModel.initializationLiveData.observe(this) {
+            if (it) {
+                val intent = Intent(this.applicationContext, ForegroundService::class.java)
+                ContextCompat.startForegroundService(this.applicationContext, intent)
+            }
+        }
     }
 
     @Suppress("LongMethod")

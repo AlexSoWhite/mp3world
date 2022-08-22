@@ -82,10 +82,8 @@ class FullscreenControlsFragment : BaseFragment<FullScreenPlayerControlsFragment
                 playerInteractor.currentSong.observe(viewLifecycleOwner) { song ->
                     renderSong(song as SongWrapper)
                 }
-//                view.findViewById<ShapeableImageView>(R.id.current_playlist)
-//                    .setOnClickListener {
-//
-//                    }
+                view.findViewById<ShapeableImageView>(R.id.current_playlist)
+                    .setOnClickListener { }
                 binding.controlsFullscreen.showShuffleButton = true
             }
         }
@@ -108,6 +106,8 @@ class FullscreenControlsFragment : BaseFragment<FullScreenPlayerControlsFragment
                 )
             )
             findViewById<ConstraintLayout>(R.id.controls_wrapper)
+                .startAnimation(AoedeAlphaAnimation())
+            findViewById<ConstraintLayout>(R.id.control_track_info_wrapper)
                 .startAnimation(AoedeAlphaAnimation())
         }
     }
@@ -138,6 +138,7 @@ class FullscreenControlsFragment : BaseFragment<FullScreenPlayerControlsFragment
                     binding.root.setBackgroundColor(
                         Color.parseColor(defaultBackgroundColor)
                     )
+                    updateBarsColor(Color.parseColor(defaultBackgroundColor))
                 }
                 // favourite
                 val actionButton = findViewById<ShapeableImageView>(R.id.action_button)
@@ -217,10 +218,7 @@ class FullscreenControlsFragment : BaseFragment<FullScreenPlayerControlsFragment
                     Color.valueOf(controlsRed, controlsGreen, controlsBlue).toArgb()
                 val backgroundColor = it.animatedValue as Int
                 root.setBackgroundColor(backgroundColor)
-                this@FullscreenControlsFragment.requireActivity().window.statusBarColor =
-                    backgroundColor
-                this@FullscreenControlsFragment.requireActivity().window.navigationBarColor =
-                    backgroundColor
+                updateBarsColor(backgroundColor)
                 controls.forEach { v ->
                     when (v) {
                         is ShapeableImageView -> v.setColorFilter(controlsColor)
@@ -231,6 +229,11 @@ class FullscreenControlsFragment : BaseFragment<FullScreenPlayerControlsFragment
             }
             colorAnimation.start()
         }
+    }
+
+    private fun updateBarsColor(color: Int) {
+        requireActivity().window.statusBarColor = color
+        requireActivity().window.navigationBarColor = color
     }
 
     companion object {

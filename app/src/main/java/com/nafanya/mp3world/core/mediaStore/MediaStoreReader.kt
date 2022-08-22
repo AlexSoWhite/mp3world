@@ -95,7 +95,11 @@ class MediaStoreReader @Inject constructor(
                         // set the song art
                         // build song object
                         val thisUri = UriFactory().getUri(thisId)
-                        val thisArt = artFactory.createBitmap(thisUri)
+                        val thisArt = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            artFactory.createBitmap(thisUri)
+                        } else {
+                            artFactory.createBitmap(thisAlbumId)
+                        }
                         val song = LocalSong(
                             uri = thisUri,
                             title = thisTitle,

@@ -17,7 +17,7 @@ import dagger.assisted.AssistedInject
 class RemoteSongsViewModel(
     private val query: String,
     queryExecutor: QueryExecutor,
-    playerInteractor: PlayerInteractor
+    private val playerInteractor: PlayerInteractor
 ) : StatePlaylistViewModel(
     playerInteractor,
     queryExecutor.songList.map {
@@ -29,6 +29,18 @@ class RemoteSongsViewModel(
 
     init {
         queryExecutor.executeQuery(query)
+        if (playerInteractor.isPlayerInitialised.value != true) {
+            compositeObservable.addObserver(queryExecutor.songList) {
+                if (it?.isNotEmpty() == true) {
+                    playerInteractor.setPlaylist(
+                        PlaylistWrapper(
+                            name = query,
+                            songList = it
+                        )
+                    )
+                }
+            }
+        }
     }
 
     override fun List<SongWrapper>.asListItems(): List<SongListItem> {

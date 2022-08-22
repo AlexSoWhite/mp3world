@@ -57,8 +57,8 @@ class BottomControlViewFragment : BaseFragment<BottomControlViewBinding>() {
         }
         viewModel.currentSong.observe(viewLifecycleOwner) {
             binding.root.isVisible = true
-            currentSong = it as SongWrapper
-            renderSong(it)
+            currentSong = viewModel.currentSong.value as SongWrapper
+            renderSong(currentSong)
         }
         binding.playerControlView.repeatToggleModes =
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or

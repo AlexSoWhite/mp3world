@@ -4,10 +4,12 @@ import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
+import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import com.nafanya.mp3world.R
 import com.nafanya.player.Song
@@ -55,20 +57,40 @@ class ArtFactory(private val context: Context? = null) {
     /**
      * Returns [SongWrapper.art] for local song with given [uri]
      */
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun createBitmap(uri: Uri): Bitmap {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        return try {
+            context
+                ?.contentResolver
+                ?.loadThumbnail(
+                    uri,
+                    Size(artDimension, artDimension),
+                    null
+                )
+        } catch (exception: IOException) {
+            defaultBitmap
+        }!!
+    }
+
+    fun createBitmap(albumId: Long): Bitmap {
+        val artworkUri = Uri.parse("content://media/external/audio/albumart")
+        val albumUri = ContentUris.withAppendedId(artworkUri, albumId)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             try {
-                context
-                    ?.contentResolver
-                    ?.loadThumbnail(
-                        uri,
-                        Size(artDimension, artDimension),
-                        null
-                    )
+                val source = ImageDecoder.createSource(
+                    context?.contentResolver!!,
+                    albumUri
+                )
+                ImageDecoder.decodeBitmap(source)
             } catch (exception: IOException) {
                 defaultBitmap
             }
-        } else {
+        } else try {
+            MediaStore.Images.Media.getBitmap(
+                context?.contentResolver,
+                albumUri
+            )
+        } catch (exception: IOException) {
             defaultBitmap
         }!!
     }

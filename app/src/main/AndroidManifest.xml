@@ -85,7 +85,7 @@
         <activity android:name=".features.playerView.view.FullScreenPlayerActivity"
             android:screenOrientation="portrait"/>
         <service android:name=".features.foregroundService.ForegroundService" />
-        <service android:name=".features.foregroundService.ServiceInitializer" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

@@ -6,9 +6,11 @@ import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.mp3world.features.albums.AlbumListManager
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
 import com.nafanya.mp3world.features.allSongs.SongListManager
+import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
 import com.nafanya.mp3world.features.artists.ArtistListManager
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.localStorage.DatabaseHolder
+import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 class InitialViewModel @Inject constructor(
     private val mediaStoreReader: MediaStoreReader,
     private val dbHolder: DatabaseHolder,
-    songListManager: SongListManager,
+    private val playerInteractor: PlayerInteractor,
+    private val songListManager: SongListManager,
     artistListManager: ArtistListManager,
     playlistListManager: PlaylistListManager,
     albumListManager: AlbumListManager,
@@ -28,6 +31,7 @@ class InitialViewModel @Inject constructor(
     val artists = artistListManager.artists
     val albums = albumListManager.albums
     val favourites = favouriteListManager.favorites
+    val initializationLiveData = playerInteractor.isPlayerInitialised
 
     fun initializeLists() {
         viewModelScope.launch {
@@ -35,6 +39,11 @@ class InitialViewModel @Inject constructor(
                 isInitialized = true
                 // initialize songList
                 mediaStoreReader.readMediaStore()
+                songListManager.songList.observeForever {
+                    if (playerInteractor.isPlayerInitialised.value != true) {
+                        playerInteractor.setPlaylist(it.asAllSongsPlaylist())
+                    }
+                }
             }
         }
     }

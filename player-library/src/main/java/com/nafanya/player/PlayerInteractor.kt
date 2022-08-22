@@ -24,13 +24,17 @@ class PlayerInteractor(
         get() = listener.isPlaying
     val currentPlaylist: LiveData<Playlist?>
         get() = mPlayer.currentPlaylist
-    private val mIsPlayerInitialised: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val mIsPlayerInitialized = MutableLiveData(false)
     val isPlayerInitialised: LiveData<Boolean>
-        get() = mIsPlayerInitialised
+        get() = mIsPlayerInitialized
 
     init {
         mPlayer.addListener(listener)
-        mIsPlayerInitialised.value = true
+        currentSong.observeForever {
+            if (isPlayerInitialised.value != true) {
+                mIsPlayerInitialized.value = true
+            }
+        }
     }
 
     fun setPlaylist(playlist: Playlist) {

@@ -27,11 +27,9 @@ internal class AoedePlayer(context: Context) {
     /**
      * current playlist, to navigate between items in it
      */
-    private val mCurrentPlaylist: MutableLiveData<Playlist?> by lazy {
-        MutableLiveData(null)
-    }
-    private val mPlaylist: Playlist
-        get() = mCurrentPlaylist.value!!
+    private val mCurrentPlaylist = MutableLiveData<Playlist>()
+    private val mPlaylist: Playlist?
+        get() = mCurrentPlaylist.value
     internal val currentPlaylist: LiveData<Playlist?>
         get() = mCurrentPlaylist
 
@@ -61,7 +59,7 @@ internal class AoedePlayer(context: Context) {
         // TODO for what?
         player?.clearMediaItems()
         mCurrentPlaylist.value = playlist
-        mPlaylist.songList.forEach {
+        mPlaylist?.songList?.forEach {
             player?.addMediaItem(it.toMediaItem())
         }
         if (isInitialized) {
@@ -77,10 +75,12 @@ internal class AoedePlayer(context: Context) {
      * @throws IllegalSeekPositionException if song isn't a member of playlist
      */
     internal fun setSong(song: Song) {
-        val idx = mPlaylist.songList.indexOf(song)
+        val idx = mPlaylist?.songList?.indexOf(song)
         try {
-            player?.seekToDefaultPosition(idx)
-            player?.play()
+            if (idx != null) {
+                player?.seekToDefaultPosition(idx)
+                player?.play()
+            }
         } catch (e: IllegalSeekPositionException) {
             throw e
         }
