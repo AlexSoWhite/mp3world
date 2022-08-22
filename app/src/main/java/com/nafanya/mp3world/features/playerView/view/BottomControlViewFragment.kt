@@ -21,10 +21,10 @@ import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.mp3world.core.view.BaseFragment
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.core.wrappers.SongWrapper
-import com.nafanya.mp3world.databinding.BottomControlViewBinding
+import com.nafanya.mp3world.databinding.PlayerControlViewBottomFragmentBinding
 import javax.inject.Inject
 
-class BottomControlViewFragment : BaseFragment<BottomControlViewBinding>() {
+class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBinding>() {
 
     @Inject
     lateinit var factory: ViewModelFactory
@@ -39,8 +39,8 @@ class BottomControlViewFragment : BaseFragment<BottomControlViewBinding>() {
         inflater: LayoutInflater,
         parent: ViewGroup?,
         attachToParent: Boolean
-    ): BottomControlViewBinding {
-        return BottomControlViewBinding.inflate(inflater, parent, attachToParent)
+    ): PlayerControlViewBottomFragmentBinding {
+        return PlayerControlViewBottomFragmentBinding.inflate(inflater, parent, attachToParent)
     }
 
     override fun onAttach(context: Context) {

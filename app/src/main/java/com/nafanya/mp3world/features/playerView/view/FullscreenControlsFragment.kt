@@ -28,14 +28,14 @@ import com.nafanya.mp3world.core.view.BaseFragment
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
-import com.nafanya.mp3world.databinding.FullScreenPlayerControlsFragmentBinding
+import com.nafanya.mp3world.databinding.PlayerControlViewFullscreenFragmentBinding
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
 import com.nafanya.mp3world.features.downloading.ResultType
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
-class FullscreenControlsFragment : BaseFragment<FullScreenPlayerControlsFragmentBinding>() {
+class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
 
     private var previousColor: Int = -1
     private var isColorInitialized = false
@@ -60,8 +60,8 @@ class FullscreenControlsFragment : BaseFragment<FullScreenPlayerControlsFragment
         inflater: LayoutInflater,
         parent: ViewGroup?,
         attachToParent: Boolean
-    ): FullScreenPlayerControlsFragmentBinding {
-        return FullScreenPlayerControlsFragmentBinding.inflate(inflater, parent, attachToParent)
+    ): PlayerControlViewFullscreenFragmentBinding {
+        return PlayerControlViewFullscreenFragmentBinding.inflate(inflater, parent, attachToParent)
     }
 
     override fun onAttach(context: Context) {
