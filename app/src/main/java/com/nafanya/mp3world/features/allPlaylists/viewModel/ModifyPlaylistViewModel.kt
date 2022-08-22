@@ -56,7 +56,7 @@ class ModifyPlaylistViewModel(
             }
             addObserver(modifyingPlaylist) {
                 modifyingPlaylistTitle = it.name
-                songList.value = it.songList
+                songList.value = ArrayList(it.songList)
             }
             addObserver(songList) {
                 songListSize = it.size

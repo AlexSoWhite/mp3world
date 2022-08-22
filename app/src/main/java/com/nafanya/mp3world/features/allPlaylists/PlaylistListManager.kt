@@ -33,7 +33,7 @@ class PlaylistListManager @Inject constructor(
     }
 
     override fun getPlaylistByContainerId(id: Long): LiveData<PlaylistWrapper?> {
-        return mPlaylists.map {
+        return playlists.map {
             it.firstOrNull { playlist -> playlist.id == id }
         }
     }
