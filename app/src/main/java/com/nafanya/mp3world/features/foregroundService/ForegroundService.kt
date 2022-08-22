@@ -21,8 +21,12 @@ import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
-// TODO use custom service
+// TODO customize
 class ForegroundService : Service() {
+
+    companion object {
+        const val CHANNEL_ID = "playback_channel"
+    }
 
     /**
      * Notification manager responsible for displaying player notification.
@@ -40,27 +44,32 @@ class ForegroundService : Service() {
             .foregroundServiceComponent()
             .inject(this)
         super.onCreate()
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             val channel = NotificationChannel(
-                "playback_channel",
+                CHANNEL_ID,
                 "player",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             notificationManager.createNotificationChannel(channel)
+            val notification = Notification.Builder(this, CHANNEL_ID)
+                .setContentTitle("")
+                .setContentText("").build()
+            startForeground(1, notification)
         }
         playerNotificationManager = PlayerNotificationManager
-            .Builder(this, 1, "playback_channel")
+            .Builder(this, 1, CHANNEL_ID)
             .setChannelImportance(IMPORTANCE_DEFAULT)
-            .setMediaDescriptionAdapter(Adapter(this)) // TODO bind with app
+            .setMediaDescriptionAdapter(Adapter(this))
             .setNotificationListener(NotificationListener())
             .setSmallIconResourceId(R.drawable.music_notification_icon)
-            .build()
-        playerNotificationManager.setUseFastForwardAction(false)
-        playerNotificationManager.setUseRewindAction(false)
-        playerNotificationManager.setUseNextActionInCompactView(true)
-        playerNotificationManager.setUsePreviousActionInCompactView(true)
-        playerNotificationManager.setPlayer(player)
+            .build().apply {
+                setUseFastForwardAction(false)
+                setUseRewindAction(false)
+                setUseNextActionInCompactView(true)
+                setUsePreviousActionInCompactView(true)
+                setPlayer(player)
+            }
     }
 
     /**
@@ -139,7 +148,7 @@ class ForegroundService : Service() {
             ongoing: Boolean
         ) {
             super.onNotificationPosted(notificationId, notification, ongoing)
-            startForeground(notificationId, notification)
+            this@ForegroundService.startForeground(notificationId, notification)
         }
 
         override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
