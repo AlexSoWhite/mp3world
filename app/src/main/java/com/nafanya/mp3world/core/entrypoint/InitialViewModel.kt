@@ -4,18 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.mp3world.features.albums.AlbumListManager
+import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.artists.ArtistListManager
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
-import com.nafanya.mp3world.features.localStorage.LocalStorageProvider
-import com.nafanya.mp3world.features.playlists.playlistsList.PlaylistListManager
+import com.nafanya.mp3world.features.localStorage.DatabaseHolder
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
 class InitialViewModel @Inject constructor(
     private val mediaStoreReader: MediaStoreReader,
-    private val localStorageProvider: LocalStorageProvider,
+    private val dbHolder: DatabaseHolder,
     songListManager: SongListManager,
     artistListManager: ArtistListManager,
     playlistListManager: PlaylistListManager,
@@ -41,7 +41,7 @@ class InitialViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        localStorageProvider.dbHolder.closeDataBase()
+        dbHolder.closeDataBase()
     }
 
     companion object {

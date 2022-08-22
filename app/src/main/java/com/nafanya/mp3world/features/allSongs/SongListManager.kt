@@ -2,49 +2,59 @@ package com.nafanya.mp3world.features.allSongs
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
-import com.nafanya.player.Song
+import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * Class that holds all songs data
  */
 @Singleton
-class SongListManager @Inject constructor() : ListManager {
+class SongListManager @Inject constructor(
+    mediaStoreReader: MediaStoreReader
+) : ListManager() {
 
-    private val mSongList: MutableLiveData<List<Song>> = MutableLiveData(listOf())
-    val songList: LiveData<List<Song>>
+    private val mSongList = MutableLiveData<List<LocalSong>>()
+    val songList: LiveData<List<LocalSong>>
         get() = mSongList
 
     private var isInitialized = false
 
-    override suspend fun populate(
-        mediaStoreReader: MediaStoreReader
-    ) {
-        if (isInitialized) {
-            mSongList.postValue(mediaStoreReader.allSongs)
-        } else {
-            // postValue doesn't trigger anything if there are no subscribers
-            // so initialization Service normally handle only setValue
-            withContext(Dispatchers.Main) {
-                mSongList.value = mediaStoreReader.allSongs
+    init {
+        mediaStoreReader.allSongs.observeForever {
+            listManagerScope.launch {
+                if (isInitialized) {
+                    mSongList.postValue(it)
+                } else {
+                    withContext(Dispatchers.Main) {
+                        mSongList.value = it
+                    }
+                }
             }
         }
     }
 
-    fun searchForSongs(query: String): List<Song> {
-        val result = mutableListOf<Song>()
-        result.addAll(
-            songList.value!!.filter {
-                it.title.lowercase().contains(query.lowercase()) ||
-                    it.artist.lowercase().contains(query.lowercase()) ||
-                    it.album.lowercase().contains(query.lowercase())
-            }
-        )
-        return result
+    override fun getPlaylistByContainerId(id: Long): LiveData<PlaylistWrapper?> {
+        return songList.map {
+            PlaylistWrapper(
+                songList = it,
+                name = "Мои песни"
+            )
+        }
     }
+}
+
+fun List<SongWrapper>.asAllSongsPlaylist(): PlaylistWrapper {
+    return PlaylistWrapper(
+        name = "Мои песни",
+        songList = this
+    )
 }

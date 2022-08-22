@@ -3,6 +3,8 @@
     <string name="my_songs">Мои песни</string>
     <string name="my_playlists">Мои плейлисты</string>
     <string name="artists">Исполнители</string>
+    <string name="albums">Альбомы</string>
+    <string name="favourites">Избранное</string>
     <string name="recycler_behavior">com.google.android.material.transition.MaterialContainerTransform</string>
     <string name="playlists">плейлисты</string>
     <string name="songs">песни</string>
@@ -21,4 +23,16 @@
     <string name="no_artists">нет исполнителей</string>
     <string name="nothing_found">ничего не найдено</string>
     <string name="player_transition">player_transition</string>
+    <string name="deny">отмена</string>
+    <string name="create">создать</string>
+    <string name="delete_playlist_message">удалить плейлист %1$s?</string>
+    <string name="confirm_changes">сохранить изменения</string>
+    <string name="add_to_favourites">добавить в избранное</string>
+    <string name="remove_from_favourites">удалить из избранного</string>
+    <string name="go_to_album">перейти к альбому %1$s</string>
+    <string name="go_to_artist">перейти к исполнителю %1$s</string>
+    <string name="song_description">%1$s - %2$s</string>
+    <string name="decline">отмена</string>
+    <string name="modify_compositions">изменить композиции</string>
+    <string name="download_song">загрузить песню %1$s - %2$s</string>
 </resources>

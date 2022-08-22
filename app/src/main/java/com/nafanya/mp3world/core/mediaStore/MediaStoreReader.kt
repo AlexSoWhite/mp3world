@@ -1,20 +1,15 @@
 package com.nafanya.mp3world.core.mediaStore
 
-import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Size
-import com.nafanya.mp3world.core.listManagers.ListManagerContainer
-import com.nafanya.player.Song
-import java.io.ByteArrayInputStream
-import java.io.IOException
-import java.io.InputStream
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.nafanya.mp3world.core.wrappers.ArtFactory
+import com.nafanya.mp3world.core.wrappers.UriFactory
+import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -23,19 +18,20 @@ import kotlinx.coroutines.withContext
  * Class that reads local MediaStore.
  * @property allSongs holds all song objects that device has
  */
+@Singleton
 class MediaStoreReader @Inject constructor(
-    private val context: Context,
-    private val listManagerContainer: ListManagerContainer
+    private val context: Context
 ) {
-
-    private var mAllSongs: List<Song> = listOf()
-    val allSongs
-        get() = mAllSongs
 
     companion object {
         private var isInitialized = false
-        private const val artDimension = 1024
     }
+
+    private val mAllSongs = MutableLiveData<List<LocalSong>>()
+    val allSongs: LiveData<List<LocalSong>>
+        get() = mAllSongs
+
+    private val artFactory = ArtFactory(context)
 
     /**
      * Sets managers data on main thread.
@@ -65,7 +61,7 @@ class MediaStoreReader @Inject constructor(
         }
         // sort based on date
         val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
-        val allSongsList = mutableListOf<Song>()
+        val allSongsList = mutableListOf<LocalSong>()
         val query = context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             projection,
@@ -97,53 +93,26 @@ class MediaStoreReader @Inject constructor(
                     // tracks with <unknown> artist are corrupted
                     if (thisArtist != "<unknown>") {
                         // set the song art
-                        val bitmap = getBitmap(context.contentResolver, thisId)
                         // build song object
-                        val song = Song(
-                            id = thisId,
+                        val thisUri = UriFactory().getUri(thisId)
+                        val thisArt = artFactory.createBitmap(thisUri)
+                        val song = LocalSong(
+                            uri = thisUri,
                             title = thisTitle,
                             artistId = thisArtistId,
                             artist = thisArtist,
                             albumId = thisAlbumId,
                             album = thisAlbumName,
                             date = thisDate,
-                            url = null,
                             duration = thisDuration,
-                            art = bitmap,
-                            artUrl = null
+                            art = thisArt
                         )
                         allSongsList.add(song)
                     }
                 }
             }
         }
-        mAllSongs = allSongsList
-        listManagerContainer.populateAll(this@MediaStoreReader)
+        mAllSongs.postValue(allSongsList)
         isInitialized = true
-    }
-
-    private fun getBitmap(contentResolver: ContentResolver, trackId: Long): Bitmap? {
-        val trackUri = ContentUris.withAppendedId(
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            trackId
-        )
-        var bitmap: Bitmap? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            bitmap = try {
-                contentResolver.loadThumbnail(trackUri, Size(artDimension, artDimension), null)
-            } catch (exception: IOException) {
-                null
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val retriever = MediaMetadataRetriever()
-            retriever.setDataSource(trackUri.path)
-            var inputStream: InputStream? = null
-            if (retriever.embeddedPicture != null) {
-                inputStream = ByteArrayInputStream(retriever.embeddedPicture)
-            }
-            retriever.release()
-            bitmap = BitmapFactory.decodeStream(inputStream)
-        }
-        return bitmap
     }
 }

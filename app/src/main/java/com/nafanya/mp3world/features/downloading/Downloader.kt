@@ -12,7 +12,8 @@ import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
-import com.nafanya.player.Song
+import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import java.io.File
 import javax.inject.Inject
 
@@ -42,7 +43,7 @@ class Downloader @Inject constructor(
     }
 
     fun download(
-        song: Song,
+        song: RemoteSong,
         callback: (DownloadResult) -> Unit
     ) {
         builder
@@ -59,10 +60,10 @@ class Downloader @Inject constructor(
     }
 
     private fun downLoadL(
-        song: Song,
+        song: SongWrapper,
         callback: (DownloadResult) -> Unit
     ): Int {
-        val url = song.url!!
+        val url = song.uri.toString()
         var fileName = url
             .substring(url.lastIndexOf('/') + 1)
             .replace('_', ' ')

@@ -2,16 +2,20 @@ package com.nafanya.mp3world.core.entrypoint
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.nafanya.mp3world.R
+import android.view.LayoutInflater
+import com.nafanya.mp3world.core.view.BaseActivity
+import com.nafanya.mp3world.databinding.SplashScreenBinding
 import java.util.Timer
 import java.util.TimerTask
 
-class InitialActivity : AppCompatActivity() {
+class InitialActivity : BaseActivity<SplashScreenBinding>() {
+
+    override fun inflate(layoutInflater: LayoutInflater): SplashScreenBinding {
+        return SplashScreenBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.splash_screen)
         Timer().schedule(
             object : TimerTask() {
                 override fun run() {

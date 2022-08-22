@@ -1,14 +1,14 @@
 package com.nafanya.mp3world.features.foregroundService
 
+import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.content.ContextCompat.startForegroundService
-import androidx.lifecycle.LifecycleService
 import com.nafanya.mp3world.core.di.PlayerApplication
+import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.player.PlayerInteractor
-import com.nafanya.player.Playlist
-import com.nafanya.player.Song
 import javax.inject.Inject
 
 /**
@@ -18,7 +18,8 @@ import javax.inject.Inject
  * it's decided to control service start.
  * Listens SongListManager state.
  */
-class ServiceInitializer : LifecycleService() {
+// TODO move initialization away from services
+class ServiceInitializer : Service() {
 
     @Inject
     lateinit var playerInteractor: PlayerInteractor
@@ -40,11 +41,11 @@ class ServiceInitializer : LifecycleService() {
             .foregroundServiceComponent()
             .inject(this)
         super.onCreate()
-        songListManager.songList.observe(this) {
+        songListManager.songList.observeForever {
             if (!isServiceInitialized && it.isNotEmpty()) {
                 playerInteractor.setPlaylist(
-                    Playlist(
-                        songList = it as MutableList<Song>,
+                    PlaylistWrapper(
+                        songList = it as MutableList<SongWrapper>,
                         id = -1,
                         name = "Мои песни"
                     )
@@ -53,7 +54,7 @@ class ServiceInitializer : LifecycleService() {
                 isServiceInitialized = true
             }
         }
-        playerInteractor.currentPlaylist.observe(this) {
+        playerInteractor.currentPlaylist.observeForever {
             if (!isServiceInitialized && it?.songList?.isNotEmpty() == true) {
                 initService()
                 isServiceInitialized = true
@@ -62,7 +63,6 @@ class ServiceInitializer : LifecycleService() {
     }
 
     override fun onBind(p0: Intent): IBinder? {
-        super.onBind(p0)
         return null
     }
 }

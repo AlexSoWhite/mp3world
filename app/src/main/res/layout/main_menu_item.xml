@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <data>
-        <variable
-            name="description"
-            type="String" />
-        <variable
-            name="count"
-            type="String" />
-    </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,23 +17,22 @@
         tools:src="@drawable/album"/>
 
     <TextView
+        android:id="@+id/description"
         android:layout_marginStart="10dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="18sp"
         tools:text="описание"
-        android:text="@{description}"
         android:layout_gravity="center_vertical"
-        android:background="@android:color/transparent"
-        />
+        android:background="@android:color/transparent" />
 
     <TextView
+        android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         tools:text="123"
-        android:text="@{count}"
         android:layout_gravity="center_vertical"
         />
 
@@ -51,8 +41,6 @@
         android:layout_height="25dp"
         android:layout_marginStart="5dp"
         android:src="@drawable/arrow_forward_ios"
-        android:layout_gravity="center_vertical"
-        />
+        android:layout_gravity="center_vertical" />
 
 </LinearLayout>
-</layout>

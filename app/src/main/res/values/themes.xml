@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Mp3world" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimaryVariant">#353535</item>
+        <item name="colorPrimaryVariant">#767685</item>
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="actionBarStyle">@style/ActionBar</item>
@@ -16,7 +16,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:navigationBarColor">#1B1A1A</item>
+        <item name="android:navigationBarColor">#0D221D</item>
     </style>
     <style name="SplashTheme" parent="Theme.Mp3world">
         <item name="android:windowBackground">@drawable/background_gradient</item>

@@ -11,7 +11,7 @@ class PlayerInteractor(
     /**
      * Player itself
      */
-    private var mPlayer: PlaylistPlayer = PlaylistPlayer(context)
+    private var mPlayer: AoedePlayer = AoedePlayer(context)
     val player: Player?
         get() = mPlayer.player
     /**

@@ -7,8 +7,8 @@ data class PlayerConfiguration(
 
     companion object {
 
-        const val defaultDurationDecreaseVolume = 500L
-        const val defaultDurationIncreaseVolume = 500L
+        const val defaultDurationDecreaseVolume = 200L
+        const val defaultDurationIncreaseVolume = 200L
     }
 }
 

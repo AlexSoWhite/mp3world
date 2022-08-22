@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Dialog">
+
+    <TextView
+        android:id="@+id/song_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="15dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        tools:text="Linkin park - Numb"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/download_action" />
+
+    <com.nafanya.mp3world.features.songListViews.actionDialogs.DialogOptionView
+        android:id="@+id/download_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="7dp"
+        tools:description="загрузить песню Linkin Park - Numb"
+        app:icon="@drawable/download_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/song_description"
+        app:layout_constraintBottom_toTopOf="@id/dismiss_action_dialog" />
+
+    <Button
+        android:background="@android:color/transparent"
+        android:id="@+id/dismiss_action_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/download_action"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:text="@string/decline" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

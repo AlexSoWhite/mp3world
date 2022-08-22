@@ -1,8 +1,13 @@
 package com.nafanya.mp3world.core.listManagers
 
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import androidx.lifecycle.LiveData
+import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 
-interface ListManager {
+abstract class ListManager {
 
-    suspend fun populate(mediaStoreReader: MediaStoreReader)
+    protected val listManagerScope = CoroutineScope(SupervisorJob())
+
+    abstract fun getPlaylistByContainerId(id: Long): LiveData<PlaylistWrapper?>
 }

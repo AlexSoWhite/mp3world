@@ -1,61 +1,34 @@
 package com.nafanya.mp3world.features.albums.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.core.viewModel.ListViewModelInterface
-import com.nafanya.mp3world.core.viewModel.PageState
+import androidx.lifecycle.map
+import com.nafanya.mp3world.core.listUtils.StateMachine
+import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
+import com.nafanya.mp3world.core.listUtils.searching.Searchable
 import com.nafanya.mp3world.features.albums.Album
 import com.nafanya.mp3world.features.albums.AlbumListManager
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.mp3world.features.albums.view.recycler.ALBUM
+import com.nafanya.mp3world.features.albums.view.recycler.AlbumListItem
 import javax.inject.Inject
 
 class AlbumListViewModel @Inject constructor(
-    playerInteractor: PlayerInteractor,
-    private val albumListManager: AlbumListManager
-) : ListViewModelInterface(playerInteractor) {
+    albumListManager: AlbumListManager
+) : StateMachine<Album, AlbumListItem>(
+    albumListManager.albums.map { it }
+),
+    Searchable<Album> {
 
-    private var query = ""
-    private val mAlbumsList: MutableLiveData<List<Album>> = MutableLiveData(listOf())
-    val albumsList: LiveData<List<Album>>
-        get() = mAlbumsList
+    override val filter: QueryFilter<Album> = QueryFilter { album, query ->
+        album.name.contains(query, true)
+    }
 
-    override fun onLoading() {
-        mAlbumsList.value = albumListManager.albums.value
-        if (mAlbumsList.value!!.isEmpty()) {
-            pageState.value = PageState.IS_EMPTY
-        } else {
-            pageState.value = PageState.IS_LOADED
+    override fun List<Album>.asListItems(): List<AlbumListItem> {
+        return this.map {
+            AlbumListItem(ALBUM, it)
         }
     }
 
-    override fun onLoaded() {
-        if (query != "") {
-            title.value = "$query (${mAlbumsList.value?.size})"
-        } else {
-            title.value = "Альбомы (${mAlbumsList.value?.size})"
-        }
-    }
-
-    override fun onEmpty() {
-        if (query != "") {
-            title.value = "Альбомы"
-        } else {
-            title.value = query
-        }
-    }
-
-    fun search(query: String) {
-        this.query = query
-        mAlbumsList.value = albumListManager.search(query)
-        if (mAlbumsList.value!!.isEmpty()) {
-            pageState.value = PageState.IS_EMPTY
-        } else {
-            pageState.value = PageState.IS_LOADED
-        }
-    }
-
-    fun reset() {
-        query = ""
-        pageState.value = PageState.IS_LOADING
+    init {
+        applyFilter(this)
+        resetInitialTitle("Альбомы")
     }
 }

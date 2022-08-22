@@ -7,9 +7,11 @@ import androidx.annotation.RequiresApi
 
 object ColorExtractor {
 
-    private const val colorTakingThreshold = 0.8f
+    private const val colorTakingMaxThreshold = 0.8f
+    private const val colorTakingMinThreshold = 0.05f
 
     @RequiresApi(Build.VERSION_CODES.Q)
+    @Suppress("ComplexCondition")
     fun getAverageColorWithNoWhiteComponent(bitmap: Bitmap): Int {
         var averageRed = 0.0
         var averageGreen = 0.0
@@ -21,9 +23,12 @@ object ColorExtractor {
             for (j in 0 until height) {
                 val color = bitmap.getColor(i, j)
                 if (
-                    color.red() < colorTakingThreshold &&
-                    color.green() < colorTakingThreshold &&
-                    color.blue() < colorTakingThreshold
+                    color.red() < colorTakingMaxThreshold &&
+                    color.green() < colorTakingMaxThreshold &&
+                    color.blue() < colorTakingMaxThreshold &&
+                    color.red() > colorTakingMinThreshold &&
+                    color.green() > colorTakingMinThreshold &&
+                    color.blue() > colorTakingMinThreshold
                 ) {
                     count++
                     averageRed += color.red()

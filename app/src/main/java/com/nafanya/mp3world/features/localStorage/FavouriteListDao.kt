@@ -9,7 +9,7 @@ import com.nafanya.mp3world.features.favorites.FavouriteListEntity
 @Dao
 interface FavouriteListDao {
     @Query("SELECT * FROM favouriteListEntity")
-    suspend fun getAll(): MutableList<Long>
+    suspend fun getAll(): MutableList<String>
 
     @Insert
     suspend fun insert(value: FavouriteListEntity)
