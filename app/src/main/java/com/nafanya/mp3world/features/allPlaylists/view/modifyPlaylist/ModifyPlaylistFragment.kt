@@ -44,6 +44,7 @@ class ModifyPlaylistFragment :
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         createTopBar(
+            this,
             viewModel,
             onConfirmCallback = {
                 viewModel.confirmChanges()

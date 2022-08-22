@@ -125,7 +125,7 @@ abstract class StateFragment<DU, LI : BaseListItem> :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)
         if (item.itemId == android.R.id.home) {
-            requireActivity().finish()
+            requireActivity().onBackPressed()
             return true
         }
         return false

@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
@@ -29,8 +30,10 @@ class BottomControlViewFragment : BaseFragment<BottomControlViewBinding>() {
     lateinit var factory: ViewModelFactory
     @Inject
     lateinit var mediaStoreReader: MediaStoreReader
-    private lateinit var viewModel: PlayerViewModel
-    private lateinit var currentSong: SongWrapper
+    private val viewModel: PlayerViewModel by viewModels {
+        factory
+    }
+    private var currentSong: SongWrapper? = null
 
     override fun inflate(
         inflater: LayoutInflater,
@@ -50,7 +53,6 @@ class BottomControlViewFragment : BaseFragment<BottomControlViewBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = factory.create(PlayerViewModel::class.java)
         binding.playerControlView.showTimeoutMs = 0
         viewModel.isPlayerInitialised.observe(viewLifecycleOwner) {
             binding.playerControlView.player = viewModel.player
@@ -58,7 +60,7 @@ class BottomControlViewFragment : BaseFragment<BottomControlViewBinding>() {
         viewModel.currentSong.observe(viewLifecycleOwner) {
             binding.root.isVisible = true
             currentSong = viewModel.currentSong.value as SongWrapper
-            renderSong(currentSong)
+            renderSong(currentSong!!)
         }
         binding.playerControlView.repeatToggleModes =
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
@@ -93,7 +95,6 @@ class BottomControlViewFragment : BaseFragment<BottomControlViewBinding>() {
     }
 
     private fun setSongIcon() {
-        val songIcon = view?.findViewById<ImageView>(R.id.control_song_icon)
-        songIcon?.setImageBitmap(currentSong.art)
+        view?.findViewById<ImageView>(R.id.control_song_icon)?.setImageBitmap(currentSong!!.art)
     }
 }

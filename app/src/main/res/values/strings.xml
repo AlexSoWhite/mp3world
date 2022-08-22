@@ -35,4 +35,6 @@
     <string name="decline">отмена</string>
     <string name="modify_compositions">изменить композиции</string>
     <string name="download_song">загрузить песню %1$s - %2$s</string>
+    <string name="changes_will_be_discarded">изменения не будут сохранены. продолжить?</string>
+    <string name="string_continue">продолжить</string>
 </resources>
