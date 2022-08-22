@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.view.BaseActivity
 import com.nafanya.mp3world.databinding.ActivityRemoteSongsLayoutBinding
-import com.r0adkll.slidr.Slidr
 
 class RemoteSongsActivity : BaseActivity<ActivityRemoteSongsLayoutBinding>() {
 
@@ -19,7 +18,6 @@ class RemoteSongsActivity : BaseActivity<ActivityRemoteSongsLayoutBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Slidr.attach(this)
         val arguments = Bundle()
         arguments.putString(QUERY, intent.getStringExtra(QUERY))
         val fragment = RemoteSongsFragment()
