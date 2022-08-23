@@ -15,12 +15,17 @@ import com.nafanya.player.Listener.Companion.URI_KEY
 internal class AoedePlayer(context: Context) {
 
     /**
-     * player itself
+     * Extended player with custom behavior.
      */
-    internal var player: AoedePlayerWrapper? = null
+    private val mPlayer: AoedePlayerWrapper = AoedePlayerWrapper(
+        ExoPlayer.Builder(context).build()
+    )
+    internal val player: AoedePlayerWrapper
+        get() = mPlayer
 
     /**
-     * sets to true when first mediaItem is loaded
+     * Setting to true when first mediaItem is loaded, needed to decide
+     * whether to start playing after song selected or not.
      */
     private var isInitialized = false
 
@@ -28,16 +33,14 @@ internal class AoedePlayer(context: Context) {
      * current playlist, to navigate between items in it
      */
     private val mCurrentPlaylist = MutableLiveData<Playlist>()
-    private val mPlaylist: Playlist?
-        get() = mCurrentPlaylist.value
-    internal val currentPlaylist: LiveData<Playlist?>
+    internal val currentPlaylist: LiveData<Playlist>
         get() = mCurrentPlaylist
 
+    private val mPlaylist: Playlist?
+        get() = mCurrentPlaylist.value
+
     init {
-        player = AoedePlayerWrapper(
-            ExoPlayer.Builder(context).build()
-        )
-        player?.exoPlayer?.apply {
+        player.exoPlayer.apply {
             setHandleAudioBecomingNoisy(true)
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
@@ -48,7 +51,7 @@ internal class AoedePlayer(context: Context) {
     }
 
     internal fun addListener(listener: Listener) {
-        player?.addListener(listener)
+        player.addListener(listener)
     }
 
     /**
@@ -57,13 +60,17 @@ internal class AoedePlayer(context: Context) {
     internal fun setPlaylist(playlist: Playlist) {
         // creating copy of playlist to continue playing deleted from playlist songs
         // TODO for what?
-        player?.clearMediaItems()
+        player.clearMediaItems()
         mCurrentPlaylist.value = playlist
         mPlaylist?.songList?.forEach {
-            player?.addMediaItem(it.toMediaItem())
+            /**
+             * when this method is called for the first time, it ends with
+             * moving player to initialized state
+             */
+            player.addMediaItem(it.toMediaItem())
         }
         if (isInitialized) {
-            player?.prepare()
+            player.prepare()
         } else {
             isInitialized = true
         }
@@ -72,14 +79,14 @@ internal class AoedePlayer(context: Context) {
     /**
      * Resets player song.
      * @param song must exist in current player playlist.
-     * @throws IllegalSeekPositionException if song isn't a member of playlist
+     * @throws IllegalSeekPositionException if song doesn't appear in playlist.
      */
     internal fun setSong(song: Song) {
         val idx = mPlaylist?.songList?.indexOf(song)
         try {
             if (idx != null) {
-                player?.seekToDefaultPosition(idx)
-                player?.play()
+                player.seekToDefaultPosition(idx)
+                player.play()
             }
         } catch (e: IllegalSeekPositionException) {
             throw e
@@ -99,8 +106,7 @@ internal class AoedePlayer(context: Context) {
             .build()
     }
 
-    internal fun destroy() {
-        player?.release()
-        player = null
+    internal fun suspend() {
+        player.pause()
     }
 }

@@ -36,8 +36,4 @@ internal class Listener(
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         _isPlaying.value = isPlaying
     }
-
-    fun destroy() {
-        // logStatistic()
-    }
 }

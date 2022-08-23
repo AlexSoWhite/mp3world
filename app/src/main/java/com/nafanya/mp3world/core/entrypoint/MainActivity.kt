@@ -7,9 +7,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
@@ -18,20 +18,29 @@ import com.nafanya.mp3world.core.view.BaseActivity
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.databinding.ActivityMainLayoutBinding
 import com.nafanya.mp3world.features.foregroundService.ForegroundService
+import com.nafanya.mp3world.features.foregroundService.ServiceMonitor
 import javax.inject.Inject
 
 class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
 
     @Inject
     lateinit var factory: ViewModelFactory
-    private lateinit var viewModel: InitialViewModel
+    val viewModel: InitialViewModel by viewModels { factory }
+
+    /**
+     * Service initializer.
+     */
+    @Inject
+    lateinit var serviceMonitor: ServiceMonitor
 
     override fun inflate(layoutInflater: LayoutInflater): ActivityMainLayoutBinding {
         return ActivityMainLayoutBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as PlayerApplication).applicationComponent.entrypointComponent().inject(this)
+        (application as PlayerApplication).applicationComponent
+            .entrypointComponent
+            .inject(this)
         super.onCreate(savedInstanceState)
         supportActionBar?.displayOptions = DISPLAY_SHOW_TITLE
         checkPermissions()
@@ -56,21 +65,10 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
                 return
             }
         }
-        viewModel = factory.create(InitialViewModel::class.java)
         viewModel.initializeLists()
+        serviceMonitor.startMonitoring()
         PRDownloader.initialize(applicationContext)
-        observeInitialization()
         initMainMenu()
-    }
-
-    // TODO consider systematizing
-    private fun observeInitialization() {
-        viewModel.initializationLiveData.observe(this) {
-            if (it) {
-                val intent = Intent(this.applicationContext, ForegroundService::class.java)
-                ContextCompat.startForegroundService(this.applicationContext, intent)
-            }
-        }
     }
 
     @Suppress("LongMethod")
@@ -171,8 +169,9 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         applicationContext.stopService(Intent(this, ForegroundService::class.java))
+        viewModel.suspendPlayer()
+        super.onDestroy()
     }
 
     override fun onBackPressed() {

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.wrappers.ArtFactory
+import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import java.io.IOException
@@ -92,4 +93,12 @@ class QueryExecutor @Inject constructor(
             }
         )
     }
+}
+
+fun List<RemoteSong>?.asPlaylist(query: String): PlaylistWrapper {
+    return PlaylistWrapper(
+        songList = this ?: emptyList(),
+        name = query,
+        id = -1
+    )
 }

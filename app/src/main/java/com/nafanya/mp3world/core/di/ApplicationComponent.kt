@@ -17,14 +17,15 @@ import com.nafanya.mp3world.features.foregroundService.di.ForegroundServiceCompo
 import com.nafanya.mp3world.features.playerView.di.PlayerViewComponentProvider
 import com.nafanya.mp3world.features.playlist.di.PlaylistComponentProvider
 import com.nafanya.mp3world.features.remoteSongs.di.RemoteSongsComponentProvider
+import com.nafanya.player.PlayerInteractor
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Scope
 import javax.inject.Singleton
 
 @Component(
     modules = [
         DownloadModule::class,
-        PlayerModule::class,
         SongListManagerModule::class,
         AlbumListManagerModule::class,
         ArtistListManagerModule::class,
@@ -47,12 +48,26 @@ interface ApplicationComponent :
 
     fun context(): Context
 
+    fun playerInteractor(): PlayerInteractor
+
     @Component.Builder
     interface Builder {
 
         @BindsInstance
         fun context(context: Context): Builder
 
+        @BindsInstance
+        fun playerInteractor(playerInteractor: PlayerInteractor): Builder
+
         fun build(): ApplicationComponent
     }
 }
+
+@Scope
+annotation class AppScope
+
+@Scope
+annotation class MainActivityScope
+
+@Scope
+annotation class FragmentScope

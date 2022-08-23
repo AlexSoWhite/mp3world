@@ -36,7 +36,7 @@ class ForegroundService : Service() {
 
     @Inject
     lateinit var playerInteractor: PlayerInteractor
-    private val player: Player?
+    private val player: Player
         get() = playerInteractor.player
 
     override fun onCreate() {
@@ -172,6 +172,5 @@ class ForegroundService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         playerNotificationManager.setPlayer(null)
-        playerInteractor.destroy()
     }
 }

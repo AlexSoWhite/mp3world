@@ -16,6 +16,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.toColor
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
@@ -25,6 +27,7 @@ import com.nafanya.mp3world.core.utils.ColorExtractor
 import com.nafanya.mp3world.core.utils.animators.AoedeAlphaAnimation
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.view.BaseFragment
+import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
@@ -33,7 +36,6 @@ import com.nafanya.mp3world.features.downloading.DownloadViewModel
 import com.nafanya.mp3world.features.downloading.ResultType
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playerView.view.currentPlaylist.CurrentPlaylistDialogFragment
-import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
 class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
@@ -46,7 +48,8 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
     @Inject
     lateinit var downloadViewModel: DownloadViewModel
     @Inject
-    lateinit var playerInteractor: PlayerInteractor
+    lateinit var factory: ViewModelFactory
+    private val viewModel: PlayerViewModel by viewModels { factory }
 
     private lateinit var application: Application
     private val controls = mutableListOf<View>()
@@ -78,24 +81,24 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         super.onViewCreated(view, savedInstanceState)
         with(binding.controlsFullscreen) {
             showTimeoutMs = 0
-            player = playerInteractor.player
             repeatToggleModes =
                 RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
                 RepeatModeUtil.REPEAT_TOGGLE_MODE_ONE or
                 RepeatModeUtil.REPEAT_TOGGLE_MODE_NONE
+            showShuffleButton = true
         }
-        playerInteractor.isPlayerInitialised.observe(viewLifecycleOwner) {
-            if (it) {
-                playerInteractor.currentSong.observe(viewLifecycleOwner) { song ->
-                    renderSong(song as SongWrapper)
-                }
-                view.findViewById<ShapeableImageView>(R.id.current_playlist)
-                    .setOnClickListener {
-                        CurrentPlaylistDialogFragment().show(childFragmentManager, null)
-                    }
-                binding.controlsFullscreen.showShuffleButton = true
+        lifecycleScope.launchWhenCreated {
+            viewModel.isPlayerInitialised.collect {
+                binding.controlsFullscreen.player = viewModel.player
             }
         }
+        viewModel.currentSong.observe(viewLifecycleOwner) {
+            renderSong(it as SongWrapper)
+        }
+        view.findViewById<ShapeableImageView>(R.id.current_playlist)
+            .setOnClickListener {
+                CurrentPlaylistDialogFragment().show(childFragmentManager, null)
+            }
         // animate elements arrive in list
         with(view) {
             controls.addAll(

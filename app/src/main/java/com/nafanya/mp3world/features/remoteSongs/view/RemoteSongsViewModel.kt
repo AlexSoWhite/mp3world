@@ -3,16 +3,18 @@ package com.nafanya.mp3world.features.remoteSongs.view
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.remoteSongs.QueryExecutor
+import com.nafanya.mp3world.features.remoteSongs.asPlaylist
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
 import com.nafanya.mp3world.features.songListViews.SongListItem
 import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
     private val query: String,
@@ -20,24 +22,19 @@ class RemoteSongsViewModel(
     private val playerInteractor: PlayerInteractor
 ) : StatePlaylistViewModel(
     playerInteractor,
-    queryExecutor.songList.map {
-        it?.let { list ->
-            PlaylistWrapper(list, -1, query)
-        } ?: PlaylistWrapper(emptyList(), -1, query)
-    }
+    queryExecutor.songList.map { it.asPlaylist(query) }
 ) {
 
     init {
         queryExecutor.executeQuery(query)
-        if (playerInteractor.isPlayerInitialised.value != true) {
-            compositeObservable.addObserver(queryExecutor.songList) {
-                if (it?.isNotEmpty() == true) {
-                    playerInteractor.setPlaylist(
-                        PlaylistWrapper(
-                            name = query,
-                            songList = it
-                        )
-                    )
+        viewModelScope.launch {
+            playerInteractor.isPlayerInitialised.collect { isInit ->
+                if (!isInit) {
+                    compositeObservable.addObserver(queryExecutor.songList) {
+                        if (it?.isNotEmpty() == true) {
+                            playerInteractor.setPlaylist(it.asPlaylist(query))
+                        }
+                    }
                 }
             }
         }

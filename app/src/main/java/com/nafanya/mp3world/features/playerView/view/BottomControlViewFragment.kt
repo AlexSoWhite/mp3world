@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
@@ -54,8 +55,14 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.playerControlView.showTimeoutMs = 0
-        viewModel.isPlayerInitialised.observe(viewLifecycleOwner) {
-            binding.playerControlView.player = viewModel.player
+        lifecycleScope.launchWhenCreated {
+            viewModel.isPlayerInitialised.collect {
+                if (it) {
+                    binding.playerControlView.player = viewModel.player
+                } else {
+                    binding.playerControlView.player = null
+                }
+            }
         }
         viewModel.currentSong.observe(viewLifecycleOwner) {
             binding.root.isVisible = true

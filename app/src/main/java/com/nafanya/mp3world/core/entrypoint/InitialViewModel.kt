@@ -1,8 +1,10 @@
 package com.nafanya.mp3world.core.entrypoint
 
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.features.albums.AlbumListManager
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
 import com.nafanya.mp3world.features.allSongs.SongListManager
@@ -31,7 +33,16 @@ class InitialViewModel @Inject constructor(
     val artists = artistListManager.artists
     val albums = albumListManager.albums
     val favourites = favouriteListManager.favorites
-    val initializationLiveData = playerInteractor.isPlayerInitialised
+
+    private val localInitializer = Observer<List<LocalSong>> { list ->
+        viewModelScope.launch {
+            playerInteractor.isPlayerInitialised.collect { isInitialized ->
+                if (!isInitialized) {
+                    playerInteractor.setPlaylist(list.asAllSongsPlaylist())
+                }
+            }
+        }
+    }
 
     fun initializeLists() {
         viewModelScope.launch {
@@ -39,17 +50,23 @@ class InitialViewModel @Inject constructor(
                 isInitialized = true
                 // initialize songList
                 mediaStoreReader.readMediaStore()
-                songListManager.songList.observeForever {
-                    if (playerInteractor.isPlayerInitialised.value != true) {
-                        playerInteractor.setPlaylist(it.asAllSongsPlaylist())
-                    }
-                }
+                songListManager.songList.observeForever(localInitializer)
             }
         }
     }
 
+    /**
+     * Called when [MainActivity] goes to destroyed state.
+     * It's decided to keep player state when app is closed, so it can be restored if app opens
+     * after a short period of time. So we simply pause the player when app is closed.
+     */
+    fun suspendPlayer() {
+        playerInteractor.suspendPlayer()
+    }
+
     override fun onCleared() {
         super.onCleared()
+        songListManager.songList.removeObserver(localInitializer)
         dbHolder.closeDataBase()
     }
 

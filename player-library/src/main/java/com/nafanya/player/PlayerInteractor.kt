@@ -2,39 +2,65 @@ package com.nafanya.player
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.Player
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class PlayerInteractor(
     context: Context
 ) {
+
     /**
-     * Player itself
+     * Player itself (extended object with customized logic).
      */
-    private var mPlayer: AoedePlayer = AoedePlayer(context)
-    val player: Player?
-        get() = mPlayer.player
+    private val mPlayer = AoedePlayer(context)
+
     /**
-     * Object that connects player state with its LiveData
+     * Player itself (default part that can be passed to the view).
+     */
+    val player: Player
+        get() = mPlayer.player
+
+    /**
+     * Object that connects [AoedePlayer] state with its LiveData.
      */
     private var listener: Listener = Listener(this)
+
+    /**
+     * Song to that player is currently seek.
+     */
     val currentSong: LiveData<Song>
         get() = listener.currentSong
+
+    /**
+     * Value which represents current playback state.
+     */
     val isPlaying: LiveData<Boolean>
         get() = listener.isPlaying
-    val currentPlaylist: LiveData<Playlist?>
+
+    /**
+     * Playlist which is currently submitted to the player.
+     */
+    val currentPlaylist: LiveData<Playlist>
         get() = mPlayer.currentPlaylist
-    private val mIsPlayerInitialized = MutableLiveData(false)
-    val isPlayerInitialised: LiveData<Boolean>
+
+    private val mIsPlayerInitialized = MutableStateFlow(false)
+    /**
+     * [AoedePlayer] considered as initialized when the first song is submitted.
+     */
+    val isPlayerInitialised: StateFlow<Boolean>
         get() = mIsPlayerInitialized
+
+    private val currentSongObserver = Observer<Song> {
+        if (!isPlayerInitialised.value) {
+            mIsPlayerInitialized.value = true
+        }
+    }
 
     init {
         mPlayer.addListener(listener)
-        currentSong.observeForever {
-            if (isPlayerInitialised.value != true) {
-                mIsPlayerInitialized.value = true
-            }
-        }
+        currentSong.observeForever(currentSongObserver)
     }
 
     fun setPlaylist(playlist: Playlist) {
@@ -45,9 +71,7 @@ class PlayerInteractor(
         mPlayer.setSong(song)
     }
 
-    fun destroy() {
-        mPlayer.player?.removeListener(listener)
-        mPlayer.destroy()
-        listener.destroy()
+    fun suspendPlayer() {
+        mPlayer.suspend()
     }
 }
