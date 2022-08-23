@@ -113,6 +113,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
             false
         )
         binding.root.maxHeight = (resources.displayMetrics.heightPixels * MAX_DIALOG_SIZE).toInt()
+        binding.root.minHeight = (resources.displayMetrics.heightPixels * MAX_DIALOG_SIZE).toInt()
         return binding.root
     }
 
