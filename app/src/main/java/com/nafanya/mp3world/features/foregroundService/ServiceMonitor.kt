@@ -9,7 +9,7 @@ import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 /**
@@ -21,7 +21,7 @@ class ServiceMonitor @Inject constructor(
     private val context: Context,
     private val playerInteractor: PlayerInteractor
 ) {
-    private val starterScope = CoroutineScope(Job())
+    private val starterScope = CoroutineScope(SupervisorJob())
 
     @Suppress("Deprecation")
     fun startMonitoring() {
