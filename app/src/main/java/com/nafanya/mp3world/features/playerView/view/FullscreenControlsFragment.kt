@@ -32,6 +32,7 @@ import com.nafanya.mp3world.databinding.PlayerControlViewFullscreenFragmentBindi
 import com.nafanya.mp3world.features.downloading.DownloadViewModel
 import com.nafanya.mp3world.features.downloading.ResultType
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
+import com.nafanya.mp3world.features.playerView.view.currentPlaylist.CurrentPlaylistDialogFragment
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
@@ -68,7 +69,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         application = requireActivity().application
         (application as PlayerApplication)
             .applicationComponent
-            .playerViewComponent()
+            .playerViewComponent
             .inject(this)
         super.onAttach(context)
     }
@@ -89,7 +90,9 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
                     renderSong(song as SongWrapper)
                 }
                 view.findViewById<ShapeableImageView>(R.id.current_playlist)
-                    .setOnClickListener { }
+                    .setOnClickListener {
+                        CurrentPlaylistDialogFragment().show(childFragmentManager, null)
+                    }
                 binding.controlsFullscreen.showShuffleButton = true
             }
         }

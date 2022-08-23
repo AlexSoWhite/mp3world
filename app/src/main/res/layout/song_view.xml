@@ -39,6 +39,7 @@
         android:layout_height="30dp"
         android:layout_gravity="center_vertical"
         android:visibility="gone"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="@id/song_icon"
         app:layout_constraintTop_toTopOf="@id/song_icon"
         app:layout_constraintBottom_toBottomOf="@id/song_icon"

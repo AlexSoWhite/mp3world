@@ -46,7 +46,7 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
     override fun onAttach(context: Context) {
         (requireActivity().application as PlayerApplication)
             .applicationComponent
-            .playerViewComponent()
+            .playerViewComponent
             .inject(this)
         super.onAttach(context)
     }

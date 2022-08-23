@@ -62,10 +62,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait" />
-        <activity android:name=".features.playlist.view.CurrentPlaylistDialogActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustNothing"
-            android:theme="@style/Theme.CurrentPlaylistDialog"/>
         <activity android:name=".features.artists.view.ArtistListActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
