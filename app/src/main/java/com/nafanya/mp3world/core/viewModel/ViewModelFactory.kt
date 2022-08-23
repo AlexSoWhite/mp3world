@@ -16,7 +16,7 @@ class ViewModelFactory @Inject constructor(
         providers[modelClass]?.let {
             return it.get() as T
         }
-        throw IllegalArgumentException("No such provider for" + modelClass.canonicalName)
+        throw IllegalArgumentException("No such provider for " + modelClass.canonicalName)
     }
 }
 

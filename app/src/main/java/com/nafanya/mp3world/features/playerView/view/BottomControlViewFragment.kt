@@ -9,13 +9,13 @@ import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.util.RepeatModeUtil
+import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
@@ -34,7 +34,6 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
     private val viewModel: PlayerViewModel by viewModels {
         factory
     }
-    private var currentSong: SongWrapper? = null
 
     override fun inflate(
         inflater: LayoutInflater,
@@ -66,8 +65,7 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
         }
         viewModel.currentSong.observe(viewLifecycleOwner) {
             binding.root.isVisible = true
-            currentSong = viewModel.currentSong.value as SongWrapper
-            renderSong(currentSong!!)
+            renderSong(it as SongWrapper)
         }
         binding.playerControlView.repeatToggleModes =
             RepeatModeUtil.REPEAT_TOGGLE_MODE_ALL or
@@ -81,16 +79,16 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
     private fun renderSong(song: SongWrapper) {
         view?.findViewById<TextView>(R.id.control_track_artist)?.text = song.artist
         view?.findViewById<TextView>(R.id.control_track_title)?.text = song.title
-        setSongIcon()
+        view?.findViewById<ShapeableImageView>(R.id.control_song_icon)?.setImageBitmap(song.art)
     }
 
     private fun toFullScreen() {
         var bundle: Bundle? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             val options = ActivityOptions.makeSceneTransitionAnimation(
-                activity,
+                requireActivity(),
                 Pair.create(
-                    requireActivity().findViewById(R.id.control_song_icon),
+                    view?.findViewById<ShapeableImageView>(R.id.control_song_icon),
                     context?.getString(R.string.player_transition)
                 )
             )
@@ -99,10 +97,6 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
 
         val intent = Intent(requireActivity(), FullScreenPlayerActivity::class.java)
         requireActivity().startActivity(intent, bundle)
-    }
-
-    private fun setSongIcon() {
-        view?.findViewById<ImageView>(R.id.control_song_icon)?.setImageBitmap(currentSong!!.art)
     }
 
     override fun onDestroyView() {

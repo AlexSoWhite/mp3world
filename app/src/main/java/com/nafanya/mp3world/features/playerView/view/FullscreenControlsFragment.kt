@@ -134,16 +134,14 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
             artistView?.text = song.artist
             artistView?.isSelected = true
             val timeConverter = TimeConverter()
-            val durationValue = song.duration
             val durationView = findViewById<TextView>(R.id.duration)
             val timeView = findViewById<TextView>(R.id.time)
             binding.controlsFullscreen.apply {
-                durationView.text = timeConverter.durationToString(durationValue)
+                durationView.text = timeConverter.durationToString(song.duration)
                 setProgressUpdateListener { position, _ ->
                     timeView.text = timeConverter.durationToString(position)
                 }
-                val songIcon = findViewById<ShapeableImageView>(R.id.control_song_icon)
-                songIcon?.setImageBitmap(song.art)
+                adjustImage(song.art)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     animateChanges(song.art)
                 } else {
@@ -198,15 +196,15 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         }
     }
 
+    private fun adjustImage(bitmap: Bitmap) {
+        view?.findViewById<ShapeableImageView>(R.id.control_song_icon)?.setImageBitmap(bitmap)
+    }
+
     @RequiresApi(Build.VERSION_CODES.Q)
     @Suppress("NestedBlockDepth")
-    private fun animateChanges(art: Bitmap? = null) = with(view) {
+    private fun animateChanges(art: Bitmap) = with(view) {
         this?.let {
-            val averageColor = if (art != null) {
-                ColorExtractor.getAverageColorWithNoWhiteComponent(art)
-            } else {
-                Color.parseColor(defaultBackgroundColor)
-            }
+            val averageColor = ColorExtractor.getAverageColorWithNoWhiteComponent(art)
             val colorFrom = if (isColorInitialized) {
                 previousColor
             } else {
@@ -215,22 +213,14 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
             previousColor = averageColor
             isColorInitialized = true
             val root = findViewById<ConstraintLayout>(R.id.root)
-            val colorAnimation =
-                ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, averageColor)
+            val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, averageColor)
             colorAnimation.duration = backgroundDuration
             colorAnimation.addUpdateListener {
-                val color = (it.animatedValue as Int).toColor()
-                var controlsBlue = color.blue()
-                var controlsRed = color.red()
-                var controlsGreen = color.green()
-                controlsRed = (controlsRed + 2.0f) / componentsAmount
-                controlsGreen = (controlsGreen + 2.0f) / componentsAmount
-                controlsBlue = (controlsBlue + 2.0f) / componentsAmount
-                val controlsColor =
-                    Color.valueOf(controlsRed, controlsGreen, controlsBlue).toArgb()
-                val backgroundColor = it.animatedValue as Int
-                root.setBackgroundColor(backgroundColor)
-                updateBarsColor(backgroundColor)
+                val controlsColor = calculateControlsColor(
+                    (it.animatedValue as Int).toColor()
+                )
+                root.setBackgroundColor(it.animatedValue as Int)
+                updateBarsColor(it.animatedValue as Int)
                 controls.forEach { v ->
                     when (v) {
                         is ShapeableImageView -> v.setColorFilter(controlsColor)
@@ -241,6 +231,14 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
             }
             colorAnimation.start()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun calculateControlsColor(color: Color): Int {
+        val controlsRed = (color.red() + 2.0f) / componentsAmount
+        val controlsGreen = (color.green() + 2.0f) / componentsAmount
+        val controlsBlue = (color.blue() + 2.0f) / componentsAmount
+        return Color.valueOf(controlsRed, controlsGreen, controlsBlue).toArgb()
     }
 
     private fun updateBarsColor(color: Int) {

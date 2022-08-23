@@ -81,21 +81,7 @@
             app:icon="@drawable/favorite"
             app:description="@string/favourites" />
 
-<!--        <include-->
-<!--            android:id="@+id/statistics"-->
-<!--            layout="@layout/main_menu_item"-->
-<!--            bind:description="@{&quot;Статистика&quot;}"-->
-<!--            bind:count="@{&quot;&quot;}" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--    <include-->
-<!--        android:id="@+id/loader"-->
-<!--        layout="@layout/loader"-->
-<!--        android:visibility="invisible"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"/>-->
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/player_control_view"
