@@ -119,7 +119,9 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
             )
             findViewById<ConstraintLayout>(R.id.controls_wrapper)
                 .startAnimation(AoedeAlphaAnimation())
-            findViewById<ConstraintLayout>(R.id.control_track_info_wrapper)
+            findViewById<TextView>(R.id.control_fullscreen_track_title)
+                .startAnimation(AoedeAlphaAnimation())
+            findViewById<TextView>(R.id.control_fullscreen_track_artist)
                 .startAnimation(AoedeAlphaAnimation())
         }
     }
