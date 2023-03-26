@@ -12,6 +12,8 @@ import com.nafanya.mp3world.core.stateMachines.list.StatedListFragmentBaseLayout
 import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.songListViews.SongListItem
+import com.nafanya.player.PlayerInteractor
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 abstract class StatedPlaylistFragmentBaseLayout :
@@ -20,6 +22,9 @@ abstract class StatedPlaylistFragmentBaseLayout :
         SongListItem
         >(),
     PlaylistHolder {
+
+    @Inject
+    lateinit var playerInteractor: PlayerInteractor
 
     final override val listViewModel: StatedListViewModel<SongWrapper, SongListItem>
         get() = playlistViewModel
@@ -38,6 +43,7 @@ abstract class StatedPlaylistFragmentBaseLayout :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
+            playlistViewModel.bindInteractor(playerInteractor)
             playlistViewModel.title.collect {
                 (requireActivity() as AppCompatActivity).supportActionBar?.title = it
             }

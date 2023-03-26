@@ -6,15 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nafanya.mp3world.core.di.ApplicationComponent
+import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.playlist.baseViews.StatePlaylistHolderFragment
 import com.nafanya.mp3world.features.remoteSongs.view.RemoteSongsActivity.Companion.QUERY
 import com.nafanya.mp3world.features.songListViews.actionDialogs.RemoteSongActionDialog
 import javax.inject.Inject
 
-class RemoteSongsFragment : StatePlaylistHolderFragment(), SwipeRefreshLayout.OnRefreshListener {
+class RemoteSongsFragment : StatedPlaylistFragmentBaseLayout(), SwipeRefreshLayout.OnRefreshListener {
 
     private val remoteSongsAdapter = RemoteSongsAdapter(
         onSongClickCallback = { viewModel.onSongClick(it) },
@@ -27,7 +27,7 @@ class RemoteSongsFragment : StatePlaylistHolderFragment(), SwipeRefreshLayout.On
             dialog.show()
         }
     )
-    override val playlistAdapter: BaseSongListAdapter
+    override val songListAdapter: BaseSongListAdapter
         get() = remoteSongsAdapter
 
     @Inject

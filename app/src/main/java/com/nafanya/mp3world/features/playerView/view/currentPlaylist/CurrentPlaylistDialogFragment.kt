@@ -31,6 +31,7 @@ import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHol
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.mp3world.features.songListViews.songViews.ImmutableLocalSongViewHolder
 import com.nafanya.mp3world.features.songListViews.songViews.RemoteSongViewHolder
+import com.nafanya.player.PlayerInteractor
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
@@ -45,6 +46,9 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
 
     @Inject
     lateinit var downloadViewModel: Lazy<DownloadViewModel>
+
+    @Inject
+    lateinit var interactor: PlayerInteractor
 
     companion object {
         const val MAX_DIALOG_SIZE = 0.7f
@@ -116,6 +120,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
         )
         binding.root.maxHeight = (resources.displayMetrics.heightPixels * MAX_DIALOG_SIZE).toInt()
         binding.root.minHeight = (resources.displayMetrics.heightPixels * MAX_DIALOG_SIZE).toInt()
+        viewModel.bindInteractor(interactor)
         return binding.root
     }
 

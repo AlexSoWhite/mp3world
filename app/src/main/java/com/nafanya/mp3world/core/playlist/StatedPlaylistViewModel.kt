@@ -14,7 +14,6 @@ import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.songListViews.SongListItem
 import com.nafanya.player.PlayerInteractor
 import com.nafanya.player.Song
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -30,10 +29,12 @@ abstract class StatedPlaylistViewModel(
     PlaylistViewModel,
     TitleViewModel<List<SongWrapper>> {
 
-    @Inject
+    val mIsInteractorBound = MutableStateFlow(false)
     lateinit var playerInteractor: PlayerInteractor
 
     override val mTitle = MutableStateFlow(baseTitle)
+
+    private var pendingSong: Song? = null
 
     override val stateMapper: (
         suspend (State<List<SongWrapper>>) -> State<List<SongWrapper>>
@@ -52,15 +53,11 @@ abstract class StatedPlaylistViewModel(
     init {
         viewModelScope.launch {
             model.startListeningModelForTitle()
-            playerInteractor.isPlaying.collectLatest {
-                mIsPlaying.value = it
+            mIsInteractorBound.collectLatest {
+                if (it) {
+                    pendingSong?.let { song -> onSongClick(song) }
+                }
             }
-            combine(
-                playerInteractor.currentSong.map { it as SongWrapper }.asFlow(),
-                isFirstItemBound.asFlow()
-            ) { song, _ ->
-                mCurrentSong.value = song
-            }.collect()
         }
     }
 
@@ -70,10 +67,34 @@ abstract class StatedPlaylistViewModel(
 
     override fun onSongClick(song: Song) {
         viewModelScope.launch {
-            playlist.take(1).collect {
-                playerInteractor.setPlaylist(it)
-                playerInteractor.setSong(song)
+            mIsInteractorBound.collectLatest {
+                if (it) {
+                    playlist.take(1).collect { playlistWrapper ->
+                        playerInteractor.setPlaylist(playlistWrapper)
+                        playerInteractor.setSong(song)
+                    }
+                } else {
+                    pendingSong = song
+                }
             }
         }
+    }
+
+    fun bindInteractor(interactor: PlayerInteractor) {
+        playerInteractor = interactor
+        viewModelScope.launch {
+            playerInteractor.isPlaying.collectLatest {
+                mIsPlaying.value = it
+            }
+        }
+        viewModelScope.launch {
+            combine(
+                playerInteractor.currentSong.map { it as SongWrapper }.asFlow(),
+                isFirstItemBound.asFlow()
+            ) { song, _ ->
+                mCurrentSong.value = song
+            }.collect()
+        }
+        mIsInteractorBound.value = true
     }
 }

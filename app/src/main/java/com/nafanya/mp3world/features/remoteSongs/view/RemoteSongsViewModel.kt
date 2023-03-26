@@ -15,14 +15,14 @@ import com.nafanya.mp3world.features.songListViews.SongListItem
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
     private val query: String,
     private val queryExecutor: QueryExecutor
 ) : StatedPlaylistViewModel(
-    queryExecutor.songList.map { it.asPlaylist(query) }.asFlow()
+    queryExecutor.songList.map { it.asPlaylist(query) }.asFlow(),
+    query
 ) {
 
     init {
@@ -38,11 +38,15 @@ class RemoteSongsViewModel(
                 }.asFlow()
             )
             viewModelScope.launch {
-                playerInteractor.isPlayerInitialised.collectLatest { isInit ->
-                    if (!isInit) {
-                        queryExecutor.songList.observeForever {
-                            if (it?.isNotEmpty() == true) {
-                                playerInteractor.setPlaylist(it.asPlaylist(query))
+                mIsInteractorBound.collect {
+                    if (it) {
+                        playerInteractor.isPlayerInitialised.collect { isInit ->
+                            if (!isInit) {
+                                queryExecutor.songList.asFlow().collect { songList ->
+                                    if (songList?.isNotEmpty() == true) {
+                                        playerInteractor.setPlaylist(songList.asPlaylist(query))
+                                    }
+                                }
                             }
                         }
                     }
