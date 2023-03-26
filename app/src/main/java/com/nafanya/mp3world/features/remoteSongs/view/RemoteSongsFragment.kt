@@ -14,7 +14,9 @@ import com.nafanya.mp3world.features.remoteSongs.view.RemoteSongsActivity.Compan
 import com.nafanya.mp3world.features.songListViews.actionDialogs.RemoteSongActionDialog
 import javax.inject.Inject
 
-class RemoteSongsFragment : StatedPlaylistFragmentBaseLayout(), SwipeRefreshLayout.OnRefreshListener {
+class RemoteSongsFragment :
+    StatedPlaylistFragmentBaseLayout(),
+    SwipeRefreshLayout.OnRefreshListener {
 
     private val remoteSongsAdapter = RemoteSongsAdapter(
         onSongClickCallback = { viewModel.onSongClick(it) },
