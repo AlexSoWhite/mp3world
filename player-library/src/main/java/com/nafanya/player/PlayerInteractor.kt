@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.Player
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -36,7 +37,7 @@ class PlayerInteractor(
     /**
      * Value which represents current playback state.
      */
-    val isPlaying: LiveData<Boolean>
+    val isPlaying: Flow<Boolean>
         get() = listener.isPlaying
 
     /**

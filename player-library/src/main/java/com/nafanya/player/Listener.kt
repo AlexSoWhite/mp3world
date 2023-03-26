@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  TODO: statistic
@@ -20,8 +22,8 @@ internal class Listener(
     internal val currentSong: LiveData<Song>
         get() = _currentSong
 
-    private val _isPlaying = MutableLiveData(false)
-    internal val isPlaying: LiveData<Boolean>
+    private val _isPlaying = MutableStateFlow(false)
+    internal val isPlaying: Flow<Boolean>
         get() = _isPlaying
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {

@@ -16,7 +16,6 @@ import javax.inject.Inject
 class CurrentPlaylistViewModel @Inject constructor(
     playerInteractor: PlayerInteractor,
 ) : StatedPlaylistViewModel(
-    playerInteractor,
     playerInteractor.currentPlaylist.map { it as PlaylistWrapper }.asFlow()
 ) {
 

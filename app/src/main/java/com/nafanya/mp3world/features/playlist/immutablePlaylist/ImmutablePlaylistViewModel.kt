@@ -15,7 +15,6 @@ import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SongListItem
-import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -25,10 +24,8 @@ import kotlinx.coroutines.launch
 
 class ImmutablePlaylistViewModel(
     injectedPlaylist: Flow<PlaylistWrapper>,
-    playerInteractor: PlayerInteractor,
     baseTitle: String
 ) : StatedPlaylistViewModel(
-    playerInteractor,
     injectedPlaylist,
     baseTitle
 ),
@@ -59,7 +56,6 @@ class ImmutablePlaylistViewModel(
         @Assisted("listManagerKey") private val listManagerKey: Int,
         @Assisted("containerId") private val containerId: Long,
         @Assisted("playlistName") private val playlistName: String,
-        private val playerInteractor: PlayerInteractor,
         private val listManagerProvider: ListManagerProvider
     ) : ViewModelProvider.Factory {
 
@@ -73,7 +69,6 @@ class ImmutablePlaylistViewModel(
             }
             return ImmutablePlaylistViewModel(
                 injectedPlaylist.map { it }.asFlow() as Flow<PlaylistWrapper>,
-                playerInteractor,
                 playlistName
             ) as T
         }

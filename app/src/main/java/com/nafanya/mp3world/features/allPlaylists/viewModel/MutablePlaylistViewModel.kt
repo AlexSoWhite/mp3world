@@ -17,21 +17,17 @@ import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
 import com.nafanya.mp3world.features.songListViews.MODIFY_PLAYLIST_BUTTON
 import com.nafanya.mp3world.features.songListViews.SONG_REARRANGEABLE
 import com.nafanya.mp3world.features.songListViews.SongListItem
-import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import java.lang.IllegalArgumentException
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MutablePlaylistViewModel(
-    playerInteractor: PlayerInteractor,
     playlistListManager: PlaylistListManager,
     playlistId: Long,
     playlistName: String
 ) : StatedPlaylistViewModel(
-    playerInteractor,
     playlistListManager.getPlaylistByContainerId(playlistId).asFlow().map {
         it ?: throw IllegalArgumentException("playlist doesn't exist")
     },
@@ -71,7 +67,6 @@ class MutablePlaylistViewModel(
     }
 
     class Factory @AssistedInject constructor(
-        private val playerInteractor: PlayerInteractor,
         private val listManagerProvider: ListManagerProvider,
         @Assisted("playlistId") private val playlistId: Long,
         @Assisted("playlistName") private var playlistName: String
@@ -83,7 +78,6 @@ class MutablePlaylistViewModel(
                 PLAYLIST_LIST_MANAGER_KEY
             ) as PlaylistListManager
             return MutablePlaylistViewModel(
-                playerInteractor,
                 playlistListManager,
                 playlistId,
                 playlistName

@@ -16,16 +16,13 @@ import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
 import com.nafanya.mp3world.features.songListViews.DATE
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SongListItem
-import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class AllSongsViewModel @Inject constructor(
-    playerInteractor: PlayerInteractor,
     songListManager: SongListManager
 ) : StatedPlaylistViewModel(
-    playerInteractor,
     songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow(),
     "Мои песни"
 ),

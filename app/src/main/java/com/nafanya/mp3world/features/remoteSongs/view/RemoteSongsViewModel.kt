@@ -12,7 +12,6 @@ import com.nafanya.mp3world.features.remoteSongs.QueryExecutor
 import com.nafanya.mp3world.features.remoteSongs.asPlaylist
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
 import com.nafanya.mp3world.features.songListViews.SongListItem
-import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -21,10 +20,8 @@ import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
     private val query: String,
-    private val queryExecutor: QueryExecutor,
-    private val playerInteractor: PlayerInteractor
+    private val queryExecutor: QueryExecutor
 ) : StatedPlaylistViewModel(
-    playerInteractor,
     queryExecutor.songList.map { it.asPlaylist(query) }.asFlow()
 ) {
 
@@ -66,13 +63,12 @@ class RemoteSongsViewModel(
 
     class Factory @AssistedInject constructor(
         @Assisted("query") private val query: String,
-        private val playerInteractor: PlayerInteractor,
         private val queryExecutor: QueryExecutor
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RemoteSongsViewModel(query, queryExecutor, playerInteractor) as T
+            return RemoteSongsViewModel(query, queryExecutor) as T
         }
 
         @AssistedFactory

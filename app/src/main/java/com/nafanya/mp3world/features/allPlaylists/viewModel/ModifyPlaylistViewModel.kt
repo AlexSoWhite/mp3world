@@ -24,7 +24,6 @@ import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
 import com.nafanya.mp3world.features.songListViews.SONG_ADDABLE_REMOVABLE
 import com.nafanya.mp3world.features.songListViews.SongListItem
-import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -36,10 +35,8 @@ class ModifyPlaylistViewModel(
     private val playlistId: Long,
     private val playlistListManager: PlaylistListManager,
     songListManager: SongListManager,
-    playerInteractor: PlayerInteractor,
     private val playlistName: String
 ) : StatedPlaylistViewModel(
-    playerInteractor,
     songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow(),
     playlistName
 ),
@@ -129,7 +126,6 @@ class ModifyPlaylistViewModel(
     class Factory @AssistedInject constructor(
         @Assisted("playlistId") private val playlistId: Long,
         @Assisted("playlistName") private val playlistName: String,
-        private val playerInteractor: PlayerInteractor,
         private val listManagerProvider: ListManagerProvider
     ) : ViewModelProvider.Factory {
 
@@ -146,7 +142,6 @@ class ModifyPlaylistViewModel(
                 playlistId,
                 playlistListManager,
                 songListManager,
-                playerInteractor,
                 playlistName
             ) as T
         }
