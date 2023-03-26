@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 abstract class StatedPlaylistViewModel(
@@ -69,7 +70,7 @@ abstract class StatedPlaylistViewModel(
 
     override fun onSongClick(song: Song) {
         viewModelScope.launch {
-            playlist.collect {
+            playlist.take(1).collect {
                 playerInteractor.setPlaylist(it)
                 playerInteractor.setSong(song)
             }
