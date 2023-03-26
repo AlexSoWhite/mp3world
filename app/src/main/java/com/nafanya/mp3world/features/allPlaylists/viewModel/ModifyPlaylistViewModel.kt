@@ -27,8 +27,10 @@ import com.nafanya.mp3world.features.songListViews.SongListItem
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 class ModifyPlaylistViewModel(
@@ -98,6 +100,26 @@ class ModifyPlaylistViewModel(
             playlistListManager.updatePlaylist(
                 modifyingPlaylist.value!!.copy(songList = songList.value!!)
             )
+            // to prevent crash if media item doesn't exist
+            playerInteractor.currentPlaylist.asFlow().take(1).collectLatest {
+                if (it == modifyingPlaylist.value!!) {
+                    val newSong = playerInteractor.currentSong.value
+                    if (newSong != null && songList.value!!.contains(newSong)) {
+                        playerInteractor.setPlaylist(it)
+                        playerInteractor.setSong(newSong)
+                    } else if (newSong != null && songList.value!!.isNotEmpty()) {
+                        playerInteractor.setPlaylist(it)
+                        playerInteractor.setSong(songList.value!![0])
+                    } else if (newSong != null) {
+                        playerInteractor.setPlaylist(
+                            PlaylistWrapper(
+                                songList = listOf(newSong as SongWrapper),
+                                name = "Temporary"
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
 

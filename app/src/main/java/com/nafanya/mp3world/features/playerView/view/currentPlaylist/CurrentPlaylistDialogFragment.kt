@@ -33,7 +33,7 @@ import com.nafanya.mp3world.features.songListViews.songViews.RemoteSongViewHolde
 import com.nafanya.player.PlayerInteractor
 import dagger.Lazy
 import javax.inject.Inject
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.take
 
 class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
 
@@ -136,7 +136,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
             adapter = mixedAdapter
         }
         lifecycleScope.launchWhenCreated {
-            viewModel.playlist.collectLatest {
+            viewModel.playlist.take(1).collect {
                 mixedAdapter.submitList(viewModel.asListItems(it.songList))
                 binding.currentPlaylistTitle.text = it.name
             }

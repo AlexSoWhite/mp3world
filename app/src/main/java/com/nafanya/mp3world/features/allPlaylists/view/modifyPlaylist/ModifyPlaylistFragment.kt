@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.features.allPlaylists.view.modifyPlaylist
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -16,8 +17,6 @@ import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import javax.inject.Inject
 
 class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
-
-    private var isFinished = false
 
     @Inject
     lateinit var modifyFactory: ModifyPlaylistViewModel.Factory.ModifyPlaylistFactory
@@ -45,13 +44,12 @@ class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
         applicationComponent.allPlaylistsComponent.inject(this)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.modifyingPlaylist.observe(viewLifecycleOwner) {
-            if (!isFinished) {
-                modifyPlaylistAdapter.setModifyingPlaylist(it)
-                modifyPlaylistAdapter.notifyDataSetChanged()
-            }
+            modifyPlaylistAdapter.setModifyingPlaylist(it)
+            modifyPlaylistAdapter.notifyDataSetChanged()
         }
     }
 
@@ -61,7 +59,6 @@ class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
         ) {
             viewModel.confirmChanges()
             requireActivity().finish()
-            isFinished = true
         }.invoke(menu, inflater)
     }
 }
