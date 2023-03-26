@@ -7,12 +7,13 @@ import com.nafanya.mp3world.features.songListViews.CONFIRM_CHANGES_BUTTON
 import com.nafanya.mp3world.features.songListViews.MODIFY_PLAYLIST_BUTTON
 import com.nafanya.mp3world.features.songListViews.SONG_REARRANGEABLE
 import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
+import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.mp3world.features.songListViews.songViews.RearrangeableSongViewHolder
 import com.nafanya.mp3world.features.songListViews.topButtonViews.ConfirmChangesButtonViewHolder
 import com.nafanya.mp3world.features.songListViews.topButtonViews.ModifyPlaylistButtonViewHolder
 
 class MutablePlaylistAdapter(
-    private val onSongClickCallback: (SongWrapper) -> Unit,
+    private val onSongClickCallback: (SongWrapper, SongView) -> Unit,
     private val onModifyButtonClickCallback: () -> Unit,
     private val onLongPressCallback: (SongWrapper) -> Unit,
     private val onConfirmChangesCallback: () -> Unit,
@@ -23,14 +24,13 @@ class MutablePlaylistAdapter(
         holder: SongListItemViewHolder,
         position: Int
     ) {
-        super.onBindViewHolder(holder, position)
         when (holder.itemViewType) {
             SONG_REARRANGEABLE -> {
                 with(holder as RearrangeableSongViewHolder) {
                     val song = currentList[position].getDataAsSong()
                     bind(
                         song,
-                        onClickCallBack = { onSongClickCallback(song) },
+                        onClickCallBack = { view -> onSongClickCallback(song, view) },
                         onActionClickedCallback = { onActionClickCallback(song as LocalSong) }
                     )
                     holder.attachToScreen(onLongPressCallback)
@@ -47,5 +47,6 @@ class MutablePlaylistAdapter(
                 }
             }
         }
+        super.onBindViewHolder(holder, position)
     }
 }

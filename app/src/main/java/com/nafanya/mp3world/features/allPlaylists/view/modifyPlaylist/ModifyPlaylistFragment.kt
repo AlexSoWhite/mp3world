@@ -30,7 +30,7 @@ class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
     private val modifyPlaylistAdapter: ModifyPlaylistAdapter by lazy {
         ModifyPlaylistAdapter(
-            onSongClickCallback = { viewModel.onSongClick(it) },
+            onSongClickCallback = ::onSongClick,
             onSongAddCallback = { viewModel.addSongToPlaylist(it) },
             onSongRemoveCallback = { viewModel.removeSongFromPlaylist(it) }
         )

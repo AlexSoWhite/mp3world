@@ -25,7 +25,7 @@ class ImmutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
     private val immutablePlaylistAdapter: ImmutablePlaylistAdapter by lazy {
         ImmutablePlaylistAdapter(
-            onSongClickCallback = { viewModel.onSongClick(it) },
+            onSongClickCallback = ::onSongClick,
             onActionClickedCallback = {
                 val dialog = LocalSongActionDialog(
                     requireActivity(),

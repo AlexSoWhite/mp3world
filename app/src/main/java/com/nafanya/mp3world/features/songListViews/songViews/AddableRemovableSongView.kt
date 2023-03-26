@@ -61,7 +61,7 @@ class AddableRemovableSongView @JvmOverloads constructor(
     }
 
     private fun removeFromPlaylist() {
-        onRemoveCallback(mSong)
+        onRemoveCallback(mSong!!)
         binding.action.setImageResource(R.drawable.add)
         binding.action.setOnClickListener {
             addToPlaylist()
@@ -69,7 +69,7 @@ class AddableRemovableSongView @JvmOverloads constructor(
     }
 
     private fun addToPlaylist() {
-        onAddCallback(mSong)
+        onAddCallback(mSong!!)
         binding.action.setImageResource(R.drawable.delete)
         binding.action.setOnClickListener {
             removeFromPlaylist()

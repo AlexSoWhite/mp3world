@@ -7,21 +7,21 @@ import com.nafanya.mp3world.features.songListViews.DATE
 import com.nafanya.mp3world.features.songListViews.DateViewHolder
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
+import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.mp3world.features.songListViews.songViews.ImmutableLocalSongViewHolder
 
 class AllSongsAdapter(
-    private val onSongItemClickCallback: (SongWrapper) -> Unit,
+    private val onSongItemClickCallback: (SongWrapper, SongView) -> Unit,
     private val onActionClickedCallback: (LocalSong) -> Unit
 ) : BaseSongListAdapter() {
 
     override fun onBindViewHolder(holder: SongListItemViewHolder, position: Int) {
-        super.onBindViewHolder(holder, position)
         when (holder.itemViewType) {
             SONG_LOCAL_IMMUTABLE -> {
                 val song = currentList[position].getDataAsSong()
                 (holder as ImmutableLocalSongViewHolder).bind(
                     song,
-                    onClickCallBack = { onSongItemClickCallback(song) },
+                    onClickCallBack = { view -> onSongItemClickCallback(song, view) },
                     onActionClickedCallback = { onActionClickedCallback(song as LocalSong) }
                 )
             }
@@ -30,5 +30,6 @@ class AllSongsAdapter(
                 (holder as DateViewHolder).bind(date)
             }
         }
+        super.onBindViewHolder(holder, position)
     }
 }

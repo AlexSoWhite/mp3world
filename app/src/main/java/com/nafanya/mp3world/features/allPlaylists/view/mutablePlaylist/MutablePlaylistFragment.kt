@@ -35,7 +35,7 @@ class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
     private val mutablePlaylistAdapter: MutablePlaylistAdapter by lazy {
         MutablePlaylistAdapter(
-            onSongClickCallback = { viewModel.onSongClick(it) },
+            onSongClickCallback = ::onSongClick,
             onModifyButtonClickCallback = {
                 moveToModifyPlaylistActivity()
             },

@@ -19,7 +19,7 @@ class AllSongsFragment : StatedPlaylistFragmentBaseLayout() {
 
     private val allSongsAdapter: AllSongsAdapter by lazy {
         AllSongsAdapter(
-            onSongItemClickCallback = { viewModel.onSongClick(it) },
+            onSongItemClickCallback = ::onSongClick,
             onActionClickedCallback = {
                 val dialog = LocalSongActionDialog(
                     requireActivity(),

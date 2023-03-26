@@ -3,7 +3,6 @@ package com.nafanya.mp3world.core.playlist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.stateMachines.State
 import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
@@ -16,9 +15,7 @@ import com.nafanya.player.PlayerInteractor
 import com.nafanya.player.Song
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
@@ -44,8 +41,6 @@ abstract class StatedPlaylistViewModel(
     override val isPlaying: LiveData<Boolean>
         get() = mIsPlaying
 
-    final override val isFirstItemBound: MutableLiveData<Boolean> = MutableLiveData(false)
-
     private val mCurrentSong = MutableLiveData<SongWrapper>()
     final override val currentSong: LiveData<SongWrapper>
         get() = mCurrentSong
@@ -59,10 +54,6 @@ abstract class StatedPlaylistViewModel(
                 }
             }
         }
-    }
-
-    override fun onFirstItemBound() {
-        isFirstItemBound.value = true
     }
 
     override fun onSongClick(song: Song) {
@@ -88,12 +79,9 @@ abstract class StatedPlaylistViewModel(
             }
         }
         viewModelScope.launch {
-            combine(
-                playerInteractor.currentSong.map { it as SongWrapper }.asFlow(),
-                isFirstItemBound.asFlow()
-            ) { song, _ ->
-                mCurrentSong.value = song
-            }.collect()
+            playerInteractor.currentSong.asFlow().collect {
+                mCurrentSong.value = it as SongWrapper
+            }
         }
         mIsInteractorBound.value = true
     }

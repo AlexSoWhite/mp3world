@@ -19,7 +19,7 @@ class RemoteSongsFragment :
     SwipeRefreshLayout.OnRefreshListener {
 
     private val remoteSongsAdapter = RemoteSongsAdapter(
-        onSongClickCallback = { viewModel.onSongClick(it) },
+        onSongClickCallback = ::onSongClick,
         onActionClickCallback = {
             val dialog = RemoteSongActionDialog(
                 requireContext(),

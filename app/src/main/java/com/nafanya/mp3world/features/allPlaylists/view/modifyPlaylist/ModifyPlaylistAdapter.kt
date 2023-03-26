@@ -5,11 +5,12 @@ import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.SONG_ADDABLE_REMOVABLE
 import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
+import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.mp3world.features.songListViews.songViews.AddableRemovableSongViewHolder
 
 class ModifyPlaylistAdapter(
     private var modifyingPlaylist: PlaylistWrapper? = null,
-    private val onSongClickCallback: (SongWrapper) -> Unit,
+    private val onSongClickCallback: (SongWrapper, SongView) -> Unit,
     private val onSongAddCallback: (SongWrapper) -> Unit,
     private val onSongRemoveCallback: (SongWrapper) -> Unit
 ) : BaseSongListAdapter() {
@@ -19,15 +20,15 @@ class ModifyPlaylistAdapter(
     }
 
     override fun onBindViewHolder(holder: SongListItemViewHolder, position: Int) {
-        super.onBindViewHolder(holder, position)
         if (holder.itemViewType == SONG_ADDABLE_REMOVABLE) {
             with(holder as AddableRemovableSongViewHolder) {
                 val song = getItem(position).getDataAsSong()
-                bind(song, onClickCallBack = { onSongClickCallback(song) })
+                bind(song, onClickCallBack = { view -> onSongClickCallback(song, view) })
                 modifyingPlaylist?.let {
                     attachToPlaylist(it, onSongAddCallback, onSongRemoveCallback)
                 }
             }
         }
+        super.onBindViewHolder(holder, position)
     }
 }

@@ -16,7 +16,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
@@ -59,13 +58,15 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
     private val mixedAdapter: BaseSongListAdapter = object : BaseSongListAdapter() {
 
         override fun onBindViewHolder(holder: SongListItemViewHolder, position: Int) {
-            super.onBindViewHolder(holder, position)
             val song = currentList[position].getDataAsSong()
             when (holder.itemViewType) {
                 SONG_LOCAL_IMMUTABLE -> {
                     (holder as ImmutableLocalSongViewHolder).bind(
                         song,
-                        onClickCallBack = { viewModel.onSongClick(song) },
+                        onClickCallBack = { view ->
+                            viewModel.onSongClick(song)
+                            currentPlayingView = view
+                        },
                         onActionClickedCallback = {
                             val dialog = LocalSongActionDialog(
                                 requireActivity(),
@@ -79,7 +80,10 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
                 SONG_REMOTE -> {
                     (holder as RemoteSongViewHolder).bind(
                         song,
-                        onClickCallBack = { viewModel.onSongClick(song) },
+                        onClickCallBack = { view ->
+                            viewModel.onSongClick(song)
+                            currentPlayingView = view
+                        },
                         onActionClickedCallback = {
                             val dialog = RemoteSongActionDialog(
                                 requireActivity(),
@@ -91,6 +95,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
                     )
                 }
             }
+            super.onBindViewHolder(holder, position)
         }
     }
 
@@ -130,9 +135,6 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mixedAdapter
         }
-        mixedAdapter.onBound.observe(viewLifecycleOwner) {
-            viewModel.onFirstItemBound()
-        }
         lifecycleScope.launchWhenCreated {
             viewModel.playlist.collectLatest {
                 mixedAdapter.submitList(viewModel.asListItems(it.songList))
@@ -140,13 +142,22 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
             }
         }
         viewModel.currentSong.observe(viewLifecycleOwner) { song ->
+            // remove indicator from old view
+            currentPlayingView?.updateCurrentSong(song)
             binding.currentPlaylistRecycler.allViews.filter {
                 it is SongView
-            }.forEach {
-                if ((it as SongView).updateCurrentSong(song as SongWrapper)) {
-                    currentPlayingView = it
+            }.forEach { view ->
+                with(view as SongView) {
+                    if (updateCurrentSong(song)) {
+                        currentPlayingView = this
+                    }
                 }
             }
+            mixedAdapter.setCurrentPlayingSong(song)
+        }
+        mixedAdapter.currentSelectedView.observe(viewLifecycleOwner) {
+            currentPlayingView = it
+            currentPlayingView?.updateIsPlaying(viewModel.isPlaying.value!!)
         }
         viewModel.isPlaying.observe(viewLifecycleOwner) {
             currentPlayingView?.updateIsPlaying(it)

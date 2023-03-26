@@ -33,7 +33,9 @@ class RearrangeableSongView @JvmOverloads constructor(
         onLongPressCallback: (SongWrapper) -> Unit,
     ) {
         binding.root.setOnLongClickListener {
-            onLongPressCallback(mSong)
+            mSong?.let {
+                onLongPressCallback(it)
+            }
             true
         }
     }
@@ -43,7 +45,7 @@ class RearrangeableSongView @JvmOverloads constructor(
     ) {
         binding.dragHandler.isVisible = true
         binding.action.setImageResource(R.drawable.delete)
-        binding.action.setOnClickListener { onDeletePressCallback(mSong) }
+        binding.action.setOnClickListener { mSong?.let { onDeletePressCallback(it) } }
     }
 
     fun moveFromDraggableState() {

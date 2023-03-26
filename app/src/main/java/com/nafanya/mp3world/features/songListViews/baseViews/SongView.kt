@@ -23,7 +23,9 @@ abstract class SongView @JvmOverloads constructor(
 
     abstract val binding: SongViewBinding
 
-    protected lateinit var mSong: SongWrapper
+    protected var mSong: SongWrapper? = null
+
+    private var mOnSongSelectedListener: ((SongView) -> Unit)? = null
 
     @CallSuper
     open fun setSong(song: SongWrapper, onSongClickCallback: () -> Unit) {
@@ -39,20 +41,20 @@ abstract class SongView @JvmOverloads constructor(
 
     fun bindAction(onActionClickedCallback: (Song) -> Unit) {
         binding.action.setOnClickListener {
-            onActionClickedCallback(mSong)
+            mSong?.let {
+                onActionClickedCallback(it)
+            }
         }
     }
 
     fun updateCurrentSong(song: SongWrapper): Boolean {
-        return when (mSong) {
-            song -> {
-                displayAsSelected()
-                true
-            }
-            else -> {
-                displayAsNotSelected()
-                false
-            }
+        return if (mSong == song) {
+            mOnSongSelectedListener?.invoke(this)
+            displayAsSelected()
+            true
+        } else {
+            displayAsNotSelected()
+            false
         }
     }
 
@@ -61,6 +63,10 @@ abstract class SongView @JvmOverloads constructor(
             true -> displayAsPlaying()
             false -> displayAsPaused()
         }
+    }
+
+    fun setOnSongSelectedListener(callback: (SongView) -> Unit) {
+        mOnSongSelectedListener = callback
     }
 
     private fun displayAsSelected() {
@@ -91,12 +97,16 @@ abstract class SongViewHolder(
     @CallSuper
     fun bind(
         song: SongWrapper,
-        onClickCallBack: () -> Unit,
+        onClickCallBack: (SongView) -> Unit,
         onActionClickedCallback: ((Song) -> Unit)? = null
     ) {
-        songView.setSong(song) { onClickCallBack() }
+        songView.setSong(song) { onClickCallBack(songView) }
         if (onActionClickedCallback != null) {
             songView.bindAction(onActionClickedCallback)
         }
+    }
+
+    fun updateIsPlaying(song: SongWrapper): Boolean {
+        return songView.updateCurrentSong(song)
     }
 }
