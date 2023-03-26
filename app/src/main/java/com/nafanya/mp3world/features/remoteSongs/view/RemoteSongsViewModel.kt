@@ -2,9 +2,11 @@ package com.nafanya.mp3world.features.remoteSongs.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
+import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.remoteSongs.QueryExecutor
 import com.nafanya.mp3world.features.remoteSongs.asPlaylist
@@ -14,25 +16,37 @@ import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
     private val query: String,
-    queryExecutor: QueryExecutor,
+    private val queryExecutor: QueryExecutor,
     private val playerInteractor: PlayerInteractor
-) : StatePlaylistViewModel(
+) : StatedPlaylistViewModel(
     playerInteractor,
-    queryExecutor.songList.map { it.asPlaylist(query) }
+    queryExecutor.songList.map { it.asPlaylist(query) }.asFlow()
 ) {
 
     init {
-        queryExecutor.executeQuery(query)
-        viewModelScope.launch {
-            playerInteractor.isPlayerInitialised.collect { isInit ->
-                if (!isInit) {
-                    compositeObservable.addObserver(queryExecutor.songList) {
-                        if (it?.isNotEmpty() == true) {
-                            playerInteractor.setPlaylist(it.asPlaylist(query))
+        model.load {
+            queryExecutor.executeQuery(query)
+            setDataSource(
+                queryExecutor.songList.map {
+                    if (it == null) {
+                        Data.Error(Error("no internet"))
+                    } else {
+                        Data.Success(it.asPlaylist(query).songList)
+                    }
+                }.asFlow()
+            )
+            viewModelScope.launch {
+                playerInteractor.isPlayerInitialised.collectLatest { isInit ->
+                    if (!isInit) {
+                        queryExecutor.songList.observeForever {
+                            if (it?.isNotEmpty() == true) {
+                                playerInteractor.setPlaylist(it.asPlaylist(query))
+                            }
                         }
                     }
                 }
@@ -40,9 +54,13 @@ class RemoteSongsViewModel(
         }
     }
 
-    override fun List<SongWrapper>.asListItems(): List<SongListItem> {
-        return this.map {
-            SongListItem(SONG_REMOTE, it)
+    override fun asListItems(list: List<SongWrapper>): List<SongListItem> {
+        return list.map { SongListItem(SONG_REMOTE, it) }
+    }
+
+    fun refresh() {
+        model.refresh {
+            queryExecutor.executeQuery(query)
         }
     }
 

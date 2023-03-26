@@ -8,11 +8,15 @@ import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHol
 import com.nafanya.mp3world.features.songListViews.songViews.AddableRemovableSongViewHolder
 
 class ModifyPlaylistAdapter(
-    private val modifyingPlaylist: PlaylistWrapper,
+    private var modifyingPlaylist: PlaylistWrapper? = null,
     private val onSongClickCallback: (SongWrapper) -> Unit,
     private val onSongAddCallback: (SongWrapper) -> Unit,
     private val onSongRemoveCallback: (SongWrapper) -> Unit
 ) : BaseSongListAdapter() {
+
+    fun setModifyingPlaylist(playlist: PlaylistWrapper) {
+        modifyingPlaylist = playlist
+    }
 
     override fun onBindViewHolder(holder: SongListItemViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -20,7 +24,9 @@ class ModifyPlaylistAdapter(
             with(holder as AddableRemovableSongViewHolder) {
                 val song = getItem(position).getDataAsSong()
                 bind(song, onClickCallBack = { onSongClickCallback(song) })
-                attachToPlaylist(modifyingPlaylist, onSongAddCallback, onSongRemoveCallback)
+                modifyingPlaylist?.let {
+                    attachToPlaylist(it, onSongAddCallback, onSongRemoveCallback)
+                }
             }
         }
     }

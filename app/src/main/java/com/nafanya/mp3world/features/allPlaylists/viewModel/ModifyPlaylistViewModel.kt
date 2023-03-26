@@ -4,15 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listManagers.ALL_SONGS_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
-import com.nafanya.mp3world.core.listUtils.searching.Searchable
+import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
+import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
-import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
+import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.stateMachines.LState
+import com.nafanya.mp3world.core.stateMachines.State
+import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
@@ -24,60 +28,73 @@ import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ModifyPlaylistViewModel(
-    playlistId: Long,
+    private val playlistId: Long,
     private val playlistListManager: PlaylistListManager,
     songListManager: SongListManager,
-    playerInteractor: PlayerInteractor
-) : StatePlaylistViewModel(
+    playerInteractor: PlayerInteractor,
+    private val playlistName: String
+) : StatedPlaylistViewModel(
     playerInteractor,
-    songListManager.songList.map { it.asAllSongsPlaylist() }
+    songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow(),
+    playlistName
 ),
-    Searchable<SongWrapper> {
+    SearchableStated<SongWrapper> {
 
-    override val filter: QueryFilter<SongWrapper> = QueryFilter(songQueryFilterCallback)
+    override val queryFilter: StatedQueryFilter<SongWrapper> =
+        StatedQueryFilter(songQueryFilterCallback)
 
-    private val mModifyingPlaylist = MutableLiveData<PlaylistWrapper>()
+    private val mModifyingPlaylist = MutableLiveData(getDefaultPlaylistWrapper())
     val modifyingPlaylist: LiveData<PlaylistWrapper>
         get() = mModifyingPlaylist
 
     private var songList: MutableLiveData<List<SongWrapper>> = MutableLiveData()
 
-    private var modifyingPlaylistTitle = ""
-    private var songListSize = 0
-
-    init {
-        applyFilter(this)
-        with(compositeObservable) {
-            addObserver(playlistListManager.getPlaylistByContainerId(playlistId)) {
-                it?.let { mModifyingPlaylist.value = it }
+    override val stateMapper: (
+        suspend (State<List<SongWrapper>>) -> State<List<SongWrapper>>
+    ) = { state ->
+        when (state) {
+            LState.Empty -> state
+            is State.Error -> state
+            is State.Initializing -> state
+            is State.Loading -> state
+            is State.Success -> {
+                State.Success(songList.asFlow().first())
             }
-            addObserver(modifyingPlaylist) {
-                modifyingPlaylistTitle = it.name
-                songList.value = ArrayList(it.songList)
-            }
-            addObserver(songList) {
-                songListSize = it.size
+            is State.Updated -> {
+                State.Success(songList.asFlow().first())
             }
         }
-        resetContainerSizeSource(songList.map { it.size })
-        addStateUpdateTrigger(songList)
     }
 
-    override fun List<SongWrapper>.asListItems(): List<SongListItem> {
-        return this.map {
+    init {
+        model.load {
+            viewModelScope.launch {
+                setDataSourceFiltered(
+                    songListManager.songList.asFlow().map {
+                        Data.Success(it.asAllSongsPlaylist().songList)
+                    }
+                )
+                playlistListManager.getPlaylistByContainerId(playlistId).asFlow().collect {
+                    mModifyingPlaylist.postValue(it)
+                    if (it != null) {
+                        songList.postValue(it.songList)
+                        Data.Success(it.songList)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun asListItems(list: List<SongWrapper>): List<SongListItem> {
+        return list.map {
             SongListItem(SONG_ADDABLE_REMOVABLE, it)
         }
     }
-
-    override fun renderListEmptyTitle() = title()
-    override fun renderListLoadedTitle() = title()
-    override fun renderListLoadingTitle() = title()
-    override fun renderListUpdatedTitle() = title()
-
-    private fun title() = "$modifyingPlaylistTitle ($songListSize)"
 
     fun confirmChanges() {
         viewModelScope.launch {
@@ -99,8 +116,19 @@ class ModifyPlaylistViewModel(
         songList.value = list
     }
 
+    private fun getDefaultPlaylistWrapper(): PlaylistWrapper {
+        return PlaylistWrapper(
+            listOf(),
+            playlistId,
+            playlistName,
+            position = -1,
+            image = null
+        )
+    }
+
     class Factory @AssistedInject constructor(
         @Assisted("playlistId") private val playlistId: Long,
+        @Assisted("playlistName") private val playlistName: String,
         private val playerInteractor: PlayerInteractor,
         private val listManagerProvider: ListManagerProvider
     ) : ViewModelProvider.Factory {
@@ -118,14 +146,18 @@ class ModifyPlaylistViewModel(
                 playlistId,
                 playlistListManager,
                 songListManager,
-                playerInteractor
+                playerInteractor,
+                playlistName
             ) as T
         }
 
         @AssistedFactory
         interface ModifyPlaylistFactory {
 
-            fun create(@Assisted("playlistId") playlistId: Long): Factory
+            fun create(
+                @Assisted("playlistId") playlistId: Long,
+                @Assisted("playlistName") playlistName: String
+            ): Factory
         }
     }
 }

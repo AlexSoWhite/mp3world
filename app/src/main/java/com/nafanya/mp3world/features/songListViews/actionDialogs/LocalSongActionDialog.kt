@@ -67,7 +67,7 @@ class LocalSongActionDialog(
             setOnClickListener {
                 ActivityStarter.Builder()
                     .with(context)
-                    .createIntentToImmutablePlaylistActivityFromAlbum(song.albumId)
+                    .createIntentToImmutablePlaylistActivityFromAlbum(song.albumId, song.album)
                     .build()
                     .startActivity()
             }
@@ -81,7 +81,7 @@ class LocalSongActionDialog(
             setOnClickListener {
                 ActivityStarter.Builder()
                     .with(context)
-                    .createIntentToImmutablePlaylistActivityFromArtist(song.artistId)
+                    .createIntentToImmutablePlaylistActivityFromArtist(song.artistId, song.artist)
                     .build()
                     .startActivity()
             }

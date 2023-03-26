@@ -112,7 +112,10 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.41'
 
     // debugImplementation because LeakCanary should only run in debug builds.
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
+    // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
+
+    // swipe to refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "android.arch.core:core-testing:1.1.1"

@@ -1,13 +1,15 @@
 package com.nafanya.mp3world.features.playlist.immutablePlaylist
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
-import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
-import com.nafanya.mp3world.core.listUtils.searching.Searchable
-import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
+import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
+import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
+import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
@@ -17,32 +19,46 @@ import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class ImmutablePlaylistViewModel(
-    injectedPlaylist: LiveData<PlaylistWrapper?>,
-    playerInteractor: PlayerInteractor
-) : StatePlaylistViewModel(
+    injectedPlaylist: Flow<PlaylistWrapper>,
+    playerInteractor: PlayerInteractor,
+    baseTitle: String
+) : StatedPlaylistViewModel(
     playerInteractor,
-    injectedPlaylist
+    injectedPlaylist,
+    baseTitle
 ),
-    Searchable<SongWrapper> {
+    SearchableStated<SongWrapper> {
 
-    override fun List<SongWrapper>.asListItems(): List<SongListItem> {
-        return this.map { SongListItem(SONG_LOCAL_IMMUTABLE, it) }
+    override fun asListItems(list: List<SongWrapper>): List<SongListItem> {
+        return list.map { SongListItem(SONG_LOCAL_IMMUTABLE, it) }
     }
 
-    override val filter: QueryFilter<SongWrapper> = QueryFilter { song, query ->
+    override val queryFilter: StatedQueryFilter<SongWrapper> = StatedQueryFilter { song, query ->
         song.title.contains(query, true) ||
             song.artist.contains(query, true)
     }
 
     init {
-        applyFilter(this)
+        model.load {
+            viewModelScope.launch {
+                setDataSourceFiltered(
+                    injectedPlaylist.map {
+                        Data.Success(it.songList)
+                    }
+                )
+            }
+        }
     }
 
     class Factory @AssistedInject constructor(
         @Assisted("listManagerKey") private val listManagerKey: Int,
         @Assisted("containerId") private val containerId: Long,
+        @Assisted("playlistName") private val playlistName: String,
         private val playerInteractor: PlayerInteractor,
         private val listManagerProvider: ListManagerProvider
     ) : ViewModelProvider.Factory {
@@ -56,8 +72,9 @@ class ImmutablePlaylistViewModel(
                 listManager.getPlaylistByContainerId(containerId).map { it }
             }
             return ImmutablePlaylistViewModel(
-                injectedPlaylist.map { it },
-                playerInteractor
+                injectedPlaylist.map { it }.asFlow() as Flow<PlaylistWrapper>,
+                playerInteractor,
+                playlistName
             ) as T
         }
 
@@ -66,7 +83,8 @@ class ImmutablePlaylistViewModel(
 
             fun create(
                 @Assisted("listManagerKey") listManagerKey: Int,
-                @Assisted("containerId") containerId: Long
+                @Assisted("containerId") containerId: Long,
+                @Assisted("playlistName") playlistName: String
             ): Factory
         }
     }

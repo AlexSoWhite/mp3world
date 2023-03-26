@@ -11,5 +11,12 @@
     <declare-styleable name="MainMenuOptionView">
         <attr name="icon"/>
         <attr name="description"/>
+        <attr name="option" format="enum">
+            <enum name="all_songs" value="0"/>
+            <enum name="all_playlists" value="1"/>
+            <enum name="artists" value="2"/>
+            <enum name="albums" value="3"/>
+            <enum name="favourites" value="4"/>
+        </attr>
     </declare-styleable>
 </resources>

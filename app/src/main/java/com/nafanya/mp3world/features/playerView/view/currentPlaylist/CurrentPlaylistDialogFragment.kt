@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.allViews
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -32,6 +33,7 @@ import com.nafanya.mp3world.features.songListViews.songViews.ImmutableLocalSongV
 import com.nafanya.mp3world.features.songListViews.songViews.RemoteSongViewHolder
 import dagger.Lazy
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
 
 class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
 
@@ -126,11 +128,11 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
         mixedAdapter.onBound.observe(viewLifecycleOwner) {
             viewModel.onFirstItemBound()
         }
-        viewModel.listItems.observe(viewLifecycleOwner) {
-            mixedAdapter.submitList(it)
-        }
-        viewModel.playlist.observe(viewLifecycleOwner) {
-            binding.currentPlaylistTitle.text = it?.name
+        lifecycleScope.launchWhenCreated {
+            viewModel.playlist.collectLatest {
+                mixedAdapter.submitList(viewModel.asListItems(it.songList))
+                binding.currentPlaylistTitle.text = it.name
+            }
         }
         viewModel.currentSong.observe(viewLifecycleOwner) { song ->
             binding.currentPlaylistRecycler.allViews.filter {

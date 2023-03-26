@@ -31,7 +31,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/playlists"
             app:icon="@drawable/song_icon"
-            app:description="@string/my_songs" />
+            app:description="@string/my_songs"
+            app:option="all_songs" />
 
         <com.nafanya.mp3world.core.entrypoint.MainMenuOptionView
             android:id="@+id/playlists"
@@ -43,7 +44,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/artists"
             app:icon="@drawable/playlist_play"
-            app:description="@string/my_playlists" />
+            app:description="@string/my_playlists"
+            app:option="all_playlists" />
 
         <com.nafanya.mp3world.core.entrypoint.MainMenuOptionView
             android:id="@+id/artists"
@@ -55,7 +57,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/albums"
             app:icon="@drawable/artist"
-            app:description="@string/artists" />
+            app:description="@string/artists"
+            app:option="artists" />
 
         <com.nafanya.mp3world.core.entrypoint.MainMenuOptionView
             android:id="@+id/albums"
@@ -65,12 +68,13 @@
             app:layout_constraintTop_toBottomOf="@id/artists"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/favourite"
+            app:layout_constraintBottom_toTopOf="@id/favourites"
             app:icon="@drawable/album"
-            app:description="@string/albums" />
+            app:description="@string/albums"
+            app:option="albums" />
 
         <com.nafanya.mp3world.core.entrypoint.MainMenuOptionView
-            android:id="@+id/favourite"
+            android:id="@+id/favourites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
@@ -79,7 +83,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:icon="@drawable/favorite"
-            app:description="@string/favourites" />
+            app:description="@string/favourites"
+            app:option="favourites" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

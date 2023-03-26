@@ -1,7 +1,8 @@
 package com.nafanya.mp3world.features.playerView.view.currentPlaylist
 
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
-import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
+import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
@@ -14,19 +15,19 @@ import javax.inject.Inject
 
 class CurrentPlaylistViewModel @Inject constructor(
     playerInteractor: PlayerInteractor,
-) : StatePlaylistViewModel(
+) : StatedPlaylistViewModel(
     playerInteractor,
-    playerInteractor.currentPlaylist.map { it as PlaylistWrapper }
+    playerInteractor.currentPlaylist.map { it as PlaylistWrapper }.asFlow()
 ) {
 
-    override fun List<SongWrapper>.asListItems(): List<SongListItem> {
-        val list = mutableListOf<SongListItem>()
-        this.forEach {
+    override fun asListItems(list: List<SongWrapper>): List<SongListItem> {
+        val newList = mutableListOf<SongListItem>()
+        list.forEach {
             when (it) {
-                is LocalSong -> list.add(SongListItem(SONG_LOCAL_IMMUTABLE, it))
-                is RemoteSong -> list.add(SongListItem(SONG_REMOTE, it))
+                is LocalSong -> newList.add(SongListItem(SONG_LOCAL_IMMUTABLE, it))
+                is RemoteSong -> newList.add(SongListItem(SONG_REMOTE, it))
             }
         }
-        return list
+        return newList
     }
 }

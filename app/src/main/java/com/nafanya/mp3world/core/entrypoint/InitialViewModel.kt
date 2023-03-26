@@ -1,9 +1,13 @@
 package com.nafanya.mp3world.core.entrypoint
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.stateMachines.StateModel
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.features.albums.AlbumListManager
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
@@ -14,6 +18,7 @@ import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.localStorage.DatabaseHolder
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
@@ -28,11 +33,25 @@ class InitialViewModel @Inject constructor(
     favouriteListManager: FavouriteListManager
 ) : ViewModel() {
 
-    val songList = songListManager.songList
-    val playlists = playlistListManager.playlists
-    val artists = artistListManager.artists
-    val albums = albumListManager.albums
-    val favourites = favouriteListManager.favorites
+    val songModel = songListManager.songList.asIntModel()
+    val playlists = playlistListManager.playlists.asIntModel()
+    val artists = artistListManager.artists.asIntModel()
+    val albums = albumListManager.albums.asIntModel()
+    val favourites = favouriteListManager.favorites.map { it.songList }.asIntModel()
+
+    private inline fun <reified T : List<Any>> LiveData<T>.asIntModel(): StateModel<Int> {
+        return StateModel<Int>().apply {
+            this.load {
+                viewModelScope.launch {
+                    this@asIntModel.asFlow().map {
+                        it.size
+                    }.collect {
+                        success(it)
+                    }
+                }
+            }
+        }
+    }
 
     private val localInitializer = Observer<List<LocalSong>> { list ->
         viewModelScope.launch {

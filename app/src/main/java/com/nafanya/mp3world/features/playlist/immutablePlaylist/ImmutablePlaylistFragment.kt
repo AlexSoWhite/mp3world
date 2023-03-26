@@ -4,22 +4,22 @@ import android.view.Menu
 import android.view.MenuInflater
 import androidx.fragment.app.viewModels
 import com.nafanya.mp3world.core.di.ApplicationComponent
-import com.nafanya.mp3world.core.listUtils.searching.SearchableFragment
-import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
+import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.attachToTopBar
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.playlist.baseViews.StatePlaylistHolderFragment
 import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongActionDialog
 import javax.inject.Inject
 
-class ImmutablePlaylistFragment : StatePlaylistHolderFragment(), SearchableFragment<SongWrapper> {
+class ImmutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
     @Inject
     lateinit var immutableFactory: ImmutablePlaylistViewModel.Factory.AssistedPlaylistFactory
     private val viewModel: ImmutablePlaylistViewModel by viewModels {
         immutableFactory.create(
             arguments?.getInt(ImmutablePlaylistActivity.LIST_MANAGER_KEY, -1) ?: -1,
-            arguments?.getLong(ImmutablePlaylistActivity.CONTAINER_ID, -1) ?: -1
+            arguments?.getLong(ImmutablePlaylistActivity.CONTAINER_ID, -1) ?: -1,
+            arguments?.getString(ImmutablePlaylistActivity.PLAYLIST_NAME) ?: ""
         )
     }
 
@@ -36,10 +36,11 @@ class ImmutablePlaylistFragment : StatePlaylistHolderFragment(), SearchableFragm
             }
         )
     }
-    override val playlistAdapter: BaseSongListAdapter
+
+    override val songListAdapter: BaseSongListAdapter
         get() = immutablePlaylistAdapter
 
-    override val playlistViewModel: StatePlaylistViewModel
+    override val playlistViewModel: StatedPlaylistViewModel
         get() = viewModel
 
     override fun onInject(applicationComponent: ApplicationComponent) {
@@ -47,6 +48,6 @@ class ImmutablePlaylistFragment : StatePlaylistHolderFragment(), SearchableFragm
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        createTopBar(viewModel).invoke(menu, inflater)
+        viewModel.attachToTopBar().invoke(menu, inflater)
     }
 }

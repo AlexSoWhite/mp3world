@@ -4,20 +4,17 @@ import android.view.Menu
 import android.view.MenuInflater
 import androidx.fragment.app.viewModels
 import com.nafanya.mp3world.core.di.ApplicationComponent
-import com.nafanya.mp3world.core.listUtils.searching.SearchableFragment
-import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
+import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.attachToTopBar
 import com.nafanya.mp3world.features.allSongs.viewModel.AllSongsViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.playlist.baseViews.StatePlaylistHolderFragment
 import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongActionDialog
 
-class AllSongsFragment :
-    StatePlaylistHolderFragment(),
-    SearchableFragment<SongWrapper> {
+class AllSongsFragment : StatedPlaylistFragmentBaseLayout() {
 
     private val viewModel: AllSongsViewModel by viewModels { factory.get() }
-    override val playlistViewModel: StatePlaylistViewModel
+    override val playlistViewModel: StatedPlaylistViewModel
         get() = viewModel
 
     private val allSongsAdapter: AllSongsAdapter by lazy {
@@ -33,7 +30,7 @@ class AllSongsFragment :
             }
         )
     }
-    override val playlistAdapter: BaseSongListAdapter
+    override val songListAdapter: BaseSongListAdapter
         get() = allSongsAdapter
 
     override fun onInject(applicationComponent: ApplicationComponent) {
@@ -41,6 +38,6 @@ class AllSongsFragment :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        createTopBar(viewModel).invoke(menu, inflater)
+        viewModel.attachToTopBar().invoke(menu, inflater)
     }
 }

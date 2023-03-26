@@ -2,12 +2,16 @@ package com.nafanya.mp3world.features.allPlaylists.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
-import com.nafanya.mp3world.core.listUtils.searching.Searchable
+import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
+import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
-import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
+import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
 import com.nafanya.mp3world.features.songListViews.MODIFY_PLAYLIST_BUTTON
@@ -17,34 +21,60 @@ import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import java.lang.IllegalArgumentException
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class MutablePlaylistViewModel(
     playerInteractor: PlayerInteractor,
     playlistListManager: PlaylistListManager,
-    playlistId: Long
-) : StatePlaylistViewModel(
+    playlistId: Long,
+    playlistName: String
+) : StatedPlaylistViewModel(
     playerInteractor,
-    playlistListManager.getPlaylistByContainerId(playlistId)
+    playlistListManager.getPlaylistByContainerId(playlistId).asFlow().map {
+        it ?: throw IllegalArgumentException("playlist doesn't exist")
+    },
+    baseTitle = playlistName
 ),
-    Searchable<SongWrapper> {
+    SearchableStated<SongWrapper> {
 
-    override val filter: QueryFilter<SongWrapper> = QueryFilter(songQueryFilterCallback)
+    override val queryFilter: StatedQueryFilter<SongWrapper> = StatedQueryFilter(
+        songQueryFilterCallback
+    )
 
-    override fun List<SongWrapper>.asListItems(): List<SongListItem> {
-        val list = mutableListOf<SongListItem>()
-        this.forEach {
-            list.add(SongListItem(SONG_REARRANGEABLE, it))
+    init {
+        model.load {
+            viewModelScope.launch {
+                setDataSourceFiltered(
+                    playlistListManager.getPlaylistByContainerId(playlistId).map {
+                        if (it != null) {
+                            Data.Success(it.songList)
+                        } else {
+                            Data.Error(java.lang.Error("unknown playlist"))
+                        }
+                    }.asFlow()
+                )
+            }
+        }
+    }
+
+    override fun asListItems(list: List<SongWrapper>): List<SongListItem> {
+        val itemList = mutableListOf<SongListItem>()
+        list.forEach {
+            itemList.add(SongListItem(SONG_REARRANGEABLE, it))
         }
         return when {
-            list.isEmpty() -> listOf()
-            else -> listOf(SongListItem(MODIFY_PLAYLIST_BUTTON, Unit)) + list
+            itemList.isEmpty() -> listOf()
+            else -> listOf(SongListItem(MODIFY_PLAYLIST_BUTTON, Unit)) + itemList
         }
     }
 
     class Factory @AssistedInject constructor(
         private val playerInteractor: PlayerInteractor,
         private val listManagerProvider: ListManagerProvider,
-        @Assisted("playlistId") private val playlistId: Long
+        @Assisted("playlistId") private val playlistId: Long,
+        @Assisted("playlistName") private var playlistName: String
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -55,13 +85,17 @@ class MutablePlaylistViewModel(
             return MutablePlaylistViewModel(
                 playerInteractor,
                 playlistListManager,
-                playlistId
+                playlistId,
+                playlistName
             ) as T
         }
 
         @AssistedFactory
         interface MutablePlaylistAssistedFactory {
-            fun create(@Assisted("playlistId") playlistId: Long): Factory
+            fun create(
+                @Assisted("playlistId") playlistId: Long,
+                @Assisted("playlistName") playlistName: String
+            ): Factory
         }
     }
 }

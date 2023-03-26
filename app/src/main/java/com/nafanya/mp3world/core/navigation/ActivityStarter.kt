@@ -14,6 +14,7 @@ import com.nafanya.mp3world.features.allPlaylists.view.mutablePlaylist.MutablePl
 import com.nafanya.mp3world.features.allSongs.view.AllSongsActivity
 import com.nafanya.mp3world.features.artists.view.ArtistListActivity
 import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity
+import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity.Companion.PLAYLIST_NAME
 import com.nafanya.mp3world.features.remoteSongs.view.RemoteSongsActivity
 import com.nafanya.mp3world.features.remoteSongs.view.RemoteSongsActivity.Companion.QUERY
 
@@ -46,12 +47,14 @@ class ActivityStarter private constructor(
         fun createIntentToMutablePlaylistActivity(playlist: PlaylistWrapper): Builder {
             intent = Intent(context, MutablePlaylistActivity::class.java)
             intent.putExtra(MutablePlaylistActivity.PLAYLIST_ID, playlist.id)
+            intent.putExtra(MutablePlaylistActivity.PLAYLIST_NAME, playlist.name)
             return this
         }
 
         fun createIntentToModifyPlaylistActivity(playlist: PlaylistWrapper): Builder {
             intent = Intent(context, ModifyPlaylistActivity::class.java)
             intent.putExtra(ModifyPlaylistActivity.PLAYLIST_ID, playlist.id)
+            intent.putExtra(ModifyPlaylistActivity.PLAYLIST_NAME, playlist.name)
             return this
         }
 
@@ -68,20 +71,26 @@ class ActivityStarter private constructor(
         fun createIntentToFavouritesActivity(): Builder {
             intent = Intent(context, ImmutablePlaylistActivity::class.java)
             intent.putExtra(ImmutablePlaylistActivity.LIST_MANAGER_KEY, FAVOURITE_LIST_MANAGER_KEY)
+            intent.putExtra(PLAYLIST_NAME, "Избранное")
             return this
         }
 
-        fun createIntentToImmutablePlaylistActivityFromAlbum(id: Long): Builder {
+        fun createIntentToImmutablePlaylistActivityFromAlbum(id: Long, albumName: String): Builder {
             intent = Intent(context, ImmutablePlaylistActivity::class.java)
             intent.putExtra(ImmutablePlaylistActivity.LIST_MANAGER_KEY, ALBUM_LIST_MANAGER_KEY)
             intent.putExtra(ImmutablePlaylistActivity.CONTAINER_ID, id)
+            intent.putExtra(PLAYLIST_NAME, albumName)
             return this
         }
 
-        fun createIntentToImmutablePlaylistActivityFromArtist(id: Long): Builder {
+        fun createIntentToImmutablePlaylistActivityFromArtist(
+            id: Long,
+            artistName: String
+        ): Builder {
             intent = Intent(context, ImmutablePlaylistActivity::class.java)
             intent.putExtra(ImmutablePlaylistActivity.LIST_MANAGER_KEY, ARTIST_LIST_MANAGER_KEY)
             intent.putExtra(ImmutablePlaylistActivity.CONTAINER_ID, id)
+            intent.putExtra(PLAYLIST_NAME, artistName)
             return this
         }
 

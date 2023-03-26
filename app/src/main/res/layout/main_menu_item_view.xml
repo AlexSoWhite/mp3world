@@ -4,30 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:paddingHorizontal="10dp"
-    android:background="?android:selectableItemBackground">
+    android:background="?android:selectableItemBackground"
+    android:paddingHorizontal="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/menu_item_icon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/description"
-        tools:src="@drawable/album"/>
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/album" />
 
     <TextView
         android:id="@+id/description"
-        android:layout_marginStart="10dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:layout_marginStart="10dp"
         android:background="@android:color/transparent"
-        app:layout_constraintStart_toEndOf="@id/menu_item_icon"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/count"
+        app:layout_constraintStart_toEndOf="@id/menu_item_icon"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="описание" />
 
     <TextView
@@ -35,21 +36,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@id/description"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/arrow"
+        app:layout_constraintStart_toEndOf="@id/description"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="123" />
+
+    <ProgressBar
+        android:id="@+id/main_menu_progress"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/arrow"
+        app:layout_constraintStart_toEndOf="@id/description"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/arrow"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@id/count"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/arrow_forward_ios"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/arrow_forward_ios" />
+        app:layout_constraintStart_toEndOf="@id/count"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@ import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
@@ -73,66 +74,11 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
 
     @Suppress("LongMethod")
     private fun initMainMenu() = binding.apply {
-        val context = this@MainActivity
-        // all songs
-        allSongs.setOnClickListener {
-            ActivityStarter.Builder()
-                .with(context)
-                .createIntentToAllSongsActivity()
-                .build()
-                .startActivity()
-        }
-        viewModel.songList.observe(context) { songList ->
-            allSongs.count.text = songList.size.toString()
-        }
-
-        // playlists
-        playlists.setOnClickListener {
-            ActivityStarter.Builder()
-                .with(context)
-                .createIntentToAllPlaylistsActivity()
-                .build()
-                .startActivity()
-        }
-        viewModel.playlists.observe(context) { allPlaylists ->
-            playlists.count.text = allPlaylists.size.toString()
-        }
-
-        // artists
-        artists.setOnClickListener {
-            ActivityStarter.Builder()
-                .with(context)
-                .createIntentToArtistListActivity()
-                .build()
-                .startActivity()
-        }
-        viewModel.artists.observe(context) { artistsList ->
-            artists.count.text = artistsList.size.toString()
-        }
-
-        // albums
-        albums.setOnClickListener {
-            ActivityStarter.Builder()
-                .with(context)
-                .createIntentToAlbumListActivity()
-                .build()
-                .startActivity()
-        }
-        viewModel.albums.observe(context) { albumsList ->
-            albums.count.text = albumsList.size.toString()
-        }
-
-        // favourites
-        favourite.setOnClickListener {
-            ActivityStarter.Builder()
-                .with(context)
-                .createIntentToFavouritesActivity()
-                .build()
-                .startActivity()
-        }
-        viewModel.favourites.observe(context) { playlist ->
-            favourite.count.text = playlist?.songList?.size.toString()
-        }
+        allSongs.bindDataSource(viewModel.songModel, lifecycleScope)
+        playlists.bindDataSource(viewModel.playlists, lifecycleScope)
+        artists.bindDataSource(viewModel.artists, lifecycleScope)
+        albums.bindDataSource(viewModel.albums, lifecycleScope)
+        favourites.bindDataSource(viewModel.favourites, lifecycleScope)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -5,44 +5,39 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.ApplicationComponent
-import com.nafanya.mp3world.core.listUtils.searching.SearchableFragment
 import com.nafanya.mp3world.core.navigation.ActivityStarter
-import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
+import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.attachToTopBar
 import com.nafanya.mp3world.features.allPlaylists.viewModel.MutablePlaylistViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.playlist.baseViews.StatePlaylistHolderFragment
 import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongActionDialog
 import javax.inject.Inject
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 
-class MutablePlaylistFragment :
-    StatePlaylistHolderFragment(),
-    SearchableFragment<SongWrapper> {
+class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
     @Inject
     lateinit var mutableFactory: MutablePlaylistViewModel.Factory.MutablePlaylistAssistedFactory
 
     private val viewModel: MutablePlaylistViewModel by viewModels {
         mutableFactory.create(
-            arguments?.getLong(MutablePlaylistActivity.PLAYLIST_ID, -1) ?: -1
+            arguments?.getLong(MutablePlaylistActivity.PLAYLIST_ID, -1) ?: -1,
+            arguments?.getString(MutablePlaylistActivity.PLAYLIST_NAME) ?: ""
         )
     }
-    override val playlistViewModel: StatePlaylistViewModel
+    override val playlistViewModel: StatedPlaylistViewModel
         get() = viewModel
 
     private val mutablePlaylistAdapter: MutablePlaylistAdapter by lazy {
         MutablePlaylistAdapter(
             onSongClickCallback = { viewModel.onSongClick(it) },
             onModifyButtonClickCallback = {
-                viewModel.playlist.value?.let {
-                    ActivityStarter.Builder()
-                        .with(requireContext())
-                        .createIntentToModifyPlaylistActivity(it)
-                        .build()
-                        .startActivity()
-                }
+                moveToModifyPlaylistActivity()
             },
             onLongPressCallback = { },
             onConfirmChangesCallback = { },
@@ -57,7 +52,7 @@ class MutablePlaylistFragment :
         )
     }
 
-    override val playlistAdapter: BaseSongListAdapter
+    override val songListAdapter: BaseSongListAdapter
         get() = mutablePlaylistAdapter
 
     override val emptyMockImageResource: Int
@@ -72,9 +67,14 @@ class MutablePlaylistFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.emptyMock.root.setOnClickListener {
-            viewModel.playlist.value?.let {
-                ActivityStarter
-                    .Builder()
+            moveToModifyPlaylistActivity()
+        }
+    }
+
+    private fun moveToModifyPlaylistActivity() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.playlist.take(1).collect {
+                ActivityStarter.Builder()
                     .with(requireContext())
                     .createIntentToModifyPlaylistActivity(it)
                     .build()
@@ -84,6 +84,6 @@ class MutablePlaylistFragment :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        createTopBar(viewModel).invoke(menu, inflater)
+        viewModel.attachToTopBar().invoke(menu, inflater)
     }
 }

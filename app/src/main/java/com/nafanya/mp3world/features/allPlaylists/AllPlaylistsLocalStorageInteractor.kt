@@ -30,11 +30,11 @@ class AllPlaylistsLocalStorageInteractor @Inject constructor(
         }.forEach {
             val songList = mutableListOf<SongWrapper>()
             it.songEntities.forEach { entity ->
-                songList.add(
-                    songs.first { song ->
-                        Uri.parse(entity.uri) == song.uri
-                    }
-                )
+                songs.firstOrNull { song ->
+                    Uri.parse(entity.uri) == song.uri
+                }?.let { localSong ->
+                    songList.add(localSong)
+                }
             }
             list.add(
                 PlaylistWrapper(

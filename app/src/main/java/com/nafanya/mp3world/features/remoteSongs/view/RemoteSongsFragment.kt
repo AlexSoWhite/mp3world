@@ -4,20 +4,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nafanya.mp3world.core.di.ApplicationComponent
-import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
+import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
-import com.nafanya.mp3world.features.downloading.DownloadViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.playlist.baseViews.StatePlaylistHolderFragment
 import com.nafanya.mp3world.features.remoteSongs.view.RemoteSongsActivity.Companion.QUERY
 import com.nafanya.mp3world.features.songListViews.actionDialogs.RemoteSongActionDialog
 import javax.inject.Inject
 
-class RemoteSongsFragment : StatePlaylistHolderFragment() {
-
-    @Inject
-    lateinit var downloadViewModel: DownloadViewModel
+class RemoteSongsFragment : StatePlaylistHolderFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val remoteSongsAdapter = RemoteSongsAdapter(
         onSongClickCallback = { viewModel.onSongClick(it) },
@@ -25,7 +22,7 @@ class RemoteSongsFragment : StatePlaylistHolderFragment() {
             val dialog = RemoteSongActionDialog(
                 requireContext(),
                 it as RemoteSong,
-                downloadViewModel
+                downloadViewModel.get()
             )
             dialog.show()
         }
@@ -42,7 +39,7 @@ class RemoteSongsFragment : StatePlaylistHolderFragment() {
         )
     }
 
-    override val playlistViewModel: StatePlaylistViewModel
+    override val playlistViewModel: StatedPlaylistViewModel
         get() = viewModel
 
     override fun onInject(applicationComponent: ApplicationComponent) {
@@ -52,8 +49,17 @@ class RemoteSongsFragment : StatePlaylistHolderFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(requireActivity() as AppCompatActivity) {
-            viewModel.title.removeObservers(this)
             supportActionBar?.title = arguments?.getString(QUERY)
         }
+        binding.refreshToggle.isEnabled = true
+        binding.refreshToggle.setOnRefreshListener {
+            binding.refreshToggle.isRefreshing = true
+            onRefresh()
+        }
+    }
+
+    override fun onRefresh() {
+        viewModel.refresh()
+        binding.refreshToggle.isRefreshing = false
     }
 }
