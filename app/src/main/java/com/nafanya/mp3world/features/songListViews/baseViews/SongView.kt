@@ -71,12 +71,14 @@ abstract class SongView @JvmOverloads constructor(
 
     private fun displayAsSelected() {
         binding.playingIndicator.isVisible = true
+        binding.selectedIndicator.isVisible = true
         binding.artist.ellipsize = TextUtils.TruncateAt.MARQUEE
         binding.artist.isSelected = true
     }
 
     private fun displayAsNotSelected() {
         binding.playingIndicator.isVisible = false
+        binding.selectedIndicator.isVisible = false
         binding.artist.ellipsize = TextUtils.TruncateAt.END
         binding.artist.isSelected = false
     }
