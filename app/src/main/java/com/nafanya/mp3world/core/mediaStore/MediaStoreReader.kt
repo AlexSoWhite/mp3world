@@ -5,12 +5,14 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.wrappers.ArtFactory
 import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Suppress("LongMethod")
@@ -20,7 +22,8 @@ import kotlinx.coroutines.withContext
  */
 @Singleton
 class MediaStoreReader @Inject constructor(
-    private val context: Context
+    private val context: Context,
+    private val ioCoroutineProvider: IOCoroutineProvider
 ) {
 
     companion object {
@@ -36,17 +39,21 @@ class MediaStoreReader @Inject constructor(
     /**
      * Sets managers data on main thread.
      */
-    suspend fun readMediaStore() {
+    fun readMediaStore() {
         if (!isInitialized) {
-            initialize()
+            ioCoroutineProvider.ioScope.launch {
+                initialize()
+            }
         }
     }
 
     /**
      * Resets SongListManager and other managers data on background thread.
      */
-    suspend fun reset() {
-        initialize()
+    fun reset() {
+        ioCoroutineProvider.ioScope.launch {
+            initialize()
+        }
     }
 
     private suspend fun initialize() = withContext(Dispatchers.IO) {

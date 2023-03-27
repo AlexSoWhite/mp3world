@@ -11,7 +11,6 @@ import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.stateMachines.State
 import com.nafanya.mp3world.core.view.BaseFragment
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.mp3world.features.downloading.DownloadViewModel
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import dagger.Lazy
 import javax.inject.Inject
@@ -24,9 +23,6 @@ abstract class StatedFragment<VB : ViewBinding, T> : BaseFragment<VB>() {
 
     @Inject
     lateinit var favouriteListViewModel: Lazy<FavouriteListViewModel>
-
-    @Inject
-    lateinit var downloadViewModel: Lazy<DownloadViewModel>
 
     abstract val statedViewModel: StatedViewModel<T>
 

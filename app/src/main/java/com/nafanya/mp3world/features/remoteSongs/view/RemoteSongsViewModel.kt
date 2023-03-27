@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.features.downloading.DownloadInteractor
+import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.mp3world.features.remoteSongs.QueryExecutor
 import com.nafanya.mp3world.features.remoteSongs.asPlaylist
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
@@ -19,11 +22,14 @@ import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
     private val query: String,
-    private val queryExecutor: QueryExecutor
+    private val queryExecutor: QueryExecutor,
+    override val downloadInteractor: DownloadInteractor,
+    override val mediaStoreReader: MediaStoreReader
 ) : StatedPlaylistViewModel(
     queryExecutor.songList.map { it.asPlaylist(query) }.asFlow(),
     query
-) {
+),
+    DownloadingViewModel {
 
     init {
         model.load {
@@ -67,12 +73,19 @@ class RemoteSongsViewModel(
 
     class Factory @AssistedInject constructor(
         @Assisted("query") private val query: String,
-        private val queryExecutor: QueryExecutor
+        private val queryExecutor: QueryExecutor,
+        private val downloadInteractor: DownloadInteractor,
+        private val mediaStoreReader: MediaStoreReader
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RemoteSongsViewModel(query, queryExecutor) as T
+            return RemoteSongsViewModel(
+                query,
+                queryExecutor,
+                downloadInteractor,
+                mediaStoreReader
+            ) as T
         }
 
         @AssistedFactory

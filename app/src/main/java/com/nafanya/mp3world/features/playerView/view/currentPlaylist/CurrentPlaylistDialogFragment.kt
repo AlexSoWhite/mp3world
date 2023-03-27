@@ -19,13 +19,15 @@ import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
-import com.nafanya.mp3world.features.downloading.DownloadViewModel
+import com.nafanya.mp3world.features.downloading.DownloadingView
+import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
 import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongActionDialog
 import com.nafanya.mp3world.features.songListViews.actionDialogs.RemoteSongActionDialog
+import com.nafanya.mp3world.features.songListViews.actionDialogs.RemoteSongActionDialog.Companion.DOWNLOAD
 import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.mp3world.features.songListViews.songViews.ImmutableLocalSongViewHolder
@@ -35,16 +37,13 @@ import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.flow.take
 
-class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
+class CurrentPlaylistDialogFragment : BottomSheetDialogFragment(), DownloadingView {
 
     @Inject
     lateinit var factory: ViewModelFactory
 
     @Inject
     lateinit var favouriteListViewModel: Lazy<FavouriteListViewModel>
-
-    @Inject
-    lateinit var downloadViewModel: Lazy<DownloadViewModel>
 
     @Inject
     lateinit var interactor: PlayerInteractor
@@ -54,6 +53,9 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
     }
 
     private val viewModel: CurrentPlaylistViewModel by viewModels { factory }
+
+    override val downloadingViewModel: DownloadingViewModel
+        get() = viewModel
 
     private val mixedAdapter: BaseSongListAdapter = object : BaseSongListAdapter() {
 
@@ -87,9 +89,13 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
                         onActionClickedCallback = {
                             val dialog = RemoteSongActionDialog(
                                 requireActivity(),
-                                song as RemoteSong,
-                                downloadViewModel.get()
+                                song as RemoteSong
                             )
+                            dialog.setOnActionClickedListener {
+                                if (it == DOWNLOAD) {
+                                    download(requireActivity(), song)
+                                }
+                            }
                             dialog.show()
                         }
                     )

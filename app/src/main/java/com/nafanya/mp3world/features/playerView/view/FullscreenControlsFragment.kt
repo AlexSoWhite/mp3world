@@ -2,7 +2,6 @@ package com.nafanya.mp3world.features.playerView.view
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
-import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -12,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.toColor
@@ -32,26 +30,29 @@ import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.databinding.PlayerControlViewFullscreenFragmentBinding
-import com.nafanya.mp3world.features.downloading.DownloadViewModel
-import com.nafanya.mp3world.features.downloading.ResultType
+import com.nafanya.mp3world.features.downloading.DownloadingView
+import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playerView.view.currentPlaylist.CurrentPlaylistDialogFragment
 import javax.inject.Inject
 
-class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
+class FullscreenControlsFragment :
+    BaseFragment<PlayerControlViewFullscreenFragmentBinding>(),
+    DownloadingView {
 
     private var previousColor: Int = -1
     private var isColorInitialized = false
 
     @Inject
     lateinit var favoriteViewModel: FavouriteListViewModel
-    @Inject
-    lateinit var downloadViewModel: DownloadViewModel
+
     @Inject
     lateinit var factory: ViewModelFactory
-    private val viewModel: PlayerViewModel by viewModels { factory }
 
-    private lateinit var application: Application
+    private val viewModel: PlayerViewModel by viewModels { factory }
+    override val downloadingViewModel: DownloadingViewModel
+        get() = viewModel
+
     private val controls = mutableListOf<View>()
 
     companion object {
@@ -69,8 +70,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
     }
 
     override fun onAttach(context: Context) {
-        application = requireActivity().application
-        (application as PlayerApplication)
+        (requireActivity().application as PlayerApplication)
             .applicationComponent
             .playerViewComponent
             .inject(this)
@@ -171,27 +171,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
                 } else {
                     actionButton.setImageResource(R.drawable.download_icon)
                     actionButton.setOnClickListener {
-                        Toast.makeText(
-                            requireActivity(),
-                            "загрузка начата",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        downloadViewModel.download(song as RemoteSong) {
-                            if (it.type == ResultType.SUCCESS) {
-                                Toast.makeText(
-                                    application,
-                                    "${song.artist} - ${song.title} загружено",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    application,
-                                    "ошибка",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            downloadViewModel.updateSongList(it)
-                        }
+                        download(requireActivity(), song as RemoteSong)
                     }
                 }
             }

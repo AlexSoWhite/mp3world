@@ -3,22 +3,24 @@ package com.nafanya.mp3world.features.songListViews.actionDialogs
 import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
-import android.widget.Toast
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.databinding.DialogRemoteSongActionBinding
-import com.nafanya.mp3world.features.downloading.DownloadViewModel
-import com.nafanya.mp3world.features.downloading.ResultType
 
 class RemoteSongActionDialog(
     context: Context,
-    private val song: RemoteSong,
-    private val downloadViewModel: DownloadViewModel
+    private val song: RemoteSong
 ) : Dialog(context, R.style.Dialog) {
+
+    companion object {
+        const val DOWNLOAD = 0
+    }
 
     private val binding = DialogRemoteSongActionBinding.inflate(
         LayoutInflater.from(context)
     )
+
+    private var onActionClickedCallback: ((Int) -> Unit)? = null
 
     init {
         setContentView(binding.root)
@@ -37,26 +39,16 @@ class RemoteSongActionDialog(
                     song.title
                 )
             downloadAction.setOnClickListener {
-                downloadViewModel.download(song) {
-                    if (it.type == ResultType.SUCCESS) {
-                        Toast.makeText(
-                            context.applicationContext,
-                            "${song.artist} - ${song.title} загружено",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            context.applicationContext,
-                            "ошибка",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    downloadViewModel.updateSongList(it)
-                }
+                onActionClickedCallback?.invoke(DOWNLOAD)
+                dismiss()
             }
             dismissRemoteActionDialog.setOnClickListener {
-                this@RemoteSongActionDialog.dismiss()
+                dismiss()
             }
         }
+    }
+
+    fun setOnActionClickedListener(callback: (Int) -> Unit) {
+        onActionClickedCallback = callback
     }
 }

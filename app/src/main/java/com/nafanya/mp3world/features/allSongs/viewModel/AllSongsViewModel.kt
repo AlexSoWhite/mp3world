@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
 import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
+import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.utils.timeConverters.DateConverter
@@ -21,7 +22,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class AllSongsViewModel @Inject constructor(
-    songListManager: SongListManager
+    songListManager: SongListManager,
+    private val mediaStoreReader: MediaStoreReader
 ) : StatedPlaylistViewModel(
     songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow(),
     "Мои песни"
@@ -41,6 +43,12 @@ class AllSongsViewModel @Inject constructor(
                     }
                 )
             }
+        }
+    }
+
+    fun refresh() {
+        model.refresh {
+            mediaStoreReader.reset()
         }
     }
 
