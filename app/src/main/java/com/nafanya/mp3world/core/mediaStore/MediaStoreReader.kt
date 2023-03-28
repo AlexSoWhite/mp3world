@@ -57,7 +57,7 @@ class MediaStoreReader @Inject constructor(
         // get all the fields from media storage
         val projection = null
         // select only music
-        val selection: String = MediaStore.Audio.Media.IS_MUSIC + "=1"
+        val selection = null
         val selectionArgs = null
         // sort based on date
         val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
@@ -104,9 +104,9 @@ class MediaStoreReader @Inject constructor(
                             uri = thisUri,
                             title = thisTitle,
                             artistId = thisArtistId,
-                            artist = thisArtist,
+                            artist = thisArtist ?: "unknown",
                             albumId = thisAlbumId,
-                            album = thisAlbumName,
+                            album = thisAlbumName ?: "unknown",
                             date = thisDate,
                             duration = thisDuration,
                             art = thisArt
