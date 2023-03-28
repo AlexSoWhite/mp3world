@@ -26,7 +26,7 @@ class AlbumView @JvmOverloads constructor(
         if (album.image != null) {
             itemImage.setImageBitmap(album.image)
         } else {
-            itemImage.setImageResource(R.drawable.album)
+            itemImage.setImageResource(R.drawable.icv_album)
         }
         setOnClickListener {
             onClickCallback()

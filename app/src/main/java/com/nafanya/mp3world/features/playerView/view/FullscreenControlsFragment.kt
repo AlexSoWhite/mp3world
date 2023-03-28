@@ -157,19 +157,19 @@ class FullscreenControlsFragment :
                 if (song is LocalSong) {
                     favoriteViewModel.isSongInFavourite(song).observe(viewLifecycleOwner) {
                         if (it) {
-                            actionButton.setImageResource(R.drawable.favorite)
+                            actionButton.setImageResource(R.drawable.icv_favorite_filled)
                             actionButton.setOnClickListener {
                                 favoriteViewModel.deleteFavourite(song)
                             }
                         } else {
-                            actionButton.setImageResource(R.drawable.favorite_border)
+                            actionButton.setImageResource(R.drawable.icv_favorite_border)
                             actionButton.setOnClickListener {
                                 favoriteViewModel.addFavourite(song)
                             }
                         }
                     }
                 } else {
-                    actionButton.setImageResource(R.drawable.ic_download)
+                    actionButton.setImageResource(R.drawable.icv_download)
                     actionButton.setOnClickListener {
                         download(requireActivity(), song as RemoteSong)
                     }

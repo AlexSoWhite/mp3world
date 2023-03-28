@@ -41,7 +41,7 @@ class ArtistListFragment : StatedListFragmentBaseLayout<Artist, ArtistListItem>(
         get() = viewModel
 
     override val emptyMockImageResource: Int
-        get() = R.drawable.artist
+        get() = R.drawable.icv_artist
     override val emptyMockTextResource: Int
         get() = R.string.no_artists
 

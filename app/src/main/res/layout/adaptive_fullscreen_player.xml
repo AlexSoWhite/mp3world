@@ -117,7 +117,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/exo_shuffle"
                 app:layout_constraintTop_toTopOf="@id/guideline4"
-                tools:src="@drawable/action_more" />
+                tools:src="@drawable/icv_action_more" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline4"

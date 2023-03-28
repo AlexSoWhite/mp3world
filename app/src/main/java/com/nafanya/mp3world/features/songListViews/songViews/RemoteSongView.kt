@@ -20,8 +20,8 @@ class RemoteSongView @JvmOverloads constructor(
 
     override fun setSong(song: SongWrapper, onSongClickCallback: () -> Unit) {
         super.setSong(song) { onSongClickCallback() }
-        binding.source.setImageResource(R.drawable.web)
-        binding.action.setImageResource(R.drawable.ic_download)
+        binding.source.setImageResource(R.drawable.icv_web)
+        binding.action.setImageResource(R.drawable.icv_download)
     }
 }
 

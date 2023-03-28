@@ -30,7 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/playlists"
-            app:icon="@drawable/song_icon"
+            app:icon="@drawable/icv_song"
             app:description="@string/my_songs"
             app:option="all_songs" />
 
@@ -56,7 +56,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/albums"
-            app:icon="@drawable/artist"
+            app:icon="@drawable/icv_artist"
             app:description="@string/artists"
             app:option="artists" />
 
@@ -69,7 +69,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/favourites"
-            app:icon="@drawable/album"
+            app:icon="@drawable/icv_album"
             app:description="@string/albums"
             app:option="albums" />
 
@@ -82,7 +82,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:icon="@drawable/favorite"
+            app:icon="@drawable/icv_favorite_filled"
             app:description="@string/favourites"
             app:option="favourites" />
 

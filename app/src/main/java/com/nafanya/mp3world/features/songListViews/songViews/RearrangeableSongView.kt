@@ -25,8 +25,8 @@ class RearrangeableSongView @JvmOverloads constructor(
         onSongClickCallback: () -> Unit
     ) {
         super.setSong(song) { onSongClickCallback() }
-        binding.source.setImageResource(R.drawable.disk)
-        binding.action.setImageResource(R.drawable.action_more)
+        binding.source.setImageResource(R.drawable.icv_disk)
+        binding.action.setImageResource(R.drawable.icv_action_more)
     }
 
     fun attachToScreen(
@@ -44,13 +44,13 @@ class RearrangeableSongView @JvmOverloads constructor(
         onDeletePressCallback: (SongWrapper) -> Unit
     ) {
         binding.dragHandler.isVisible = true
-        binding.action.setImageResource(R.drawable.delete)
+        binding.action.setImageResource(R.drawable.icv_delete)
         binding.action.setOnClickListener { mSong?.let { onDeletePressCallback(it) } }
     }
 
     fun moveFromDraggableState() {
         binding.dragHandler.isVisible = false
-        binding.action.setImageResource(R.drawable.action_more)
+        binding.action.setImageResource(R.drawable.icv_action_more)
         binding.action.setOnClickListener {
             Toast.makeText(
                 context,

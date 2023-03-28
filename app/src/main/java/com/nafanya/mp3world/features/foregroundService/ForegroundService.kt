@@ -62,7 +62,7 @@ class ForegroundService : Service() {
             .setChannelImportance(IMPORTANCE_DEFAULT)
             .setMediaDescriptionAdapter(Adapter(this))
             .setNotificationListener(NotificationListener())
-            .setSmallIconResourceId(R.drawable.music_notification_icon)
+            .setSmallIconResourceId(R.drawable.icv_music_notificatioin)
             .build().apply {
                 setUseFastForwardAction(false)
                 setUseRewindAction(false)

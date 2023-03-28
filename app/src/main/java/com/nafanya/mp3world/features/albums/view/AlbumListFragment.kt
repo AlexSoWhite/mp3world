@@ -39,7 +39,7 @@ class AlbumListFragment : StatedListFragmentBaseLayout<Album, AlbumListItem>() {
     override val listViewModel: StatedListViewModel<Album, AlbumListItem>
         get() = viewModel
 
-    override val emptyMockImageResource = R.drawable.album
+    override val emptyMockImageResource = R.drawable.icv_album
     override val emptyMockTextResource = R.string.no_albums
 
     override fun onInject(applicationComponent: ApplicationComponent) {

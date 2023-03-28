@@ -12,7 +12,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:background="@android:color/transparent"
-        tools:src="@drawable/favorite"
+        tools:src="@drawable/icv_favorite_filled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/option_menu_item_description"

@@ -116,7 +116,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/exo_shuffle"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/action_more" />
+                tools:src="@drawable/icv_action_more" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -234,7 +234,7 @@
             android:layout_height="30dp"
             android:layout_marginEnd="30dp"
             android:background="?selectableItemBackgroundBorderless"
-            android:src="@drawable/playlist_play"
+            android:src="@drawable/queue_music"
             app:layout_constraintBottom_toBottomOf="@+id/controls"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/controls"

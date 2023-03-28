@@ -40,7 +40,7 @@ class AddableRemovableSongView @JvmOverloads constructor(
 
     override fun setSong(song: SongWrapper, onSongClickCallback: () -> Unit) {
         super.setSong(song) { onSongClickCallback() }
-        binding.source.setImageResource(R.drawable.disk)
+        binding.source.setImageResource(R.drawable.icv_disk)
     }
 
     fun attachToPlaylist(
@@ -52,17 +52,17 @@ class AddableRemovableSongView @JvmOverloads constructor(
         this.onAddCallback = onAddCallback
         this.onRemoveCallback = onRemoveCallback
         if (this.playlist.songList.contains(mSong)) {
-            binding.action.setImageResource(R.drawable.delete)
+            binding.action.setImageResource(R.drawable.icv_delete)
             binding.action.setOnClickListener { removeFromPlaylist() }
         } else {
-            binding.action.setImageResource(R.drawable.add)
+            binding.action.setImageResource(R.drawable.icv_add)
             binding.action.setOnClickListener { addToPlaylist() }
         }
     }
 
     private fun removeFromPlaylist() {
         onRemoveCallback(mSong!!)
-        binding.action.setImageResource(R.drawable.add)
+        binding.action.setImageResource(R.drawable.icv_add)
         binding.action.setOnClickListener {
             addToPlaylist()
         }
@@ -70,7 +70,7 @@ class AddableRemovableSongView @JvmOverloads constructor(
 
     private fun addToPlaylist() {
         onAddCallback(mSong!!)
-        binding.action.setImageResource(R.drawable.delete)
+        binding.action.setImageResource(R.drawable.icv_delete)
         binding.action.setOnClickListener {
             removeFromPlaylist()
         }

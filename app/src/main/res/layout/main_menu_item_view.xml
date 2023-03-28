@@ -16,7 +16,7 @@
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/album" />
+        tools:src="@drawable/icv_album" />
 
     <TextView
         android:id="@+id/description"
@@ -59,7 +59,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="5dp"
-        android:src="@drawable/arrow_forward_ios"
+        android:src="@drawable/icv_arrow_forward"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/count"

@@ -20,8 +20,8 @@ class ImmutableLocalSongView @JvmOverloads constructor(
 
     override fun setSong(song: SongWrapper, onSongClickCallback: () -> Unit) {
         super.setSong(song, onSongClickCallback)
-        binding.source.setImageResource(R.drawable.disk)
-        binding.action.setImageResource(R.drawable.action_more)
+        binding.source.setImageResource(R.drawable.icv_disk)
+        binding.action.setImageResource(R.drawable.icv_action_more)
     }
 }
 

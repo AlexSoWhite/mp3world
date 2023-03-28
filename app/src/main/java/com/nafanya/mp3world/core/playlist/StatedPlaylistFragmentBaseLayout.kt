@@ -38,7 +38,7 @@ abstract class StatedPlaylistFragmentBaseLayout :
         get() = binding.recycler
 
     override val emptyMockImageResource: Int
-        get() = R.drawable.empty_song_list
+        get() = R.drawable.icv_song_list
     override val emptyMockTextResource: Int
         get() = R.string.no_songs
 

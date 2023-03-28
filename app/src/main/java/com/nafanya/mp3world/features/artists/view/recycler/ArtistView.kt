@@ -27,7 +27,7 @@ class ArtistView @JvmOverloads constructor(
         if (artist.image != null) {
             itemImage.setImageBitmap(artist.image)
         } else {
-            itemImage.setImageResource(R.drawable.artist)
+            itemImage.setImageResource(R.drawable.icv_artist)
         }
         setOnClickListener {
             onClickCallback()

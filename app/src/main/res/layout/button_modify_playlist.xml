@@ -14,7 +14,7 @@
         android:id="@+id/modify_playlist_button_image"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:src="@drawable/modify"
+        android:src="@drawable/icv_modify"
         android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/modify_playlist_button_text"

@@ -22,14 +22,14 @@ class LocalSongActionDialog(
     private val favouriteObserver = Observer<Boolean> {
         with(binding) {
             if (it) {
-                favouriteAction.icon.setImageResource(R.drawable.favorite)
+                favouriteAction.icon.setImageResource(R.drawable.icv_favorite_filled)
                 favouriteAction.description.text =
                     context.getString(R.string.remove_from_favourites)
                 favouriteAction.setOnClickListener {
                     favouriteListViewModel.deleteFavourite(song)
                 }
             } else {
-                favouriteAction.icon.setImageResource(R.drawable.favorite_border)
+                favouriteAction.icon.setImageResource(R.drawable.icv_favorite_border)
                 favouriteAction.description.text = context.getString(R.string.add_to_favourites)
                 favouriteAction.setOnClickListener {
                     favouriteListViewModel.addFavourite(song)

@@ -6,6 +6,6 @@
         android:id="@+id/dismiss_changes"
         android:title="@string/app_name"
         android:textColor="@color/white"
-        android:icon="@drawable/delete"
+        android:icon="@drawable/icv_delete"
         app:showAsAction="ifRoom|collapseActionView"/>
 </menu>

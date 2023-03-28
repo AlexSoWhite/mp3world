@@ -52,7 +52,7 @@
             android:layout_height="25dp"
             android:layout_marginEnd="15dp"
             android:background="?selectableItemBackgroundBorderless"
-            android:src="@drawable/delete"
+            android:src="@drawable/icv_delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
