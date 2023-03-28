@@ -169,7 +169,7 @@ class FullscreenControlsFragment :
                         }
                     }
                 } else {
-                    actionButton.setImageResource(R.drawable.download_icon)
+                    actionButton.setImageResource(R.drawable.ic_download)
                     actionButton.setOnClickListener {
                         download(requireActivity(), song as RemoteSong)
                     }

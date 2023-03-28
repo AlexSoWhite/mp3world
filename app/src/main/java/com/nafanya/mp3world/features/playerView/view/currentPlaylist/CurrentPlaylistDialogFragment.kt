@@ -26,8 +26,6 @@ import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
 import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongActionDialog
-import com.nafanya.mp3world.features.songListViews.actionDialogs.RemoteSongActionDialog
-import com.nafanya.mp3world.features.songListViews.actionDialogs.RemoteSongActionDialog.Companion.DOWNLOAD
 import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.mp3world.features.songListViews.songViews.ImmutableLocalSongViewHolder
@@ -87,16 +85,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment(), DownloadingVi
                             currentPlayingView = view
                         },
                         onActionClickedCallback = {
-                            val dialog = RemoteSongActionDialog(
-                                requireActivity(),
-                                song as RemoteSong
-                            )
-                            dialog.setOnActionClickedListener {
-                                if (it == DOWNLOAD) {
-                                    download(requireActivity(), song)
-                                }
-                            }
-                            dialog.show()
+                            download(requireActivity(), song as RemoteSong)
                         }
                     )
                 }

@@ -13,8 +13,6 @@ import com.nafanya.mp3world.features.downloading.DownloadingView
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.remoteSongs.view.RemoteSongsActivity.Companion.QUERY
-import com.nafanya.mp3world.features.songListViews.actionDialogs.RemoteSongActionDialog
-import com.nafanya.mp3world.features.songListViews.actionDialogs.RemoteSongActionDialog.Companion.DOWNLOAD
 import javax.inject.Inject
 
 class RemoteSongsFragment :
@@ -31,16 +29,7 @@ class RemoteSongsFragment :
     private val remoteSongsAdapter = RemoteSongsAdapter(
         onSongClickCallback = ::onSongClick,
         onActionClickCallback = {
-            val dialog = RemoteSongActionDialog(
-                requireContext(),
-                it as RemoteSong
-            )
-            dialog.setOnActionClickedListener { actionId ->
-                if (actionId == DOWNLOAD) {
-                    download(requireActivity(), it)
-                }
-            }
-            dialog.show()
+            download(requireActivity(), it as RemoteSong)
         }
     )
 
