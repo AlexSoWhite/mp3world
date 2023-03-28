@@ -20,10 +20,12 @@ class CurrentPlaylistViewModel @Inject constructor(
     playerInteractor: PlayerInteractor,
     override val downloadInteractor: DownloadInteractor,
     override val mediaStoreReader: MediaStoreReader
-) : StatedPlaylistViewModel(
-    playerInteractor.currentPlaylist.map { it as PlaylistWrapper }.asFlow()
-),
+) : StatedPlaylistViewModel(),
     DownloadingViewModel {
+
+    override val playlistFlow = playerInteractor.currentPlaylist.map {
+        it as PlaylistWrapper
+    }.asFlow()
 
     override fun asListItems(list: List<SongWrapper>): List<SongListItem> {
         val newList = mutableListOf<SongListItem>()

@@ -25,11 +25,10 @@ import kotlinx.coroutines.launch
 class ImmutablePlaylistViewModel(
     injectedPlaylist: Flow<PlaylistWrapper>,
     baseTitle: String
-) : StatedPlaylistViewModel(
-    injectedPlaylist,
-    baseTitle
-),
+) : StatedPlaylistViewModel(baseTitle),
     SearchableStated<SongWrapper> {
+
+    override val playlistFlow = injectedPlaylist
 
     override fun asListItems(list: List<SongWrapper>): List<SongListItem> {
         return list.map { SongListItem(SONG_LOCAL_IMMUTABLE, it) }

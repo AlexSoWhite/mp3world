@@ -27,13 +27,15 @@ class MutablePlaylistViewModel(
     playlistListManager: PlaylistListManager,
     playlistId: Long,
     playlistName: String
-) : StatedPlaylistViewModel(
-    playlistListManager.getPlaylistByContainerId(playlistId).asFlow().map {
-        it ?: throw IllegalArgumentException("playlist doesn't exist")
-    },
-    baseTitle = playlistName
-),
+) : StatedPlaylistViewModel(baseTitle = playlistName),
     SearchableStated<SongWrapper> {
+
+    override val playlistFlow = playlistListManager
+        .getPlaylistByContainerId(playlistId)
+        .asFlow()
+        .map {
+            it ?: throw IllegalArgumentException("playlist doesn't exist")
+        }
 
     override val queryFilter: StatedQueryFilter<SongWrapper> = StatedQueryFilter(
         songQueryFilterCallback

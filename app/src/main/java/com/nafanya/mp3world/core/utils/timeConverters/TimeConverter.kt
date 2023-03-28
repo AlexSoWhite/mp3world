@@ -1,9 +1,11 @@
 package com.nafanya.mp3world.core.utils.timeConverters
 
+import javax.inject.Inject
+
 /**
  * Class that converts duration to string and string to duration.
  */
-class TimeConverter {
+class TimeConverter @Inject constructor() {
 
     fun stringToDuration(value: String): Long {
         var result = 0L

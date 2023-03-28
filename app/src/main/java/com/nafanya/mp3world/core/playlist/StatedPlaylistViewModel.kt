@@ -20,11 +20,12 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 abstract class StatedPlaylistViewModel(
-    val playlist: Flow<PlaylistWrapper>,
     final override val baseTitle: String = "",
 ) : StatedListViewModel<SongWrapper, SongListItem>(),
     PlaylistViewModel,
     TitleViewModel<List<SongWrapper>> {
+
+    abstract val playlistFlow: Flow<PlaylistWrapper>
 
     val mIsInteractorBound = MutableStateFlow(false)
     lateinit var playerInteractor: PlayerInteractor
@@ -60,7 +61,7 @@ abstract class StatedPlaylistViewModel(
         viewModelScope.launch {
             mIsInteractorBound.collectLatest {
                 if (it) {
-                    playlist.take(1).collect { playlistWrapper ->
+                    playlistFlow.take(1).collectLatest { playlistWrapper ->
                         playerInteractor.setPlaylist(playlistWrapper)
                         playerInteractor.setSong(song)
                     }

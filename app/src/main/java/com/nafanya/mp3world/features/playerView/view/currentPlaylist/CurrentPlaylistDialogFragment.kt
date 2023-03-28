@@ -131,7 +131,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment(), DownloadingVi
             adapter = mixedAdapter
         }
         lifecycleScope.launchWhenCreated {
-            viewModel.playlist.take(1).collect {
+            viewModel.playlistFlow.take(1).collect {
                 mixedAdapter.submitList(viewModel.asListItems(it.songList))
                 binding.currentPlaylistTitle.text = it.name
             }

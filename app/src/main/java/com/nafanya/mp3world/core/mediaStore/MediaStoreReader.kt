@@ -11,11 +11,9 @@ import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "NestedBlockDepth")
 /**
  * Class that reads local MediaStore.
  * @property allSongs holds all song objects that device has
@@ -23,7 +21,8 @@ import kotlinx.coroutines.withContext
 @Singleton
 class MediaStoreReader @Inject constructor(
     private val context: Context,
-    private val ioCoroutineProvider: IOCoroutineProvider
+    private val ioCoroutineProvider: IOCoroutineProvider,
+    private val artFactory: ArtFactory
 ) {
 
     companion object {
@@ -33,8 +32,6 @@ class MediaStoreReader @Inject constructor(
     private val mAllSongs = MutableLiveData<List<LocalSong>>()
     val allSongs: LiveData<List<LocalSong>>
         get() = mAllSongs
-
-    private val artFactory = ArtFactory(context)
 
     /**
      * Sets managers data on main thread.
@@ -56,7 +53,7 @@ class MediaStoreReader @Inject constructor(
         }
     }
 
-    private suspend fun initialize() = withContext(Dispatchers.IO) {
+    private fun initialize() {
         // get all the fields from media storage
         val projection = null
         // select only music
@@ -93,7 +90,7 @@ class MediaStoreReader @Inject constructor(
                     val thisAlbumId = getLong(albumIdColumn)
                     val thisAlbumName = getString(albumColumn)
                     val thisDuration = getLong(durationColumn)
-                    // tracks with <unknown> artist are corrupted
+                    // tracks with <unknown> artist are often corrupted
                     if (thisArtist != "<unknown>") {
                         // set the song art
                         // build song object

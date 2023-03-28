@@ -24,11 +24,10 @@ import kotlinx.coroutines.launch
 class AllSongsViewModel @Inject constructor(
     songListManager: SongListManager,
     private val mediaStoreReader: MediaStoreReader
-) : StatedPlaylistViewModel(
-    songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow(),
-    "Мои песни"
-),
+) : StatedPlaylistViewModel("Мои песни"),
     SearchableStated<SongWrapper> {
+
+    override val playlistFlow = songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow()
 
     override val queryFilter: StatedQueryFilter<SongWrapper> = StatedQueryFilter(
         songQueryFilterCallback

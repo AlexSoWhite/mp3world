@@ -2,12 +2,11 @@ package com.nafanya.mp3world.features.remoteSongs.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
+import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
@@ -18,6 +17,8 @@ import com.nafanya.mp3world.features.songListViews.SongListItem
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
@@ -25,11 +26,11 @@ class RemoteSongsViewModel(
     private val queryExecutor: QueryExecutor,
     override val downloadInteractor: DownloadInteractor,
     override val mediaStoreReader: MediaStoreReader
-) : StatedPlaylistViewModel(
-    queryExecutor.songList.map { it.asPlaylist(query) }.asFlow(),
-    query
-),
+) : StatedPlaylistViewModel(baseTitle = query),
     DownloadingViewModel {
+
+    override val playlistFlow: Flow<PlaylistWrapper>
+        get() = queryExecutor.songList.map { it.asPlaylist(query) }
 
     init {
         model.load {
@@ -41,14 +42,14 @@ class RemoteSongsViewModel(
                     } else {
                         Data.Success(it.asPlaylist(query).songList)
                     }
-                }.asFlow()
+                }
             )
             viewModelScope.launch {
                 mIsInteractorBound.collect {
                     if (it) {
                         playerInteractor.isPlayerInitialised.collect { isInit ->
                             if (!isInit) {
-                                queryExecutor.songList.asFlow().collect { songList ->
+                                queryExecutor.songList.collect { songList ->
                                     if (songList?.isNotEmpty() == true) {
                                         playerInteractor.setPlaylist(songList.asPlaylist(query))
                                     }

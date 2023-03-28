@@ -38,11 +38,10 @@ class ModifyPlaylistViewModel(
     private val playlistListManager: PlaylistListManager,
     songListManager: SongListManager,
     private val playlistName: String
-) : StatedPlaylistViewModel(
-    songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow(),
-    playlistName
-),
+) : StatedPlaylistViewModel(playlistName),
     SearchableStated<SongWrapper> {
+
+    override val playlistFlow = songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow()
 
     override val queryFilter: StatedQueryFilter<SongWrapper> =
         StatedQueryFilter(songQueryFilterCallback)

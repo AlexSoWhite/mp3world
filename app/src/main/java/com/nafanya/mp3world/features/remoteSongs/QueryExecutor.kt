@@ -1,14 +1,17 @@
 package com.nafanya.mp3world.features.remoteSongs
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.nafanya.mp3world.core.coroutines.UnconfinedCoroutineProvider
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.wrappers.ArtFactory
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.SongList
 import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import java.io.IOException
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -23,16 +26,19 @@ import org.jsoup.Jsoup
 // TODO pagination
 // TODO result wrapping
 class QueryExecutor @Inject constructor(
-    private val client: OkHttpClient
+    private val client: OkHttpClient,
+    private val artFactory: ArtFactory,
+    private val timeConverter: TimeConverter,
+    private val unconfinedCoroutineProvider: UnconfinedCoroutineProvider
 ) {
 
     private val prefix = "https://ru.hitmotop.com/search?q="
 
-    private val mSongList = MutableLiveData<List<RemoteSong>?>()
-    val songList: LiveData<List<RemoteSong>?>
-        get() = mSongList
-
-    private val artFactory = ArtFactory()
+    private val mSongList = SongList<RemoteSong>(
+        unconfinedCoroutineProvider.unconfinedScope
+    )
+    val songList: Flow<List<RemoteSong>?>
+        get() = mSongList.listFlow
 
     fun executeQuery(query: String) {
         val url = prefix + query
@@ -42,14 +48,13 @@ class QueryExecutor @Inject constructor(
         client.newCall(request).enqueue(
             object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                    mSongList.postValue(null)
+                    mSongList.unlock()
                 }
 
                 override fun onResponse(call: Call, response: Response) {
                     response.body?.let {
+                        mSongList.setEmptyList()
                         val doc = Jsoup.parseBodyFragment(it.string())
-                        val songList = mutableListOf<RemoteSong>()
                         val arts = doc.getElementsByClass("track__img")
                         val info = doc.getElementsByClass("track__info")
                         for (i in info.indices) {
@@ -57,7 +62,7 @@ class QueryExecutor @Inject constructor(
                             val artElement = arts[i]
                             val title = elem.getElementsByClass("track__title").text()
                             val artist = elem.getElementsByClass("track__desc").text()
-                            val duration = TimeConverter().stringToDuration(
+                            val duration = timeConverter.stringToDuration(
                                 elem.getElementsByClass("track__fulltime").text()
                             )
                             var artUrl = artElement
@@ -72,23 +77,30 @@ class QueryExecutor @Inject constructor(
                                 .attr("href")
                                 .toString()
                             val uri = UriFactory().getUri(downloadUrl)
-                            val art = artFactory.createBitmap(artUrl)
-                            songList.add(
+                            mSongList.addOrUpdateSongWrapper(
                                 RemoteSong(
                                     uri = uri,
                                     title = title,
                                     artist = artist,
                                     duration = duration,
-                                    art = art
+                                    art = artFactory.defaultBitmap
                                 )
                             )
-                        }
-                        if (songList.isEmpty()) {
-                            mSongList.postValue(null)
-                        } else {
-                            mSongList.postValue(songList)
+                            unconfinedCoroutineProvider.unconfinedScope.launch {
+                                artFactory.createBitmap(artUrl).collectLatest { bitmap ->
+                                    val newSong = RemoteSong(
+                                        uri = uri,
+                                        title = title,
+                                        artist = artist,
+                                        duration = duration,
+                                        art = bitmap
+                                    )
+                                    mSongList.addOrUpdateSongWrapper(newSong)
+                                }
+                            }
                         }
                     }
+                    mSongList.unlock()
                 }
             }
         )

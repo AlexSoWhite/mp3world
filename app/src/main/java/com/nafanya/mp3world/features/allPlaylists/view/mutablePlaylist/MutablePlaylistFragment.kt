@@ -73,7 +73,7 @@ class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
     private fun moveToModifyPlaylistActivity() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.playlist.take(1).collect {
+            viewModel.playlistFlow.take(1).collect {
                 ActivityStarter.Builder()
                     .with(requireContext())
                     .createIntentToModifyPlaylistActivity(it)
