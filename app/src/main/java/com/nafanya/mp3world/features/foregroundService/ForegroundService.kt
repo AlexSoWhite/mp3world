@@ -13,7 +13,7 @@ import android.os.Build
 import android.os.IBinder
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_DEFAULT
+import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.entrypoint.InitialActivity
@@ -49,7 +49,7 @@ class ForegroundService : Service() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 "player",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
             notificationManager.createNotificationChannel(channel)
             val notification = Notification.Builder(this, CHANNEL_ID)
@@ -59,7 +59,7 @@ class ForegroundService : Service() {
         }
         playerNotificationManager = PlayerNotificationManager
             .Builder(this, 1, CHANNEL_ID)
-            .setChannelImportance(IMPORTANCE_DEFAULT)
+            .setChannelImportance(IMPORTANCE_HIGH)
             .setMediaDescriptionAdapter(Adapter(this))
             .setNotificationListener(NotificationListener())
             .setSmallIconResourceId(R.drawable.icv_music_notificatioin)
