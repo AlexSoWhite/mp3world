@@ -10,15 +10,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/control_track_info_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
-        app:layout_constraintVertical_weight="2"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@id/controls_wrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constrainedHeight="true"
+        app:layout_constraintVertical_chainStyle="spread_inside">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/control_song_icon"
@@ -73,9 +73,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/controls_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        app:layout_constraintVertical_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -170,17 +169,18 @@
             android:id="@+id/exo_repeat_toggle"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="10dp"
             android:background="?selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="@+id/controls"
             app:layout_constraintEnd_toStartOf="@+id/controls"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/controls"
             tools:src="@drawable/repeat_one" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/controls"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/current_playlist"
@@ -232,7 +232,7 @@
             android:id="@+id/current_playlist"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="10dp"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/queue_music"
             app:layout_constraintBottom_toBottomOf="@+id/controls"

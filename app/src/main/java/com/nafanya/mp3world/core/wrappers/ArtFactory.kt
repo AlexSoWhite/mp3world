@@ -10,6 +10,8 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.toBitmap
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.coroutines.DefaultCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
@@ -27,7 +29,7 @@ class ArtFactory @Inject constructor(
 ) {
 
     companion object {
-        private const val artDimension = 1024
+        private const val artDimension = 500
     }
 
     val defaultBitmap: Bitmap
@@ -36,10 +38,12 @@ class ArtFactory @Inject constructor(
         val options = BitmapFactory.Options()
         options.outWidth = artDimension
         options.outHeight = artDimension
-        defaultBitmap = BitmapFactory.decodeResource(
-            context.resources,
-            R.drawable.song_icon_preview,
-            options
+        defaultBitmap = AppCompatResources.getDrawable(
+            context,
+            R.drawable.song_icon_preview
+        )!!.toBitmap(
+            artDimension,
+            artDimension
         )
     }
 
