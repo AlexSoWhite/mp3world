@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.playerView.view
 
 import androidx.lifecycle.ViewModel
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.player.PlayerInteractor
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class PlayerViewModel @Inject constructor(
     playerInteractor: PlayerInteractor,
     override val downloadInteractor: DownloadInteractor,
-    override val mediaStoreReader: MediaStoreReader
+    override val mediaStoreInteractor: MediaStoreInteractor
 ) : ViewModel(), DownloadingViewModel {
 
     val isPlayerInitialised = playerInteractor.isPlayerInitialised

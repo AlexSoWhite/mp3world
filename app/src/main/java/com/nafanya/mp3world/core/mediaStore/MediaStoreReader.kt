@@ -1,67 +1,67 @@
 package com.nafanya.mp3world.core.mediaStore
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.wrappers.ArtFactory
+import com.nafanya.mp3world.core.wrappers.SongList
 import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
-import javax.inject.Singleton
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 
-@Suppress("LongMethod", "NestedBlockDepth")
 /**
- * Class that reads local MediaStore.
- * @property allSongs holds all song objects that device has
+ * TODO: file observer
  */
-@Singleton
 class MediaStoreReader @Inject constructor(
     private val context: Context,
     private val ioCoroutineProvider: IOCoroutineProvider,
     private val artFactory: ArtFactory
 ) {
 
-    companion object {
-        private var isInitialized = false
-    }
+    // get all the fields from media storage
+    private val projection = null
 
-    private val mAllSongs = MutableLiveData<List<LocalSong>>()
-    val allSongs: LiveData<List<LocalSong>>
-        get() = mAllSongs
+    private val selection = null
+
+    private val selectionArgs = null
+
+    // sort based on date
+    private val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
+
+    // private val fileObserver: FileObserver
+
+    private val mClosedSongList = SongList<LocalSong>()
 
     /**
-     * Sets managers data on main thread.
+     * Returns song flow (unordered)
      */
-    fun readMediaStore() {
-        if (!isInitialized) {
-            ioCoroutineProvider.ioScope.launch {
-                initialize()
+    val songList: SharedFlow<List<LocalSong>?>
+        get() = mClosedSongList.listFlow.shareIn(
+            ioCoroutineProvider.ioScope,
+            replay = 1,
+            started = SharingStarted.Lazily
+        )
+
+    init {
+        /*
+        fileObserver = object : FileObserver(File(Environment.DIRECTORY_DOWNLOADS)) {
+            override fun onEvent(event: Int, path: String?) {
+
             }
         }
+        fileObserver.startWatching()
+         */
+        readMediaStore()
     }
 
-    /**
-     * Resets SongListManager and other managers data on background thread.
-     */
-    fun reset() {
-        ioCoroutineProvider.ioScope.launch {
-            initialize()
-        }
-    }
-
-    private fun initialize() {
-        // get all the fields from media storage
-        val projection = null
-        // select only music
-        val selection = null
-        val selectionArgs = null
-        // sort based on date
-        val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
-        val allSongsList = mutableListOf<LocalSong>()
+    @Suppress("LongMethod", "NestedBlockDepth")
+    fun readMediaStore() {
         val query = context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             projection,
@@ -69,6 +69,8 @@ class MediaStoreReader @Inject constructor(
             selectionArgs,
             "$sortOrder DESC"
         )
+        mClosedSongList.setEmptyList()
+        mClosedSongList.lock()
         query?.use { cursor ->
             with(cursor) {
                 val titleColumn = getColumnIndex(MediaStore.Audio.Media.TITLE)
@@ -95,11 +97,6 @@ class MediaStoreReader @Inject constructor(
                         // set the song art
                         // build song object
                         val thisUri = UriFactory().getUri(thisId)
-                        val thisArt = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            artFactory.createBitmap(thisUri)
-                        } else {
-                            artFactory.createBitmap(thisAlbumId)
-                        }
                         val song = LocalSong(
                             uri = thisUri,
                             title = thisTitle,
@@ -109,14 +106,40 @@ class MediaStoreReader @Inject constructor(
                             album = thisAlbumName ?: "unknown",
                             date = thisDate,
                             duration = thisDuration,
-                            art = thisArt
+                            art = artFactory.defaultBitmap
                         )
-                        allSongsList.add(song)
+                        mClosedSongList.addOrUpdateSongWrapper(song)
+                        ioCoroutineProvider.ioScope.launch {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                artFactory.createBitmap(thisUri).collect {
+                                    collectBitmap(song, it)
+                                }
+                            } else {
+                                artFactory.createBitmap(thisAlbumId).collect {
+                                    collectBitmap(song, it)
+                                }
+                            }
+                        }
                     }
                 }
             }
+            mClosedSongList.unlock()
         }
-        mAllSongs.postValue(allSongsList)
-        isInitialized = true
+    }
+
+    private fun collectBitmap(song: LocalSong, bitmap: Bitmap) {
+        val newSong = LocalSong(
+            uri = song.uri,
+            title = song.title,
+            artist = song.artist,
+            duration = song.duration,
+            date = song.date,
+            artistId = song.artistId,
+            albumId = song.albumId,
+            album = song.album,
+            art = bitmap
+        )
+        // Log.d("bitmap", "${song.title} is ${newSong.title} == ${song == newSong}")
+        mClosedSongList.addOrUpdateSongWrapper(newSong)
     }
 }

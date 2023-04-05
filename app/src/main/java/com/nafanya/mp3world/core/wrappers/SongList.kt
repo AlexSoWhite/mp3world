@@ -37,6 +37,7 @@ class SongList<T : SongWrapper>(
         mCurrentList = mutableListOf()
     }
 
+    @Synchronized
     fun addOrUpdateSongWrapper(song: T) {
         if (mCurrentList == null) {
             mCurrentList = mutableListOf()

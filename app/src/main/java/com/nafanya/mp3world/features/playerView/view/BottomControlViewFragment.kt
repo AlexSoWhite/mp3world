@@ -18,7 +18,6 @@ import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
 import com.nafanya.mp3world.core.view.BaseFragment
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.core.wrappers.SongWrapper
@@ -29,8 +28,7 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
 
     @Inject
     lateinit var factory: ViewModelFactory
-    @Inject
-    lateinit var mediaStoreReader: MediaStoreReader
+
     private val viewModel: PlayerViewModel by viewModels {
         factory
     }

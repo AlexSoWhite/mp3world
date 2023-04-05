@@ -4,23 +4,24 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
+import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.listManagers.ListManager
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.localStorage.DatabaseHolder
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
- * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
+ * Object that holds favourites data. Managed by [DatabaseHolder] and [MediaStoreInteractor].
  */
 @Singleton
 class FavouriteListManager @Inject constructor(
-    mediaStoreReader: MediaStoreReader,
+    mediaStoreInteractor: MediaStoreInteractor,
+    ioCoroutineProvider: IOCoroutineProvider,
     private val dbHolder: DatabaseHolder
 ) : ListManager() {
 
@@ -29,14 +30,15 @@ class FavouriteListManager @Inject constructor(
         get() = mFavourites
 
     init {
-        mediaStoreReader.allSongs.observeForever { songList ->
-            listManagerScope.launch {
-                withContext(Dispatchers.IO) {
+        ioCoroutineProvider.ioScope.launch {
+            mediaStoreInteractor.allSongs.collectLatest { rawList ->
+                rawList?.let { songList ->
                     val uris = dbHolder.db.favouriteListDao().getAll().map { Uri.parse(it) }
+                    val songs = songList
+                        .sortedByDescending { song -> song.date }
+                        .filter { uris.contains(it.uri) }
                     val temp = PlaylistWrapper(
-                        songList = songList.filter {
-                            uris.contains(it.uri)
-                        },
+                        songList = songs,
                         name = "Избранное"
                     )
                     mFavourites.postValue(temp)

@@ -3,19 +3,23 @@ package com.nafanya.mp3world.features.albums
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
+import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.listManagers.ListManager
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
- * Object that holds albums data. Populated by MediaStoreReader. Updates when MediaStoreReader is updated.
+ * Object that holds albums data. Populated by [MediaStoreInteractor]. Updates when [MediaStoreInteractor] is updated.
  */
 @Singleton
 class AlbumListManager @Inject constructor(
-    mediaStoreReader: MediaStoreReader
+    mediaStoreInteractor: MediaStoreInteractor,
+    ioCoroutineProvider: IOCoroutineProvider
 ) : ListManager() {
 
     private val mAlbums = MutableLiveData<List<Album>>()
@@ -25,9 +29,13 @@ class AlbumListManager @Inject constructor(
     private var suspendedList = mutableListOf<Album>()
 
     init {
-        mediaStoreReader.allSongs.observeForever {
-            fillSuspendedList(it)
-            updateData()
+        ioCoroutineProvider.ioScope.launch {
+            mediaStoreInteractor.allSongs.collectLatest {
+                it?.let { list ->
+                    fillSuspendedList(list)
+                    updateData()
+                }
+            }
         }
     }
 

@@ -11,7 +11,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
-import com.downloader.PRDownloader
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.navigation.ActivityStarter
@@ -68,7 +67,6 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
         }
         viewModel.initializeLists()
         serviceMonitor.startMonitoring()
-        PRDownloader.initialize(applicationContext)
         initMainMenu()
     }
 

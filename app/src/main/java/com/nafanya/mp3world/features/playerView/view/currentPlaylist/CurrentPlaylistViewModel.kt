@@ -2,7 +2,7 @@ package com.nafanya.mp3world.features.playerView.view.currentPlaylist
 
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class CurrentPlaylistViewModel @Inject constructor(
     playerInteractor: PlayerInteractor,
     override val downloadInteractor: DownloadInteractor,
-    override val mediaStoreReader: MediaStoreReader
+    override val mediaStoreInteractor: MediaStoreInteractor
 ) : StatedPlaylistViewModel(),
     DownloadingViewModel {
 

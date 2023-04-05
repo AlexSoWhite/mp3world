@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
 import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.utils.timeConverters.DateConverter
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 class AllSongsViewModel @Inject constructor(
     songListManager: SongListManager,
-    private val mediaStoreReader: MediaStoreReader
+    private val mediaStoreInteractor: MediaStoreInteractor
 ) : StatedPlaylistViewModel("Мои песни"),
     SearchableStated<SongWrapper> {
 
@@ -47,7 +47,7 @@ class AllSongsViewModel @Inject constructor(
 
     fun refresh() {
         model.refresh {
-            mediaStoreReader.reset()
+            mediaStoreInteractor.reset()
         }
     }
 
@@ -55,9 +55,11 @@ class AllSongsViewModel @Inject constructor(
     override fun asListItems(list: List<SongWrapper>): List<SongListItem> {
         val listItemMap: MutableMap<String, MutableList<LocalSong>> = mutableMapOf()
         val listItems = mutableListOf<SongListItem>()
-        (list as List<LocalSong>).groupByTo(listItemMap) { song ->
-            DateConverter().dateToString(song.date)
-        }
+        (list as List<LocalSong>)
+            .sortedByDescending { song -> song.date }
+            .groupByTo(listItemMap) { song ->
+                DateConverter().dateToString(song.date)
+            }
         listItemMap.entries.forEach { entry ->
             val date = entry.key
             val songs = entry.value

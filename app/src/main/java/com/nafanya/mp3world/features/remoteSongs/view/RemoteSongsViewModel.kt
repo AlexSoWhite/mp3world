@@ -3,7 +3,7 @@ package com.nafanya.mp3world.features.remoteSongs.view
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
@@ -25,7 +25,7 @@ class RemoteSongsViewModel(
     private val query: String,
     private val queryExecutor: QueryExecutor,
     override val downloadInteractor: DownloadInteractor,
-    override val mediaStoreReader: MediaStoreReader
+    override val mediaStoreInteractor: MediaStoreInteractor
 ) : StatedPlaylistViewModel(baseTitle = query),
     DownloadingViewModel {
 
@@ -76,7 +76,7 @@ class RemoteSongsViewModel(
         @Assisted("query") private val query: String,
         private val queryExecutor: QueryExecutor,
         private val downloadInteractor: DownloadInteractor,
-        private val mediaStoreReader: MediaStoreReader
+        private val storeInteractor: MediaStoreInteractor
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -85,7 +85,7 @@ class RemoteSongsViewModel(
                 query,
                 queryExecutor,
                 downloadInteractor,
-                mediaStoreReader
+                storeInteractor
             ) as T
         }
 

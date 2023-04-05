@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.remoteSongs
 
-import com.nafanya.mp3world.core.coroutines.UnconfinedCoroutineProvider
+import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.wrappers.ArtFactory
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
@@ -10,7 +10,6 @@ import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import java.io.IOException
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
@@ -29,14 +28,12 @@ class QueryExecutor @Inject constructor(
     private val client: OkHttpClient,
     private val artFactory: ArtFactory,
     private val timeConverter: TimeConverter,
-    private val unconfinedCoroutineProvider: UnconfinedCoroutineProvider
+    private val ioCoroutineProvider: IOCoroutineProvider
 ) {
 
     private val prefix = "https://ru.hitmotop.com/search?q="
 
-    private val mSongList = SongList<RemoteSong>(
-        unconfinedCoroutineProvider.unconfinedScope
-    )
+    private val mSongList = SongList<RemoteSong>()
     val songList: Flow<List<RemoteSong>?>
         get() = mSongList.listFlow
 
@@ -86,8 +83,8 @@ class QueryExecutor @Inject constructor(
                                     art = artFactory.defaultBitmap
                                 )
                             )
-                            unconfinedCoroutineProvider.unconfinedScope.launch {
-                                artFactory.createBitmap(artUrl).collectLatest { bitmap ->
+                            ioCoroutineProvider.ioScope.launch {
+                                artFactory.createBitmap(artUrl).collect { bitmap ->
                                     val newSong = RemoteSong(
                                         uri = uri,
                                         title = title,

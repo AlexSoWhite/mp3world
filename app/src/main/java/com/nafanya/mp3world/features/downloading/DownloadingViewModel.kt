@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.downloading
 
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 
 /**
@@ -10,7 +10,7 @@ interface DownloadingViewModel {
 
     val downloadInteractor: DownloadInteractor
 
-    val mediaStoreReader: MediaStoreReader
+    val mediaStoreInteractor: MediaStoreInteractor
 
     fun download(remoteSong: RemoteSong, callback: (DownloadResult) -> Unit) {
         downloadInteractor.download(remoteSong) {
@@ -19,6 +19,6 @@ interface DownloadingViewModel {
     }
 
     fun resetMediaStore() {
-        mediaStoreReader.reset()
+        mediaStoreInteractor.reset()
     }
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.stateMachines.StateModel
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.features.albums.AlbumListManager
@@ -21,9 +21,12 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+/**
+ * TODO: remove initialization logic
+ */
 @Suppress("LongParameterList")
 class InitialViewModel @Inject constructor(
-    private val mediaStoreReader: MediaStoreReader,
+    private val mediaStoreInteractor: MediaStoreInteractor,
     private val dbHolder: DatabaseHolder,
     private val playerInteractor: PlayerInteractor,
     private val songListManager: SongListManager,
@@ -68,7 +71,7 @@ class InitialViewModel @Inject constructor(
             if (!isInitialized) {
                 isInitialized = true
                 // initialize songList
-                mediaStoreReader.readMediaStore()
+                mediaStoreInteractor.readMediaStore()
                 songListManager.songList.observeForever(localInitializer)
             }
         }

@@ -51,46 +51,78 @@ class ArtFactory @Inject constructor(
      * Returns [SongWrapper.art] for local song with given [uri]
      */
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun createBitmap(uri: Uri): Bitmap {
-        return try {
-            context
-                .contentResolver
-                ?.loadThumbnail(
-                    uri,
-                    Size(artDimension, artDimension),
-                    null
-                )
-        } catch (exception: IOException) {
-            defaultBitmap
-        }!!
+    @Synchronized
+    fun createBitmap(uri: Uri): SharedFlow<Bitmap> {
+        val flow = MutableSharedFlow<Bitmap>()
+        ioCoroutineProvider.ioScope.launch {
+            kotlin.runCatching {
+                try {
+                    defaultCoroutineProvider.defaultScope.launch {
+                        kotlin.runCatching {
+                            val bitmap = context
+                                .contentResolver
+                                ?.loadThumbnail(
+                                    uri,
+                                    Size(artDimension, artDimension),
+                                    null
+                                )!!
+                            flow.emit(bitmap)
+                        }
+                    }
+                } catch (exception: IOException) {
+                    /**
+                     * TODO: logging
+                     */
+                }
+            }
+        }
+        return flow
     }
 
-    fun createBitmap(albumId: Long): Bitmap {
+    @Synchronized
+    fun createBitmap(albumId: Long): SharedFlow<Bitmap> {
         val artworkUri = Uri.parse("content://media/external/audio/albumart")
         val albumUri = ContentUris.withAppendedId(artworkUri, albumId)
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            try {
-                val source = ImageDecoder.createSource(
-                    context.contentResolver!!,
-                    albumUri
-                )
-                ImageDecoder.decodeBitmap(source)
-            } catch (exception: IOException) {
-                defaultBitmap
+        val flow = MutableSharedFlow<Bitmap>()
+        ioCoroutineProvider.ioScope.launch {
+            kotlin.runCatching {
+                defaultCoroutineProvider.defaultScope.launch {
+                    kotlin.runCatching {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            try {
+                                val source = ImageDecoder.createSource(
+                                    context.contentResolver!!,
+                                    albumUri
+                                )
+                                val bitmap = ImageDecoder.decodeBitmap(source)
+                                flow.emit(bitmap)
+                            } catch (exception: IOException) {
+                                /**
+                                 * TODO: logging
+                                 */
+                            }
+                        } else try {
+                            val bitmap = MediaStore.Images.Media.getBitmap(
+                                context.contentResolver,
+                                albumUri
+                            )
+                            flow.emit(bitmap)
+                        } catch (exception: IOException) {
+                            /**
+                             * TODO: logging
+                             */
+                        }
+                    }
+                }
             }
-        } else try {
-            MediaStore.Images.Media.getBitmap(
-                context.contentResolver,
-                albumUri
-            )
-        } catch (exception: IOException) {
-            defaultBitmap
-        }!!
+        }
+        return flow
     }
 
     /**
      * Returns [SongWrapper.art] for remote songs with given [url]
      */
+    @Synchronized
     fun createBitmap(url: String): SharedFlow<Bitmap> {
         val flow = MutableSharedFlow<Bitmap>()
         ioCoroutineProvider.ioScope.launch {

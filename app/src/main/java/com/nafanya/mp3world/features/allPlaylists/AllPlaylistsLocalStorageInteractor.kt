@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistWithSongs
@@ -16,13 +16,13 @@ import kotlinx.coroutines.flow.combine
 
 class AllPlaylistsLocalStorageInteractor @Inject constructor(
     private val dbHolder: DatabaseHolder,
-    mediaStoreReader: MediaStoreReader,
+    mediaStoreInteractor: MediaStoreInteractor,
 ) {
 
     private val mAllPlaylists = MutableLiveData<List<PlaylistWithSongs>>()
     val allPlaylists: LiveData<List<PlaylistWrapper>> = combine(
         mAllPlaylists.asFlow(),
-        mediaStoreReader.allSongs.asFlow()
+        mediaStoreInteractor.allSongs
     ) { playlists, songs ->
         val list = mutableListOf<PlaylistWrapper>()
         playlists.sortedByDescending {
@@ -30,7 +30,7 @@ class AllPlaylistsLocalStorageInteractor @Inject constructor(
         }.forEach {
             val songList = mutableListOf<SongWrapper>()
             it.songEntities.forEach { entity ->
-                songs.firstOrNull { song ->
+                songs?.firstOrNull { song ->
                     Uri.parse(entity.uri) == song.uri
                 }?.let { localSong ->
                     songList.add(localSong)
