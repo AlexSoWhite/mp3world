@@ -56,7 +56,6 @@ class AllSongsViewModel @Inject constructor(
         val listItemMap: MutableMap<String, MutableList<LocalSong>> = mutableMapOf()
         val listItems = mutableListOf<SongListItem>()
         (list as List<LocalSong>)
-            .sortedByDescending { song -> song.date }
             .groupByTo(listItemMap) { song ->
                 DateConverter().dateToString(song.date)
             }

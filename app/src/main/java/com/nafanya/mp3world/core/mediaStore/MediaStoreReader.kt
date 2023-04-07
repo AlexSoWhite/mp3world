@@ -12,6 +12,7 @@ import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 
@@ -42,11 +43,15 @@ class MediaStoreReader @Inject constructor(
      * Returns song flow (unordered)
      */
     val songList: SharedFlow<List<LocalSong>?>
-        get() = mClosedSongList.listFlow.shareIn(
-            ioCoroutineProvider.ioScope,
-            replay = 1,
-            started = SharingStarted.Lazily
-        )
+        get() = mClosedSongList.listFlow
+            .map {
+                it?.sortedByDescending { song -> song.date }
+            }
+            .shareIn(
+                ioCoroutineProvider.ioScope,
+                replay = 1,
+                started = SharingStarted.Lazily
+            )
 
     init {
         /*

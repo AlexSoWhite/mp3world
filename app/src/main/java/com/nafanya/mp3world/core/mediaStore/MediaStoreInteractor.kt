@@ -7,7 +7,6 @@ import javax.inject.Singleton
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
-@Suppress("LongMethod", "NestedBlockDepth")
 /**
  * Class that reads local MediaStore.
  * @property allSongs holds all song objects that device has
