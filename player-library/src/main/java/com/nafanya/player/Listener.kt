@@ -1,11 +1,7 @@
 package com.nafanya.player
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  TODO: statistic
@@ -18,24 +14,30 @@ internal class Listener(
         const val URI_KEY = "uri"
     }
 
-    private val _currentSong = MutableLiveData<Song>()
-    internal val currentSong: LiveData<Song>
-        get() = _currentSong
+    private var onCurrentSongUpdateListener: ((Song) -> Unit)? = null
 
-    private val _isPlaying = MutableStateFlow(false)
-    internal val isPlaying: Flow<Boolean>
-        get() = _isPlaying
+    private var onIsPlayingChangedListener: ((Boolean) -> Unit)? = null
+
+    internal fun setOnCurrentSongUpdateListener(callback: (Song) -> Unit) {
+        onCurrentSongUpdateListener = callback
+    }
+
+    internal fun setOnIsPlayingChangeListener(callback: (Boolean) -> Unit) {
+        onIsPlayingChangedListener = callback
+    }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         super.onMediaItemTransition(mediaItem, reason)
         mediaItem?.let {
-            _currentSong.value = playerInteractor.currentPlaylist.value?.songList?.first {
+            playerInteractor.currentPlaylist.value?.songList?.first {
                 it.uri == mediaItem.mediaMetadata.extras!!.getParcelable(URI_KEY)
+            }?.let { newSong ->
+                onCurrentSongUpdateListener?.invoke(newSong)
             }
         }
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
-        _isPlaying.value = isPlaying
+        onIsPlayingChangedListener?.invoke(isPlaying)
     }
 }

@@ -2,7 +2,6 @@ package com.nafanya.mp3world.core.playlist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.stateMachines.State
 import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
@@ -75,12 +74,12 @@ abstract class StatedPlaylistViewModel(
     fun bindInteractor(interactor: PlayerInteractor) {
         playerInteractor = interactor
         viewModelScope.launch {
-            playerInteractor.isPlaying.collectLatest {
+            playerInteractor.isPlaying.collect {
                 mIsPlaying.value = it
             }
         }
         viewModelScope.launch {
-            playerInteractor.currentSong.asFlow().collect {
+            playerInteractor.currentSong.collectLatest {
                 mCurrentSong.value = it as SongWrapper
             }
         }

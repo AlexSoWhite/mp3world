@@ -102,20 +102,21 @@ class ModifyPlaylistViewModel(
             // to prevent crash if media item doesn't exist
             playerInteractor.currentPlaylist.asFlow().take(1).collectLatest {
                 if (it == modifyingPlaylist.value!!) {
-                    val newSong = playerInteractor.currentSong.value
-                    if (newSong != null && songList.value!!.contains(newSong)) {
-                        playerInteractor.setPlaylist(it)
-                        playerInteractor.setSong(newSong)
-                    } else if (newSong != null && songList.value!!.isNotEmpty()) {
-                        playerInteractor.setPlaylist(it)
-                        playerInteractor.setSong(songList.value!![0])
-                    } else if (newSong != null) {
-                        playerInteractor.setPlaylist(
-                            PlaylistWrapper(
-                                songList = listOf(newSong as SongWrapper),
-                                name = "Temporary"
+                    playerInteractor.currentSong.collectLatest { newSong ->
+                        if (newSong != null && songList.value!!.contains(newSong)) {
+                            playerInteractor.setPlaylist(it)
+                            playerInteractor.setSong(newSong)
+                        } else if (newSong != null && songList.value!!.isNotEmpty()) {
+                            playerInteractor.setPlaylist(it)
+                            playerInteractor.setSong(songList.value!![0])
+                        } else if (newSong != null) {
+                            playerInteractor.setPlaylist(
+                                PlaylistWrapper(
+                                    songList = listOf(newSong as SongWrapper),
+                                    name = "Temporary"
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }

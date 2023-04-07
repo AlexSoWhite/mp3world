@@ -2,15 +2,21 @@ package com.nafanya.player
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.google.android.exoplayer2.Player
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class PlayerInteractor(
     context: Context
 ) {
+
+    private val playerInteractorScope = CoroutineScope(Job() + Dispatchers.IO)
 
     /**
      * Player itself (extended object with customized logic).
@@ -23,22 +29,37 @@ class PlayerInteractor(
     val player: Player
         get() = mPlayer.player
 
-    /**
-     * Object that connects [AoedePlayer] state with its LiveData.
-     */
-    private var listener: Listener = Listener(this)
+    private val mCurrentSong = MutableSharedFlow<Song>(replay = 1)
 
     /**
      * Song to that player is currently seek.
      */
-    val currentSong: LiveData<Song>
-        get() = listener.currentSong
+    val currentSong: SharedFlow<Song>
+        get() = mCurrentSong
+
+    private val mIsPlaying = MutableSharedFlow<Boolean>(replay = 1)
 
     /**
      * Value which represents current playback state.
      */
-    val isPlaying: Flow<Boolean>
-        get() = listener.isPlaying
+    val isPlaying: SharedFlow<Boolean>
+        get() = mIsPlaying
+
+    /**
+     * Object that connects [AoedePlayer] state with its LiveData.
+     */
+    private var listener: Listener = Listener(this).apply {
+        setOnCurrentSongUpdateListener {
+            playerInteractorScope.launch {
+                mCurrentSong.emit(it)
+            }
+        }
+        setOnIsPlayingChangeListener {
+            playerInteractorScope.launch {
+                mIsPlaying.emit(it)
+            }
+        }
+    }
 
     /**
      * Playlist which is currently submitted to the player.
@@ -47,21 +68,22 @@ class PlayerInteractor(
         get() = mPlayer.currentPlaylist
 
     private val mIsPlayerInitialized = MutableStateFlow(false)
+
     /**
      * [AoedePlayer] considered as initialized when the first song is submitted.
      */
     val isPlayerInitialised: StateFlow<Boolean>
         get() = mIsPlayerInitialized
 
-    private val currentSongObserver = Observer<Song> {
-        if (!isPlayerInitialised.value) {
-            mIsPlayerInitialized.value = true
-        }
-    }
-
     init {
         mPlayer.addListener(listener)
-        currentSong.observeForever(currentSongObserver)
+        playerInteractorScope.launch {
+            currentSong.collect {
+                if (!isPlayerInitialised.value) {
+                    mIsPlayerInitialized.value = true
+                }
+            }
+        }
     }
 
     fun setPlaylist(playlist: Playlist) {

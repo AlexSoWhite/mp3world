@@ -11,6 +11,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.IBinder
+import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH
@@ -64,6 +65,7 @@ class ForegroundService : Service() {
             .setNotificationListener(NotificationListener())
             .setSmallIconResourceId(R.drawable.icv_music_notificatioin)
             .build().apply {
+                setPriority(PRIORITY_HIGH)
                 setUseFastForwardAction(false)
                 setUseRewindAction(false)
                 setUseNextActionInCompactView(true)
@@ -110,7 +112,12 @@ class ForegroundService : Service() {
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
         ): Bitmap {
-            return (playerInteractor.currentSong.value!! as SongWrapper).art
+            val song = playerInteractor
+                .currentPlaylist
+                .value
+                ?.songList
+                ?.get(player.currentMediaItemIndex) as SongWrapper
+            return song.art
         }
 
         /**

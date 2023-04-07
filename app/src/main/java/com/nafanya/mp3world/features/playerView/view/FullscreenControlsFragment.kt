@@ -92,8 +92,10 @@ class FullscreenControlsFragment :
                 binding.controlsFullscreen.player = viewModel.player
             }
         }
-        viewModel.currentSong.observe(viewLifecycleOwner) {
-            renderSong(it as SongWrapper)
+        lifecycleScope.launchWhenCreated {
+            viewModel.currentSong.collect {
+                renderSong(it as SongWrapper)
+            }
         }
         view.findViewById<ShapeableImageView>(R.id.current_playlist)
             .setOnClickListener {
