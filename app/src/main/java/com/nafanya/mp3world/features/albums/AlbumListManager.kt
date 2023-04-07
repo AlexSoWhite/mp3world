@@ -2,31 +2,52 @@ package com.nafanya.mp3world.features.albums
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.listManagers.ListManager
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
-import com.nafanya.player.Playlist
-import com.nafanya.player.Song
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
+import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
- * Object that holds albums data. Populated by MediaStoreReader. Updates when MediaStoreReader is updated.
+ * Object that holds albums data. Populated by [MediaStoreInteractor]. Updates when [MediaStoreInteractor] is updated.
  */
 @Singleton
-class AlbumListManager @Inject constructor() : ListManager {
+class AlbumListManager @Inject constructor(
+    mediaStoreInteractor: MediaStoreInteractor,
+    ioCoroutineProvider: IOCoroutineProvider
+) : ListManager() {
 
-    private val mAlbums: MutableLiveData<List<Album>> = MutableLiveData(listOf())
+    private val mAlbums = MutableLiveData<List<Album>>()
     val albums: LiveData<List<Album>>
         get() = mAlbums
 
     private var suspendedList = mutableListOf<Album>()
 
-    override suspend fun populate(mediaStoreReader: MediaStoreReader) {
-        fillSuspendedList(mediaStoreReader.allSongs)
-        updateData()
+    init {
+        ioCoroutineProvider.ioScope.launch {
+            mediaStoreInteractor.allSongs.collectLatest {
+                it?.let { list ->
+                    fillSuspendedList(list)
+                    updateData()
+                }
+            }
+        }
     }
 
-    private fun fillSuspendedList(songList: List<Song>) {
+    override fun getPlaylistByContainerId(id: Long): LiveData<PlaylistWrapper?> {
+        return albums.map {
+            it.firstOrNull { album ->
+                album.id == id
+            }?.playlist
+        }
+    }
+
+    private fun fillSuspendedList(songList: List<LocalSong>) {
         songList.forEach { song ->
             val album = Album(
                 id = song.albumId,
@@ -37,17 +58,16 @@ class AlbumListManager @Inject constructor() : ListManager {
         }
     }
 
-    private fun add(element: Album, song: Song) {
+    private fun add(element: Album, song: LocalSong) {
         val index = suspendedList.indexOf(element)
         if (index != -1) {
-            suspendedList
-                .elementAt(index)
-                .playlist
-                ?.songList
-                ?.add(song)
+            val playlist = suspendedList[index].playlist
+            suspendedList.elementAt(index).playlist = playlist?.copy(
+                songList = listOf(song) + playlist.songList
+            )
         } else {
-            element.playlist = Playlist(
-                arrayListOf(song),
+            element.playlist = PlaylistWrapper(
+                listOf(song),
                 name = element.name
             )
             suspendedList.add(element)
@@ -57,9 +77,5 @@ class AlbumListManager @Inject constructor() : ListManager {
     private fun updateData() {
         mAlbums.postValue(suspendedList)
         suspendedList = mutableListOf()
-    }
-
-    fun search(query: String): List<Album> {
-        return mAlbums.value?.filter { it.name.lowercase().contains(query.lowercase()) } ?: listOf()
     }
 }

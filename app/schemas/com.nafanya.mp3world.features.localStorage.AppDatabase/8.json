@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "05ad6e1dede3538db9ad0d52842e23ee",
+    "identityHash": "61764481b46ab5129e4ed3de20dc1b4b",
     "entities": [
       {
         "tableName": "PlaylistStorageEntity",
@@ -55,50 +55,12 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "SongStatisticEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `time` INTEGER, `title` TEXT, `artist` TEXT, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "time",
-            "columnName": "time",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "title",
-            "columnName": "title",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "artist",
-            "columnName": "artist",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '05ad6e1dede3538db9ad0d52842e23ee')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '61764481b46ab5129e4ed3de20dc1b4b')"
     ]
   }
 }

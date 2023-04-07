@@ -1,22 +1,23 @@
 package com.nafanya.mp3world.features.playerView.view
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.DataBindingUtil
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.databinding.PlayerViewFullscreenBinding
+import com.nafanya.mp3world.core.view.BaseActivity
+import com.nafanya.mp3world.databinding.ActivityFullScreenPlayerBinding
 
-class FullScreenPlayerActivity : AppCompatActivity() {
+class FullScreenPlayerActivity : BaseActivity<ActivityFullScreenPlayerBinding>() {
 
-    private lateinit var binding: PlayerViewFullscreenBinding
+    override fun inflate(layoutInflater: LayoutInflater): ActivityFullScreenPlayerBinding {
+        return ActivityFullScreenPlayerBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding = DataBindingUtil.setContentView(this, R.layout.player_view_fullscreen)
     }
 
     override fun onBackPressed() {

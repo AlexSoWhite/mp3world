@@ -10,10 +10,10 @@ class DateConverter {
 
     companion object {
         private const val multiplier = 1000L
+        private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
     }
 
     fun dateToString(arg: Long): String {
-        val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
         return simpleDateFormat.format(arg * multiplier)
     }
 }

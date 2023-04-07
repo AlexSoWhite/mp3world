@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.albums
 
 import android.graphics.Bitmap
-import com.nafanya.player.Playlist
+import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 
 /**
  * Class that wraps the album.
@@ -10,7 +10,7 @@ import com.nafanya.player.Playlist
 data class Album(
     val name: String,
     val id: Long,
-    var playlist: Playlist? = null,
+    var playlist: PlaylistWrapper? = null,
     var image: Bitmap?
 ) {
     override fun equals(other: Any?): Boolean {

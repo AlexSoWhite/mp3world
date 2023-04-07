@@ -1,23 +1,33 @@
 package com.nafanya.mp3world.features.foregroundService
 
+import android.annotation.SuppressLint
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.IBinder
-import androidx.lifecycle.LifecycleService
+import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_DEFAULT
+import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.entrypoint.InitialActivity
+import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
-class ForegroundService : LifecycleService() {
+// TODO customize
+class ForegroundService : Service() {
+
+    companion object {
+        const val CHANNEL_ID = "playback_channel"
+    }
 
     /**
      * Notification manager responsible for displaying player notification.
@@ -27,7 +37,7 @@ class ForegroundService : LifecycleService() {
 
     @Inject
     lateinit var playerInteractor: PlayerInteractor
-    private val player: Player?
+    private val player: Player
         get() = playerInteractor.player
 
     override fun onCreate() {
@@ -35,18 +45,33 @@ class ForegroundService : LifecycleService() {
             .foregroundServiceComponent()
             .inject(this)
         super.onCreate()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "player",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+            val notification = Notification.Builder(this, CHANNEL_ID)
+                .setContentTitle("")
+                .setContentText("").build()
+            startForeground(1, notification)
+        }
         playerNotificationManager = PlayerNotificationManager
-            .Builder(this, 1, "playback_channel")
-            .setChannelImportance(IMPORTANCE_DEFAULT)
-            .setMediaDescriptionAdapter(Adapter(this)) // TODO bind with app
+            .Builder(this, 1, CHANNEL_ID)
+            .setChannelImportance(IMPORTANCE_HIGH)
+            .setMediaDescriptionAdapter(Adapter(this))
             .setNotificationListener(NotificationListener())
-            .setSmallIconResourceId(R.drawable.music_notification_icon)
-            .build()
-        playerNotificationManager.setUseFastForwardAction(false)
-        playerNotificationManager.setUseRewindAction(false)
-        playerNotificationManager.setUseNextActionInCompactView(true)
-        playerNotificationManager.setUsePreviousActionInCompactView(true)
-        playerNotificationManager.setPlayer(player)
+            .setSmallIconResourceId(R.drawable.icv_music_notificatioin)
+            .build().apply {
+                setPriority(PRIORITY_HIGH)
+                setUseFastForwardAction(false)
+                setUseRewindAction(false)
+                setUseNextActionInCompactView(true)
+                setUsePreviousActionInCompactView(true)
+                setPlayer(player)
+            }
     }
 
     /**
@@ -60,24 +85,24 @@ class ForegroundService : LifecycleService() {
          * Song title.
          */
         override fun getCurrentContentTitle(player: Player): CharSequence {
-            return playerInteractor
+            val song = playerInteractor
                 .currentPlaylist
                 .value
                 ?.songList
-                ?.get(player.currentMediaItemIndex)
-                ?.title as CharSequence
+                ?.get(player.currentMediaItemIndex) as SongWrapper
+            return song.title
         }
 
         /**
          * Song artist.
          */
         override fun getCurrentContentText(player: Player): CharSequence {
-            return playerInteractor
+            val song = playerInteractor
                 .currentPlaylist
                 .value
                 ?.songList
-                ?.get(player.currentMediaItemIndex)
-                ?.artist as CharSequence
+                ?.get(player.currentMediaItemIndex) as SongWrapper
+            return song.artist
         }
 
         /**
@@ -86,13 +111,19 @@ class ForegroundService : LifecycleService() {
         override fun getCurrentLargeIcon(
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
-        ): Bitmap? {
-            return playerInteractor.currentSong.value!!.art
+        ): Bitmap {
+            val song = playerInteractor
+                .currentPlaylist
+                .value
+                ?.songList
+                ?.get(player.currentMediaItemIndex) as SongWrapper
+            return song.art
         }
 
         /**
          * Method triggered when notification clicked.
          */
+        @SuppressLint("UnspecifiedImmutableFlag")
         override fun createCurrentContentIntent(player: Player): PendingIntent? {
             val intentToMain = Intent(context, InitialActivity::class.java)
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -124,7 +155,7 @@ class ForegroundService : LifecycleService() {
             ongoing: Boolean
         ) {
             super.onNotificationPosted(notificationId, notification, ongoing)
-            startForeground(notificationId, notification)
+            this@ForegroundService.startForeground(notificationId, notification)
         }
 
         override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
@@ -134,7 +165,6 @@ class ForegroundService : LifecycleService() {
     }
 
     override fun onBind(intent: Intent): IBinder? {
-        super.onBind(intent)
         return null
     }
 
@@ -149,6 +179,5 @@ class ForegroundService : LifecycleService() {
     override fun onDestroy() {
         super.onDestroy()
         playerNotificationManager.setPlayer(null)
-        playerInteractor.destroy()
     }
 }

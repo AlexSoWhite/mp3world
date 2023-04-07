@@ -12,8 +12,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@mipmap/ic_launcher_foreground"
-        android:background="@drawable/icon_gradient"/>
+        android:src="@drawable/icv_mp3"
+        android:background="@drawable/icv_launcher_background"/>
 
     <TextView
         android:layout_marginTop="10dp"

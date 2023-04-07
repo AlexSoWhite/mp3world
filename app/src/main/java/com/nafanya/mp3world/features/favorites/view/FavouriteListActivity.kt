@@ -1,61 +1,28 @@
 package com.nafanya.mp3world.features.favorites.view
 
 import android.os.Bundle
-import android.view.View
-import androidx.appcompat.app.ActionBar
-import androidx.lifecycle.Observer
-import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.view.RecyclerHolderActivity
-import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.mp3world.features.allSongs.SongListAdapter
-import com.nafanya.mp3world.features.allSongs.SongListViewModel
-import javax.inject.Inject
+import android.view.LayoutInflater
+import com.nafanya.mp3world.R
+import com.nafanya.mp3world.core.listManagers.FAVOURITE_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.view.BaseActivity
+import com.nafanya.mp3world.databinding.ActivityImmutablePlaylistLayoutBinding
+import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity.Companion.LIST_MANAGER_KEY
+import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistFragment
 
-class FavouriteListActivity : RecyclerHolderActivity() {
+class FavouriteListActivity : BaseActivity<ActivityImmutablePlaylistLayoutBinding>() {
 
-    @Inject
-    lateinit var factory: ViewModelFactory
-
-    override fun setViewModel() {
-        viewModel = factory.create(SongListViewModel::class.java)
-    }
-
-    override fun setAdapter() {
-        (viewModel as SongListViewModel).playlist.observe(this) {
-            binding.recycler.adapter = SongListAdapter(it, null) { playlist, song ->
-                viewModel.onClick(playlist, song)
-            }
-        }
+    override fun inflate(layoutInflater: LayoutInflater): ActivityImmutablePlaylistLayoutBinding {
+        return ActivityImmutablePlaylistLayoutBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as PlayerApplication).applicationComponent.favouritesComponent().inject(this)
         super.onCreate(savedInstanceState)
-    }
-
-    override fun setTitle() {
-        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
-        val observer = Observer<String> {
-            supportActionBar?.title = it
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-        (viewModel as SongListViewModel).title.observe(this, observer)
-    }
-
-    override fun onStart() {
-        super.onStart()
-//        SourceProvider.newInstanceWithPlaylist(
-//            Playlist(
-//                name = "Избранное",
-//                id = 0,
-//                songList = FavouriteListManager.favorites.value!!
-//            )
-//        )
-//        (viewModel as SongListViewModel).start()
-    }
-
-    override fun onEmpty() {
-        super.onEmpty()
-        binding.emptySongList.emptySongList.visibility = View.VISIBLE
+        val arguments = Bundle()
+        arguments.putInt(LIST_MANAGER_KEY, FAVOURITE_LIST_MANAGER_KEY)
+        val fragment = ImmutablePlaylistFragment()
+        fragment.arguments = arguments
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.immutable_playlist_fragment_container, fragment)
+            .commit()
     }
 }

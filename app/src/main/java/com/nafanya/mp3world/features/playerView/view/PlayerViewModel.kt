@@ -1,17 +1,23 @@
 package com.nafanya.mp3world.features.playerView.view
 
 import androidx.lifecycle.ViewModel
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
+import com.nafanya.mp3world.features.downloading.DownloadInteractor
+import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
+/**
+ * ViewModel for player control views (FullScreen and Bottom)
+ */
 class PlayerViewModel @Inject constructor(
-    private val playerInteractor: PlayerInteractor
-) : ViewModel() {
+    playerInteractor: PlayerInteractor,
+    override val downloadInteractor: DownloadInteractor,
+    override val mediaStoreInteractor: MediaStoreInteractor
+) : ViewModel(), DownloadingViewModel {
 
-    val isPlayerInitialised
-        get() = playerInteractor.isPlayerInitialised
-    val player
-        get() = playerInteractor.player
-    val currentSong
-        get() = playerInteractor.currentSong
+    val isPlayerInitialised = playerInteractor.isPlayerInitialised
+    val player = playerInteractor.player
+    val currentSong = playerInteractor.currentSong
+    val currentPlaylist = playerInteractor.currentPlaylist
 }

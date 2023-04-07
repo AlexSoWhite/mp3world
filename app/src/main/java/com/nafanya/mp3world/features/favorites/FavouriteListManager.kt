@@ -1,50 +1,80 @@
 package com.nafanya.mp3world.features.favorites
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.listManagers.ListManager
-import com.nafanya.mp3world.core.mediaStore.MediaStoreReader
-import com.nafanya.mp3world.features.localStorage.LocalStorageProvider
-import com.nafanya.player.Playlist
-import com.nafanya.player.Song
+import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
+import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.features.localStorage.DatabaseHolder
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
- * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
+ * Object that holds favourites data. Managed by [DatabaseHolder] and [MediaStoreInteractor].
  */
 @Singleton
 class FavouriteListManager @Inject constructor(
-    private val localStorageProvider: LocalStorageProvider
-) : ListManager {
+    mediaStoreInteractor: MediaStoreInteractor,
+    ioCoroutineProvider: IOCoroutineProvider,
+    private val dbHolder: DatabaseHolder
+) : ListManager() {
 
-    private val mFavourites = MutableLiveData<Playlist>()
-    val favorites: LiveData<Playlist>
+    private val mFavourites = MutableLiveData<PlaylistWrapper>()
+    val favorites: LiveData<PlaylistWrapper>
         get() = mFavourites
 
-    fun add(song: Song) {
-        val temp = mFavourites.value?.copy()
-        temp?.songList?.add(song)
-        mFavourites.postValue(temp)
+    init {
+        ioCoroutineProvider.ioScope.launch {
+            mediaStoreInteractor.allSongs.collectLatest { rawList ->
+                rawList?.let { songList ->
+                    val uris = dbHolder.db.favouriteListDao().getAll().map { Uri.parse(it) }
+                    val songs = songList
+                        .sortedByDescending { song -> song.date }
+                        .filter { uris.contains(it.uri) }
+                    val temp = PlaylistWrapper(
+                        songList = songs,
+                        name = "Избранное"
+                    )
+                    mFavourites.postValue(temp)
+                }
+            }
+        }
     }
 
-    fun delete(song: Song) {
-        val temp = mFavourites.value?.copy()
-        temp?.songList?.remove(song)
-        mFavourites.postValue(temp)
+    override fun getPlaylistByContainerId(id: Long): LiveData<PlaylistWrapper?> {
+        return favorites.map { it }
     }
 
-    override suspend fun populate(mediaStoreReader: MediaStoreReader) {
-        withContext(Dispatchers.IO) {
-            val ids = localStorageProvider.dbHolder.db.favouriteListDao().getAll()
-            val temp = Playlist(
-                songList = mutableListOf(),
+    suspend fun add(song: SongWrapper) {
+        val temp = mutableListOf<SongWrapper>()
+        favorites.value?.songList?.forEach {
+            temp.add(it)
+        }
+        dbHolder.db.favouriteListDao().insert(FavouriteListEntity(song.uri.toString()))
+        mFavourites.postValue(
+            PlaylistWrapper(
+                songList = listOf(song) + temp,
                 name = "Избранное"
             )
-            temp.songList.addAll(mediaStoreReader.allSongs.filter { ids.contains(it.id) })
-            mFavourites.postValue(temp)
-        }
+        )
+    }
+
+    suspend fun delete(song: SongWrapper) {
+        val temp: MutableList<SongWrapper> = favorites.value?.songList as MutableList<SongWrapper>
+        temp.remove(song)
+        dbHolder.db.favouriteListDao().delete(FavouriteListEntity(song.uri.toString()))
+        mFavourites.postValue(
+            PlaylistWrapper(
+                songList = temp,
+                id = -1,
+                name = "Избранное"
+            )
+        )
     }
 }

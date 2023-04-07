@@ -8,5 +8,5 @@ import androidx.room.PrimaryKey
  */
 @Entity
 data class FavouriteListEntity(
-    @PrimaryKey var id: Long
+    @PrimaryKey var uri: String
 )

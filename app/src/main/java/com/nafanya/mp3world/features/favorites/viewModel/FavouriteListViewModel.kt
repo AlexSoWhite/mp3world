@@ -1,31 +1,37 @@
 package com.nafanya.mp3world.features.favorites.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
-import com.nafanya.mp3world.features.localStorage.LocalStorageProvider
-import com.nafanya.player.Song
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 class FavouriteListViewModel @Inject constructor(
-    private val localStorageProvider: LocalStorageProvider,
     private val favouriteListManager: FavouriteListManager
 ) : ViewModel() {
 
     val playlist = favouriteListManager.favorites
 
-    fun addFavourite(song: Song) {
+    fun addFavourite(song: SongWrapper) {
         viewModelScope.launch {
             favouriteListManager.add(song)
-            localStorageProvider.addFavourite(song)
         }
     }
 
-    fun deleteFavourite(song: Song) {
+    fun deleteFavourite(song: SongWrapper) {
         viewModelScope.launch {
             favouriteListManager.delete(song)
-            localStorageProvider.deleteFavourite(song)
+        }
+    }
+
+    fun isSongInFavourite(song: SongWrapper): LiveData<Boolean> {
+        return playlist.map {
+            it.songList.map { song ->
+                song.uri
+            }.contains(song.uri)
         }
     }
 }
