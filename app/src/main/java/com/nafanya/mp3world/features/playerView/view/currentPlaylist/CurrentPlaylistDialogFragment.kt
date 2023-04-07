@@ -22,26 +22,26 @@ import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
 import com.nafanya.mp3world.features.downloading.DownloadingView
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
-import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
-import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
-import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongActionDialog
-import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
+import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongDialogHolder
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
-import com.nafanya.mp3world.features.songListViews.songViews.ImmutableLocalSongViewHolder
-import com.nafanya.mp3world.features.songListViews.songViews.RemoteSongViewHolder
 import com.nafanya.player.PlayerInteractor
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.flow.take
 
-class CurrentPlaylistDialogFragment : BottomSheetDialogFragment(), DownloadingView {
+class CurrentPlaylistDialogFragment :
+    BottomSheetDialogFragment(),
+    DownloadingView,
+    LocalSongDialogHolder {
 
     @Inject
     lateinit var factory: ViewModelFactory
 
     @Inject
     lateinit var favouriteListViewModel: Lazy<FavouriteListViewModel>
+
+    override val actualFavouriteListViewModel: FavouriteListViewModel
+        get() = favouriteListViewModel.get()
 
     @Inject
     lateinit var interactor: PlayerInteractor
@@ -55,42 +55,22 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment(), DownloadingVi
     override val downloadingViewModel: DownloadingViewModel
         get() = viewModel
 
-    private val mixedAdapter: BaseSongListAdapter = object : BaseSongListAdapter() {
-
-        override fun onBindViewHolder(holder: SongListItemViewHolder, position: Int) {
-            val song = currentList[position].getDataAsSong()
-            when (holder.itemViewType) {
-                SONG_LOCAL_IMMUTABLE -> {
-                    (holder as ImmutableLocalSongViewHolder).bind(
-                        song,
-                        onClickCallBack = { view ->
-                            viewModel.onSongClick(song)
-                            currentPlayingView = view
-                        },
-                        onActionClickedCallback = {
-                            val dialog = LocalSongActionDialog(
-                                requireActivity(),
-                                song as LocalSong,
-                                favouriteListViewModel.get()
-                            )
-                            dialog.show()
-                        }
-                    )
+    private val mixedAdapter = MixedAdapter().apply {
+        onClickCallback = { view, song ->
+            viewModel.onSongClick(song)
+            currentPlayingView = view
+        }
+        onLocalActionClickCallback = { song ->
+            val dialog = createDialog(requireActivity(), song as LocalSong)
+            actualFavouriteListViewModel
+                .isSongInFavourite(song)
+                .observe(viewLifecycleOwner) {
+                    dialog.setIsFavorite(it)
                 }
-                SONG_REMOTE -> {
-                    (holder as RemoteSongViewHolder).bind(
-                        song,
-                        onClickCallBack = { view ->
-                            viewModel.onSongClick(song)
-                            currentPlayingView = view
-                        },
-                        onActionClickedCallback = {
-                            download(requireActivity(), song as RemoteSong)
-                        }
-                    )
-                }
-            }
-            super.onBindViewHolder(holder, position)
+            dialog.show()
+        }
+        onRemoteActionClickCallback = { song ->
+            download(requireActivity(), song as RemoteSong)
         }
     }
 

@@ -13,16 +13,22 @@ import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.utils.attachToTopBar
 import com.nafanya.mp3world.features.allPlaylists.viewModel.MutablePlaylistViewModel
+import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongActionDialog
+import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongDialogHolder
 import javax.inject.Inject
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
-class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
+class MutablePlaylistFragment :
+    StatedPlaylistFragmentBaseLayout(),
+    LocalSongDialogHolder {
 
     @Inject
     lateinit var mutableFactory: MutablePlaylistViewModel.Factory.MutablePlaylistAssistedFactory
+
+    override val actualFavouriteListViewModel: FavouriteListViewModel
+        get() = favouriteListViewModel.get()
 
     private val viewModel: MutablePlaylistViewModel by viewModels {
         mutableFactory.create(
@@ -34,22 +40,19 @@ class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
         get() = viewModel
 
     private val mutablePlaylistAdapter: MutablePlaylistAdapter by lazy {
-        MutablePlaylistAdapter(
-            onSongClickCallback = ::onSongClick,
-            onModifyButtonClickCallback = {
-                moveToModifyPlaylistActivity()
-            },
-            onLongPressCallback = { },
-            onConfirmChangesCallback = { },
-            onActionClickCallback = {
-                val dialog = LocalSongActionDialog(
-                    requireActivity(),
-                    it,
-                    favouriteListViewModel.get()
-                )
+        MutablePlaylistAdapter().apply {
+            onSongClickCallback = this@MutablePlaylistFragment::onSongClick
+            onModifyButtonClickCallback = { moveToModifyPlaylistActivity() }
+            onLongPressCallback = { }
+            onConfirmChangesCallback = { }
+            onActionClickCallback = { song ->
+                val dialog = createDialog(requireActivity(), song)
+                actualFavouriteListViewModel.isSongInFavourite(song).observe(viewLifecycleOwner) {
+                    dialog.setIsFavorite(it)
+                }
                 dialog.show()
             }
-        )
+        }
     }
 
     override val songListAdapter: BaseSongListAdapter

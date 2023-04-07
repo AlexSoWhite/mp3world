@@ -7,11 +7,14 @@ import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.utils.attachToTopBar
+import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongActionDialog
+import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongDialogHolder
 import javax.inject.Inject
 
-class ImmutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
+class ImmutablePlaylistFragment :
+    StatedPlaylistFragmentBaseLayout(),
+    LocalSongDialogHolder {
 
     @Inject
     lateinit var immutableFactory: ImmutablePlaylistViewModel.Factory.AssistedPlaylistFactory
@@ -23,15 +26,17 @@ class ImmutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
         )
     }
 
+    override val actualFavouriteListViewModel: FavouriteListViewModel
+        get() = favouriteListViewModel.get()
+
     private val immutablePlaylistAdapter: ImmutablePlaylistAdapter by lazy {
         ImmutablePlaylistAdapter(
             onSongClickCallback = ::onSongClick,
-            onActionClickedCallback = {
-                val dialog = LocalSongActionDialog(
-                    requireActivity(),
-                    it,
-                    favouriteListViewModel.get()
-                )
+            onActionClickedCallback = { song ->
+                val dialog = createDialog(requireActivity(), song)
+                actualFavouriteListViewModel.isSongInFavourite(song).observe(viewLifecycleOwner) {
+                    dialog.setIsFavorite(it)
+                }
                 dialog.show()
             }
         )

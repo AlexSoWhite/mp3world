@@ -99,10 +99,10 @@ abstract class SongViewHolder(
     @CallSuper
     fun bind(
         song: SongWrapper,
-        onClickCallBack: (SongView) -> Unit,
+        onClickCallback: (SongView) -> Unit,
         onActionClickedCallback: ((Song) -> Unit)? = null
     ) {
-        songView.setSong(song) { onClickCallBack(songView) }
+        songView.setSong(song) { onClickCallback(songView) }
         if (onActionClickedCallback != null) {
             songView.bindAction(onActionClickedCallback)
         }

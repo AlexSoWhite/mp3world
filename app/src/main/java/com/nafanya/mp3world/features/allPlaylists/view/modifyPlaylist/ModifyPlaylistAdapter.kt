@@ -23,7 +23,7 @@ class ModifyPlaylistAdapter(
         if (holder.itemViewType == SONG_ADDABLE_REMOVABLE) {
             with(holder as AddableRemovableSongViewHolder) {
                 val song = getItem(position).getDataAsSong()
-                bind(song, onClickCallBack = { view -> onSongClickCallback(song, view) })
+                bind(song, onClickCallback = { view -> onSongClickCallback(song, view) })
                 modifyingPlaylist?.let {
                     attachToPlaylist(it, onSongAddCallback, onSongRemoveCallback)
                 }

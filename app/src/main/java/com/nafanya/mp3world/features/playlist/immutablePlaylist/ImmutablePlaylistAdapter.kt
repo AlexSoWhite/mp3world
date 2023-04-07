@@ -16,7 +16,7 @@ class ImmutablePlaylistAdapter(
         val song = getItem(position).getDataAsSong()
         (holder as ImmutableLocalSongViewHolder).bind(
             song,
-            onClickCallBack = { view -> onSongClickCallback(song, view) },
+            onClickCallback = { view -> onSongClickCallback(song, view) },
             onActionClickedCallback = { onActionClickedCallback(song as LocalSong) }
         )
         super.onBindViewHolder(holder, position)

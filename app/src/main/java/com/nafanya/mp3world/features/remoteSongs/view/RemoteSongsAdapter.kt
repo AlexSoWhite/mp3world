@@ -17,7 +17,7 @@ class RemoteSongsAdapter(
             val song = getItem(position).getDataAsSong()
             (holder as RemoteSongViewHolder).bind(
                 song,
-                onClickCallBack = { view -> onSongClickCallback(song, view) },
+                onClickCallback = { view -> onSongClickCallback(song, view) },
                 onActionClickedCallback = { onActionClickCallback(song) }
             )
         }

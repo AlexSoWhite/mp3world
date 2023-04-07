@@ -21,7 +21,7 @@ class AllSongsAdapter(
                 val song = currentList[position].getDataAsSong()
                 (holder as ImmutableLocalSongViewHolder).bind(
                     song,
-                    onClickCallBack = { view -> onSongItemClickCallback(song, view) },
+                    onClickCallback = { view -> onSongItemClickCallback(song, view) },
                     onActionClickedCallback = { onActionClickedCallback(song as LocalSong) }
                 )
             }

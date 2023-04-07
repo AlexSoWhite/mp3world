@@ -12,13 +12,13 @@ import com.nafanya.mp3world.features.songListViews.songViews.RearrangeableSongVi
 import com.nafanya.mp3world.features.songListViews.topButtonViews.ConfirmChangesButtonViewHolder
 import com.nafanya.mp3world.features.songListViews.topButtonViews.ModifyPlaylistButtonViewHolder
 
-class MutablePlaylistAdapter(
-    private val onSongClickCallback: (SongWrapper, SongView) -> Unit,
-    private val onModifyButtonClickCallback: () -> Unit,
-    private val onLongPressCallback: (SongWrapper) -> Unit,
-    private val onConfirmChangesCallback: () -> Unit,
-    private val onActionClickCallback: (LocalSong) -> Unit
-) : BaseSongListAdapter() {
+class MutablePlaylistAdapter : BaseSongListAdapter() {
+
+    lateinit var onSongClickCallback: (SongWrapper, SongView) -> Unit
+    lateinit var onModifyButtonClickCallback: () -> Unit
+    lateinit var onLongPressCallback: (SongWrapper) -> Unit
+    lateinit var onConfirmChangesCallback: () -> Unit
+    lateinit var onActionClickCallback: (LocalSong) -> Unit
 
     override fun onBindViewHolder(
         holder: SongListItemViewHolder,
@@ -30,7 +30,7 @@ class MutablePlaylistAdapter(
                     val song = currentList[position].getDataAsSong()
                     bind(
                         song,
-                        onClickCallBack = { view -> onSongClickCallback(song, view) },
+                        onClickCallback = { view -> onSongClickCallback(song, view) },
                         onActionClickedCallback = { onActionClickCallback(song as LocalSong) }
                     )
                     holder.attachToScreen(onLongPressCallback)

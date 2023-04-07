@@ -1,49 +1,48 @@
 package com.nafanya.mp3world.features.songListViews.actionDialogs
 
 import android.app.Dialog
+import android.content.Context
 import android.view.LayoutInflater
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.databinding.DialogLocalSongActionBinding
-import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
+
+enum class LocalSongAction {
+    ADD_TO_FAVORITE,
+    REMOVE_FROM_FAVORITE,
+    GO_TO_ALBUM,
+    GO_TO_ARTIST
+}
 
 class LocalSongActionDialog(
-    private val activity: FragmentActivity,
-    private val song: LocalSong,
-    private val favouriteListViewModel: FavouriteListViewModel
-) : Dialog(activity, R.style.Dialog) {
+    context: Context,
+    private val song: LocalSong
+) : Dialog(context, R.style.Dialog) {
 
     private var binding: DialogLocalSongActionBinding =
         DialogLocalSongActionBinding.inflate(LayoutInflater.from(context))
 
-    private val favouriteObserver = Observer<Boolean> {
-        with(binding) {
-            if (it) {
-                favouriteAction.icon.setImageResource(R.drawable.icv_favorite_filled)
-                favouriteAction.description.text =
-                    context.getString(R.string.remove_from_favourites)
-                favouriteAction.setOnClickListener {
-                    favouriteListViewModel.deleteFavourite(song)
-                }
-            } else {
-                favouriteAction.icon.setImageResource(R.drawable.icv_favorite_border)
-                favouriteAction.description.text = context.getString(R.string.add_to_favourites)
-                favouriteAction.setOnClickListener {
-                    favouriteListViewModel.addFavourite(song)
-                }
-            }
-        }
-    }
+    private var actionListener: ((LocalSongAction) -> Unit)? = null
 
     init {
         this.setContentView(binding.root)
-        manageFavourite()
-        manageAlbums()
-        manageArtists()
-        with(binding) {
+        binding.apply {
+            goToAlbum.setOnClickListener {
+                actionListener?.invoke(LocalSongAction.GO_TO_ALBUM)
+                dismiss()
+            }
+            goToAlbum.description.text = context.getString(
+                R.string.go_to_album,
+                song.album
+            )
+            goToArtist.setOnClickListener {
+                actionListener?.invoke(LocalSongAction.GO_TO_ARTIST)
+                dismiss()
+            }
+            goToArtist.description.text = context.getString(
+                R.string.go_to_artist,
+                song.artist
+            )
             songDescription.text =
                 context.getString(R.string.song_description, song.artist, song.title)
             songDescription.isSelected = true
@@ -53,43 +52,26 @@ class LocalSongActionDialog(
         }
     }
 
-    private fun manageFavourite() = binding.apply {
-        favouriteListViewModel.isSongInFavourite(song).observe(
-            activity,
-            favouriteObserver
-        )
+    fun setActionListener(callback: (LocalSongAction) -> Unit) {
+        actionListener = callback
     }
 
-    private fun manageAlbums() = binding.apply {
-        goToAlbum.apply {
+    fun setIsFavorite(isFavorite: Boolean) = with(binding.favouriteAction) {
+        if (isFavorite) {
+            icon.setImageResource(R.drawable.icv_favorite_filled)
             description.text =
-                context.getString(R.string.go_to_album, song.album)
+                context.getString(R.string.remove_from_favourites)
             setOnClickListener {
-                ActivityStarter.Builder()
-                    .with(context)
-                    .createIntentToImmutablePlaylistActivityFromAlbum(song.albumId, song.album)
-                    .build()
-                    .startActivity()
+                actionListener?.invoke(LocalSongAction.REMOVE_FROM_FAVORITE)
+                dismiss()
+            }
+        } else {
+            icon.setImageResource(R.drawable.icv_favorite_border)
+            description.text = context.getString(R.string.add_to_favourites)
+            setOnClickListener {
+                actionListener?.invoke(LocalSongAction.ADD_TO_FAVORITE)
+                dismiss()
             }
         }
-    }
-
-    private fun manageArtists() = binding.apply {
-        goToArtist.apply {
-            description.text =
-                context.getString(R.string.go_to_artist, song.artist)
-            setOnClickListener {
-                ActivityStarter.Builder()
-                    .with(context)
-                    .createIntentToImmutablePlaylistActivityFromArtist(song.artistId, song.artist)
-                    .build()
-                    .startActivity()
-            }
-        }
-    }
-
-    override fun dismiss() {
-        super.dismiss()
-        favouriteListViewModel.isSongInFavourite(song).removeObserver(favouriteObserver)
     }
 }
