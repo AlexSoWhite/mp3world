@@ -50,6 +50,7 @@ class QueryExecutor @Inject constructor(
 
                 override fun onResponse(call: Call, response: Response) {
                     response.body?.let {
+                        mSongList.lock()
                         mSongList.setEmptyList()
                         val doc = Jsoup.parseBodyFragment(it.string())
                         val arts = doc.getElementsByClass("track__img")
