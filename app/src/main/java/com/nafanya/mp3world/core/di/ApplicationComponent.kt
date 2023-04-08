@@ -14,6 +14,7 @@ import com.nafanya.mp3world.features.downloading.di.DownloadModule
 import com.nafanya.mp3world.features.favorites.di.FavouriteListManagerModule
 import com.nafanya.mp3world.features.favorites.di.FavouritesComponentProvider
 import com.nafanya.mp3world.features.foregroundService.di.ForegroundServiceComponentProvider
+import com.nafanya.mp3world.features.metadataEditing.di.MetadataEditComponentProvider
 import com.nafanya.mp3world.features.playerView.di.PlayerViewComponentProvider
 import com.nafanya.mp3world.features.playlist.di.PlaylistComponentProvider
 import com.nafanya.mp3world.features.remoteSongs.di.RemoteSongsComponentProvider
@@ -44,7 +45,8 @@ interface ApplicationComponent :
     AllPlaylistsComponentProvider,
     PlayerViewComponentProvider,
     RemoteSongsComponentProvider,
-    ForegroundServiceComponentProvider {
+    ForegroundServiceComponentProvider,
+    MetadataEditComponentProvider {
 
     fun context(): Context
 

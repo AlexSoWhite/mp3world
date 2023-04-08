@@ -80,6 +80,9 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".features.playerView.view.FullScreenPlayerActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".features.metadataEditing.MetadataEditActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <service android:name=".features.foregroundService.ForegroundService" />
     </application>
 </manifest>

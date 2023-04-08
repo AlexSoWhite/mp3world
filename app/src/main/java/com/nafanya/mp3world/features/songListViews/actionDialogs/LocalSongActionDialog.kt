@@ -11,7 +11,8 @@ enum class LocalSongAction {
     ADD_TO_FAVORITE,
     REMOVE_FROM_FAVORITE,
     GO_TO_ALBUM,
-    GO_TO_ARTIST
+    GO_TO_ARTIST,
+    GO_TO_EDIT_METADATA
 }
 
 class LocalSongActionDialog(
@@ -43,6 +44,10 @@ class LocalSongActionDialog(
                 R.string.go_to_artist,
                 song.artist
             )
+            goToEditMetadata.setOnClickListener {
+                actionListener?.invoke(LocalSongAction.GO_TO_EDIT_METADATA)
+                dismiss()
+            }
             songDescription.text =
                 context.getString(R.string.song_description, song.artist, song.title)
             songDescription.isSelected = true

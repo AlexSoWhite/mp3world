@@ -33,4 +33,9 @@
     <string name="changes_will_be_discarded">Изменения не будут сохранены. Продолжить?</string>
     <string name="string_continue">продолжить</string>
     <string name="ready">готово</string>
+    <string name="edit_metadata">изменить метаданные</string>
+    <string name="save">сохранить</string>
+    <string name="title">название</string>
+    <string name="artist">исполнитель</string>
+    <string name="album">альбом</string>
 </resources>

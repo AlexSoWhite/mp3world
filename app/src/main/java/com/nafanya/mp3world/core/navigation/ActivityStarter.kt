@@ -2,6 +2,7 @@ package com.nafanya.mp3world.core.navigation
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import com.nafanya.mp3world.core.listManagers.ALBUM_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ARTIST_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.FAVOURITE_LIST_MANAGER_KEY
@@ -13,6 +14,8 @@ import com.nafanya.mp3world.features.allPlaylists.view.modifyPlaylist.ModifyPlay
 import com.nafanya.mp3world.features.allPlaylists.view.mutablePlaylist.MutablePlaylistActivity
 import com.nafanya.mp3world.features.allSongs.view.AllSongsActivity
 import com.nafanya.mp3world.features.artists.view.ArtistListActivity
+import com.nafanya.mp3world.features.metadataEditing.MetadataEditActivity
+import com.nafanya.mp3world.features.metadataEditing.MetadataEditActivity.Companion.SONG_URI_KEY
 import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity
 import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity.Companion.PLAYLIST_NAME
 import com.nafanya.mp3world.features.remoteSongs.view.RemoteSongsActivity
@@ -104,6 +107,12 @@ class ActivityStarter private constructor(
         fun createIntentToRemoteSongsActivity(query: String): Builder {
             intent = Intent(context, RemoteSongsActivity::class.java)
             intent.putExtra(QUERY, query)
+            return this
+        }
+
+        fun createIntentToEditMetadataActivity(uri: Uri): Builder {
+            intent = Intent(context, MetadataEditActivity::class.java)
+            intent.putExtra(SONG_URI_KEY, uri.toString())
             return this
         }
 

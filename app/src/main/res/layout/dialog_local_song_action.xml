@@ -54,15 +54,29 @@
         android:id="@+id/go_to_artist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginVertical="7dp"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="25dp"
         tools:description="перейти к исполнителю Linkin Park"
         app:description="@string/go_to_artist"
         app:icon="@drawable/icv_artist"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/go_to_album"
+        app:layout_constraintBottom_toTopOf="@id/go_to_edit_metadata" />
+
+    <com.nafanya.mp3world.features.songListViews.actionDialogs.DialogOptionView
+        android:id="@+id/go_to_edit_metadata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="25dp"
+        tools:description="изменить метаданные"
+        app:description="@string/edit_metadata"
+        app:icon="@drawable/icv_modify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/go_to_artist"
         app:layout_constraintBottom_toTopOf="@id/dismiss_local_action_dialog" />
 
     <Button
@@ -73,7 +87,7 @@
         android:background="?selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/go_to_artist"
+        app:layout_constraintTop_toBottomOf="@id/go_to_edit_metadata"
         app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="16sp"
         android:textColor="@color/white"

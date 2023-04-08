@@ -44,6 +44,14 @@ interface LocalSongDialogHolder {
                     .build()
                     .startActivity()
             }
+            LocalSongAction.GO_TO_EDIT_METADATA -> {
+                ActivityStarter
+                    .Builder()
+                    .with(context)
+                    .createIntentToEditMetadataActivity(song.uri)
+                    .build()
+                    .startActivity()
+            }
         }
     }
 }
