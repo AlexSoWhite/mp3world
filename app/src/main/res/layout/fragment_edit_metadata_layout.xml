@@ -23,31 +23,30 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/song_icon"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="25dp"
-        android:transitionName="@string/player_transition"
         android:layout_marginTop="60dp"
-        app:layout_constraintBottom_toTopOf="@+id/song_title_input_layout"
         app:layout_constraintDimensionRatio="H,1:1"
-        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintBottom_toTopOf="@+id/song_title_input_layout"
         app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
         app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0"
         tools:src="@drawable/song_icon_preview" />
 
     <View
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:background="@color/black"
         app:layout_constraintTop_toTopOf="@id/song_icon"
         app:layout_constraintEnd_toEndOf="@id/song_icon"/>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/modify_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:clickable="true"
         android:focusable="true"
         android:background="?selectableItemBackground"
@@ -66,8 +65,7 @@
         app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/song_icon"
         app:layout_constraintBottom_toTopOf="@id/song_artist_input_layout"
-        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
-        app:layout_constraintHorizontal_bias="0.0">
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/song_title_input"
@@ -90,8 +88,7 @@
         app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/song_title_input_layout"
         app:layout_constraintBottom_toTopOf="@id/song_album_input_layout"
-        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
-        app:layout_constraintHorizontal_bias="0.0">
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/song_artist_input"
@@ -114,8 +111,7 @@
         app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/song_artist_input_layout"
         app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
-        app:layout_constraintBottom_toTopOf="@id/submit_button"
-        app:layout_constraintHorizontal_bias="0.0">
+        app:layout_constraintBottom_toTopOf="@id/submit_button">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/song_album_input"
@@ -140,6 +136,7 @@
         android:focusable="true"
         app:layout_constraintTop_toBottomOf="@id/song_album_input_layout"
         app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
-        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline" />
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
