@@ -31,7 +31,7 @@ class DownloadManagerInteractor @Inject constructor(
         request.setNotificationVisibility(
             DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
         )
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC, fileName)
         val id = downloadManager.enqueue(request)
         val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         val receiver = DownloadReceiver(id, fileName)

@@ -14,7 +14,8 @@ class LocalSong(
     val date: Long,
     val artistId: Long,
     val albumId: Long,
-    val album: String
+    val album: String,
+    val path: String
 ) : SongWrapper(
     uri,
     art,

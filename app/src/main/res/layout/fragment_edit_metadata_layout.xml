@@ -37,6 +37,7 @@
         tools:src="@drawable/song_icon_preview" />
 
     <View
+        android:id="@+id/modify_icon_background"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:background="@color/black"
@@ -67,7 +68,7 @@
         app:layout_constraintBottom_toTopOf="@id/song_artist_input_layout"
         app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:id="@+id/song_title_input"
             android:layout_width="wrap_content"
             android:minWidth="150dp"
@@ -90,7 +91,7 @@
         app:layout_constraintBottom_toTopOf="@id/song_album_input_layout"
         app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:id="@+id/song_artist_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -113,7 +114,7 @@
         app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
         app:layout_constraintBottom_toTopOf="@id/submit_button">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:id="@+id/song_album_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -138,5 +139,24 @@
         app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
         app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <include
+        android:id="@+id/loader"
+        layout="@layout/loader" />
+
+    <include
+        android:id="@+id/error"
+        layout="@layout/error" />
+
+    <ImageView
+        android:id="@+id/remove"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/icv_trash" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

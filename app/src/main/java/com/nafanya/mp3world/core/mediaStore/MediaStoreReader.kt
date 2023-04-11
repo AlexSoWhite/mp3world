@@ -86,6 +86,7 @@ class MediaStoreReader @Inject constructor(
                 val albumIdColumn = getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
                 val albumColumn = getColumnIndex(MediaStore.Audio.Media.ALBUM)
                 val durationColumn = getColumnIndex(MediaStore.Audio.Media.DURATION)
+                val pathColumn = getColumnIndex(MediaStore.Audio.Media.DATA)
                 while (moveToNext()) {
                     // Use an ID column from the projection to get
                     // a URI representing the media item itself.
@@ -97,6 +98,7 @@ class MediaStoreReader @Inject constructor(
                     val thisAlbumId = getLong(albumIdColumn)
                     val thisAlbumName = getString(albumColumn)
                     val thisDuration = getLong(durationColumn)
+                    val thisPath = getString(pathColumn)
                     // tracks with <unknown> artist are often corrupted
                     if (thisArtist != "<unknown>") {
                         // set the song art
@@ -111,7 +113,8 @@ class MediaStoreReader @Inject constructor(
                             album = thisAlbumName ?: "unknown",
                             date = thisDate,
                             duration = thisDuration,
-                            art = artFactory.defaultBitmap
+                            art = artFactory.defaultBitmap,
+                            path = thisPath
                         )
                         mClosedSongList.addOrUpdateSongWrapper(song)
                         ioCoroutineProvider.ioScope.launch {
@@ -142,7 +145,8 @@ class MediaStoreReader @Inject constructor(
             artistId = song.artistId,
             albumId = song.albumId,
             album = song.album,
-            art = bitmap
+            art = bitmap,
+            path = song.path
         )
         // Log.d("bitmap", "${song.title} is ${newSong.title} == ${song == newSong}")
         mClosedSongList.addOrUpdateSongWrapper(newSong)

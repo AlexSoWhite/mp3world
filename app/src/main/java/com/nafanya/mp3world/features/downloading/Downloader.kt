@@ -17,7 +17,7 @@ class Downloader @Inject constructor(
 
     companion object {
         private val DOWNLOAD_DIR = Environment
-            .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            .getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
             .absolutePath
     }
 

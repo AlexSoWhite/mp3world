@@ -38,4 +38,5 @@
     <string name="title">название</string>
     <string name="artist">исполнитель</string>
     <string name="album">альбом</string>
+    <string name="an_error_occurred">произошла ошибка</string>
 </resources>
