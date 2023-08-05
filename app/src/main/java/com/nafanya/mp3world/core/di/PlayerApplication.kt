@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.core.di
 
 import android.app.Application
+import com.google.gson.Gson
 import com.nafanya.player.PlayerInteractor
 
 class PlayerApplication : Application() {
@@ -12,6 +13,7 @@ class PlayerApplication : Application() {
         applicationComponent = DaggerApplicationComponent.builder()
             .context(this)
             .playerInteractor(PlayerInteractor(this))
+            .gson(Gson())
             .build()
     }
 }
