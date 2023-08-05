@@ -21,13 +21,12 @@ class DownloadManagerInteractor @Inject constructor(
 ) {
 
     @WorkerThread
-    fun downloadFromUrl(url: String): Flow<String?> {
+    fun downloadFromUrl(url: String, fileName: String): Flow<String?> {
         val downloadManager =
             context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val fileName = createFileName(url)
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
-        request.setTitle(createFileName(url))
+        request.setTitle(fileName)
         request.setNotificationVisibility(
             DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
         )
@@ -55,13 +54,5 @@ class DownloadManagerInteractor @Inject constructor(
                 context.unregisterReceiver(this)
             }
         }
-    }
-
-    private fun createFileName(url: String): String {
-        var fileName = url
-            .substring(url.lastIndexOf('/') + 1)
-            .replace('_', ' ')
-        fileName = fileName.substring(0, fileName.lastIndexOf(' ')) + ".mp3"
-        return fileName
     }
 }

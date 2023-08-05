@@ -15,6 +15,7 @@ import org.jsoup.select.Elements
  */
 // TODO pagination
 // TODO result wrapping
+@Deprecated("does not work anymore")
 class HitmoTopSongSearcher @Inject constructor(
     client: OkHttpClient,
     artFactory: ArtFactory,
@@ -54,7 +55,7 @@ class HitmoTopSongSearcher @Inject constructor(
         return SongModelWithoutArt(
             title = title,
             artist = artist,
-            url = downloadUrl,
+            songUrl = downloadUrl,
             artUrl = artUrl,
             duration = duration
         )

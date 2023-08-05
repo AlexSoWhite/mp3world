@@ -31,7 +31,7 @@ abstract class SongSearcher(
     protected data class SongModelWithoutArt(
         val title: String,
         val artist: String,
-        val url: String,
+        val songUrl: String,
         val artUrl: String,
         val duration: Long
     )
@@ -53,7 +53,7 @@ abstract class SongSearcher(
                         val doc = Jsoup.parseBodyFragment(it.string())
                         splitDocument(doc).forEachIndexed { index, element ->
                             val model = parseNode(index, element)
-                            val uri = UriFactory().getUri(model.url)
+                            val uri = UriFactory().getUri(model.songUrl)
                             mSongList.addOrUpdateSongWrapper(
                                 RemoteSong(
                                     uri = uri,

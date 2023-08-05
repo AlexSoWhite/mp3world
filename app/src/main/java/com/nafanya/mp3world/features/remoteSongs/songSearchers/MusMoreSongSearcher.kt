@@ -50,7 +50,7 @@ class MusMoreSongSearcher @Inject constructor(
         return SongModelWithoutArt(
             title = title,
             artist = artist,
-            url = songUrl,
+            songUrl = songUrl,
             artUrl = artUrl,
             duration = duration
         )

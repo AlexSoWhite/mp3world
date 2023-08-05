@@ -26,8 +26,9 @@ class Downloader @Inject constructor(
         callback: (DownloadResult) -> Unit
     ) {
         val url = song.uri.toString()
+        val fileName = "${song.artist} - ${song.title}.mp3"
         try {
-            downloadManagerInteractor.downloadFromUrl(url).collect { name ->
+            downloadManagerInteractor.downloadFromUrl(url, fileName).collect { name ->
                 if (name!!.isNotEmpty()) {
                     scan(name, callback)
                 }
