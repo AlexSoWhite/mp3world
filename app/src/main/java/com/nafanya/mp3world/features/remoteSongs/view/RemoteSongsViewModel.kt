@@ -8,10 +8,12 @@ import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
-import com.nafanya.mp3world.features.remoteSongs.QueryExecutor
-import com.nafanya.mp3world.features.remoteSongs.asPlaylist
+import com.nafanya.mp3world.features.remoteSongs.songSearchers.MUSMORE
+import com.nafanya.mp3world.features.remoteSongs.songSearchers.SongSearcher
+import com.nafanya.mp3world.features.remoteSongs.songSearchers.SongSearchersProvider
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
 import com.nafanya.mp3world.features.songListViews.SongListItem
 import dagger.assisted.Assisted
@@ -23,20 +25,23 @@ import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
     private val query: String,
-    private val queryExecutor: QueryExecutor,
+    private val songSearchersProvider: SongSearchersProvider,
     override val downloadInteractor: DownloadInteractor,
     override val mediaStoreInteractor: MediaStoreInteractor
 ) : StatedPlaylistViewModel(baseTitle = query),
     DownloadingViewModel {
 
+    private val songSearcher: SongSearcher
+        get() = songSearchersProvider.getSongSearcher(MUSMORE)
+
     override val playlistFlow: Flow<PlaylistWrapper>
-        get() = queryExecutor.songList.map { it.asPlaylist(query) }
+        get() = songSearcher.songList.map { it.asPlaylist(query) }
 
     init {
         model.load {
-            queryExecutor.executeQuery(query)
+            songSearcher.searchSongs(query)
             setDataSource(
-                queryExecutor.songList.map {
+                songSearcher.songList.map {
                     if (it == null) {
                         Data.Error(Error("no internet"))
                     } else {
@@ -49,7 +54,7 @@ class RemoteSongsViewModel(
                     if (it) {
                         playerInteractor.isPlayerInitialised.collect { isInit ->
                             if (!isInit) {
-                                queryExecutor.songList.collect { songList ->
+                                songSearcher.songList.collect { songList ->
                                     if (songList?.isNotEmpty() == true) {
                                         playerInteractor.setPlaylist(songList.asPlaylist(query))
                                     }
@@ -68,22 +73,22 @@ class RemoteSongsViewModel(
 
     fun refresh() {
         model.refresh {
-            queryExecutor.executeQuery(query)
+            songSearcher.searchSongs(query)
         }
     }
 
     class Factory @AssistedInject constructor(
         @Assisted("query") private val query: String,
-        private val queryExecutor: QueryExecutor,
         private val downloadInteractor: DownloadInteractor,
-        private val storeInteractor: MediaStoreInteractor
+        private val storeInteractor: MediaStoreInteractor,
+        private val songSearchersProvider: SongSearchersProvider
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return RemoteSongsViewModel(
                 query,
-                queryExecutor,
+                songSearchersProvider,
                 downloadInteractor,
                 storeInteractor
             ) as T
@@ -93,5 +98,13 @@ class RemoteSongsViewModel(
         interface RemoteAssistedFactory {
             fun create(@Assisted("query") query: String): Factory
         }
+    }
+
+    private fun List<RemoteSong>?.asPlaylist(query: String): PlaylistWrapper {
+        return PlaylistWrapper(
+            songList = this ?: emptyList(),
+            name = query,
+            id = -1
+        )
     }
 }

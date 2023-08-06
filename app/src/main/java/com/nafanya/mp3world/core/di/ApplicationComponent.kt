@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.core.di
 
 import android.content.Context
+import com.google.gson.Gson
 import com.nafanya.mp3world.core.entrypoint.di.EntrypointComponentProvider
 import com.nafanya.mp3world.features.albums.di.AlbumComponentProvider
 import com.nafanya.mp3world.features.albums.di.AlbumListManagerModule
@@ -58,6 +59,9 @@ interface ApplicationComponent :
 
         @BindsInstance
         fun playerInteractor(playerInteractor: PlayerInteractor): Builder
+
+        @BindsInstance
+        fun gson(gson: Gson): Builder
 
         fun build(): ApplicationComponent
     }
