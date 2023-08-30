@@ -9,4 +9,6 @@
 .externalNativeBuild
 .cxx
 tz.md
-/app
+/app/build
+/app/demo
+/app/full
