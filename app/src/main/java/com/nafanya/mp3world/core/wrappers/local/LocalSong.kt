@@ -13,9 +13,4 @@ class LocalSong(
     val artistId: Long,
     val albumId: Long,
     val album: String
-) : SongWrapper(uri, title, artist, duration) {
-
-//    override fun updateDiskCacheKey(messageDigest: MessageDigest) {
-//        messageDigest.update(uri.toString().toByteArray())
-//    }
-}
+) : SongWrapper(uri, title, artist, duration)
