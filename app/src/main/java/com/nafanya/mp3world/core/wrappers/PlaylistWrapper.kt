@@ -12,7 +12,7 @@ data class PlaylistWrapper(
 
     override fun equals(other: Any?): Boolean {
         return this.id == (other as? PlaylistWrapper)?.id &&
-                this.name == (other as? PlaylistWrapper)?.name
+            this.name == (other as? PlaylistWrapper)?.name
     }
 
     override fun hashCode(): Int {
