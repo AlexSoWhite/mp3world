@@ -11,7 +11,7 @@ abstract class SongWrapper(
 ) : Song(uri) {
 
     override fun equals(other: Any?): Boolean {
-        return (this.uri == (other as SongWrapper).uri)
+        return (this.uri == (other as? SongWrapper)?.uri)
     }
 
     override fun hashCode(): Int {
