@@ -27,7 +27,6 @@ import com.nafanya.mp3world.core.utils.animators.AoedeAlphaAnimation
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.view.BaseFragment
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.mp3world.core.wrappers.SongImageBitmapFactory
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.glide.CustomBitmapTarget
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
@@ -51,9 +50,6 @@ class FullscreenControlsFragment :
 
     @Inject
     lateinit var factory: ViewModelFactory
-
-    @Inject
-    lateinit var songImageBitmapFactory: SongImageBitmapFactory
 
     private val viewModel: PlayerViewModel by viewModels { factory }
     override val downloadingViewModel: DownloadingViewModel
