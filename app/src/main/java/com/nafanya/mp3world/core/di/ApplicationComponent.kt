@@ -3,6 +3,8 @@ package com.nafanya.mp3world.core.di
 import android.content.Context
 import com.google.gson.Gson
 import com.nafanya.mp3world.core.entrypoint.di.EntrypointComponentProvider
+import com.nafanya.mp3world.core.wrappers.di.BitmapFlowModelLoaderFactoryComponentProvider
+import com.nafanya.mp3world.core.wrappers.di.WrappersModule
 import com.nafanya.mp3world.features.albums.di.AlbumComponentProvider
 import com.nafanya.mp3world.features.albums.di.AlbumListManagerModule
 import com.nafanya.mp3world.features.allPlaylists.di.AllPlaylistsComponentProvider
@@ -23,6 +25,7 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Scope
 import javax.inject.Singleton
+import okhttp3.OkHttpClient
 
 @Component(
     modules = [
@@ -31,7 +34,8 @@ import javax.inject.Singleton
         AlbumListManagerModule::class,
         ArtistListManagerModule::class,
         FavouriteListManagerModule::class,
-        PlaylistListManagerModule::class
+        PlaylistListManagerModule::class,
+        WrappersModule::class
     ]
 )
 @Singleton
@@ -45,7 +49,8 @@ interface ApplicationComponent :
     AllPlaylistsComponentProvider,
     PlayerViewComponentProvider,
     RemoteSongsComponentProvider,
-    ForegroundServiceComponentProvider {
+    ForegroundServiceComponentProvider,
+    BitmapFlowModelLoaderFactoryComponentProvider {
 
     fun context(): Context
 
@@ -62,6 +67,9 @@ interface ApplicationComponent :
 
         @BindsInstance
         fun gson(gson: Gson): Builder
+
+        @BindsInstance
+        fun okHttpClient(client: OkHttpClient): Builder
 
         fun build(): ApplicationComponent
     }

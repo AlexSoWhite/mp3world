@@ -111,13 +111,8 @@ class ForegroundService : Service() {
         override fun getCurrentLargeIcon(
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
-        ): Bitmap {
-            val song = playerInteractor
-                .currentPlaylist
-                .value
-                ?.songList
-                ?.get(player.currentMediaItemIndex) as SongWrapper
-            return song.art
+        ): Bitmap? {
+            return null
         }
 
         /**

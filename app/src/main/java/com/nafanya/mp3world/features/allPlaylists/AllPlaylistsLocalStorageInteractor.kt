@@ -42,7 +42,7 @@ class AllPlaylistsLocalStorageInteractor @Inject constructor(
                     id = it.playlistEntity.id,
                     name = it.playlistEntity.name,
                     position = it.playlistEntity.position,
-                    image = if (songList.isNotEmpty()) songList[0].art else null
+                    imageSource = songList.firstOrNull()
                 )
             )
         }

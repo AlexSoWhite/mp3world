@@ -5,6 +5,8 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
+import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.databinding.SongViewBinding
@@ -35,7 +37,8 @@ abstract class SongView @JvmOverloads constructor(
             artist.text = song.artist
             duration.text = TimeConverter().durationToString(song.duration)
             songRoot.setOnClickListener { onSongClickCallback() }
-            songIcon.setImageBitmap(song.art)
+
+            Glide.with(context).load(song).placeholder(R.drawable.song_icon_preview).into(songIcon)
         }
     }
 

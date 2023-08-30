@@ -3,6 +3,7 @@ package com.nafanya.mp3world.features.allPlaylists.view.allPlaylists.recycler.vi
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.utils.TextUtil
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
@@ -32,11 +33,10 @@ class PlaylistView @JvmOverloads constructor(
         tracksCount.text = TextUtil.getCompositionsCountString(
             playlist.songList.size
         )
-        if (playlist.image != null) {
-            itemImage.setImageBitmap(playlist.image)
-        } else {
-            itemImage.setImageResource(R.drawable.playlist_play)
-        }
+        Glide.with(context)
+            .load(playlist.imageSource)
+            .placeholder(R.drawable.playlist_play)
+            .into(itemImage)
         setOnClickListener {
             onClickCallback(ClickType.CLICK)
         }

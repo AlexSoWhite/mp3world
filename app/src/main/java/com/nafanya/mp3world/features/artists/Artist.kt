@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.artists
 
-import android.graphics.Bitmap
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.SongWrapper
 
 /**
  * Class that wraps the artist.
@@ -11,7 +11,7 @@ data class Artist(
     val name: String,
     val id: Long,
     var playlist: PlaylistWrapper? = null,
-    var image: Bitmap?
+    var imageSource: SongWrapper?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this.id == (other as Artist).id) return true

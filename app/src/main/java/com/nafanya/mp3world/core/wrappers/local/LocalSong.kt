@@ -1,13 +1,11 @@
 package com.nafanya.mp3world.core.wrappers.local
 
-import android.graphics.Bitmap
 import android.net.Uri
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 
 @Suppress("LongParameterList")
 class LocalSong(
     uri: Uri,
-    art: Bitmap,
     title: String,
     artist: String,
     duration: Long,
@@ -15,10 +13,4 @@ class LocalSong(
     val artistId: Long,
     val albumId: Long,
     val album: String
-) : SongWrapper(
-    uri,
-    art,
-    title,
-    artist,
-    duration
-)
+) : SongWrapper(uri, title, artist, duration)

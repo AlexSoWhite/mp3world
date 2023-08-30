@@ -1,11 +1,8 @@
 package com.nafanya.mp3world.core.mediaStore
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.os.Build
 import android.provider.MediaStore
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
-import com.nafanya.mp3world.core.wrappers.ArtFactory
 import com.nafanya.mp3world.core.wrappers.SongList
 import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
@@ -14,7 +11,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
 
 /**
  * TODO: file observer
@@ -22,7 +18,7 @@ import kotlinx.coroutines.launch
 class MediaStoreReader @Inject constructor(
     private val context: Context,
     private val ioCoroutineProvider: IOCoroutineProvider,
-    private val artFactory: ArtFactory
+    private val uriFactory: UriFactory
 ) {
 
     // get all the fields from media storage
@@ -101,7 +97,7 @@ class MediaStoreReader @Inject constructor(
                     if (thisArtist != "<unknown>") {
                         // set the song art
                         // build song object
-                        val thisUri = UriFactory().getUri(thisId)
+                        val thisUri = uriFactory.getUri(thisId)
                         val song = LocalSong(
                             uri = thisUri,
                             title = thisTitle,
@@ -110,41 +106,13 @@ class MediaStoreReader @Inject constructor(
                             albumId = thisAlbumId,
                             album = thisAlbumName ?: "unknown",
                             date = thisDate,
-                            duration = thisDuration,
-                            art = artFactory.defaultBitmap
+                            duration = thisDuration
                         )
                         mClosedSongList.addOrUpdateSongWrapper(song)
-                        ioCoroutineProvider.ioScope.launch {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                artFactory.createBitmap(thisUri).collect {
-                                    collectBitmap(song, it)
-                                }
-                            } else {
-                                artFactory.createBitmap(thisAlbumId).collect {
-                                    collectBitmap(song, it)
-                                }
-                            }
-                        }
                     }
                 }
             }
             mClosedSongList.unlock()
         }
-    }
-
-    private fun collectBitmap(song: LocalSong, bitmap: Bitmap) {
-        val newSong = LocalSong(
-            uri = song.uri,
-            title = song.title,
-            artist = song.artist,
-            duration = song.duration,
-            date = song.date,
-            artistId = song.artistId,
-            albumId = song.albumId,
-            album = song.album,
-            art = bitmap
-        )
-        // Log.d("bitmap", "${song.title} is ${newSong.title} == ${song == newSong}")
-        mClosedSongList.addOrUpdateSongWrapper(newSong)
     }
 }

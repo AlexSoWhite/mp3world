@@ -58,7 +58,7 @@ class PlaylistListManager @Inject constructor(
             temp.add(it)
         }
         playlist.songList.forEach {
-            playlist.image = it.art
+            playlist.imageSource = it
         }
         val index = temp.indexOf(playlist)
         if (index != -1) {

@@ -52,7 +52,7 @@ class AlbumListManager @Inject constructor(
             val album = Album(
                 id = song.albumId,
                 name = song.album,
-                image = song.art
+                imageSource = song
             )
             add(album, song)
         }

@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
-import com.nafanya.mp3world.core.wrappers.ArtFactory
+import com.nafanya.mp3world.core.wrappers.UriFactory
+import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import javax.inject.Inject
 import okhttp3.OkHttpClient
 import org.jsoup.nodes.Document
@@ -10,9 +10,8 @@ import org.jsoup.nodes.Element
 @Deprecated("does not contain valid metadata")
 class ZvuchSongSearcher @Inject constructor(
     client: OkHttpClient,
-    artFactory: ArtFactory,
-    ioCoroutineProvider: IOCoroutineProvider
-) : SongSearcher(client, artFactory, ioCoroutineProvider) {
+    private val uriFactory: UriFactory
+) : SongSearcher(client) {
 
     companion object {
         private const val millisecondsInOneSecond = 1000L
@@ -27,7 +26,7 @@ class ZvuchSongSearcher @Inject constructor(
             .getElementsByClass("mainSongs")[0]
             .getElementsByClass("item")
 
-    override fun parseNode(index: Int, element: Element): SongModelWithoutArt {
+    override fun parseNode(index: Int, element: Element): RemoteSong {
         val title = element
             .attributes()
             .get("data-title")
@@ -44,12 +43,12 @@ class ZvuchSongSearcher @Inject constructor(
             .get("data-src")
             .replace("small", "large")
         val duration = element.attributes().get("data-duration").toLong() * millisecondsInOneSecond
-        return SongModelWithoutArt(
-            title,
-            artist,
-            songUrl,
-            artUrl,
-            duration
+        return RemoteSong(
+            uri = uriFactory.getUri(songUrl),
+            artUrl = artUrl,
+            title = title,
+            artist = artist,
+            duration = duration
         )
     }
 }

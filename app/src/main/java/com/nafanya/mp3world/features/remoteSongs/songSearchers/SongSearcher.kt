@@ -1,13 +1,9 @@
 package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
-import com.nafanya.mp3world.core.wrappers.ArtFactory
 import com.nafanya.mp3world.core.wrappers.SongList
-import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import java.io.IOException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -18,23 +14,13 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
 abstract class SongSearcher(
-    private val client: OkHttpClient,
-    private val artFactory: ArtFactory,
-    private val ioCoroutineProvider: IOCoroutineProvider
+    private val client: OkHttpClient
 ) {
 
     protected val mSongList = SongList<RemoteSong>()
 
     val songList: Flow<List<RemoteSong>?>
         get() = mSongList.listFlow
-
-    protected data class SongModelWithoutArt(
-        val title: String,
-        val artist: String,
-        val songUrl: String,
-        val artUrl: String,
-        val duration: Long
-    )
 
     fun searchSongs(query: String) {
         val request = Request.Builder()
@@ -53,28 +39,7 @@ abstract class SongSearcher(
                         val doc = Jsoup.parseBodyFragment(it.string())
                         splitDocument(doc).forEachIndexed { index, element ->
                             val model = parseNode(index, element)
-                            val uri = UriFactory().getUri(model.songUrl)
-                            mSongList.addOrUpdateSongWrapper(
-                                RemoteSong(
-                                    uri = uri,
-                                    title = model.title,
-                                    artist = model.artist,
-                                    duration = model.duration,
-                                    art = artFactory.defaultBitmap
-                                )
-                            )
-                            ioCoroutineProvider.ioScope.launch {
-                                artFactory.createBitmap(model.artUrl).collect { bitmap ->
-                                    val newSong = RemoteSong(
-                                        uri = uri,
-                                        title = model.title,
-                                        artist = model.artist,
-                                        duration = model.duration,
-                                        art = bitmap
-                                    )
-                                    mSongList.addOrUpdateSongWrapper(newSong)
-                                }
-                            }
+                            mSongList.addOrUpdateSongWrapper(model)
                         }
                     }
                     mSongList.unlock()
@@ -87,5 +52,5 @@ abstract class SongSearcher(
 
     protected abstract fun splitDocument(document: Document): List<Element>
 
-    protected abstract fun parseNode(index: Int, element: Element): SongModelWithoutArt
+    protected abstract fun parseNode(index: Int, element: Element): RemoteSong
 }
