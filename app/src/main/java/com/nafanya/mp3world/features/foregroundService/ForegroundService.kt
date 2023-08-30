@@ -16,29 +16,18 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.coroutines.AppDispatchers
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.entrypoint.InitialActivity
-import com.nafanya.mp3world.core.wrappers.SongImageBitmapFactory
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 // TODO customize
-class ForegroundService : Service(), CoroutineScope {
+class ForegroundService : Service() {
 
     companion object {
         const val CHANNEL_ID = "playback_channel"
     }
-
-    private val coroutineJob = Job()
-    override val coroutineContext: CoroutineContext
-        get() = AppDispatchers.io + coroutineJob
 
     /**
      * Notification manager responsible for displaying player notification.
@@ -50,9 +39,6 @@ class ForegroundService : Service(), CoroutineScope {
     lateinit var playerInteractor: PlayerInteractor
     private val player: Player
         get() = playerInteractor.player
-
-    @Inject
-    lateinit var songImageBitmapFactory: SongImageBitmapFactory
 
     override fun onCreate() {
         (application as PlayerApplication).applicationComponent
@@ -95,10 +81,6 @@ class ForegroundService : Service(), CoroutineScope {
         private val context: Context
     ) : PlayerNotificationManager.MediaDescriptionAdapter {
 
-        private var previousSong: SongWrapper? = null
-
-        private var previousBitmap: Bitmap? = null
-
         /**
          * Song title.
          */
@@ -130,25 +112,7 @@ class ForegroundService : Service(), CoroutineScope {
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
         ): Bitmap? {
-            val song = playerInteractor
-                .currentPlaylist
-                .value
-                ?.songList
-                ?.get(player.currentMediaItemIndex) as SongWrapper
-
-            if (previousSong?.equals(song) != true) {
-                previousSong = song
-                launch {
-                    songImageBitmapFactory.getBitmapForSong(song).collectLatest {
-                        if (it != null) {
-                            previousBitmap = it
-                            callback.onBitmap(it)
-                        }
-                    }
-                }
-            }
-
-            return previousBitmap
+            return null
         }
 
         /**

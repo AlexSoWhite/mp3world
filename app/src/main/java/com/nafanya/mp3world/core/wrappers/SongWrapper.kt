@@ -1,16 +1,14 @@
 package com.nafanya.mp3world.core.wrappers
 
 import android.net.Uri
-import com.bumptech.glide.load.Key
 import com.nafanya.player.Song
 
 abstract class SongWrapper(
     uri: Uri,
-    val art: Uri,
     val title: String,
     val artist: String,
     val duration: Long
-) : Song(uri), Key {
+) : Song(uri) {
 
     override fun equals(other: Any?): Boolean {
         return (this.uri == (other as SongWrapper).uri)

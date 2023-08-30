@@ -1,10 +1,8 @@
 package com.nafanya.mp3world.core.mediaStore
 
 import android.content.Context
-import android.os.Build
 import android.provider.MediaStore
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
-import com.nafanya.mp3world.core.wrappers.ArtFactory
 import com.nafanya.mp3world.core.wrappers.SongList
 import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
@@ -20,7 +18,6 @@ import kotlinx.coroutines.flow.shareIn
 class MediaStoreReader @Inject constructor(
     private val context: Context,
     private val ioCoroutineProvider: IOCoroutineProvider,
-    private val artFactory: ArtFactory,
     private val uriFactory: UriFactory
 ) {
 
@@ -101,11 +98,6 @@ class MediaStoreReader @Inject constructor(
                         // set the song art
                         // build song object
                         val thisUri = uriFactory.getUri(thisId)
-                        val artUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            artFactory.createArtUri(thisUri)
-                        } else {
-                            artFactory.createArtUri(thisAlbumId)
-                        }
                         val song = LocalSong(
                             uri = thisUri,
                             title = thisTitle,
@@ -114,8 +106,7 @@ class MediaStoreReader @Inject constructor(
                             albumId = thisAlbumId,
                             album = thisAlbumName ?: "unknown",
                             date = thisDate,
-                            duration = thisDuration,
-                            art = artUri
+                            duration = thisDuration
                         )
                         mClosedSongList.addOrUpdateSongWrapper(song)
                     }

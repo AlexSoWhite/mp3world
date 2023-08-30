@@ -1,7 +1,6 @@
 package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
-import com.nafanya.mp3world.core.wrappers.ArtFactory
 import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import javax.inject.Inject
@@ -19,7 +18,6 @@ import org.jsoup.select.Elements
 @Deprecated("does not work anymore")
 class HitmoTopSongSearcher @Inject constructor(
     client: OkHttpClient,
-    private val artFactory: ArtFactory,
     private val uriFactory: UriFactory,
     private val timeConverter: TimeConverter
 ) : SongSearcher(client) {
@@ -55,7 +53,7 @@ class HitmoTopSongSearcher @Inject constructor(
             .toString()
         return RemoteSong(
             uri = uriFactory.getUri(downloadUrl),
-            art = artFactory.createArtUri(artUrl),
+            artUrl = artUrl,
             title = title,
             artist = artist,
             duration = duration

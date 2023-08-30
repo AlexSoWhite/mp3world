@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
-import com.nafanya.mp3world.core.wrappers.ArtFactory
 import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import javax.inject.Inject
@@ -11,7 +10,6 @@ import org.jsoup.nodes.Element
 @Deprecated("does not contain valid metadata")
 class ZvuchSongSearcher @Inject constructor(
     client: OkHttpClient,
-    private val artFactory: ArtFactory,
     private val uriFactory: UriFactory
 ) : SongSearcher(client) {
 
@@ -47,7 +45,7 @@ class ZvuchSongSearcher @Inject constructor(
         val duration = element.attributes().get("data-duration").toLong() * millisecondsInOneSecond
         return RemoteSong(
             uri = uriFactory.getUri(songUrl),
-            art = artFactory.createArtUri(artUrl),
+            artUrl = artUrl,
             title = title,
             artist = artist,
             duration = duration

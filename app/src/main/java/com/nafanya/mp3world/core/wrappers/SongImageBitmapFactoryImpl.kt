@@ -10,6 +10,9 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.toBitmap
+import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.coroutines.DefaultCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
@@ -38,6 +41,21 @@ class SongImageBitmapFactoryImpl @Inject constructor(
         private const val artDimension = 500
     }
 
+    private val defaultBitmap: Bitmap
+
+    init {
+        val options = BitmapFactory.Options()
+        options.outWidth = artDimension
+        options.outHeight = artDimension
+        defaultBitmap = AppCompatResources.getDrawable(
+            context,
+            R.drawable.song_icon_preview
+        )!!.toBitmap(
+            artDimension,
+            artDimension
+        )
+    }
+
     override fun getBitmapForSong(song: SongWrapper, size: Size?): SharedFlow<Bitmap?> {
         return when (song) {
             is RemoteSong -> getBitmapForRemoteSong(song)
@@ -50,7 +68,7 @@ class SongImageBitmapFactoryImpl @Inject constructor(
         val flow = MutableSharedFlow<Bitmap?>()
         ioCoroutineProvider.ioScope.launch {
             kotlin.runCatching {
-                val request = Request.Builder().url(song.art.toString()).build()
+                val request = Request.Builder().url(song.artUrl).build()
                 okHttpClient.newCall(request)
                     .enqueue(
                         responseCallback = object : Callback {
@@ -59,7 +77,7 @@ class SongImageBitmapFactoryImpl @Inject constructor(
                                  * TODO logging
                                  */
                                 ioCoroutineProvider.ioScope.launch {
-                                    flow.emit(null)
+                                    flow.emit(defaultBitmap)
                                 }
                             }
 
@@ -109,7 +127,7 @@ class SongImageBitmapFactoryImpl @Inject constructor(
                     /**
                      * TODO: logging
                      */
-                    flow.emit(null)
+                    flow.emit(defaultBitmap)
                 }
             }
         }
@@ -136,7 +154,7 @@ class SongImageBitmapFactoryImpl @Inject constructor(
                                 /**
                                  * TODO: logging
                                  */
-                                flow.emit(null)
+                                flow.emit(defaultBitmap)
                             }
                         } else try {
                             val bitmap = MediaStore.Images.Media.getBitmap(
@@ -148,7 +166,7 @@ class SongImageBitmapFactoryImpl @Inject constructor(
                             /**
                              * TODO: logging
                              */
-                            flow.emit(null)
+                            flow.emit(defaultBitmap)
                         }
                     }
                 }
