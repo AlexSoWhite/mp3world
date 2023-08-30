@@ -28,16 +28,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 class ModifyPlaylistViewModel(
-    private val playlistId: Long,
     private val playlistListManager: PlaylistListManager,
+    playlistId: Long,
     songListManager: SongListManager,
-    private val playlistName: String
+    playlistName: String
 ) : StatedPlaylistViewModel(playlistName),
     SearchableStated<SongWrapper> {
 
@@ -46,11 +44,11 @@ class ModifyPlaylistViewModel(
     override val queryFilter: StatedQueryFilter<SongWrapper> =
         StatedQueryFilter(songQueryFilterCallback)
 
-    private val mModifyingPlaylist = MutableLiveData(getDefaultPlaylistWrapper())
+    private val mModifyingPlaylist = MutableLiveData<PlaylistWrapper>()
     val modifyingPlaylist: LiveData<PlaylistWrapper>
         get() = mModifyingPlaylist
 
-    private var songList: MutableLiveData<List<SongWrapper>> = MutableLiveData()
+    private val songList = mutableListOf<SongWrapper>()
 
     override val stateMapper: (
         suspend (State<List<SongWrapper>>) -> State<List<SongWrapper>>
@@ -61,10 +59,10 @@ class ModifyPlaylistViewModel(
             is State.Initializing -> state
             is State.Loading -> state
             is State.Success -> {
-                State.Success(songList.asFlow().first())
+                State.Success(songList)
             }
             is State.Updated -> {
-                State.Success(songList.asFlow().first())
+                State.Success(songList)
             }
         }
     }
@@ -77,11 +75,11 @@ class ModifyPlaylistViewModel(
                         Data.Success(it.asAllSongsPlaylist().songList)
                     }
                 )
-                playlistListManager.getPlaylistByContainerId(playlistId).asFlow().collect {
+                playlistListManager.getPlaylistByContainerId(playlistId).asFlow().collectLatest {
                     mModifyingPlaylist.postValue(it)
                     if (it != null) {
-                        songList.postValue(it.songList)
-                        Data.Success(it.songList)
+                        songList.clear()
+                        songList.addAll(it.songList)
                     }
                 }
             }
@@ -96,53 +94,19 @@ class ModifyPlaylistViewModel(
 
     fun confirmChanges() {
         viewModelScope.launch {
+            val oldPlaylist = modifyingPlaylist.value!!
             playlistListManager.updatePlaylist(
-                modifyingPlaylist.value!!.copy(songList = songList.value!!)
+                oldPlaylist.copy(songList = songList)
             )
-            // to prevent crash if media item doesn't exist
-            playerInteractor.currentPlaylist.asFlow().take(1).collectLatest {
-                if (it == modifyingPlaylist.value!!) {
-                    playerInteractor.currentSong.collectLatest { newSong ->
-                        if (newSong != null && songList.value!!.contains(newSong)) {
-                            playerInteractor.setPlaylist(it)
-                            playerInteractor.setSong(newSong)
-                        } else if (newSong != null && songList.value!!.isNotEmpty()) {
-                            playerInteractor.setPlaylist(it)
-                            playerInteractor.setSong(songList.value!![0])
-                        } else if (newSong != null) {
-                            playerInteractor.setPlaylist(
-                                PlaylistWrapper(
-                                    songList = listOf(newSong as SongWrapper),
-                                    name = "Temporary"
-                                )
-                            )
-                        }
-                    }
-                }
-            }
         }
     }
 
     fun addSongToPlaylist(song: SongWrapper) {
-        val list = mutableListOf(song)
-        val existedList = songList.value ?: listOf()
-        songList.value = list + existedList
+        songList.add(song)
     }
 
     fun removeSongFromPlaylist(song: SongWrapper) {
-        val list = songList.value as MutableList<SongWrapper>
-        list.remove(song)
-        songList.value = list
-    }
-
-    private fun getDefaultPlaylistWrapper(): PlaylistWrapper {
-        return PlaylistWrapper(
-            listOf(),
-            playlistId,
-            playlistName,
-            position = -1,
-            imageSource = null
-        )
+        songList.remove(song)
     }
 
     class Factory @AssistedInject constructor(
@@ -161,8 +125,8 @@ class ModifyPlaylistViewModel(
                 ALL_SONGS_LIST_MANAGER_KEY
             ) as SongListManager
             return ModifyPlaylistViewModel(
-                playlistId,
                 playlistListManager,
+                playlistId,
                 songListManager,
                 playlistName
             ) as T

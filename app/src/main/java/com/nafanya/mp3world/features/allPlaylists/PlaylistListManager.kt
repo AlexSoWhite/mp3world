@@ -3,20 +3,20 @@ package com.nafanya.mp3world.features.allPlaylists
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
+import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
  */
 @Singleton
 class PlaylistListManager @Inject constructor(
-    private val interactor: AllPlaylistsLocalStorageInteractor
+    private val interactor: AllPlaylistsLocalStorageInteractor,
+    private val ioCoroutineProvider: IOCoroutineProvider
 ) : ListManager() {
 
     private val mPlaylists = MutableLiveData<List<PlaylistWrapper>>()
@@ -45,10 +45,8 @@ class PlaylistListManager @Inject constructor(
             songList = listOf(),
             position = playlists.value?.maxOfOrNull { it.position + 1 } ?: 0
         )
-        listManagerScope.launch {
-            withContext(Dispatchers.IO) {
-                interactor.insert(playlist)
-            }
+        ioCoroutineProvider.ioScope.launch {
+            interactor.insert(playlist)
         }
     }
 
@@ -62,10 +60,8 @@ class PlaylistListManager @Inject constructor(
         }
         val index = temp.indexOf(playlist)
         if (index != -1) {
-            listManagerScope.launch {
-                withContext(Dispatchers.IO) {
-                    interactor.update(temp[index], playlist)
-                }
+            ioCoroutineProvider.ioScope.launch {
+                interactor.update(temp[index], playlist)
             }
         }
     }
@@ -73,10 +69,8 @@ class PlaylistListManager @Inject constructor(
     fun deletePlaylist(playlist: PlaylistWrapper) {
         val temp = playlists.value as MutableList<PlaylistWrapper>
         temp.remove(playlist)
-        listManagerScope.launch {
-            withContext(Dispatchers.IO) {
-                interactor.delete(playlist)
-            }
+        ioCoroutineProvider.ioScope.launch {
+            interactor.delete(playlist)
         }
     }
 }
