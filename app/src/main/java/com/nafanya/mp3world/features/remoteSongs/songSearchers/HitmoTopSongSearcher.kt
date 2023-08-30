@@ -1,8 +1,9 @@
 package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.wrappers.ArtFactory
+import com.nafanya.mp3world.core.wrappers.UriFactory
+import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import javax.inject.Inject
 import okhttp3.OkHttpClient
 import org.jsoup.nodes.Document
@@ -18,10 +19,10 @@ import org.jsoup.select.Elements
 @Deprecated("does not work anymore")
 class HitmoTopSongSearcher @Inject constructor(
     client: OkHttpClient,
-    artFactory: ArtFactory,
-    ioCoroutineProvider: IOCoroutineProvider,
+    private val artFactory: ArtFactory,
+    private val uriFactory: UriFactory,
     private val timeConverter: TimeConverter
-) : SongSearcher(client, artFactory, ioCoroutineProvider) {
+) : SongSearcher(client) {
 
     private val prefix = "https://ru.hitmotop.com/search?q="
 
@@ -34,7 +35,7 @@ class HitmoTopSongSearcher @Inject constructor(
         return document.getElementsByClass("track_info")
     }
 
-    override fun parseNode(index: Int, element: Element): SongModelWithoutArt {
+    override fun parseNode(index: Int, element: Element): RemoteSong {
         val artElement = arts?.get(index)
         val title = element.getElementsByClass("track__title").text()
         val artist = element.getElementsByClass("track__desc").text()
@@ -52,11 +53,11 @@ class HitmoTopSongSearcher @Inject constructor(
             .getElementsByClass("track__download-btn")
             .attr("href")
             .toString()
-        return SongModelWithoutArt(
+        return RemoteSong(
+            uri = uriFactory.getUri(downloadUrl),
+            art = artFactory.createArtUri(artUrl),
             title = title,
             artist = artist,
-            songUrl = downloadUrl,
-            artUrl = artUrl,
             duration = duration
         )
     }

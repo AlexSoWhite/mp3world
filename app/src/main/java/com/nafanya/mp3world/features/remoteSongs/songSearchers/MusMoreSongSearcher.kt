@@ -1,9 +1,10 @@
 package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
 import com.google.gson.Gson
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.wrappers.ArtFactory
+import com.nafanya.mp3world.core.wrappers.UriFactory
+import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import javax.inject.Inject
 import okhttp3.OkHttpClient
 import org.jsoup.nodes.Document
@@ -12,11 +13,11 @@ import org.jsoup.select.Elements
 
 class MusMoreSongSearcher @Inject constructor(
     client: OkHttpClient,
-    ioCoroutineProvider: IOCoroutineProvider,
-    artFactory: ArtFactory,
+    private val artFactory: ArtFactory,
+    private val uriFactory: UriFactory,
     private val gson: Gson,
     private val timeConverter: TimeConverter
-) : SongSearcher(client, artFactory, ioCoroutineProvider) {
+) : SongSearcher(client) {
 
     private val searchPrefix = "https://ruo.morsmusic.org/search/"
 
@@ -36,7 +37,7 @@ class MusMoreSongSearcher @Inject constructor(
 
     override fun splitDocument(document: Document): Elements = document.getElementsByClass("track")
 
-    override fun parseNode(index: Int, element: Element): SongModelWithoutArt {
+    override fun parseNode(index: Int, element: Element): RemoteSong {
         val attrs = element.attributes().dataset()
         val meta = attrs.getValue("musmeta")
         val metaJson = gson.fromJson(meta, MetaJson::class.java)
@@ -47,11 +48,11 @@ class MusMoreSongSearcher @Inject constructor(
         val duration = timeConverter.stringToDuration(
             element.getElementsByClass("track__fulltime").text()
         )
-        return SongModelWithoutArt(
+        return RemoteSong(
+            uri = uriFactory.getUri(songUrl),
+            art = artFactory.createArtUri(artUrl),
             title = title,
             artist = artist,
-            songUrl = songUrl,
-            artUrl = artUrl,
             duration = duration
         )
     }

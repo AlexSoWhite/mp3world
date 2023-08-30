@@ -52,7 +52,7 @@ class ArtistListManager @Inject constructor(
             val artist = Artist(
                 name = song.artist,
                 id = song.artistId,
-                image = song.art
+                imageSource = song
             )
             add(artist, song)
         }

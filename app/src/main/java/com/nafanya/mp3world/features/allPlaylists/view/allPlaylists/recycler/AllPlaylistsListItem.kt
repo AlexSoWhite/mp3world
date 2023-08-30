@@ -48,7 +48,7 @@ val PlaylistDiffUtilCallback = object : DiffUtil.ItemCallback<AllPlaylistsListIt
             val newPlaylist = newItem.getDataAsPlaylist()
             (oldPlaylist.id == newPlaylist.id) &&
                 (oldPlaylist.name == newPlaylist.name) &&
-                (oldPlaylist.image?.sameAs(newPlaylist.image) == true) &&
+                (oldPlaylist.imageSource == newPlaylist.imageSource) &&
                 (oldPlaylist.songList.size == newPlaylist.songList.size)
         } else {
             true

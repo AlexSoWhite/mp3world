@@ -3,6 +3,7 @@ package com.nafanya.mp3world.features.albums.view.recycler
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseListItemView
 import com.nafanya.mp3world.core.utils.TextUtil
@@ -23,11 +24,10 @@ class AlbumView @JvmOverloads constructor(
         tracksCount.text = TextUtil.getCompositionsCountString(
             album.playlist!!.songList.size
         )
-        if (album.image != null) {
-            itemImage.setImageBitmap(album.image)
-        } else {
-            itemImage.setImageResource(R.drawable.icv_album)
-        }
+        Glide.with(context)
+            .load(album.imageSource)
+            .placeholder(R.drawable.icv_album)
+            .into(itemImage)
         setOnClickListener {
             onClickCallback()
         }

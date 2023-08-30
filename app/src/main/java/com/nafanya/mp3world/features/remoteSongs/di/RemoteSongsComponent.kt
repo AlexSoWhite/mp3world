@@ -5,7 +5,6 @@ import dagger.Subcomponent
 
 @Subcomponent(
     modules = [
-        RemoteSongsModule::class,
         SongSearchersModule::class
     ]
 )

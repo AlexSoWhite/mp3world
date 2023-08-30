@@ -141,7 +141,7 @@ class ModifyPlaylistViewModel(
             playlistId,
             playlistName,
             position = -1,
-            image = null
+            imageSource = null
         )
     }
 

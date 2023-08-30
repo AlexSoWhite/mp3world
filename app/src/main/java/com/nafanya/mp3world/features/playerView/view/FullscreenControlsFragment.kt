@@ -4,7 +4,9 @@ import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +18,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.toColor
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
@@ -26,6 +31,7 @@ import com.nafanya.mp3world.core.utils.animators.AoedeAlphaAnimation
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.view.BaseFragment
 import com.nafanya.mp3world.core.viewModel.ViewModelFactory
+import com.nafanya.mp3world.core.wrappers.SongImageBitmapFactory
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
@@ -48,6 +54,9 @@ class FullscreenControlsFragment :
 
     @Inject
     lateinit var factory: ViewModelFactory
+
+    @Inject
+    lateinit var songImageBitmapFactory: SongImageBitmapFactory
 
     private val viewModel: PlayerViewModel by viewModels { factory }
     override val downloadingViewModel: DownloadingViewModel
@@ -145,15 +154,7 @@ class FullscreenControlsFragment :
                 setProgressUpdateListener { position, _ ->
                     timeView.text = timeConverter.durationToString(position)
                 }
-                adjustImage(song.art)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    animateChanges(song.art)
-                } else {
-                    binding.root.setBackgroundColor(
-                        Color.parseColor(defaultBackgroundColor)
-                    )
-                    updateBarsColor(Color.parseColor(defaultBackgroundColor))
-                }
+                adjustImage(song)
                 // favourite
                 val actionButton = findViewById<ShapeableImageView>(R.id.action_button)
                 if (song is LocalSong) {
@@ -180,8 +181,44 @@ class FullscreenControlsFragment :
         }
     }
 
-    private fun adjustImage(bitmap: Bitmap) {
-        view?.findViewById<ShapeableImageView>(R.id.control_song_icon)?.setImageBitmap(bitmap)
+    private fun adjustImage(song: SongWrapper) {
+        view?.findViewById<ShapeableImageView>(R.id.control_song_icon)?.let {
+            Glide.with(this)
+                .asBitmap()
+                .load(song)
+                .into(
+                    object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            it.setImageBitmap(resource)
+                            proceedColor(resource)
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                            placeholder?.let {
+                                val resource = BitmapFactory.decodeResource(
+                                    requireActivity().resources,
+                                    R.drawable.song_icon_preview
+                                )
+                                proceedColor(resource)
+                            }
+                        }
+                    }
+                )
+        }
+    }
+
+    private fun proceedColor(resource: Bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            animateChanges(resource)
+        } else {
+            binding.root.setBackgroundColor(
+                Color.parseColor(defaultBackgroundColor)
+            )
+            updateBarsColor(Color.parseColor(defaultBackgroundColor))
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)

@@ -68,7 +68,7 @@ val SongListItemDiffUtilCallback = object : DiffUtil.ItemCallback<SongListItem>(
                 (song1.uri == song2.uri) &&
                     (song1.title == song2.title) &&
                     (song1.artist == song2.artist) &&
-                    (song1.art.sameAs(song2.art))
+                    (song1.art == song2.art)
             }
             DATE -> oldItem.getDataAsDate() == newItem.getDataAsDate()
             else -> true

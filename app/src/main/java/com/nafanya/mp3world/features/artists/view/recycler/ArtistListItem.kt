@@ -31,7 +31,7 @@ val ArtistDiffUtilCallback = object : DiffUtil.ItemCallback<ArtistListItem>() {
             val newData = newItem.getDataAsArtist()
             return oldData.name == newData.name &&
                 oldData.playlist == newData.playlist &&
-                oldData.image?.equals(newData.image) == true
+                oldData.imageSource?.equals(newData.imageSource) == true
         }
         return false
     }

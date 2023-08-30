@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.core.wrappers
 
-import android.graphics.Bitmap
 import com.nafanya.player.Playlist
 
 data class PlaylistWrapper(
@@ -8,7 +7,7 @@ data class PlaylistWrapper(
     val id: Long = 0,
     val name: String,
     val position: Int = 0,
-    var image: Bitmap? = null
+    var imageSource: SongWrapper? = null
 ) : Playlist {
 
     override fun equals(other: Any?): Boolean {
@@ -17,6 +16,7 @@ data class PlaylistWrapper(
 
     override fun hashCode(): Int {
         var result = songList.hashCode()
+        result = 31 * result + id.hashCode()
         result = 31 * result + name.hashCode()
         result = 31 * result + position
         return result

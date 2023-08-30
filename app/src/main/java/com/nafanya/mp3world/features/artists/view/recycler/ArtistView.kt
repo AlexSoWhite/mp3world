@@ -3,6 +3,7 @@ package com.nafanya.mp3world.features.artists.view.recycler
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseListItemView
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
@@ -24,11 +25,10 @@ class ArtistView @JvmOverloads constructor(
         tracksCount.text = TextUtil.getCompositionsCountString(
             artist.playlist!!.songList.size
         )
-        if (artist.image != null) {
-            itemImage.setImageBitmap(artist.image)
-        } else {
-            itemImage.setImageResource(R.drawable.icv_artist)
-        }
+        Glide.with(context)
+            .load(artist.imageSource)
+            .placeholder(R.drawable.icv_artist)
+            .into(itemImage)
         setOnClickListener {
             onClickCallback()
         }

@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
@@ -79,7 +80,12 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
     private fun renderSong(song: SongWrapper) {
         view?.findViewById<TextView>(R.id.control_track_artist)?.text = song.artist
         view?.findViewById<TextView>(R.id.control_track_title)?.text = song.title
-        view?.findViewById<ShapeableImageView>(R.id.control_song_icon)?.setImageBitmap(song.art)
+        view?.findViewById<ShapeableImageView>(R.id.control_song_icon)?.let {
+            Glide.with(requireActivity())
+                .load(song)
+                .placeholder(R.drawable.song_icon_preview)
+                .into(it)
+        }
     }
 
     private fun toFullScreen() {
