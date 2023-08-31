@@ -7,5 +7,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "mp3world"
-include ':app'
-include ':player-library'
+include(":app")
+include(":player-library")
