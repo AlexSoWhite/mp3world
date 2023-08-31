@@ -114,6 +114,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
 
     override fun onDestroy() {
         applicationContext.stopService(Intent(this, ForegroundService::class.java))
+        val a = 1
         viewModel.suspendPlayer()
         super.onDestroy()
     }
