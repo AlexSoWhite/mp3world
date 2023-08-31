@@ -62,6 +62,13 @@ android {
     }
 }
 
+detekt {
+    autoCorrect = true
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("$rootDir/staticAnalysis/detektConfig.yml")
+}
+
 dependencies {
 
     implementation(project(Projects.playerLibrary))

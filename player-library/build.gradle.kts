@@ -1,5 +1,6 @@
 plugins {
     id(Plugins.Android.library)
+    id(Plugins.Detekt.plugin)
     kotlin(Plugins.Kotlin.android)
 }
 
@@ -21,6 +22,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+detekt {
+    autoCorrect = true
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("$rootDir/staticAnalysis/detektConfig.yml")
 }
 
 dependencies {
