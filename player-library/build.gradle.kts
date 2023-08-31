@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = BuildConfig.compileSdk
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 33
+        minSdk = BuildConfig.minSdk
+        targetSdk = BuildConfig.targetSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -25,16 +25,11 @@ android {
 
 dependencies {
 
-    implementation(Dependencies.AndroidX.coreKtx)
-    implementation(Dependencies.AndroidX.appCompat)
-    implementation(Dependencies.Google.material)
+    implementation(Dependencies.AndroidX.liveData)
+    implementation(Dependencies.Coroutines.coroutinesCore)
+    implementation(Dependencies.Google.exoplayer)
+
     testImplementation(Dependencies.Testing.junit)
     androidTestImplementation(Dependencies.Testing.androidXjunit)
     androidTestImplementation(Dependencies.Testing.espressoCore)
-
-    // player library
-    implementation(Dependencies.Google.exoplayer)
-
-    implementation(Dependencies.Coroutines.coroutinesCore)
-    implementation(Dependencies.AndroidX.liveData)
 }

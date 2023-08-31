@@ -1,31 +1,27 @@
 object Dependencies {
 
     object AndroidX {
-        
+
         object Versions {
             const val appCompat = "1.4.1"
             const val coreCtx = "1.7.0"
             const val constraintLayot = "2.1.3"
             const val viewModelKtx = "2.4.1"
-            const val lifecycleService = "2.5.1"
             const val paging = "3.1.1"
-            const val activityKtx = "1.4.0"
             const val fragmentKtx = "1.1.0"
             const val swipeRefreshLayout = "1.1.0"
             const val liveData = "2.5.1"
         }
-        
+
         const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
         const val coreKtx = "androidx.core:core-ktx:${Versions.coreCtx}"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayot}"
+        const val constraintLayout =
+            "androidx.constraintlayout:constraintlayout:${Versions.constraintLayot}"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.viewModelKtx}"
-        // TODO obsolete
-        @Deprecated("mb obsolete")
-        const val lidecycleService = "androidx.lifecycle:lifecycle-service:${Versions.lifecycleService}"
         const val paging = "androidx.paging:paging-runtime-ktx:${Versions.paging}"
-        const val activityKtx = "androidx.activity:activity-ktx:${Versions.activityKtx}"
         const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"
-        const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
+        const val swipeRefreshLayout =
+            "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
         const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.liveData}"
     }
 
@@ -35,11 +31,10 @@ object Dependencies {
             const val coroutines = "1.6.0"
         }
 
-        const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
-        const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
-        // TODO obsolete?
-        @Deprecated("mb obsolete")
-        const val playServices = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
+        const val coroutinesCore =
+            "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
+        const val coroutinesAndroid =
+            "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     }
 
     object Google {
@@ -60,7 +55,7 @@ object Dependencies {
         }
 
         const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
-        const val daggerCOmpiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
+        const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     }
 
     object Images {

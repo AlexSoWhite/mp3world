@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = BuildConfig.compileSdk
 
     defaultConfig {
         applicationId = "com.nafanya.mp3world"
-        minSdk = 21
-        targetSdk = 32
+        minSdk = BuildConfig.minSdk
+        targetSdk = BuildConfig.targetSdk
         versionCode = 2
         versionName = "1.0.1"
 
@@ -45,6 +45,7 @@ android {
             val proguards = fileTree("proguard") {
                 include("*.pro")
             }
+            @Suppress("SpreadOperator")
             proguardFiles(*proguards.toList().toTypedArray())
         }
     }
@@ -53,7 +54,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget =("1.8")
+        jvmTarget = "1.8"
     }
     buildFeatures {
         viewBinding = true
@@ -67,10 +68,9 @@ dependencies {
     implementation(Dependencies.AndroidX.appCompat)
     implementation(Dependencies.AndroidX.coreKtx)
     implementation(Dependencies.AndroidX.constraintLayout)
-    implementation(Dependencies.AndroidX.lidecycleService)
     implementation(Dependencies.AndroidX.viewModel)
     implementation(Dependencies.AndroidX.paging)
-    implementation(Dependencies.AndroidX.activityKtx)
+    // to use 'by viewModels()'
     implementation(Dependencies.AndroidX.fragmentKtx)
     implementation(Dependencies.AndroidX.swipeRefreshLayout)
 
@@ -79,7 +79,6 @@ dependencies {
 
     implementation(Dependencies.Coroutines.coroutinesCore)
     implementation(Dependencies.Coroutines.coroutinesAndroid)
-    implementation(Dependencies.Coroutines.playServices)
 
     implementation(Dependencies.Web.okHttp3)
     implementation(Dependencies.Web.jsoup)
@@ -93,7 +92,7 @@ dependencies {
     androidTestImplementation(Dependencies.LocalDb.roomTesting)
 
     implementation(Dependencies.DI.dagger)
-    kapt(Dependencies.DI.daggerCOmpiler)
+    kapt(Dependencies.DI.daggerCompiler)
 
     // debugImplementation because LeakCanary should only run in debug builds.
     // debugImplementation(Dependencies.Debug.leakCanary)
