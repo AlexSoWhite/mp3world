@@ -32,14 +32,10 @@ jobs:
         with:
           path: build/bin
           key: ${{ runner.os }}
-      - name: 💙 Ktlint
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./ktlint
       - name: 💜 Detekt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./detekt
+        run: ./gradlew detektAll
   check_aseemble:
     runs-on: ubuntu-latest
     steps:
