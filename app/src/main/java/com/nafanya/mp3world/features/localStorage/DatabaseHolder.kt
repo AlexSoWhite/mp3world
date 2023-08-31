@@ -65,8 +65,6 @@ class DatabaseHolder @Inject constructor(
         override fun migrate(database: SupportSQLiteDatabase) {
             val cursor = database.query("SELECT * FROM playlist")
             val playlists = mutableListOf<PlaylistWrapper>()
-            val ids = mutableListOf<Long>()
-            val songIds = mutableListOf<MutableList<SongWrapper>>()
             val songListColumn = cursor.getColumnIndex("songList")
             val idColumn = cursor.getColumnIndex("id")
             val nameColumn = cursor.getColumnIndex("name")
