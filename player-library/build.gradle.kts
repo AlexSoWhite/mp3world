@@ -25,16 +25,16 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.2")
-    implementation("com.google.android.material:material:1.6.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    implementation(Dependencies.AndroidX.coreKtx)
+    implementation(Dependencies.AndroidX.appCompat)
+    implementation(Dependencies.Google.material)
+    testImplementation(Dependencies.Testing.junit)
+    androidTestImplementation(Dependencies.Testing.androidXjunit)
+    androidTestImplementation(Dependencies.Testing.espressoCore)
 
     // player library
-    implementation("com.google.android.exoplayer:exoplayer:2.17.1")
+    implementation(Dependencies.Google.exoplayer)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    implementation(Dependencies.Coroutines.coroutinesCore)
+    implementation(Dependencies.AndroidX.liveData)
 }

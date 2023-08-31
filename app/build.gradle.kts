@@ -62,69 +62,46 @@ android {
 
 dependencies {
 
-    implementation(project(":player-library"))
+    implementation(project(Projects.playerLibrary))
 
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.5.0")
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
+    implementation(Dependencies.AndroidX.appCompat)
+    implementation(Dependencies.AndroidX.coreKtx)
+    implementation(Dependencies.AndroidX.constraintLayout)
+    implementation(Dependencies.AndroidX.lidecycleService)
+    implementation(Dependencies.AndroidX.viewModel)
+    implementation(Dependencies.AndroidX.paging)
+    implementation(Dependencies.AndroidX.activityKtx)
+    implementation(Dependencies.AndroidX.fragmentKtx)
+    implementation(Dependencies.AndroidX.swipeRefreshLayout)
 
-    implementation("androidx.lifecycle:lifecycle-service:2.5.1")
+    implementation(Dependencies.Google.material)
+    implementation(Dependencies.Google.exoplayer)
 
-    // player library
-    implementation("com.google.android.exoplayer:exoplayer:2.17.1")
+    implementation(Dependencies.Coroutines.coroutinesCore)
+    implementation(Dependencies.Coroutines.coroutinesAndroid)
+    implementation(Dependencies.Coroutines.playServices)
 
-    // coroutines and viewModel
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    implementation(Dependencies.Web.okHttp3)
+    implementation(Dependencies.Web.jsoup)
 
-    // okhttp3 to make requests to internet
-    implementation("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation(Dependencies.Images.glide)
+    kapt(Dependencies.Images.glideCompiler)
 
-    // jsoup to parse html pages
-    implementation("org.jsoup:jsoup:1.13.1")
+    implementation(Dependencies.LocalDb.roomKtx)
+    implementation(Dependencies.LocalDb.gson)
+    kapt(Dependencies.LocalDb.roomCompiler)
+    androidTestImplementation(Dependencies.LocalDb.roomTesting)
 
-    // glide to load images
-    implementation("com.github.bumptech.glide:glide:4.11.0")
-
-    // local storage, SQLite wrapper Room
-    val roomVersion = "2.4.2"
-    implementation("androidx.room:room-ktx:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    // optional - Test helpers
-    androidTestImplementation("androidx.room:room-testing:$roomVersion")
-    // gson to help room serialize lists
-    implementation("com.google.code.gson:gson:2.9.0")
-
-    // paging
-    val pagingVersion = "3.1.1"
-    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
-
-    implementation("androidx.activity:activity-ktx:1.4.0")
-
-    implementation("androidx.fragment:fragment-ktx:1.1.0")
-
-    // dagger dependency injection
-    implementation("com.google.dagger:dagger:2.41")
-    kapt("com.google.dagger:dagger-compiler:2.41")
+    implementation(Dependencies.DI.dagger)
+    kapt(Dependencies.DI.daggerCOmpiler)
 
     // debugImplementation because LeakCanary should only run in debug builds.
-    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
+    // debugImplementation(Dependencies.Debug.leakCanary)
 
-    // swipe to refresh
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-
-    // glide for images
-    implementation("com.github.bumptech.glide:glide:4.14.2")
-    kapt("com.github.bumptech.glide:compiler:4.14.2")
-
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("android.arch.core:core-testing:1.1.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    testImplementation(Dependencies.Testing.junit)
+    testImplementation(Dependencies.Testing.coreTesting)
+    androidTestImplementation(Dependencies.Testing.androidXjunit)
+    androidTestImplementation(Dependencies.Testing.espressoCore)
 }
 
 kapt {
