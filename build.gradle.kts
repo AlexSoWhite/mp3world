@@ -11,6 +11,7 @@ plugins {
 
 dependencies {
     implementation(kotlin(Plugins.Kotlin.standardLibrary))
+    detektPlugins(Plugins.Detekt.formatterDependency)
 }
 repositories {
     google()
@@ -25,8 +26,17 @@ compileTestKotlin.kotlinOptions {
     jvmTarget = "1.8"
 }
 
-tasks.register("detektAll") {
-    allprojects {
-        this@register.dependsOn(tasks.withType<Detekt>())
-    }
+tasks.register("detektAll", Detekt::class.java) {
+    val kotlinFiles = "**/*.kt"
+    val resourceFiles = "**/res/**"
+    val buildFiles = "**/build/**"
+
+    autoCorrect = true
+    parallel = true
+    buildUponDefaultConfig = true
+    allRules = false
+    setSource(file(projectDir))
+    config.setFrom("$rootDir/staticAnalysis/detektConfig.yml")
+    include(kotlinFiles)
+    exclude(buildFiles, resourceFiles)
 }

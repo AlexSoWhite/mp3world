@@ -32,3 +32,8 @@ style:
 potential-bugs:
   UnsafeCallOnNullableType:
     active: false
+
+formatting:
+  active: true
+  Indentation:
+    active: true
