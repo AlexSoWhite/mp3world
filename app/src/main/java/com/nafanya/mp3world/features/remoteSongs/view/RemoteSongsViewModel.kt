@@ -3,7 +3,6 @@ package com.nafanya.mp3world.features.remoteSongs.view
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
@@ -11,6 +10,7 @@ import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
+import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.features.remoteSongs.songSearchers.HITMO_TOP
 import com.nafanya.mp3world.features.remoteSongs.songSearchers.SongSearcher
 import com.nafanya.mp3world.features.remoteSongs.songSearchers.SongSearchersProvider
@@ -80,7 +80,7 @@ class RemoteSongsViewModel(
     class Factory @AssistedInject constructor(
         @Assisted("query") private val query: String,
         private val downloadInteractor: DownloadInteractor,
-        private val storeInteractor: MediaStoreInteractor,
+        private val mediaStoreInteractor: MediaStoreInteractor,
         private val songSearchersProvider: SongSearchersProvider
     ) : ViewModelProvider.Factory {
 
@@ -90,7 +90,7 @@ class RemoteSongsViewModel(
                 query,
                 songSearchersProvider,
                 downloadInteractor,
-                storeInteractor
+                mediaStoreInteractor
             ) as T
         }
 

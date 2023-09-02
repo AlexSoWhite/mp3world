@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.core.entrypoint
+package com.nafanya.mp3world.features.entrypoint
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,9 @@ import com.nafanya.mp3world.databinding.SplashScreenBinding
 import java.util.Timer
 import java.util.TimerTask
 
+/**
+ * TODO correct splash
+*/
 class InitialActivity : BaseActivity<SplashScreenBinding>() {
 
     override fun inflate(layoutInflater: LayoutInflater): SplashScreenBinding {

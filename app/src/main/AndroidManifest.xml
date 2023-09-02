@@ -20,7 +20,7 @@
         android:name=".core.di.PlayerApplication"
         tools:ignore="LockedOrientationActivity">
         <activity
-            android:name=".core.entrypoint.InitialActivity"
+            android:name=".features.entrypoint.InitialActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".core.entrypoint.MainActivity"
+            android:name=".features.entrypoint.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Mp3world.Launcher"

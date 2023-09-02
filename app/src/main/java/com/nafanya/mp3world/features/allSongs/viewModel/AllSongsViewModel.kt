@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
 import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
-import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.utils.timeConverters.DateConverter
@@ -14,6 +13,7 @@ import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
+import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.features.songListViews.DATE
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SongListItem
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 class AllSongsViewModel @Inject constructor(
     songListManager: SongListManager,
-    private val mediaStoreInteractor: MediaStoreInteractor
+    private val mediaStoreInteractor: MediaStoreInteractor,
 ) : StatedPlaylistViewModel("Мои песни"),
     SearchableStated<SongWrapper> {
 

@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.core.entrypoint
+package com.nafanya.mp3world.features.entrypoint
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.stateMachines.StateModel
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.features.albums.AlbumListManager
@@ -16,6 +15,7 @@ import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
 import com.nafanya.mp3world.features.artists.ArtistListManager
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
 import com.nafanya.mp3world.features.localStorage.DatabaseHolder
+import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
@@ -81,6 +81,8 @@ class InitialViewModel @Inject constructor(
      * Called when [MainActivity] goes to destroyed state.
      * It's decided to keep player state when app is closed, so it can be restored if app opens
      * after a short period of time. So we simply pause the player when app is closed.
+     *
+     * TODO fix it as system shows annoying notification
      */
     fun suspendPlayer() {
         playerInteractor.suspendPlayer()

@@ -1,25 +1,19 @@
-package com.nafanya.mp3world.core.mediaStore
+package com.nafanya.mp3world.features.mediaStore
 
 import android.content.Context
 import android.provider.MediaStore
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
-import com.nafanya.mp3world.core.wrappers.SongList
+import androidx.annotation.WorkerThread
 import com.nafanya.mp3world.core.wrappers.UriFactory
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
 
 /**
  * TODO: file observer
  */
-class MediaStoreReader @Inject constructor(
+class MediaStoreReaderImpl @Inject constructor(
     private val context: Context,
-    private val ioCoroutineProvider: IOCoroutineProvider,
     private val uriFactory: UriFactory
-) {
+) : MediaStoreReader {
 
     // get all the fields from media storage
     private val projection = null
@@ -31,37 +25,9 @@ class MediaStoreReader @Inject constructor(
     // sort based on date
     private val sortOrder = MediaStore.Audio.Media.DATE_MODIFIED
 
-    // private val fileObserver: FileObserver
-
-    private val mClosedSongList = SongList<LocalSong>()
-
-    /**
-     * Returns song flow
-     */
-    val songList: SharedFlow<List<LocalSong>?>
-        get() = mClosedSongList.listFlow
-            .map {
-                it?.sortedByDescending { song -> song.date }
-            }
-            .shareIn(
-                ioCoroutineProvider.ioScope,
-                replay = 1,
-                started = SharingStarted.Lazily
-            )
-
-    init {
-        /*
-        fileObserver = object : FileObserver(File(Environment.DIRECTORY_DOWNLOADS)) {
-            override fun onEvent(event: Int, path: String?) {
-
-            }
-        }
-        fileObserver.startWatching()
-         */
-    }
-
     @Suppress("LongMethod", "NestedBlockDepth")
-    fun readMediaStore() {
+    @WorkerThread
+    override fun readMediaStore(): List<LocalSong>? {
         val query = context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             projection,
@@ -69,8 +35,7 @@ class MediaStoreReader @Inject constructor(
             selectionArgs,
             "$sortOrder DESC"
         )
-        mClosedSongList.setEmptyList()
-        mClosedSongList.lock()
+        var list: MutableList<LocalSong>? = null
         query?.use { cursor ->
             with(cursor) {
                 val titleColumn = getColumnIndex(MediaStore.Audio.Media.TITLE)
@@ -107,11 +72,14 @@ class MediaStoreReader @Inject constructor(
                             date = thisDate,
                             duration = thisDuration
                         )
-                        mClosedSongList.addOrUpdateSongWrapper(song)
+                        if (list == null) {
+                            list = mutableListOf()
+                        }
+                        list!!.add(song)
                     }
                 }
             }
-            mClosedSongList.unlock()
         }
+        return list
     }
 }

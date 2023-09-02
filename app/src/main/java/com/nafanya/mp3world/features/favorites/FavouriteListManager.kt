@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.listManagers.ListManager
-import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.localStorage.DatabaseHolder
+import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.collectLatest

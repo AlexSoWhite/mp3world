@@ -1,10 +1,14 @@
-package com.nafanya.mp3world.core.mediaStore
+package com.nafanya.mp3world.features.mediaStore
 
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 
 /**
@@ -12,26 +16,35 @@ import kotlinx.coroutines.launch
  * @property allSongs holds all song objects that device has
  */
 @Singleton
-class MediaStoreInteractor @Inject constructor(
+class MediaStoreInteractorImpl @Inject constructor(
     private val ioCoroutineProvider: IOCoroutineProvider,
     private val mediaStoreReader: MediaStoreReader
-) {
+) : MediaStoreInteractor {
 
     companion object {
         private var isInitialized = false
     }
 
-    val allSongs: SharedFlow<List<LocalSong>?>
-        get() = mediaStoreReader.songList
+    private val mAllSongs = MutableSharedFlow<List<LocalSong>?>()
+    override val allSongs: SharedFlow<List<LocalSong>?>
+        get() = mAllSongs
+            .map {
+                it?.sortedByDescending { song -> song.date }
+            }
+            .shareIn(
+                ioCoroutineProvider.ioScope,
+                replay = 1,
+                started = SharingStarted.Lazily
+            )
 
     /**
      * Sets managers data on main thread.
      */
-    fun readMediaStore() {
+    override fun readMediaStore() {
         if (!isInitialized) {
             ioCoroutineProvider.ioScope.launch {
-                mediaStoreReader.readMediaStore()
                 isInitialized = true
+                mAllSongs.emit(mediaStoreReader.readMediaStore())
             }
         }
     }
@@ -39,9 +52,9 @@ class MediaStoreInteractor @Inject constructor(
     /**
      * Resets SongListManager and other managers data on background thread.
      */
-    fun reset() {
+    override fun reset() {
         ioCoroutineProvider.ioScope.launch {
-            mediaStoreReader.readMediaStore()
+            mAllSongs.emit(mediaStoreReader.readMediaStore())
         }
     }
 }

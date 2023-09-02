@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.core.entrypoint
+package com.nafanya.mp3world.features.entrypoint
 
 import android.Manifest
 import android.content.Intent

@@ -5,12 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
-import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistWithSongs
 import com.nafanya.mp3world.features.allPlaylists.model.toStorageEntity
 import com.nafanya.mp3world.features.localStorage.DatabaseHolder
+import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
 

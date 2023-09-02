@@ -2,7 +2,6 @@ package com.nafanya.mp3world.core.di
 
 import android.content.Context
 import com.google.gson.Gson
-import com.nafanya.mp3world.core.entrypoint.di.EntrypointComponentProvider
 import com.nafanya.mp3world.core.wrappers.di.BitmapFlowModelLoaderFactoryComponentProvider
 import com.nafanya.mp3world.core.wrappers.di.WrappersModule
 import com.nafanya.mp3world.features.albums.di.AlbumComponentProvider
@@ -14,9 +13,11 @@ import com.nafanya.mp3world.features.allSongs.di.SongListManagerModule
 import com.nafanya.mp3world.features.artists.di.ArtistListManagerModule
 import com.nafanya.mp3world.features.artists.di.ArtistsComponentProvider
 import com.nafanya.mp3world.features.downloading.di.DownloadModule
+import com.nafanya.mp3world.features.entrypoint.di.EntrypointComponentProvider
 import com.nafanya.mp3world.features.favorites.di.FavouriteListManagerModule
 import com.nafanya.mp3world.features.favorites.di.FavouritesComponentProvider
 import com.nafanya.mp3world.features.foregroundService.di.ForegroundServiceComponentProvider
+import com.nafanya.mp3world.features.mediaStore.di.MediaStoreModule
 import com.nafanya.mp3world.features.playerView.di.PlayerViewComponentProvider
 import com.nafanya.mp3world.features.playlist.di.PlaylistComponentProvider
 import com.nafanya.mp3world.features.remoteSongs.di.RemoteSongsComponentProvider
@@ -30,6 +31,7 @@ import okhttp3.OkHttpClient
 @Component(
     modules = [
         ViewModelFactoryModule::class,
+        MediaStoreModule::class,
         DownloadModule::class,
         SongListManagerModule::class,
         AlbumListManagerModule::class,

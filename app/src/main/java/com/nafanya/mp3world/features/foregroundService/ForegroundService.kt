@@ -17,7 +17,7 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.entrypoint.InitialActivity
+import com.nafanya.mp3world.features.entrypoint.InitialActivity
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject

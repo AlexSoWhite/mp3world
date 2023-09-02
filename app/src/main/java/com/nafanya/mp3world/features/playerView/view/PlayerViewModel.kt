@@ -1,9 +1,9 @@
 package com.nafanya.mp3world.features.playerView.view
 
 import androidx.lifecycle.ViewModel
-import com.nafanya.mp3world.core.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
+import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
