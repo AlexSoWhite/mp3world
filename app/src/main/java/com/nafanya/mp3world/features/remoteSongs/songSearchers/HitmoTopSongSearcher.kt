@@ -14,39 +14,32 @@ import org.jsoup.select.Elements
  * Will be replaced with SoundCloud API call when it opens.
  */
 // TODO pagination
-// TODO result wrapping
-@Deprecated("does not work anymore")
 class HitmoTopSongSearcher @Inject constructor(
     client: OkHttpClient,
     private val uriFactory: UriFactory,
     private val timeConverter: TimeConverter
 ) : SongSearcher(client) {
 
-    private val prefix = "https://ru.hitmotop.com/search?q="
+    private val baseUrl = "https://rur.hitmotop.com"
 
-    private var arts: Elements? = null
+    private val searchPrefix = "$baseUrl/search?q="
 
-    override fun getSearchUrl(query: String) = prefix + query
+    override fun getSearchUrl(query: String) = searchPrefix + query
 
-    override fun splitDocument(document: Document): List<Element> {
-        arts = document.getElementsByClass("track__img")
-        return document.getElementsByClass("track_info")
-    }
+    override fun splitDocument(document: Document): Elements =
+        document.getElementsByClass("tracks__item")
 
     override fun parseNode(index: Int, element: Element): RemoteSong {
-        val artElement = arts?.get(index)
         val title = element.getElementsByClass("track__title").text()
         val artist = element.getElementsByClass("track__desc").text()
         val duration = timeConverter.stringToDuration(
             element.getElementsByClass("track__fulltime").text()
         )
-        var artUrl = artElement
-            ?.attr("style")
-        artUrl = artUrl?.substring(
-            artUrl.indexOf('\'') + 2,
-            artUrl.lastIndexOf('\'')
-        )
-        artUrl = "https://ru.hitmotop.com/$artUrl"
+        val artUrl = element
+            .getElementsByClass("track__img")
+            .attr("style")
+            .substringAfter('\'')
+            .substringBefore('\'')
         val downloadUrl = element
             .getElementsByClass("track__download-btn")
             .attr("href")
