@@ -8,7 +8,6 @@ import javax.inject.Inject
 @MapKey
 annotation class SongSearcherKey(val value: Int)
 const val MUSMORE = 0
-@Deprecated("does not work animore")
 const val HITMO_TOP = 1
 @Deprecated("does not contain valid metadata")
 const val ZVUCH = 2
@@ -22,9 +21,5 @@ class SongSearchersProvider @Inject constructor(
             return it
         }
         throw IllegalArgumentException("No such provider for $key")
-    }
-
-    fun getAll(): List<SongSearcher> {
-        return songSearchersMap.values.toList()
     }
 }

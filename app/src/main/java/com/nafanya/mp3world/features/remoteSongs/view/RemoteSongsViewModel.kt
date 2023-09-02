@@ -11,7 +11,7 @@ import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
-import com.nafanya.mp3world.features.remoteSongs.songSearchers.MUSMORE
+import com.nafanya.mp3world.features.remoteSongs.songSearchers.HITMO_TOP
 import com.nafanya.mp3world.features.remoteSongs.songSearchers.SongSearcher
 import com.nafanya.mp3world.features.remoteSongs.songSearchers.SongSearchersProvider
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
@@ -32,7 +32,7 @@ class RemoteSongsViewModel(
     DownloadingViewModel {
 
     private val songSearcher: SongSearcher
-        get() = songSearchersProvider.getSongSearcher(MUSMORE)
+        get() = songSearchersProvider.getSongSearcher(HITMO_TOP)
 
     override val playlistFlow: Flow<PlaylistWrapper>
         get() = songSearcher.songList.map { it.asPlaylist(query) }
