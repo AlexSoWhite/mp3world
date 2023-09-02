@@ -29,6 +29,7 @@ import okhttp3.OkHttpClient
 
 @Component(
     modules = [
+        ViewModelFactoryModule::class,
         DownloadModule::class,
         SongListManagerModule::class,
         AlbumListManagerModule::class,

@@ -9,13 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.allViews
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
@@ -35,7 +35,7 @@ class CurrentPlaylistDialogFragment :
     LocalSongDialogHolder {
 
     @Inject
-    lateinit var factory: ViewModelFactory
+    lateinit var factory: ViewModelProvider.Factory
 
     @Inject
     lateinit var favouriteListViewModel: Lazy<FavouriteListViewModel>

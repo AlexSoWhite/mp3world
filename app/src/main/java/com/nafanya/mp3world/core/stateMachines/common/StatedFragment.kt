@@ -4,13 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.stateMachines.State
 import com.nafanya.mp3world.core.view.BaseFragment
-import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import dagger.Lazy
 import javax.inject.Inject
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 abstract class StatedFragment<VB : ViewBinding, T> : BaseFragment<VB>() {
 
     @Inject
-    lateinit var factory: Lazy<ViewModelFactory>
+    lateinit var factory: Lazy<ViewModelProvider.Factory>
 
     @Inject
     lateinit var favouriteListViewModel: Lazy<FavouriteListViewModel>

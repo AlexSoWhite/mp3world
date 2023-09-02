@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.toColor
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.ui.DefaultTimeBar
@@ -26,7 +27,6 @@ import com.nafanya.mp3world.core.utils.ColorExtractor
 import com.nafanya.mp3world.core.utils.animators.AoedeAlphaAnimation
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.view.BaseFragment
-import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.glide.CustomBitmapTarget
 import com.nafanya.mp3world.core.wrappers.local.LocalSong
@@ -49,7 +49,7 @@ class FullscreenControlsFragment :
     lateinit var favoriteViewModel: FavouriteListViewModel
 
     @Inject
-    lateinit var factory: ViewModelFactory
+    lateinit var factory: ViewModelProvider.Factory
 
     private val viewModel: PlayerViewModel by viewModels { factory }
     override val downloadingViewModel: DownloadingViewModel

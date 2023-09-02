@@ -10,12 +10,12 @@ import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.view.BaseActivity
-import com.nafanya.mp3world.core.viewModel.ViewModelFactory
 import com.nafanya.mp3world.databinding.ActivityMainLayoutBinding
 import com.nafanya.mp3world.features.foregroundService.ForegroundService
 import com.nafanya.mp3world.features.foregroundService.ServiceMonitor
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
 
     @Inject
-    lateinit var factory: ViewModelFactory
+    lateinit var factory: ViewModelProvider.Factory
     val viewModel: InitialViewModel by viewModels { factory }
 
     /**
