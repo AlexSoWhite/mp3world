@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.nafanya.mp3world.core.wrappers.di.BitmapFlowModelLoaderFactoryComponentProvider
 import com.nafanya.mp3world.core.wrappers.di.WrappersModule
 import com.nafanya.mp3world.features.albums.di.AlbumComponentProvider
-import com.nafanya.mp3world.features.albums.di.AlbumListManagerModule
+import com.nafanya.mp3world.features.albums.di.AlbumModule
 import com.nafanya.mp3world.features.allPlaylists.di.AllPlaylistsComponentProvider
 import com.nafanya.mp3world.features.allPlaylists.di.PlaylistListManagerModule
 import com.nafanya.mp3world.features.allSongs.di.AllSongsComponentProvider
@@ -34,7 +34,7 @@ import okhttp3.OkHttpClient
         MediaStoreModule::class,
         DownloadModule::class,
         SongListManagerModule::class,
-        AlbumListManagerModule::class,
+        AlbumModule::class,
         ArtistListManagerModule::class,
         FavouriteListManagerModule::class,
         PlaylistListManagerModule::class,

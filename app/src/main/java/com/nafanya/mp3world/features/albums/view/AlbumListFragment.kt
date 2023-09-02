@@ -24,7 +24,7 @@ class AlbumListFragment : StatedListFragmentBaseLayout<Album, AlbumListItem>() {
     private val albumListAdapter: AlbumListAdapter by lazy {
         AlbumListAdapter {
             val starter = ActivityStarter.Builder()
-                .with(this.requireActivity())
+                .with(requireActivity())
                 .createIntentToImmutablePlaylistActivityFromAlbum(it.id, it.name)
                 .build()
             starter.startActivity()

@@ -18,6 +18,7 @@ import com.nafanya.mp3world.features.localStorage.DatabaseHolder
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -47,6 +48,20 @@ class InitialViewModel @Inject constructor(
             this.load {
                 viewModelScope.launch {
                     this@asIntModel.asFlow().map {
+                        it.size
+                    }.collect {
+                        success(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private inline fun <reified T : List<Any>> Flow<T>.asIntModel(): StateModel<Int> {
+        return StateModel<Int>().apply {
+            this.load {
+                viewModelScope.launch {
+                    this@asIntModel.map {
                         it.size
                     }.collect {
                         success(it)
