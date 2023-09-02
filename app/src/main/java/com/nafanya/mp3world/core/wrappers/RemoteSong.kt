@@ -1,7 +1,6 @@
 package com.nafanya.mp3world.core.wrappers
 
 import android.net.Uri
-import com.nafanya.mp3world.core.wrappers.SongWrapper
 
 class RemoteSong(
     uri: Uri,
