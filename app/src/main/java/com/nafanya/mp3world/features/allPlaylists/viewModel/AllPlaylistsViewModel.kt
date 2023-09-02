@@ -2,9 +2,11 @@ package com.nafanya.mp3world.features.allPlaylists.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
-import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
+import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
+import com.nafanya.mp3world.core.listUtils.searching.Searchable
+import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.stateMachines.State
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
@@ -16,21 +18,15 @@ import com.nafanya.mp3world.features.allPlaylists.view.allPlaylists.recycler.All
 import com.nafanya.mp3world.features.allPlaylists.view.allPlaylists.recycler.PLAYLIST
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class AllPlaylistsViewModel @Inject constructor(
     private val playlistListManager: PlaylistListManager,
 ) : StatedListViewModel<PlaylistWrapper, AllPlaylistsListItem>(),
-    SearchableStated<PlaylistWrapper>,
+    Searchable<PlaylistWrapper>,
     TitleViewModel<List<PlaylistWrapper>> {
 
     private var isModifyingPlaylistsTrigger = MutableLiveData(Unit)
-
-    override val queryFilter: StatedQueryFilter<PlaylistWrapper> =
-        StatedQueryFilter { playlist, s ->
-            playlist.name.contains(s, true)
-        }
 
     override val baseTitle = "Мои плейлисты"
     override val mTitle = MutableStateFlow(baseTitle)
@@ -39,13 +35,18 @@ class AllPlaylistsViewModel @Inject constructor(
         suspend (State<List<PlaylistWrapper>>) -> State<List<PlaylistWrapper>>
     )? = null
 
+    private val searchProcessor = SearchProcessor<PlaylistWrapper>(
+        QueryFilter { playlist, s ->
+            playlist.name.contains(s, true)
+        }
+    )
+
     init {
         model.load {
             viewModelScope.launch {
-                setDataSourceFiltered(
-                    playlistListManager.playlists.asFlow().map {
-                        Data.Success(it)
-                    }
+                searchProcessor.setup(
+                    this@AllPlaylistsViewModel,
+                    playlistListManager.playlists.map { Data.Success(it) }.asFlow()
                 )
                 model.startListeningModelForTitle()
             }
@@ -76,5 +77,9 @@ class AllPlaylistsViewModel @Inject constructor(
         } else {
             listOf()
         }
+    }
+
+    override fun search(query: String) {
+        searchProcessor.search(query)
     }
 }

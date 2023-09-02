@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
-import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
+import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
+import com.nafanya.mp3world.core.listUtils.searching.Searchable
+import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
@@ -21,14 +21,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 class MutablePlaylistViewModel(
     playlistListManager: PlaylistListManager,
     playlistId: Long,
     playlistName: String
 ) : StatedPlaylistViewModel(baseTitle = playlistName),
-    SearchableStated<SongWrapper> {
+    Searchable<SongWrapper> {
 
     override val playlistFlow = playlistListManager
         .getPlaylistByContainerId(playlistId)
@@ -37,23 +36,20 @@ class MutablePlaylistViewModel(
             it ?: throw IllegalArgumentException("playlist doesn't exist")
         }
 
-    override val queryFilter: StatedQueryFilter<SongWrapper> = StatedQueryFilter(
-        songQueryFilterCallback
-    )
+    private val searchProcessor = SearchProcessor(QueryFilter(songQueryFilterCallback))
 
     init {
         model.load {
-            viewModelScope.launch {
-                setDataSourceFiltered(
-                    playlistListManager.getPlaylistByContainerId(playlistId).map {
-                        if (it != null) {
-                            Data.Success(it.songList)
-                        } else {
-                            Data.Error(java.lang.Error("unknown playlist"))
-                        }
-                    }.asFlow()
-                )
-            }
+            searchProcessor.setup(
+                this,
+                playlistListManager.getPlaylistByContainerId(playlistId).map {
+                    if (it != null) {
+                        Data.Success(it.songList)
+                    } else {
+                        Data.Error(java.lang.Error("unknown playlist"))
+                    }
+                }.asFlow()
+            )
         }
     }
 
@@ -66,6 +62,10 @@ class MutablePlaylistViewModel(
             itemList.isEmpty() -> listOf()
             else -> listOf(SongListItem(MODIFY_PLAYLIST_BUTTON, Unit)) + itemList
         }
+    }
+
+    override fun search(query: String) {
+        searchProcessor.search(query)
     }
 
     class Factory @AssistedInject constructor(

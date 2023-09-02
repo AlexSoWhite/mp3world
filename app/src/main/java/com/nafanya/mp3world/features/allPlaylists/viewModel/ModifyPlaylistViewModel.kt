@@ -10,8 +10,9 @@ import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listManagers.ALL_SONGS_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
-import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
+import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
+import com.nafanya.mp3world.core.listUtils.searching.Searchable
+import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.LState
@@ -28,7 +29,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ModifyPlaylistViewModel(
@@ -37,12 +37,9 @@ class ModifyPlaylistViewModel(
     songListManager: SongListManager,
     playlistName: String
 ) : StatedPlaylistViewModel(playlistName),
-    SearchableStated<SongWrapper> {
+    Searchable<SongWrapper> {
 
     override val playlistFlow = songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow()
-
-    override val queryFilter: StatedQueryFilter<SongWrapper> =
-        StatedQueryFilter(songQueryFilterCallback)
 
     private val mModifyingPlaylist = MutableLiveData<PlaylistWrapper>()
     val modifyingPlaylist: LiveData<PlaylistWrapper>
@@ -50,6 +47,9 @@ class ModifyPlaylistViewModel(
 
     private val songList = mutableListOf<SongWrapper>()
 
+    /**
+     * TODO Refactor this everywhere
+     */
     override val stateMapper: (
         suspend (State<List<SongWrapper>>) -> State<List<SongWrapper>>
     ) = { state ->
@@ -67,13 +67,16 @@ class ModifyPlaylistViewModel(
         }
     }
 
+    private val searchProcessor = SearchProcessor(QueryFilter(songQueryFilterCallback))
+
     init {
         model.load {
             viewModelScope.launch {
-                setDataSourceFiltered(
-                    songListManager.songList.asFlow().map {
+                searchProcessor.setup(
+                    this@ModifyPlaylistViewModel,
+                    songListManager.songList.map {
                         Data.Success(it.asAllSongsPlaylist().songList)
-                    }
+                    }.asFlow()
                 )
                 playlistListManager.getPlaylistByContainerId(playlistId).asFlow().collectLatest {
                     mModifyingPlaylist.postValue(it)
@@ -92,6 +95,10 @@ class ModifyPlaylistViewModel(
         }
     }
 
+    override fun search(query: String) {
+        searchProcessor.search(query)
+    }
+
     fun confirmChanges() {
         viewModelScope.launch {
             val oldPlaylist = modifyingPlaylist.value!!
@@ -101,11 +108,11 @@ class ModifyPlaylistViewModel(
         }
     }
 
-    fun addSongToPlaylist(song: SongWrapper) {
+    fun addSongToCopyOfPlaylist(song: SongWrapper) {
         songList.add(song)
     }
 
-    fun removeSongFromPlaylist(song: SongWrapper) {
+    fun removeSongFromCopyOfPlaylist(song: SongWrapper) {
         songList.remove(song)
     }
 

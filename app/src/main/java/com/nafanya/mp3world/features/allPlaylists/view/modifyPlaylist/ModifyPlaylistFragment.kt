@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.ApplicationComponent
+import com.nafanya.mp3world.core.listUtils.searching.DefaultOnQueryTextListener
 import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.utils.attachToConfirmableTopBar
 import com.nafanya.mp3world.features.allPlaylists.view.modifyPlaylist.ModifyPlaylistActivity.Companion.PLAYLIST_NAME
 import com.nafanya.mp3world.features.allPlaylists.viewModel.ModifyPlaylistViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
@@ -30,8 +32,8 @@ class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
     private val modifyPlaylistAdapter: ModifyPlaylistAdapter by lazy {
         ModifyPlaylistAdapter(
             onSongClickCallback = ::onSongClick,
-            onSongAddCallback = { viewModel.addSongToPlaylist(it) },
-            onSongRemoveCallback = { viewModel.removeSongFromPlaylist(it) }
+            onSongAddCallback = { viewModel.addSongToCopyOfPlaylist(it) },
+            onSongRemoveCallback = { viewModel.removeSongFromCopyOfPlaylist(it) }
         )
     }
     override val songListAdapter: BaseSongListAdapter
@@ -54,11 +56,28 @@ class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        viewModel.attachToConfirmableTopBar(
-            requireActivity() as AppCompatActivity,
-        ) {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val dialog = DiscardChangesDialog(
+                    requireActivity()
+                ) {
+                    requireActivity().finish()
+                }
+                dialog.show()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
+        // setting appBar search view
+        inflater.inflate(R.menu.add_songs_to_playlist_menu, menu)
+        val confirm = menu.findItem(R.id.confirm_adding)
+        val searchItem = menu.findItem(R.id.search)
+        val searchView: SearchView = searchItem?.actionView as SearchView
+        // setting search dispatcher
+        searchView.setOnQueryTextListener(DefaultOnQueryTextListener(viewModel))
+        confirm?.setOnMenuItemClickListener {
             viewModel.confirmChanges()
             requireActivity().finish()
-        }.invoke(menu, inflater)
+            true
+        }
     }
 }

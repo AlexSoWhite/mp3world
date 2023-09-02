@@ -14,7 +14,7 @@ import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.stateMachines.list.StatedListFragmentBaseLayout
 import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
-import com.nafanya.mp3world.core.utils.attachToTopBar
+import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.features.artists.Artist
 import com.nafanya.mp3world.features.artists.view.recycler.ArtistListAdapter
 import com.nafanya.mp3world.features.artists.view.recycler.ArtistListItem

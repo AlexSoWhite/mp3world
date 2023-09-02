@@ -4,10 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
-import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
-import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
+import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
+import com.nafanya.mp3world.core.listUtils.searching.Searchable
+import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
+import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
@@ -20,13 +21,12 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 class ImmutablePlaylistViewModel(
     injectedPlaylist: Flow<PlaylistWrapper>,
     baseTitle: String
 ) : StatedPlaylistViewModel(baseTitle),
-    SearchableStated<SongWrapper> {
+    Searchable<SongWrapper> {
 
     override val playlistFlow = injectedPlaylist
 
@@ -34,21 +34,21 @@ class ImmutablePlaylistViewModel(
         return list.map { SongListItem(SONG_LOCAL_IMMUTABLE, it) }
     }
 
-    override val queryFilter: StatedQueryFilter<SongWrapper> = StatedQueryFilter { song, query ->
-        song.title.contains(query, true) ||
-            song.artist.contains(query, true)
-    }
+    private val searchProcessor = SearchProcessor(QueryFilter(songQueryFilterCallback))
 
     init {
         model.load {
-            viewModelScope.launch {
-                setDataSourceFiltered(
-                    injectedPlaylist.map {
-                        Data.Success(it.songList)
-                    }
-                )
-            }
+            searchProcessor.setup(
+                this@ImmutablePlaylistViewModel,
+                injectedPlaylist.map {
+                    Data.Success(it.songList)
+                }
+            )
         }
+    }
+
+    override fun search(query: String) {
+        searchProcessor.search(query)
     }
 
     class Factory @AssistedInject constructor(
