@@ -4,7 +4,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 
 /**
- TODO: statistic
+ * TODO: statistic
  */
 internal class Listener(
     private val playerInteractor: PlayerInteractor
