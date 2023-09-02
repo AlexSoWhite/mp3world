@@ -36,7 +36,7 @@ class MediaStoreReader @Inject constructor(
     private val mClosedSongList = SongList<LocalSong>()
 
     /**
-     * Returns song flow (unordered)
+     * Returns song flow
      */
     val songList: SharedFlow<List<LocalSong>?>
         get() = mClosedSongList.listFlow
@@ -58,7 +58,6 @@ class MediaStoreReader @Inject constructor(
         }
         fileObserver.startWatching()
          */
-        readMediaStore()
     }
 
     @Suppress("LongMethod", "NestedBlockDepth")
