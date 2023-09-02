@@ -1,11 +1,13 @@
 package com.nafanya.mp3world.core.utils.timeConverters
 
-import javax.inject.Inject
-
 /**
  * Class that converts duration to string and string to duration.
  */
-class TimeConverter @Inject constructor() {
+object TimeConverter {
+
+    private const val millisecondsInOneHour = 3600000
+    private const val millisecondsInOneMinute = 60000
+    private const val millisecondsInOneSecond = 1000
 
     fun stringToDuration(value: String): Long {
         var result = 0L
@@ -40,11 +42,5 @@ class TimeConverter @Inject constructor() {
                 minutes.toString().padStart(2, '0') + ":" +
                 seconds.toString().padStart(2, '0')
         }
-    }
-
-    companion object {
-        private const val millisecondsInOneHour = 3600000
-        private const val millisecondsInOneMinute = 60000
-        private const val millisecondsInOneSecond = 1000
     }
 }

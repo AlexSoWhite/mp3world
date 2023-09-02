@@ -16,8 +16,7 @@ import org.jsoup.select.Elements
 // TODO pagination
 class HitmoTopSongSearcher @Inject constructor(
     client: OkHttpClient,
-    private val uriFactory: UriFactory,
-    private val timeConverter: TimeConverter
+    private val uriFactory: UriFactory
 ) : SongSearcher(client) {
 
     private val baseUrl = "https://rur.hitmotop.com"
@@ -32,7 +31,7 @@ class HitmoTopSongSearcher @Inject constructor(
     override fun parseNode(index: Int, element: Element): RemoteSong {
         val title = element.getElementsByClass("track__title").text()
         val artist = element.getElementsByClass("track__desc").text()
-        val duration = timeConverter.stringToDuration(
+        val duration = TimeConverter.stringToDuration(
             element.getElementsByClass("track__fulltime").text()
         )
         val artUrl = element

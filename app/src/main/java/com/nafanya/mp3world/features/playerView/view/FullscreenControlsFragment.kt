@@ -139,13 +139,12 @@ class FullscreenControlsFragment :
             val artistView = findViewById<TextView>(R.id.control_fullscreen_track_artist)
             artistView?.text = song.artist
             artistView?.isSelected = true
-            val timeConverter = TimeConverter()
             val durationView = findViewById<TextView>(R.id.duration)
             val timeView = findViewById<TextView>(R.id.time)
             binding.controlsFullscreen.apply {
-                durationView.text = timeConverter.durationToString(song.duration)
+                durationView.text = TimeConverter.durationToString(song.duration)
                 setProgressUpdateListener { position, _ ->
-                    timeView.text = timeConverter.durationToString(position)
+                    timeView.text = TimeConverter.durationToString(position)
                 }
                 adjustImage(song)
                 // favourite

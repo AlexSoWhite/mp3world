@@ -68,7 +68,7 @@ class AllSongsViewModel @Inject constructor(
         val listItems = mutableListOf<SongListItem>()
         (list as List<LocalSong>)
             .groupByTo(listItemMap) { song ->
-                DateConverter().dateToString(song.date)
+                DateConverter.dateToString(song.date)
             }
         listItemMap.entries.forEach { entry ->
             val date = entry.key

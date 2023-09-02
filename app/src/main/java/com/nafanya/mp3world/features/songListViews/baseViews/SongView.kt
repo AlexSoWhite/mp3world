@@ -35,9 +35,8 @@ abstract class SongView @JvmOverloads constructor(
         with(binding) {
             title.text = song.title
             artist.text = song.artist
-            duration.text = TimeConverter().durationToString(song.duration)
+            duration.text = TimeConverter.durationToString(song.duration)
             songRoot.setOnClickListener { onSongClickCallback() }
-
             Glide.with(context).load(song).placeholder(R.drawable.song_icon_preview).into(songIcon)
         }
     }
