@@ -2,7 +2,7 @@ package com.nafanya.mp3world.features.songListViews.actionDialogs
 
 import android.content.Context
 import com.nafanya.mp3world.core.navigation.ActivityStarter
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 
 interface LocalSongDialogHolder {

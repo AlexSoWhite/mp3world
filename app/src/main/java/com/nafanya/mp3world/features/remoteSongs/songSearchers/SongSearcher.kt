@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
 import com.nafanya.mp3world.core.wrappers.SongList
-import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
+import com.nafanya.mp3world.core.wrappers.RemoteSong
 import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import okhttp3.Call

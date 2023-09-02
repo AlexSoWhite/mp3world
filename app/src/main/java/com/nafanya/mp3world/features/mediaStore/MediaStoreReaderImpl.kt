@@ -4,7 +4,7 @@ import android.content.Context
 import android.provider.MediaStore
 import androidx.annotation.WorkerThread
 import com.nafanya.mp3world.core.wrappers.UriFactory
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import javax.inject.Inject
 
 /**

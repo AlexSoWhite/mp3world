@@ -16,8 +16,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
-import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
+import com.nafanya.mp3world.core.wrappers.RemoteSong
 import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
 import com.nafanya.mp3world.features.downloading.DownloadingView
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel

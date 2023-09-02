@@ -180,7 +180,7 @@ import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHol
 import com.nafanya.mp3world.features.songListViews.songViews.RearrangeableSongViewHolder
 import com.nafanya.mp3world.features.songListViews.topButtonViews.ConfirmChangesButtonViewHolder
 import com.nafanya.mp3world.core.wrappers.SongWrapper
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
 
 class MutablePlaylistAdapter(
     private val onSongClickCallback: (SongWrapper) -> Unit,

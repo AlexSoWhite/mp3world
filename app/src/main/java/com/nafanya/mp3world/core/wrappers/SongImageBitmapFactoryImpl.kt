@@ -15,8 +15,6 @@ import androidx.core.graphics.drawable.toBitmap
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.coroutines.DefaultCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
-import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import java.io.FileNotFoundException
 import java.lang.Exception
 import java.lang.NullPointerException

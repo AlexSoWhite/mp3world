@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.mediaStore
 
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import kotlinx.coroutines.flow.SharedFlow
 
 interface MediaStoreInteractor {

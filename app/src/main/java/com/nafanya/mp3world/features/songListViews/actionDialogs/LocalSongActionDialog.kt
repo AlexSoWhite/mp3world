@@ -4,7 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.databinding.DialogLocalSongActionBinding
 
 enum class LocalSongAction {

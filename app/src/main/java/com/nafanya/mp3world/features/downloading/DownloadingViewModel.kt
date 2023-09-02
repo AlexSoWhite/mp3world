@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.downloading
 
-import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
+import com.nafanya.mp3world.core.wrappers.RemoteSong
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 
 /**

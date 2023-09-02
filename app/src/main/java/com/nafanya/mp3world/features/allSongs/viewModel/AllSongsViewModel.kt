@@ -14,7 +14,7 @@ import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.utils.timeConverters.DateConverter
 import com.nafanya.mp3world.core.wrappers.SongWrapper
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor

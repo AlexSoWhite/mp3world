@@ -7,7 +7,7 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.stateMachines.StateModel
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.features.albums.AlbumListManager
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
 import com.nafanya.mp3world.features.allSongs.SongListManager

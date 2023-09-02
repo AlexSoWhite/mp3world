@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.mediaStore
 
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.MutableSharedFlow

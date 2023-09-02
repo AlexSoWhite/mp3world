@@ -29,8 +29,8 @@ import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.view.BaseFragment
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.glide.CustomBitmapTarget
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
-import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
+import com.nafanya.mp3world.core.wrappers.LocalSong
+import com.nafanya.mp3world.core.wrappers.RemoteSong
 import com.nafanya.mp3world.databinding.PlayerControlViewFullscreenFragmentBinding
 import com.nafanya.mp3world.features.downloading.DownloadingView
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
