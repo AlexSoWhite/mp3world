@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.ApplicationComponent
+import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.features.allPlaylists.viewModel.MutablePlaylistViewModel
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
@@ -71,6 +72,9 @@ class MutablePlaylistFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.emptyMock.root.setOnClickListener {
             moveToModifyPlaylistActivity()
+        }
+        viewModel.title.observe(viewLifecycleOwner) {
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
         }
     }
 

@@ -3,9 +3,9 @@ package com.nafanya.mp3world.core.playlist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.stateMachines.State
+import com.nafanya.mp3world.core.coroutines.collectInScope
+import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
-import com.nafanya.mp3world.core.stateMachines.title.TitleViewModel
 import com.nafanya.mp3world.core.viewModel.PlaylistViewModel
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
@@ -18,24 +18,16 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
-abstract class StatedPlaylistViewModel(
-    final override val baseTitle: String = "",
-) : StatedListViewModel<SongWrapper, SongListItem>(),
-    PlaylistViewModel,
-    TitleViewModel<List<SongWrapper>> {
+abstract class StatedPlaylistViewModel :
+    StatedListViewModel<SongWrapper, SongListItem>(),
+    PlaylistViewModel {
 
     abstract val playlistFlow: Flow<PlaylistWrapper>
 
     val mIsInteractorBound = MutableStateFlow(false)
     lateinit var playerInteractor: PlayerInteractor
 
-    override val mTitle = MutableStateFlow(baseTitle)
-
     private var pendingSong: Song? = null
-
-    override val stateMapper: (
-        suspend (State<List<SongWrapper>>) -> State<List<SongWrapper>>
-    )? = null
 
     private var mIsPlaying = MutableLiveData(false)
     override val isPlaying: LiveData<Boolean>
@@ -47,7 +39,6 @@ abstract class StatedPlaylistViewModel(
 
     init {
         viewModelScope.launch {
-            model.startListeningModelForTitle()
             mIsInteractorBound.collectLatest {
                 if (it) {
                     pendingSong?.let { song -> onSongClick(song) }
@@ -73,15 +64,9 @@ abstract class StatedPlaylistViewModel(
 
     fun bindInteractor(interactor: PlayerInteractor) {
         playerInteractor = interactor
-        viewModelScope.launch {
-            playerInteractor.isPlaying.collect {
-                mIsPlaying.value = it
-            }
-        }
-        viewModelScope.launch {
-            playerInteractor.currentSong.collectLatest {
-                mCurrentSong.value = it as SongWrapper
-            }
+        playerInteractor.isPlaying.collectInScope(viewModelScope, mIsPlaying::setValue)
+        playerInteractor.currentSong.collectLatestInScope(viewModelScope) {
+            mCurrentSong.value = it as SongWrapper
         }
         mIsInteractorBound.value = true
     }

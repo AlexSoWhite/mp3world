@@ -1,12 +1,15 @@
 package com.nafanya.mp3world.features.playlist.immutablePlaylist
 
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.nafanya.mp3world.core.di.ApplicationComponent
+import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongDialogHolder
@@ -50,6 +53,13 @@ class ImmutablePlaylistFragment :
 
     override fun onInject(applicationComponent: ApplicationComponent) {
         applicationComponent.playlistComponent.inject(this)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.title.observe(viewLifecycleOwner) {
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

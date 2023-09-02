@@ -1,15 +1,19 @@
 package com.nafanya.mp3world.features.allPlaylists.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
-import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
+import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
+import com.nafanya.mp3world.core.listUtils.title.TitleViewModel
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.SongWrapper
@@ -26,8 +30,9 @@ class MutablePlaylistViewModel(
     playlistListManager: PlaylistListManager,
     playlistId: Long,
     playlistName: String
-) : StatedPlaylistViewModel(baseTitle = playlistName),
-    Searchable<SongWrapper> {
+) : StatedPlaylistViewModel(),
+    Searchable<SongWrapper>,
+    TitleViewModel<List<SongWrapper>> {
 
     override val playlistFlow = playlistListManager
         .getPlaylistByContainerId(playlistId)
@@ -38,8 +43,14 @@ class MutablePlaylistViewModel(
 
     private val searchProcessor = SearchProcessor(QueryFilter(songQueryFilterCallback))
 
+    private val titleProcessor = TitleProcessor<List<SongWrapper>>()
+    override val title: LiveData<String>
+        get() = titleProcessor.title
+
     init {
         model.load {
+            titleProcessor.setup(model, viewModelScope)
+            titleProcessor.setBaseTitle(playlistName)
             searchProcessor.setup(
                 this,
                 playlistListManager.getPlaylistByContainerId(playlistId).map {

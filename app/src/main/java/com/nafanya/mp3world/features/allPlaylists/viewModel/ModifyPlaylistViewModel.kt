@@ -7,15 +7,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.listManagers.ALL_SONGS_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
-import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
+import com.nafanya.mp3world.core.listUtils.title.TitleViewModel
+import com.nafanya.mp3world.core.listUtils.title.convertStateToTitle
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.stateMachines.LState
 import com.nafanya.mp3world.core.stateMachines.State
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
@@ -33,11 +35,12 @@ import kotlinx.coroutines.launch
 
 class ModifyPlaylistViewModel(
     private val playlistListManager: PlaylistListManager,
+    private val playlistName: String,
     playlistId: Long,
-    songListManager: SongListManager,
-    playlistName: String
-) : StatedPlaylistViewModel(playlistName),
-    Searchable<SongWrapper> {
+    songListManager: SongListManager
+) : StatedPlaylistViewModel(),
+    Searchable<SongWrapper>,
+    TitleViewModel<List<SongWrapper>> {
 
     override val playlistFlow = songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow()
 
@@ -47,37 +50,22 @@ class ModifyPlaylistViewModel(
 
     private val songList = mutableListOf<SongWrapper>()
 
-    /**
-     * TODO Refactor this everywhere
-     */
-    override val stateMapper: (
-        suspend (State<List<SongWrapper>>) -> State<List<SongWrapper>>
-    ) = { state ->
-        when (state) {
-            LState.Empty -> state
-            is State.Error -> state
-            is State.Initializing -> state
-            is State.Loading -> state
-            is State.Success -> {
-                State.Success(songList)
-            }
-            is State.Updated -> {
-                State.Success(songList)
-            }
-        }
-    }
-
     private val searchProcessor = SearchProcessor(QueryFilter(songQueryFilterCallback))
+
+    private val mTitle = MutableLiveData(playlistName)
+    override val title: LiveData<String>
+        get() = mTitle
 
     init {
         model.load {
+            searchProcessor.setup(
+                this@ModifyPlaylistViewModel,
+                songListManager.songList.map {
+                    Data.Success(it.asAllSongsPlaylist().songList)
+                }.asFlow()
+            )
+            model.currentState.collectLatestInScope(viewModelScope, ::proceedState)
             viewModelScope.launch {
-                searchProcessor.setup(
-                    this@ModifyPlaylistViewModel,
-                    songListManager.songList.map {
-                        Data.Success(it.asAllSongsPlaylist().songList)
-                    }.asFlow()
-                )
                 playlistListManager.getPlaylistByContainerId(playlistId).asFlow().collectLatest {
                     mModifyingPlaylist.postValue(it)
                     if (it != null) {
@@ -99,21 +87,29 @@ class ModifyPlaylistViewModel(
         searchProcessor.search(query)
     }
 
-    fun confirmChanges() {
-        viewModelScope.launch {
-            val oldPlaylist = modifyingPlaylist.value!!
-            playlistListManager.updatePlaylist(
-                oldPlaylist.copy(songList = songList)
-            )
+    private fun proceedState(state: State<List<SongWrapper>>) {
+        val newState = when (state) {
+            is State.Success, is State.Updated -> State.Success(songList)
+            else -> state
         }
+        mTitle.value = convertStateToTitle(newState, playlistName)
+    }
+
+    fun confirmChanges() {
+        val oldPlaylist = modifyingPlaylist.value!!
+        playlistListManager.updatePlaylist(
+            oldPlaylist.copy(songList = songList)
+        )
     }
 
     fun addSongToCopyOfPlaylist(song: SongWrapper) {
-        songList.add(song)
+        songList.add(0, song)
+        proceedState(model.currentState.value)
     }
 
     fun removeSongFromCopyOfPlaylist(song: SongWrapper) {
         songList.remove(song)
+        proceedState(model.currentState.value)
     }
 
     class Factory @AssistedInject constructor(
@@ -133,9 +129,9 @@ class ModifyPlaylistViewModel(
             ) as SongListManager
             return ModifyPlaylistViewModel(
                 playlistListManager,
+                playlistName,
                 playlistId,
-                songListManager,
-                playlistName
+                songListManager
             ) as T
         }
 

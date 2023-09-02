@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.SharedFlow
 
 interface MediaStoreInteractor {
 
-    val allSongs: SharedFlow<List<LocalSong>?>
+    val allSongs: SharedFlow<List<LocalSong>>
 
     /**
      * Reads media store, should be called only once during initialization

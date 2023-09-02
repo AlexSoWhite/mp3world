@@ -1,11 +1,15 @@
 package com.nafanya.mp3world.features.allSongs.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
-import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
+import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
+import com.nafanya.mp3world.core.listUtils.title.TitleViewModel
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.utils.timeConverters.DateConverter
@@ -22,8 +26,9 @@ import javax.inject.Inject
 class AllSongsViewModel @Inject constructor(
     songListManager: SongListManager,
     private val mediaStoreInteractor: MediaStoreInteractor,
-) : StatedPlaylistViewModel("Мои песни"),
-    Searchable<SongWrapper> {
+) : StatedPlaylistViewModel(),
+    Searchable<SongWrapper>,
+    TitleViewModel<List<SongWrapper>> {
 
     override val playlistFlow = songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow()
 
@@ -33,8 +38,15 @@ class AllSongsViewModel @Inject constructor(
         )
     )
 
+    private val titleProcessor = TitleProcessor<List<SongWrapper>>()
+    override val title: LiveData<String>
+        get() = titleProcessor.title
+
     init {
         model.load {
+            titleProcessor.setup(model, viewModelScope)
+            // TODO string resource
+            titleProcessor.setBaseTitle("Мои песни")
             searchProcessor.setup(
                 this@AllSongsViewModel,
                 songListManager.songList.map {

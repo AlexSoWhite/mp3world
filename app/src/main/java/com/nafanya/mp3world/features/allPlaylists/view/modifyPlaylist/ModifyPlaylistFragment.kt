@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import com.nafanya.mp3world.R
@@ -52,6 +53,9 @@ class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
         viewModel.modifyingPlaylist.observe(viewLifecycleOwner) {
             modifyPlaylistAdapter.setModifyingPlaylist(it)
             modifyPlaylistAdapter.notifyDataSetChanged()
+        }
+        viewModel.title.observe(viewLifecycleOwner) {
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
         }
     }
 

@@ -51,8 +51,8 @@ class RemoteSongsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(requireActivity() as AppCompatActivity) {
-            supportActionBar?.title = arguments?.getString(QUERY)
+        viewModel.title.observe(viewLifecycleOwner) {
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
         }
         binding.refreshToggle.isEnabled = true
         binding.refreshToggle.setOnRefreshListener {

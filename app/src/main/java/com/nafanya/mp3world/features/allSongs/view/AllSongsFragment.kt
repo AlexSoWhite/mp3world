@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nafanya.mp3world.core.di.ApplicationComponent
@@ -48,6 +49,9 @@ class AllSongsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.title.observe(viewLifecycleOwner) {
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
+        }
         binding.refreshToggle.isEnabled = true
         binding.refreshToggle.setOnRefreshListener {
             binding.refreshToggle.isRefreshing = true

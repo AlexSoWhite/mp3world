@@ -6,20 +6,18 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.listUtils.recycler.BaseAdapter
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
+import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.stateMachines.list.StatedListFragmentBaseLayout
 import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
-import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.features.artists.Artist
 import com.nafanya.mp3world.features.artists.view.recycler.ArtistListAdapter
 import com.nafanya.mp3world.features.artists.view.recycler.ArtistListItem
 import com.nafanya.mp3world.features.artists.viewModel.ArtistListViewModel
-import kotlinx.coroutines.flow.collectLatest
 
 class ArtistListFragment : StatedListFragmentBaseLayout<Artist, ArtistListItem>() {
 
@@ -51,10 +49,8 @@ class ArtistListFragment : StatedListFragmentBaseLayout<Artist, ArtistListItem>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.title.collectLatest {
-                (requireActivity() as AppCompatActivity).supportActionBar?.title = it
-            }
+        viewModel.title.observe(viewLifecycleOwner) {
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
         }
     }
 

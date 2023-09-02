@@ -30,7 +30,7 @@ class SongListManager @Inject constructor(
     init {
         ioCoroutineProvider.ioScope.launch {
             mediaStoreInteractor.allSongs.collectLatest {
-                it?.let { list ->
+                it.let { list ->
                     mSongList.postValue(list)
                 }
             }

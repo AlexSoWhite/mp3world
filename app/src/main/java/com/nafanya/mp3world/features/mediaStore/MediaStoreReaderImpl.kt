@@ -27,7 +27,7 @@ class MediaStoreReaderImpl @Inject constructor(
 
     @Suppress("LongMethod", "NestedBlockDepth")
     @WorkerThread
-    override fun readMediaStore(): List<LocalSong>? {
+    override fun readMediaStore(): List<LocalSong> {
         val query = context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             projection,
@@ -35,7 +35,7 @@ class MediaStoreReaderImpl @Inject constructor(
             selectionArgs,
             "$sortOrder DESC"
         )
-        var list: MutableList<LocalSong>? = null
+        val list = mutableListOf<LocalSong>()
         query?.use { cursor ->
             with(cursor) {
                 val titleColumn = getColumnIndex(MediaStore.Audio.Media.TITLE)
@@ -72,10 +72,7 @@ class MediaStoreReaderImpl @Inject constructor(
                             date = thisDate,
                             duration = thisDuration
                         )
-                        if (list == null) {
-                            list = mutableListOf()
-                        }
-                        list!!.add(song)
+                        list.add(song)
                     }
                 }
             }

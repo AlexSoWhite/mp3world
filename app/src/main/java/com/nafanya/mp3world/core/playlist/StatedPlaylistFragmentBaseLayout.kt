@@ -2,10 +2,7 @@ package com.nafanya.mp3world.core.playlist
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.allViews
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.listUtils.recycler.BaseAdapter
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
@@ -16,7 +13,6 @@ import com.nafanya.mp3world.features.songListViews.SongListItem
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
-import kotlinx.coroutines.launch
 
 abstract class StatedPlaylistFragmentBaseLayout :
     StatedListFragmentBaseLayout<
@@ -34,9 +30,6 @@ abstract class StatedPlaylistFragmentBaseLayout :
     final override val adapter: BaseAdapter<SongListItem, out BaseViewHolder>
         get() = songListAdapter
 
-    final override val songsRecycler: RecyclerView
-        get() = binding.recycler
-
     override val emptyMockImageResource: Int
         get() = R.drawable.icv_song_list
     override val emptyMockTextResource: Int
@@ -46,12 +39,7 @@ abstract class StatedPlaylistFragmentBaseLayout :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launch {
-            playlistViewModel.bindInteractor(playerInteractor)
-            playlistViewModel.title.collect {
-                (requireActivity() as AppCompatActivity).supportActionBar?.title = it
-            }
-        }
+        playlistViewModel.bindInteractor(playerInteractor)
         playlistViewModel.currentSong.observe(viewLifecycleOwner) { song ->
             // remove indicator from old view
             currentPlayingView?.updateCurrentSong(song)

@@ -25,11 +25,11 @@ class MediaStoreInteractorImpl @Inject constructor(
         private var isInitialized = false
     }
 
-    private val mAllSongs = MutableSharedFlow<List<LocalSong>?>()
-    override val allSongs: SharedFlow<List<LocalSong>?>
+    private val mAllSongs = MutableSharedFlow<List<LocalSong>>()
+    override val allSongs: SharedFlow<List<LocalSong>>
         get() = mAllSongs
             .map {
-                it?.sortedByDescending { song -> song.date }
+                it.sortedByDescending { song -> song.date }
             }
             .shareIn(
                 ioCoroutineProvider.ioScope,

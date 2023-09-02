@@ -1,8 +1,12 @@
 package com.nafanya.mp3world.features.remoteSongs.view
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.coroutines.collectInScope
+import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
+import com.nafanya.mp3world.core.listUtils.title.TitleViewModel
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
@@ -21,15 +25,15 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
     private val query: String,
     private val songSearchersProvider: SongSearchersProvider,
     override val downloadInteractor: DownloadInteractor,
     override val mediaStoreInteractor: MediaStoreInteractor
-) : StatedPlaylistViewModel(baseTitle = query),
-    DownloadingViewModel {
+) : StatedPlaylistViewModel(),
+    DownloadingViewModel,
+    TitleViewModel<List<SongWrapper>> {
 
     private val songSearcher: SongSearcher
         get() = songSearchersProvider.getSongSearcher(HITMO_TOP)
@@ -37,8 +41,15 @@ class RemoteSongsViewModel(
     override val playlistFlow: Flow<PlaylistWrapper>
         get() = songSearcher.songList.map { it.asPlaylist(query) }
 
+    private val titleProcessor = TitleProcessor<List<SongWrapper>>()
+
+    override val title: LiveData<String>
+        get() = titleProcessor.title
+
     init {
         model.load {
+            titleProcessor.setup(this.model, viewModelScope)
+            titleProcessor.setBaseTitle(query)
             songSearcher.searchSongs(query)
             setDataSource(
                 songSearcher.songList.map {
@@ -49,15 +60,13 @@ class RemoteSongsViewModel(
                     }
                 }
             )
-            viewModelScope.launch {
-                mIsInteractorBound.collect {
-                    if (it) {
-                        playerInteractor.isPlayerInitialised.collect { isInit ->
-                            if (!isInit) {
-                                songSearcher.songList.collect { songList ->
-                                    if (songList?.isNotEmpty() == true) {
-                                        playerInteractor.setPlaylist(songList.asPlaylist(query))
-                                    }
+            mIsInteractorBound.collectInScope(viewModelScope) {
+                if (it) {
+                    playerInteractor.isPlayerInitialised.collectInScope(viewModelScope) { isInit ->
+                        if (!isInit) {
+                            songSearcher.songList.collectInScope(viewModelScope) { songList ->
+                                if (songList?.isNotEmpty() == true) {
+                                    playerInteractor.setPlaylist(songList.asPlaylist(query))
                                 }
                             }
                         }
