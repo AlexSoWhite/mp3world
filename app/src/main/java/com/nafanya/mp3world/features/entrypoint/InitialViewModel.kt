@@ -14,7 +14,7 @@ import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
 import com.nafanya.mp3world.features.artists.ArtistListManager
 import com.nafanya.mp3world.features.favorites.FavouriteListManager
-import com.nafanya.mp3world.features.localStorage.DatabaseHolder
+import com.nafanya.mp3world.features.localStorage.LocalStorageInteractor
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @Suppress("LongParameterList")
 class InitialViewModel @Inject constructor(
     private val mediaStoreInteractor: MediaStoreInteractor,
-    private val dbHolder: DatabaseHolder,
+    private val dbHolder: LocalStorageInteractor,
     private val playerInteractor: PlayerInteractor,
     private val songListManager: SongListManager,
     artistListManager: ArtistListManager,
@@ -87,6 +87,7 @@ class InitialViewModel @Inject constructor(
                 isInitialized = true
                 // initialize songList
                 mediaStoreInteractor.readMediaStore()
+                // TODO flow
                 songListManager.songList.observeForever(localInitializer)
             }
         }

@@ -7,7 +7,7 @@ import com.nafanya.mp3world.core.wrappers.di.WrappersModule
 import com.nafanya.mp3world.features.albums.di.AlbumComponentProvider
 import com.nafanya.mp3world.features.albums.di.AlbumModule
 import com.nafanya.mp3world.features.allPlaylists.di.AllPlaylistsComponentProvider
-import com.nafanya.mp3world.features.allPlaylists.di.PlaylistListManagerModule
+import com.nafanya.mp3world.features.allPlaylists.di.AllPlaylistsModule
 import com.nafanya.mp3world.features.allSongs.di.AllSongsComponentProvider
 import com.nafanya.mp3world.features.allSongs.di.SongListManagerModule
 import com.nafanya.mp3world.features.artists.di.ArtistListManagerModule
@@ -17,6 +17,7 @@ import com.nafanya.mp3world.features.entrypoint.di.EntrypointComponentProvider
 import com.nafanya.mp3world.features.favorites.di.FavouriteListManagerModule
 import com.nafanya.mp3world.features.favorites.di.FavouritesComponentProvider
 import com.nafanya.mp3world.features.foregroundService.di.ForegroundServiceComponentProvider
+import com.nafanya.mp3world.features.localStorage.di.LocalStorageModule
 import com.nafanya.mp3world.features.mediaStore.di.MediaStoreModule
 import com.nafanya.mp3world.features.playerView.di.PlayerViewComponentProvider
 import com.nafanya.mp3world.features.playlist.di.PlaylistComponentProvider
@@ -33,11 +34,12 @@ import okhttp3.OkHttpClient
         ViewModelFactoryModule::class,
         MediaStoreModule::class,
         DownloadModule::class,
+        LocalStorageModule::class,
         SongListManagerModule::class,
         AlbumModule::class,
         ArtistListManagerModule::class,
         FavouriteListManagerModule::class,
-        PlaylistListManagerModule::class,
+        AllPlaylistsModule::class,
         WrappersModule::class
     ]
 )

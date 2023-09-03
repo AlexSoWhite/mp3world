@@ -13,4 +13,3 @@ interface AlbumComponentProvider {
 
     val albumComponent: AlbumComponent
 }
-

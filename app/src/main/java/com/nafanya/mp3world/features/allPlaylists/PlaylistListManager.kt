@@ -1,22 +1,28 @@
 package com.nafanya.mp3world.features.allPlaylists
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
+import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.features.allPlaylists.model.toStorageEntity
+import com.nafanya.mp3world.features.localStorage.AllPlaylistsListInteractor
+import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.launch
 
 /**
  * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
  */
 @Singleton
 class PlaylistListManager @Inject constructor(
-    private val interactor: AllPlaylistsLocalStorageInteractor,
-    private val ioCoroutineProvider: IOCoroutineProvider
+    private val allPlaylistsListInteractor: AllPlaylistsListInteractor,
+    ioCoroutineProvider: IOCoroutineProvider,
+    mediaStoreInteractor: MediaStoreInteractor
 ) : ListManager() {
 
     private val mPlaylists = MutableLiveData<List<PlaylistWrapper>>()
@@ -24,11 +30,34 @@ class PlaylistListManager @Inject constructor(
         get() = mPlaylists
 
     init {
-        interactor.allPlaylists.observeForever {
-            mPlaylists.postValue(it)
-        }
-        listManagerScope.launch {
-            interactor.getAll()
+        mediaStoreInteractor.allSongs.collectLatestInScope(ioCoroutineProvider.ioScope) { songs ->
+            allPlaylistsListInteractor.getAllPlaylists().collectLatestInScope(
+                ioCoroutineProvider.ioScope
+            ) { entries ->
+                val list = mutableListOf<PlaylistWrapper>()
+                entries.sortedByDescending {
+                    it.playlistEntity.position
+                }.forEach {
+                    val songList = mutableListOf<SongWrapper>()
+                    it.songEntities.forEach { entity ->
+                        songs.firstOrNull { song ->
+                            Uri.parse(entity.uri) == song.uri
+                        }?.let { localSong ->
+                            songList.add(localSong)
+                        }
+                    }
+                    list.add(
+                        PlaylistWrapper(
+                            songList = songList,
+                            id = it.playlistEntity.id,
+                            name = it.playlistEntity.name,
+                            position = it.playlistEntity.position,
+                            imageSource = songList.firstOrNull()
+                        )
+                    )
+                }
+                mPlaylists.postValue(list)
+            }
         }
     }
 
@@ -38,19 +67,20 @@ class PlaylistListManager @Inject constructor(
         }
     }
 
-    fun addPlaylist(playlistName: String) {
-        val playlist = PlaylistWrapper(
+    suspend fun addPlaylist(playlistName: String) {
+        val entity = PlaylistWrapper(
             name = playlistName,
             id = playlists.value?.maxOfOrNull { it.id + 1 } ?: 0,
             songList = listOf(),
             position = playlists.value?.maxOfOrNull { it.position + 1 } ?: 0
-        )
-        ioCoroutineProvider.ioScope.launch {
-            interactor.insert(playlist)
+        ).toStorageEntity()
+        allPlaylistsListInteractor.apply {
+            insert(entity.first)
+            insertSongs(entity.second)
         }
     }
 
-    fun updatePlaylist(playlist: PlaylistWrapper) {
+    suspend fun updatePlaylist(playlist: PlaylistWrapper) {
         val temp = mutableListOf<PlaylistWrapper>()
         playlists.value?.forEach {
             temp.add(it)
@@ -60,17 +90,13 @@ class PlaylistListManager @Inject constructor(
         }
         val index = temp.indexOf(playlist)
         if (index != -1) {
-            ioCoroutineProvider.ioScope.launch {
-                interactor.update(temp[index], playlist)
-            }
+            val oldEntity = temp[index].toStorageEntity()
+            val newEntity = playlist.toStorageEntity()
+            allPlaylistsListInteractor.update(oldEntity.first, newEntity)
         }
     }
 
-    fun deletePlaylist(playlist: PlaylistWrapper) {
-        val temp = playlists.value as MutableList<PlaylistWrapper>
-        temp.remove(playlist)
-        ioCoroutineProvider.ioScope.launch {
-            interactor.delete(playlist)
-        }
+    suspend fun deletePlaylist(playlist: PlaylistWrapper) {
+        allPlaylistsListInteractor.delete(playlist.toStorageEntity().first)
     }
 }

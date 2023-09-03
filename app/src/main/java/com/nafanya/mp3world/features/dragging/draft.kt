@@ -23,7 +23,7 @@ import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
 import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModelDraggable
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.songListViews.songViews.RearrangeableSongView
-import com.nafanya.mp3world.features.allPlaylists.viewModel.MutablePlaylistViewModel
+import com.nafanya.mp3world.features.allPlaylists.mutablePlaylist.MutablePlaylistViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.playlist.baseViews.StatePlaylistHolderFragment
 import com.nafanya.mp3world.features.playlist.baseViews.StatePlaylistHolderFragmentDraggable

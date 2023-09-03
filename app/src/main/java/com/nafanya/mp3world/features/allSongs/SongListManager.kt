@@ -4,15 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
+import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.listManagers.ListManager
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
-import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 /**
  * Class that holds all songs data
@@ -28,12 +27,8 @@ class SongListManager @Inject constructor(
         get() = mSongList
 
     init {
-        ioCoroutineProvider.ioScope.launch {
-            mediaStoreInteractor.allSongs.collectLatest {
-                it.let { list ->
-                    mSongList.postValue(list)
-                }
-            }
+        mediaStoreInteractor.allSongs.collectLatestInScope(ioCoroutineProvider.ioScope) {
+            mSongList.postValue(it)
         }
     }
 
