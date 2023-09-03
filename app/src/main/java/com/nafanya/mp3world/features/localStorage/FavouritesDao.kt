@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.nafanya.mp3world.features.favorites.model.FavouritesEntity
+import com.nafanya.mp3world.features.favourites.model.FavouritesEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

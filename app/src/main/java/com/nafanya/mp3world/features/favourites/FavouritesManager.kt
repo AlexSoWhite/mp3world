@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.features.favorites
+package com.nafanya.mp3world.features.favourites
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
-import com.nafanya.mp3world.features.favorites.model.FavouritesEntity
+import com.nafanya.mp3world.features.favourites.model.FavouritesEntity
 import com.nafanya.mp3world.features.localStorage.api.FavouritesInteractor
 import com.nafanya.mp3world.features.localStorage.LocalStorageInteractor
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor

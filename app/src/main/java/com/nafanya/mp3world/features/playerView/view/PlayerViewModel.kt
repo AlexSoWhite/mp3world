@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
-import com.nafanya.mp3world.features.favorites.FavouritesManager
-import com.nafanya.mp3world.features.favorites.FavouritesManagerProxy
+import com.nafanya.mp3world.features.favourites.FavouritesManager
+import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject

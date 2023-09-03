@@ -17,8 +17,8 @@ import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
-import com.nafanya.mp3world.features.favorites.FavouritesManager
-import com.nafanya.mp3world.features.favorites.FavouritesManagerProxy
+import com.nafanya.mp3world.features.favourites.FavouritesManager
+import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.features.songListViews.DATE
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE

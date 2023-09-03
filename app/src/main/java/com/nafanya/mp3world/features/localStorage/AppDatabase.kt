@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistSongsEntity
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistStorageEntity
-import com.nafanya.mp3world.features.favorites.model.FavouritesEntity
+import com.nafanya.mp3world.features.favourites.model.FavouritesEntity
 import com.nafanya.mp3world.features.localStorage.migrations.AutoMigration1314
 
 @Database(

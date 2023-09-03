@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.features.favorites.view
+package com.nafanya.mp3world.features.favourites.view
 
 import android.os.Bundle
 import android.view.LayoutInflater

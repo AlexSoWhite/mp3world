@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.features.favorites
+package com.nafanya.mp3world.features.favourites
 
 import androidx.lifecycle.LiveData
 import com.nafanya.mp3world.core.wrappers.LocalSong

@@ -7,7 +7,7 @@ import androidx.room.Room
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistSongsEntity
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistStorageEntity
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistWithSongs
-import com.nafanya.mp3world.features.favorites.model.FavouritesEntity
+import com.nafanya.mp3world.features.favourites.model.FavouritesEntity
 import com.nafanya.mp3world.features.localStorage.api.AllPlaylistsInteractor
 import com.nafanya.mp3world.features.localStorage.api.FavouritesInteractor
 import com.nafanya.mp3world.features.localStorage.migrations.Migration12

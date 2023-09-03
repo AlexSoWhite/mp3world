@@ -1,6 +1,6 @@
-package com.nafanya.mp3world.features.favorites.di
+package com.nafanya.mp3world.features.favourites.di
 
-import com.nafanya.mp3world.features.favorites.view.FavouritesActivity
+import com.nafanya.mp3world.features.favourites.view.FavouritesActivity
 import dagger.Subcomponent
 
 @Subcomponent

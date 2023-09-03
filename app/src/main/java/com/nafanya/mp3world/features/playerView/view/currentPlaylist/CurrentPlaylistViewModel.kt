@@ -10,8 +10,8 @@ import com.nafanya.mp3world.core.wrappers.RemoteSong
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
-import com.nafanya.mp3world.features.favorites.FavouritesManager
-import com.nafanya.mp3world.features.favorites.FavouritesManagerProxy
+import com.nafanya.mp3world.features.favourites.FavouritesManager
+import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE

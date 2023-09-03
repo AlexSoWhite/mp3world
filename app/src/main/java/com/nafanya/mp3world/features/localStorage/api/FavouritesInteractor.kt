@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.localStorage.api
 
 import android.net.Uri
-import com.nafanya.mp3world.features.favorites.model.FavouritesEntity
+import com.nafanya.mp3world.features.favourites.model.FavouritesEntity
 import kotlinx.coroutines.flow.Flow
 
 interface FavouritesInteractor {

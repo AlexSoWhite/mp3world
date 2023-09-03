@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.features.favorites.model
+package com.nafanya.mp3world.features.favourites.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

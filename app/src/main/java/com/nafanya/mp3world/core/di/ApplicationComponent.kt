@@ -14,8 +14,8 @@ import com.nafanya.mp3world.features.artists.di.ArtistListManagerModule
 import com.nafanya.mp3world.features.artists.di.ArtistsComponentProvider
 import com.nafanya.mp3world.features.downloading.di.DownloadModule
 import com.nafanya.mp3world.features.entrypoint.di.EntrypointComponentProvider
-import com.nafanya.mp3world.features.favorites.di.FavouritesModule
-import com.nafanya.mp3world.features.favorites.di.FavouritesComponentProvider
+import com.nafanya.mp3world.features.favourites.di.FavouritesModule
+import com.nafanya.mp3world.features.favourites.di.FavouritesComponentProvider
 import com.nafanya.mp3world.features.foregroundService.di.ForegroundServiceComponentProvider
 import com.nafanya.mp3world.features.localStorage.di.LocalStorageModule
 import com.nafanya.mp3world.features.mediaStore.di.MediaStoreModule
