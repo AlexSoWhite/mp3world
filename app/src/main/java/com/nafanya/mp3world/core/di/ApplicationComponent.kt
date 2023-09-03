@@ -9,12 +9,12 @@ import com.nafanya.mp3world.features.albums.di.AlbumModule
 import com.nafanya.mp3world.features.allPlaylists.di.AllPlaylistsComponentProvider
 import com.nafanya.mp3world.features.allPlaylists.di.AllPlaylistsModule
 import com.nafanya.mp3world.features.allSongs.di.AllSongsComponentProvider
-import com.nafanya.mp3world.features.allSongs.di.SongListManagerModule
+import com.nafanya.mp3world.features.allSongs.di.AllSongsModule
 import com.nafanya.mp3world.features.artists.di.ArtistListManagerModule
 import com.nafanya.mp3world.features.artists.di.ArtistsComponentProvider
 import com.nafanya.mp3world.features.downloading.di.DownloadModule
 import com.nafanya.mp3world.features.entrypoint.di.EntrypointComponentProvider
-import com.nafanya.mp3world.features.favorites.di.FavouriteListManagerModule
+import com.nafanya.mp3world.features.favorites.di.FavouritesModule
 import com.nafanya.mp3world.features.favorites.di.FavouritesComponentProvider
 import com.nafanya.mp3world.features.foregroundService.di.ForegroundServiceComponentProvider
 import com.nafanya.mp3world.features.localStorage.di.LocalStorageModule
@@ -35,10 +35,10 @@ import okhttp3.OkHttpClient
         MediaStoreModule::class,
         DownloadModule::class,
         LocalStorageModule::class,
-        SongListManagerModule::class,
+        AllSongsModule::class,
         AlbumModule::class,
         ArtistListManagerModule::class,
-        FavouriteListManagerModule::class,
+        FavouritesModule::class,
         AllPlaylistsModule::class,
         WrappersModule::class
     ]

@@ -13,22 +13,16 @@ import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongDialogHolder
+import com.nafanya.mp3world.features.songListViews.actionDialogs.defaultLocalSongActionDialog
 import javax.inject.Inject
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
-class MutablePlaylistFragment :
-    StatedPlaylistFragmentBaseLayout(),
-    LocalSongDialogHolder {
+class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
     @Inject
     lateinit var mutableFactory: MutablePlaylistViewModel.Factory.MutablePlaylistAssistedFactory
-
-    override val actualFavouriteListViewModel: FavouriteListViewModel
-        get() = favouriteListViewModel.get()
 
     private val viewModel: MutablePlaylistViewModel by viewModels {
         mutableFactory.create(
@@ -45,13 +39,8 @@ class MutablePlaylistFragment :
             onModifyButtonClickCallback = { moveToModifyPlaylistActivity() }
             onLongPressCallback = { }
             onConfirmChangesCallback = { }
-            onActionClickCallback = { song ->
-                val dialog = createDialog(requireActivity(), song)
-                actualFavouriteListViewModel.isSongInFavourite(song).observe(viewLifecycleOwner) {
-                    dialog.setIsFavorite(it)
-                }
-                dialog.show()
-            }
+            onActionClickCallback = (requireActivity() as AppCompatActivity)
+                .defaultLocalSongActionDialog(viewModel)
         }
     }
 

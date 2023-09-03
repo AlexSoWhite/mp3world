@@ -12,7 +12,7 @@ import com.nafanya.mp3world.features.allPlaylists.model.PlaylistWithSongs
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class AllPlaylistsListDao {
+abstract class AllPlaylistsDao {
     @Transaction
     @Query("SELECT * FROM playlistStorageEntity")
     abstract fun getAll(): Flow<List<PlaylistWithSongs>>

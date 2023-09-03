@@ -7,7 +7,9 @@ import androidx.room.Room
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistSongsEntity
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistStorageEntity
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistWithSongs
-import com.nafanya.mp3world.features.favorites.FavouriteListEntity
+import com.nafanya.mp3world.features.favorites.model.FavouritesEntity
+import com.nafanya.mp3world.features.localStorage.api.AllPlaylistsInteractor
+import com.nafanya.mp3world.features.localStorage.api.FavouritesInteractor
 import com.nafanya.mp3world.features.localStorage.migrations.Migration12
 import com.nafanya.mp3world.features.localStorage.migrations.Migration23
 import com.nafanya.mp3world.features.localStorage.migrations.Migration34
@@ -26,7 +28,7 @@ import kotlinx.coroutines.flow.map
  */
 class LocalStorageInteractor(
     private val context: Context
-) : FavouriteListInteractor, AllPlaylistsListInteractor {
+) : FavouritesInteractor, AllPlaylistsInteractor {
 
     private val db: AppDatabase = Room.databaseBuilder(
         context,
@@ -44,42 +46,42 @@ class LocalStorageInteractor(
     ).build()
 
     override fun getFavouritesUris(): Flow<List<Uri>> {
-        return db.favouriteListDao().getAll().map { list -> list.map { it.toUri() } }
+        return db.favouritesDao().getAll().map { list -> list.map { it.toUri() } }
     }
 
-    override suspend fun addFavourite(entity: FavouriteListEntity) {
-        db.favouriteListDao().insert(entity)
+    override suspend fun addFavourite(entity: FavouritesEntity) {
+        db.favouritesDao().insert(entity)
     }
 
-    override suspend fun deleteFavourite(entity: FavouriteListEntity) {
-        db.favouriteListDao().delete(entity)
+    override suspend fun deleteFavourite(entity: FavouritesEntity) {
+        db.favouritesDao().delete(entity)
     }
 
     override fun getAllPlaylists(): Flow<List<PlaylistWithSongs>> {
-        return db.allPlaylistsListDao().getAll()
+        return db.allPlaylistsDao().getAll()
     }
 
     override suspend fun insert(entity: PlaylistStorageEntity) {
-        db.allPlaylistsListDao().insert(entity)
+        db.allPlaylistsDao().insert(entity)
     }
 
     override suspend fun insertSongs(songs: List<PlaylistSongsEntity>) {
-        db.allPlaylistsListDao().insertSongs(songs)
+        db.allPlaylistsDao().insertSongs(songs)
     }
 
     override suspend fun delete(entity: PlaylistStorageEntity) {
-        db.allPlaylistsListDao().delete(entity)
+        db.allPlaylistsDao().delete(entity)
     }
 
     override suspend fun update(entity: PlaylistStorageEntity) {
-        db.allPlaylistsListDao().update(entity)
+        db.allPlaylistsDao().update(entity)
     }
 
     override suspend fun update(
         oldEntity: PlaylistStorageEntity,
         newEntity: Pair<PlaylistStorageEntity, List<PlaylistSongsEntity>>
     ) {
-        db.allPlaylistsListDao().update(oldEntity, newEntity)
+        db.allPlaylistsDao().update(oldEntity, newEntity)
     }
 
     fun closeDataBase() {

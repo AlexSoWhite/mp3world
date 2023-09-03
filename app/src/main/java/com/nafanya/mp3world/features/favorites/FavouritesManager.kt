@@ -6,9 +6,10 @@ import androidx.lifecycle.map
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.listManagers.ListManager
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
-import com.nafanya.mp3world.core.wrappers.SongWrapper
-import com.nafanya.mp3world.features.localStorage.FavouriteListInteractor
+import com.nafanya.mp3world.features.favorites.model.FavouritesEntity
+import com.nafanya.mp3world.features.localStorage.api.FavouritesInteractor
 import com.nafanya.mp3world.features.localStorage.LocalStorageInteractor
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
@@ -18,8 +19,8 @@ import javax.inject.Singleton
  * Object that holds favourites data. Managed by [LocalStorageInteractor] and [MediaStoreInteractor].
  */
 @Singleton
-class FavouriteListManager @Inject constructor(
-    private val favouriteListInteractor: FavouriteListInteractor,
+class FavouritesManager @Inject constructor(
+    private val favouriteListInteractor: FavouritesInteractor,
     mediaStoreInteractor: MediaStoreInteractor,
     ioCoroutineProvider: IOCoroutineProvider
 ) : ListManager() {
@@ -27,6 +28,11 @@ class FavouriteListManager @Inject constructor(
     private val mFavourites = MutableLiveData<PlaylistWrapper>()
     val favorites: LiveData<PlaylistWrapper>
         get() = mFavourites
+
+    fun isSongInFavourites(song: LocalSong) = favorites
+        .map { favourites ->
+            favourites.songList.contains(song)
+        }
 
     init {
         mediaStoreInteractor.allSongs.collectLatestInScope(
@@ -52,11 +58,11 @@ class FavouriteListManager @Inject constructor(
         return favorites.map { it }
     }
 
-    suspend fun add(song: SongWrapper) {
-        favouriteListInteractor.addFavourite(FavouriteListEntity(song.uri.toString()))
+    suspend fun add(song: LocalSong) {
+        favouriteListInteractor.addFavourite(FavouritesEntity(song.uri.toString()))
     }
 
-    suspend fun delete(song: SongWrapper) {
-        favouriteListInteractor.deleteFavourite(FavouriteListEntity(song.uri.toString()))
+    suspend fun delete(song: LocalSong) {
+        favouriteListInteractor.deleteFavourite(FavouritesEntity(song.uri.toString()))
     }
 }

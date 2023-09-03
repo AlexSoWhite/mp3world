@@ -1,3 +1,3 @@
-/build
-/demo
-/full
+/build/*
+/demo/*
+/full/*

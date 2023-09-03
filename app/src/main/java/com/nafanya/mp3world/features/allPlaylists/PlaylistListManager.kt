@@ -10,7 +10,7 @@ import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.model.toStorageEntity
-import com.nafanya.mp3world.features.localStorage.AllPlaylistsListInteractor
+import com.nafanya.mp3world.features.localStorage.api.AllPlaylistsInteractor
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,7 +20,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class PlaylistListManager @Inject constructor(
-    private val allPlaylistsListInteractor: AllPlaylistsListInteractor,
+    private val allPlaylistsInteractor: AllPlaylistsInteractor,
     ioCoroutineProvider: IOCoroutineProvider,
     mediaStoreInteractor: MediaStoreInteractor
 ) : ListManager() {
@@ -31,7 +31,7 @@ class PlaylistListManager @Inject constructor(
 
     init {
         mediaStoreInteractor.allSongs.collectLatestInScope(ioCoroutineProvider.ioScope) { songs ->
-            allPlaylistsListInteractor.getAllPlaylists().collectLatestInScope(
+            allPlaylistsInteractor.getAllPlaylists().collectLatestInScope(
                 ioCoroutineProvider.ioScope
             ) { entries ->
                 val list = mutableListOf<PlaylistWrapper>()
@@ -74,7 +74,7 @@ class PlaylistListManager @Inject constructor(
             songList = listOf(),
             position = playlists.value?.maxOfOrNull { it.position + 1 } ?: 0
         ).toStorageEntity()
-        allPlaylistsListInteractor.apply {
+        allPlaylistsInteractor.apply {
             insert(entity.first)
             insertSongs(entity.second)
         }
@@ -92,11 +92,11 @@ class PlaylistListManager @Inject constructor(
         if (index != -1) {
             val oldEntity = temp[index].toStorageEntity()
             val newEntity = playlist.toStorageEntity()
-            allPlaylistsListInteractor.update(oldEntity.first, newEntity)
+            allPlaylistsInteractor.update(oldEntity.first, newEntity)
         }
     }
 
     suspend fun deletePlaylist(playlist: PlaylistWrapper) {
-        allPlaylistsListInteractor.delete(playlist.toStorageEntity().first)
+        allPlaylistsInteractor.delete(playlist.toStorageEntity().first)
     }
 }

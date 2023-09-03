@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.features.localStorage.di
 
 import android.content.Context
-import com.nafanya.mp3world.features.localStorage.AllPlaylistsListInteractor
-import com.nafanya.mp3world.features.localStorage.FavouriteListInteractor
+import com.nafanya.mp3world.features.localStorage.api.AllPlaylistsInteractor
+import com.nafanya.mp3world.features.localStorage.api.FavouritesInteractor
 import com.nafanya.mp3world.features.localStorage.LocalStorageInteractor
 import dagger.Module
 import dagger.Provides
@@ -23,7 +23,7 @@ class LocalStorageModule {
     @Singleton
     fun provideFavouriteListProvider(
         localStorageInteractor: LocalStorageInteractor
-    ): FavouriteListInteractor {
+    ): FavouritesInteractor {
         return localStorageInteractor
     }
 
@@ -31,7 +31,7 @@ class LocalStorageModule {
     @Singleton
     fun provideAllPlaylistsListProvider(
         localStorageInteractor: LocalStorageInteractor
-    ): AllPlaylistsListInteractor {
+    ): AllPlaylistsInteractor {
         return localStorageInteractor
     }
 }

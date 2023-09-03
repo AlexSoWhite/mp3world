@@ -13,7 +13,7 @@ import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
 import com.nafanya.mp3world.features.allSongs.SongListManager
 import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
 import com.nafanya.mp3world.features.artists.ArtistListManager
-import com.nafanya.mp3world.features.favorites.FavouriteListManager
+import com.nafanya.mp3world.features.favorites.FavouritesManager
 import com.nafanya.mp3world.features.localStorage.LocalStorageInteractor
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
@@ -34,7 +34,7 @@ class InitialViewModel @Inject constructor(
     artistListManager: ArtistListManager,
     playlistListManager: PlaylistListManager,
     albumListManager: AlbumListManager,
-    favouriteListManager: FavouriteListManager
+    favouriteListManager: FavouritesManager
 ) : ViewModel() {
 
     val songModel = songListManager.songList.asIntModel()

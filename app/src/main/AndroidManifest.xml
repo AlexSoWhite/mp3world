@@ -70,7 +70,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.favorites.view.FavouriteListActivity"
+        <activity android:name=".features.favorites.view.FavouritesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>

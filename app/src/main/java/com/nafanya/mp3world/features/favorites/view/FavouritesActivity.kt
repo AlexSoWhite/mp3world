@@ -9,7 +9,7 @@ import com.nafanya.mp3world.databinding.ActivityImmutablePlaylistLayoutBinding
 import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity.Companion.LIST_MANAGER_KEY
 import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistFragment
 
-class FavouriteListActivity : BaseActivity<ActivityImmutablePlaylistLayoutBinding>() {
+class FavouritesActivity : BaseActivity<ActivityImmutablePlaylistLayoutBinding>() {
 
     override fun inflate(layoutInflater: LayoutInflater): ActivityImmutablePlaylistLayoutBinding {
         return ActivityImmutablePlaylistLayoutBinding.inflate(layoutInflater)

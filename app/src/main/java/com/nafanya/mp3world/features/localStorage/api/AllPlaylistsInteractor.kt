@@ -1,11 +1,11 @@
-package com.nafanya.mp3world.features.localStorage
+package com.nafanya.mp3world.features.localStorage.api
 
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistSongsEntity
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistStorageEntity
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistWithSongs
 import kotlinx.coroutines.flow.Flow
 
-interface AllPlaylistsListInteractor {
+interface AllPlaylistsInteractor {
 
     fun getAllPlaylists(): Flow<List<PlaylistWithSongs>>
 

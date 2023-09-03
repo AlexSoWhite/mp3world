@@ -31,18 +31,12 @@ class LocalSongActionDialog(
                 actionListener?.invoke(LocalSongAction.GO_TO_ALBUM)
                 dismiss()
             }
-            goToAlbum.description.text = context.getString(
-                R.string.go_to_album,
-                song.album
-            )
+            goToAlbum.description.text = song.album
             goToArtist.setOnClickListener {
                 actionListener?.invoke(LocalSongAction.GO_TO_ARTIST)
                 dismiss()
             }
-            goToArtist.description.text = context.getString(
-                R.string.go_to_artist,
-                song.artist
-            )
+            goToArtist.description.text = song.artist
             songDescription.text =
                 context.getString(R.string.song_description, song.artist, song.title)
             songDescription.isSelected = true

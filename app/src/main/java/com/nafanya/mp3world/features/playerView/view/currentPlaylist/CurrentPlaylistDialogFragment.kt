@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.allViews
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -16,32 +17,21 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.wrappers.LocalSong
-import com.nafanya.mp3world.core.wrappers.RemoteSong
 import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
 import com.nafanya.mp3world.features.downloading.DownloadingView
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
-import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
-import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongDialogHolder
+import com.nafanya.mp3world.features.songListViews.actionDialogs.defaultLocalSongActionDialog
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.player.PlayerInteractor
-import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.flow.take
 
 class CurrentPlaylistDialogFragment :
     BottomSheetDialogFragment(),
-    DownloadingView,
-    LocalSongDialogHolder {
+    DownloadingView {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
-
-    @Inject
-    lateinit var favouriteListViewModel: Lazy<FavouriteListViewModel>
-
-    override val actualFavouriteListViewModel: FavouriteListViewModel
-        get() = favouriteListViewModel.get()
 
     @Inject
     lateinit var interactor: PlayerInteractor
@@ -60,17 +50,10 @@ class CurrentPlaylistDialogFragment :
             viewModel.onSongClick(song)
             currentPlayingView = view
         }
-        onLocalActionClickCallback = { song ->
-            val dialog = createDialog(requireActivity(), song as LocalSong)
-            actualFavouriteListViewModel
-                .isSongInFavourite(song)
-                .observe(viewLifecycleOwner) {
-                    dialog.setIsFavorite(it)
-                }
-            dialog.show()
-        }
+        onLocalActionClickCallback = (requireActivity() as AppCompatActivity)
+            .defaultLocalSongActionDialog(viewModel)
         onRemoteActionClickCallback = { song ->
-            download(requireActivity(), song as RemoteSong)
+            download(requireActivity(), song)
         }
     }
 

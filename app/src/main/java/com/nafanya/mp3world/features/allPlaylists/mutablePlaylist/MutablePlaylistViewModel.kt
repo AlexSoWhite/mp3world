@@ -16,8 +16,11 @@ import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
 import com.nafanya.mp3world.core.listUtils.title.TitleViewModel
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
+import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
+import com.nafanya.mp3world.features.favorites.FavouritesManager
+import com.nafanya.mp3world.features.favorites.FavouritesManagerProxy
 import com.nafanya.mp3world.features.songListViews.MODIFY_PLAYLIST_BUTTON
 import com.nafanya.mp3world.features.songListViews.SONG_REARRANGEABLE
 import com.nafanya.mp3world.features.songListViews.SongListItem
@@ -25,14 +28,17 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class MutablePlaylistViewModel(
+    private val favouriteListManager: FavouritesManager,
     playlistListManager: PlaylistListManager,
     playlistId: Long,
     playlistName: String
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
-    TitleViewModel<List<SongWrapper>> {
+    TitleViewModel<List<SongWrapper>>,
+    FavouritesManagerProxy {
 
     override val playlistFlow = playlistListManager
         .getPlaylistByContainerId(playlistId)
@@ -79,7 +85,18 @@ class MutablePlaylistViewModel(
         searchProcessor.search(query)
     }
 
+    override fun isSongInFavourites(song: LocalSong) = favouriteListManager.isSongInFavourites(song)
+
+    override fun addFavourite(song: LocalSong) {
+        viewModelScope.launch { favouriteListManager.add(song) }
+    }
+
+    override fun deleteFavourite(song: LocalSong) {
+        viewModelScope.launch { favouriteListManager.delete(song) }
+    }
+
     class Factory @AssistedInject constructor(
+        private val favouriteListManager: FavouritesManager,
         private val listManagerProvider: ListManagerProvider,
         @Assisted("playlistId") private val playlistId: Long,
         @Assisted("playlistName") private var playlistName: String
@@ -91,6 +108,7 @@ class MutablePlaylistViewModel(
                 PLAYLIST_LIST_MANAGER_KEY
             ) as PlaylistListManager
             return MutablePlaylistViewModel(
+                favouriteListManager,
                 playlistListManager,
                 playlistId,
                 playlistName

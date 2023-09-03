@@ -27,14 +27,13 @@ import com.nafanya.mp3world.core.utils.ColorExtractor
 import com.nafanya.mp3world.core.utils.animators.AoedeAlphaAnimation
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
 import com.nafanya.mp3world.core.view.BaseFragment
-import com.nafanya.mp3world.core.wrappers.SongWrapper
-import com.nafanya.mp3world.core.wrappers.glide.CustomBitmapTarget
 import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.core.wrappers.RemoteSong
+import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.glide.CustomBitmapTarget
 import com.nafanya.mp3world.databinding.PlayerControlViewFullscreenFragmentBinding
 import com.nafanya.mp3world.features.downloading.DownloadingView
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
-import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
 import com.nafanya.mp3world.features.playerView.view.currentPlaylist.CurrentPlaylistDialogFragment
 import javax.inject.Inject
 
@@ -44,9 +43,6 @@ class FullscreenControlsFragment :
 
     private var previousColor: Int = -1
     private var isColorInitialized = false
-
-    @Inject
-    lateinit var favoriteViewModel: FavouriteListViewModel
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -130,44 +126,45 @@ class FullscreenControlsFragment :
         }
     }
 
-    @Suppress("LongMethod", "NestedBlockDepth", "ComplexMethod")
-    private fun renderSong(song: SongWrapper) = with(view) {
-        this?.let {
-            val titleView = findViewById<TextView>(R.id.control_fullscreen_track_title)
-            titleView?.text = song.title
-            titleView?.isSelected = true
-            val artistView = findViewById<TextView>(R.id.control_fullscreen_track_artist)
-            artistView?.text = song.artist
-            artistView?.isSelected = true
-            val durationView = findViewById<TextView>(R.id.duration)
-            val timeView = findViewById<TextView>(R.id.time)
-            binding.controlsFullscreen.apply {
-                durationView.text = TimeConverter.durationToString(song.duration)
-                setProgressUpdateListener { position, _ ->
-                    timeView.text = TimeConverter.durationToString(position)
+    private fun renderSong(song: SongWrapper) = with(requireView()) {
+        val titleView = findViewById<TextView>(R.id.control_fullscreen_track_title)
+        titleView?.text = song.title
+        titleView?.isSelected = true
+        val artistView = findViewById<TextView>(R.id.control_fullscreen_track_artist)
+        artistView?.text = song.artist
+        artistView?.isSelected = true
+        val durationView = findViewById<TextView>(R.id.duration)
+        val timeView = findViewById<TextView>(R.id.time)
+        binding.controlsFullscreen.apply {
+            durationView.text = TimeConverter.durationToString(song.duration)
+            setProgressUpdateListener { position, _ ->
+                timeView.text = TimeConverter.durationToString(position)
+            }
+            adjustImage(song)
+            // favourite
+            val actionButton = findViewById<ShapeableImageView>(R.id.action_button)
+            if (song is LocalSong) {
+                setupFavourite(song, actionButton)
+            } else {
+                actionButton.setImageResource(R.drawable.icv_download)
+                actionButton.setOnClickListener {
+                    download(requireActivity(), song as RemoteSong)
                 }
-                adjustImage(song)
-                // favourite
-                val actionButton = findViewById<ShapeableImageView>(R.id.action_button)
-                if (song is LocalSong) {
-                    favoriteViewModel.isSongInFavourite(song).observe(viewLifecycleOwner) {
-                        if (it) {
-                            actionButton.setImageResource(R.drawable.icv_favorite_filled)
-                            actionButton.setOnClickListener {
-                                favoriteViewModel.deleteFavourite(song)
-                            }
-                        } else {
-                            actionButton.setImageResource(R.drawable.icv_favorite_border)
-                            actionButton.setOnClickListener {
-                                favoriteViewModel.addFavourite(song)
-                            }
-                        }
-                    }
-                } else {
-                    actionButton.setImageResource(R.drawable.icv_download)
-                    actionButton.setOnClickListener {
-                        download(requireActivity(), song as RemoteSong)
-                    }
+            }
+        }
+    }
+
+    private fun setupFavourite(song: LocalSong, actionButton: ShapeableImageView) {
+        viewModel.isSongInFavourites(song).observe(viewLifecycleOwner) {
+            if (it) {
+                actionButton.setImageResource(R.drawable.icv_favorite_filled)
+                actionButton.setOnClickListener {
+                    viewModel.deleteFavourite(song)
+                }
+            } else {
+                actionButton.setImageResource(R.drawable.icv_favorite_border)
+                actionButton.setOnClickListener {
+                    viewModel.addFavourite(song)
                 }
             }
         }
@@ -202,35 +199,33 @@ class FullscreenControlsFragment :
 
     @RequiresApi(Build.VERSION_CODES.Q)
     @Suppress("NestedBlockDepth")
-    private fun animateChanges(art: Bitmap) = with(view) {
-        this?.let {
-            val averageColor = ColorExtractor.getAverageColorWithNoWhiteComponent(art)
-            val colorFrom = if (isColorInitialized) {
-                previousColor
-            } else {
-                context.getColor(android.R.color.transparent)
-            }
-            previousColor = averageColor
-            isColorInitialized = true
-            val root = findViewById<ConstraintLayout>(R.id.root)
-            val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, averageColor)
-            colorAnimation.duration = backgroundDuration
-            colorAnimation.addUpdateListener {
-                val controlsColor = calculateControlsColor(
-                    (it.animatedValue as Int).toColor()
-                )
-                root.setBackgroundColor(it.animatedValue as Int)
-                updateBarsColor(it.animatedValue as Int)
-                controls.forEach { v ->
-                    when (v) {
-                        is ShapeableImageView -> v.setColorFilter(controlsColor)
-                        is DefaultTimeBar -> v.setScrubberColor(controlsColor)
-                        is TextView -> v.setTextColor(controlsColor)
-                    }
+    private fun animateChanges(art: Bitmap) = with(requireView()) {
+        val averageColor = ColorExtractor.getAverageColorWithNoWhiteComponent(art)
+        val colorFrom = if (isColorInitialized) {
+            previousColor
+        } else {
+            context.getColor(android.R.color.transparent)
+        }
+        previousColor = averageColor
+        isColorInitialized = true
+        val root = findViewById<ConstraintLayout>(R.id.root)
+        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, averageColor)
+        colorAnimation.duration = backgroundDuration
+        colorAnimation.addUpdateListener {
+            val controlsColor = calculateControlsColor(
+                (it.animatedValue as Int).toColor()
+            )
+            root.setBackgroundColor(it.animatedValue as Int)
+            updateBarsColor(it.animatedValue as Int)
+            controls.forEach { v ->
+                when (v) {
+                    is ShapeableImageView -> v.setColorFilter(controlsColor)
+                    is DefaultTimeBar -> v.setScrubberColor(controlsColor)
+                    is TextView -> v.setTextColor(controlsColor)
                 }
             }
-            colorAnimation.start()
         }
+        colorAnimation.start()
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)

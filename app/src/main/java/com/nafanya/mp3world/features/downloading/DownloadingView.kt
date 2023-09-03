@@ -6,6 +6,8 @@ import com.nafanya.mp3world.core.wrappers.RemoteSong
 
 /**
  * Interface for views that can trigger downloading
+ *
+ * TODO make it actual interface
  */
 interface DownloadingView {
 
