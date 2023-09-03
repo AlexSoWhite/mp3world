@@ -10,8 +10,8 @@ import com.nafanya.mp3world.features.allPlaylists.di.AllPlaylistsComponentProvid
 import com.nafanya.mp3world.features.allPlaylists.di.AllPlaylistsModule
 import com.nafanya.mp3world.features.allSongs.di.AllSongsComponentProvider
 import com.nafanya.mp3world.features.allSongs.di.AllSongsModule
-import com.nafanya.mp3world.features.artists.di.ArtistListManagerModule
 import com.nafanya.mp3world.features.artists.di.ArtistsComponentProvider
+import com.nafanya.mp3world.features.artists.di.ArtistsModule
 import com.nafanya.mp3world.features.downloading.di.DownloadModule
 import com.nafanya.mp3world.features.entrypoint.di.EntrypointComponentProvider
 import com.nafanya.mp3world.features.favourites.di.FavouritesModule
@@ -37,7 +37,7 @@ import okhttp3.OkHttpClient
         LocalStorageModule::class,
         AllSongsModule::class,
         AlbumModule::class,
-        ArtistListManagerModule::class,
+        ArtistsModule::class,
         FavouritesModule::class,
         AllPlaylistsModule::class,
         WrappersModule::class

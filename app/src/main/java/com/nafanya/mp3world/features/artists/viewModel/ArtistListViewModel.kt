@@ -1,8 +1,6 @@
 package com.nafanya.mp3world.features.artists.viewModel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
@@ -16,6 +14,7 @@ import com.nafanya.mp3world.features.artists.ArtistListManager
 import com.nafanya.mp3world.features.artists.view.recycler.ARTIST
 import com.nafanya.mp3world.features.artists.view.recycler.ArtistListItem
 import javax.inject.Inject
+import kotlinx.coroutines.flow.map
 
 class ArtistListViewModel @Inject constructor(
     artistListManager: ArtistListManager
@@ -39,8 +38,8 @@ class ArtistListViewModel @Inject constructor(
             // TODO: string resource
             titleProcessor.setBaseTitle("Исполнители")
             searchProcessor.setup(
-                this@ArtistListViewModel,
-                artistListManager.artists.map { Data.Success(it) }.asFlow()
+                this,
+                artistListManager.artists.map { Data.Success(it) }
             )
         }
     }

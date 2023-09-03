@@ -1,81 +1,48 @@
 package com.nafanya.mp3world.features.artists
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
+import androidx.lifecycle.asLiveData
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
-import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * Object that holds artists data. Populated by [MediaStoreInteractor].
  */
 @Singleton
 class ArtistListManager @Inject constructor(
-    mediaStoreInteractor: MediaStoreInteractor,
-    ioCoroutineProvider: IOCoroutineProvider
+    mediaStoreInteractor: MediaStoreInteractor
 ) : ListManager() {
 
-    private val mArtists = MutableLiveData<List<Artist>>()
-    val artists: LiveData<List<Artist>>
-        get() = mArtists
-
-    private var suspendedList = mutableListOf<Artist>()
-
-    init {
-        ioCoroutineProvider.ioScope.launch {
-            mediaStoreInteractor.allSongs.collectLatest {
-                it?.let {
-                    fillSuspendList(it)
-                    updateData()
-                }
+    private val mArtists = mediaStoreInteractor
+        .allSongs
+        .map { list ->
+            list.groupBy {
+                Pair(it.artistId, it.artist)
+            }.map {
+                Artist(
+                    id = it.key.first,
+                    name = it.key.second,
+                    imageSource = it.value[0],
+                    playlist = PlaylistWrapper(
+                        it.value,
+                        name = it.key.second
+                    )
+                )
             }
         }
-    }
+    val artists: Flow<List<Artist>>
+        get() = mArtists
 
     override fun getPlaylistByContainerId(id: Long): LiveData<PlaylistWrapper?> {
         return artists.map {
             it.firstOrNull { artist ->
                 artist.id == id
             }?.playlist
-        }
-    }
-
-    private fun fillSuspendList(songList: List<LocalSong>) {
-        songList.forEach { song ->
-            val artist = Artist(
-                name = song.artist,
-                id = song.artistId,
-                imageSource = song
-            )
-            add(artist, song)
-        }
-    }
-
-    private fun add(element: Artist, song: LocalSong) {
-        val index = suspendedList.indexOf(element)
-        if (index != -1) {
-            val playlist = suspendedList[index].playlist
-            suspendedList.elementAt(index).playlist = playlist?.copy(
-                songList = listOf(song) + playlist.songList
-            )
-        } else {
-            element.playlist = PlaylistWrapper(
-                listOf(song),
-                name = element.name
-            )
-            suspendedList.add(element)
-        }
-    }
-
-    private fun updateData() {
-        mArtists.postValue(suspendedList)
-        suspendedList = mutableListOf()
+        }.asLiveData()
     }
 }
