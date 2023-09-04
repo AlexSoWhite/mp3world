@@ -4,7 +4,7 @@ import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Interface to obtain adding and removing favourites. TO implement  it you should use
+ * Interface to obtain adding and removing favourites. T implement  it you should use
  * [FavouritesManager]
  */
 interface FavouritesManagerProxy {

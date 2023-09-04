@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.listManagers.FAVOURITE_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.stateMachines.commonUi.Data
@@ -29,14 +30,21 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MutablePlaylistViewModel(
-    private val favouriteListManager: FavouritesManager,
-    playlistListManager: PlaylistListManager,
+    listManagerProvider: ListManagerProvider,
     playlistId: Long,
     playlistName: String
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
     TitleProcessorWrapper<List<SongWrapper>>,
     FavouritesManagerProxy {
+
+    private val playlistListManager = listManagerProvider.getListManager(
+        PLAYLIST_LIST_MANAGER_KEY
+    ) as PlaylistListManager
+
+    private val favouritesManager = listManagerProvider.getListManager(
+        FAVOURITE_LIST_MANAGER_KEY
+    ) as FavouritesManager
 
     override val playlistFlow = playlistListManager.getPlaylistByContainerId(playlistId)
 
@@ -74,18 +82,17 @@ class MutablePlaylistViewModel(
         searchProcessor.search(query)
     }
 
-    override fun isSongInFavourites(song: LocalSong) = favouriteListManager.isSongInFavourites(song)
+    override fun isSongInFavourites(song: LocalSong) = favouritesManager.isSongInFavourites(song)
 
     override fun addFavourite(song: LocalSong) {
-        viewModelScope.launch { favouriteListManager.add(song) }
+        viewModelScope.launch { favouritesManager.add(song) }
     }
 
     override fun deleteFavourite(song: LocalSong) {
-        viewModelScope.launch { favouriteListManager.delete(song) }
+        viewModelScope.launch { favouritesManager.delete(song) }
     }
 
     class Factory @AssistedInject constructor(
-        private val favouriteListManager: FavouritesManager,
         private val listManagerProvider: ListManagerProvider,
         @Assisted("playlistId") private val playlistId: Long,
         @Assisted("playlistName") private var playlistName: String
@@ -93,12 +100,8 @@ class MutablePlaylistViewModel(
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val playlistListManager = listManagerProvider.getListManager(
-                PLAYLIST_LIST_MANAGER_KEY
-            ) as PlaylistListManager
             return MutablePlaylistViewModel(
-                favouriteListManager,
-                playlistListManager,
+                listManagerProvider,
                 playlistId,
                 playlistName
             ) as T
