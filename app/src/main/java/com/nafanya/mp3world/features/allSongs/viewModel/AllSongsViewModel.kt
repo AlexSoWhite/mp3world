@@ -9,7 +9,7 @@ import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
-import com.nafanya.mp3world.core.listUtils.title.TitleViewModel
+import com.nafanya.mp3world.core.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.utils.timeConverters.DateConverter
@@ -32,7 +32,7 @@ class AllSongsViewModel @Inject constructor(
     songListManager: SongListManager
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
-    TitleViewModel<List<SongWrapper>>,
+    TitleProcessorWrapper<List<SongWrapper>>,
     FavouritesManagerProxy {
 
     override val playlistFlow = songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow()

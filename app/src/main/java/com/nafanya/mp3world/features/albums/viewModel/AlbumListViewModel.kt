@@ -6,7 +6,7 @@ import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
-import com.nafanya.mp3world.core.listUtils.title.TitleViewModel
+import com.nafanya.mp3world.core.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
 import com.nafanya.mp3world.features.albums.Album
@@ -20,7 +20,7 @@ class AlbumListViewModel @Inject constructor(
     albumListManager: AlbumListManager
 ) : StatedListViewModel<Album, AlbumListItem>(),
     Searchable<Album>,
-    TitleViewModel<List<Album>> {
+    TitleProcessorWrapper<List<Album>> {
 
     private val searchProcessor = SearchProcessor<Album>(
         QueryFilter { album, query ->

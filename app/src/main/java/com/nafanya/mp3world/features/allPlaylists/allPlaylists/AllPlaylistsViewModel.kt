@@ -9,7 +9,7 @@ import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
-import com.nafanya.mp3world.core.listUtils.title.TitleViewModel
+import com.nafanya.mp3world.core.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.stateMachines.common.Data
 import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
@@ -24,7 +24,7 @@ class AllPlaylistsViewModel @Inject constructor(
     private val playlistListManager: PlaylistListManager,
 ) : StatedListViewModel<PlaylistWrapper, AllPlaylistsListItem>(),
     Searchable<PlaylistWrapper>,
-    TitleViewModel<List<PlaylistWrapper>> {
+    TitleProcessorWrapper<List<PlaylistWrapper>> {
 
     private var isModifyingPlaylistsTrigger = MutableLiveData(Unit)
 

@@ -15,7 +15,7 @@ import com.nafanya.mp3world.core.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
-import com.nafanya.mp3world.core.listUtils.title.TitleViewModel
+import com.nafanya.mp3world.core.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.listUtils.title.convertStateToTitle
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.State
@@ -40,7 +40,7 @@ class ModifyPlaylistViewModel(
     songListManager: SongListManager
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
-    TitleViewModel<List<SongWrapper>> {
+    TitleProcessorWrapper<List<SongWrapper>> {
 
     override val playlistFlow = songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow()
 
