@@ -3,7 +3,7 @@ package com.nafanya.mp3world.features.entrypoint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import com.nafanya.mp3world.core.view.BaseActivity
+import com.nafanya.mp3world.core.commonUi.BaseActivity
 import com.nafanya.mp3world.databinding.SplashScreenBinding
 import java.util.Timer
 import java.util.TimerTask

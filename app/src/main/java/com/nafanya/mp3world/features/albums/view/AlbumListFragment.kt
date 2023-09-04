@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.ApplicationComponent
-import com.nafanya.mp3world.core.listUtils.recycler.BaseAdapter
-import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
-import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseAdapter
+import com.nafanya.mp3world.core.utils.listUtils.recycler.commonUi.BaseViewHolder
+import com.nafanya.mp3world.core.utils.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListFragmentBaseLayout
 import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel

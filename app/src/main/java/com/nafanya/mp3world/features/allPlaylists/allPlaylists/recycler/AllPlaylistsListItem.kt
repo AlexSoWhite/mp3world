@@ -2,8 +2,8 @@ package com.nafanya.mp3world.features.allPlaylists.allPlaylists.recycler
 
 import androidx.annotation.IntDef
 import androidx.recyclerview.widget.DiffUtil
-import com.nafanya.mp3world.core.listUtils.recycler.BaseListItem
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseListItem
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 
 @Retention(AnnotationRetention.SOURCE)
 @IntDef(

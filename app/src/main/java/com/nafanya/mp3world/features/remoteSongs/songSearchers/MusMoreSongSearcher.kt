@@ -2,8 +2,8 @@ package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
 import com.google.gson.Gson
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
-import com.nafanya.mp3world.core.wrappers.UriFactory
-import com.nafanya.mp3world.core.wrappers.RemoteSong
+import com.nafanya.mp3world.core.wrappers.song.UriFactory
+import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import javax.inject.Inject
 import okhttp3.OkHttpClient
 import org.jsoup.nodes.Document

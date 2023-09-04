@@ -3,8 +3,8 @@ package com.nafanya.mp3world.features.mediaStore
 import android.content.Context
 import android.provider.MediaStore
 import androidx.annotation.WorkerThread
-import com.nafanya.mp3world.core.wrappers.UriFactory
-import com.nafanya.mp3world.core.wrappers.LocalSong
+import com.nafanya.mp3world.core.wrappers.song.UriFactory
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import javax.inject.Inject
 
 /**

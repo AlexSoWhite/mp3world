@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.allPlaylists.model
 
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 
 fun PlaylistWrapper.toStorageEntity(): Pair<PlaylistStorageEntity, List<PlaylistSongsEntity>> {
     val playlistEntity = PlaylistStorageEntity(

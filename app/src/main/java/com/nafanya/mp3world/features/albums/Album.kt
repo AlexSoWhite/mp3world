@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.albums
 
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 
 /**
  * Class that wraps the album.

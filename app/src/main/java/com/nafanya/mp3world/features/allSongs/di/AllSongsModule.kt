@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.allSongs.di
 
 import androidx.lifecycle.ViewModel
-import com.nafanya.mp3world.core.di.ViewModelKey
+import com.nafanya.mp3world.core.di.viewModel.ViewModelKey
 import com.nafanya.mp3world.core.listManagers.ALL_SONGS_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.listManagers.ListManagerKey

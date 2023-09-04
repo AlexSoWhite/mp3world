@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nafanya.mp3world.core.di.ApplicationComponent
-import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
-import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.wrappers.RemoteSong
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistFragmentBaseLayout
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.features.downloading.DownloadingView
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter

@@ -2,7 +2,7 @@ package com.nafanya.mp3world.features.downloading
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.wrappers.RemoteSong
+import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 

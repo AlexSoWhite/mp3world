@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.core.stateMachines.commonUi.list
 
-import com.nafanya.mp3world.core.listUtils.recycler.BaseListItem
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseListItem
 import com.nafanya.mp3world.core.stateMachines.ListStateModel
 import com.nafanya.mp3world.core.stateMachines.commonUi.Data
 import com.nafanya.mp3world.core.stateMachines.commonUi.StatedViewModel

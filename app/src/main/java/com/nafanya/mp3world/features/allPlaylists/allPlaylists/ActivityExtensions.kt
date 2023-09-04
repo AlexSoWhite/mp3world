@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.view.BaseDialog
+import com.nafanya.mp3world.core.commonUi.BaseDialog
 
 fun AppCompatActivity.createAddPlaylistDialog(
     onSubmitCallback: (String) -> Unit

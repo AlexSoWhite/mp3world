@@ -6,7 +6,7 @@ import com.nafanya.mp3world.core.listManagers.ALBUM_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ARTIST_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.FAVOURITE_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.features.albums.view.AlbumListActivity
 import com.nafanya.mp3world.features.allPlaylists.allPlaylists.AllPlaylistsActivity
 import com.nafanya.mp3world.features.allPlaylists.modifyPlaylist.ModifyPlaylistActivity

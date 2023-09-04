@@ -11,9 +11,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.ApplicationComponent
-import com.nafanya.mp3world.core.listUtils.searching.DefaultOnQueryTextListener
-import com.nafanya.mp3world.core.playlist.StatedPlaylistFragmentBaseLayout
-import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.listUtils.searching.DefaultOnQueryTextListener
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistFragmentBaseLayout
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.features.allPlaylists.modifyPlaylist.ModifyPlaylistActivity.Companion.PLAYLIST_NAME
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import javax.inject.Inject

@@ -1,9 +1,8 @@
 package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
-import com.nafanya.mp3world.core.wrappers.SongList
-import com.nafanya.mp3world.core.wrappers.RemoteSong
+import androidx.annotation.WorkerThread
+import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import java.io.IOException
-import kotlinx.coroutines.flow.Flow
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -17,32 +16,27 @@ abstract class SongSearcher(
     private val client: OkHttpClient
 ) {
 
-    protected val mSongList = SongList<RemoteSong>()
-
-    val songList: Flow<List<RemoteSong>?>
-        get() = mSongList.listFlow
-
-    fun searchSongs(query: String) {
+    @WorkerThread
+    fun searchSongs(query: String, onSearchCompleted: (List<RemoteSong>?) -> Unit) {
         val request = Request.Builder()
             .url(getSearchUrl(query))
             .build()
         client.newCall(request).enqueue(
             object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    mSongList.unlock()
+                    onSearchCompleted.invoke(null)
                 }
 
                 override fun onResponse(call: Call, response: Response) {
+                    val list = mutableListOf<RemoteSong>()
                     response.body?.let {
-                        mSongList.lock()
-                        mSongList.setEmptyList()
                         val doc = Jsoup.parseBodyFragment(it.string())
                         splitDocument(doc).forEachIndexed { index, element ->
                             val model = parseNode(index, element)
-                            mSongList.addOrUpdateSongWrapper(model)
+                            list.add(model)
                         }
                     }
-                    mSongList.unlock()
+                    onSearchCompleted.invoke(list)
                 }
             }
         )

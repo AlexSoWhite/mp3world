@@ -2,7 +2,7 @@ package com.nafanya.mp3world.features.playerView.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.wrappers.LocalSong
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.mp3world.features.favourites.FavouritesManager

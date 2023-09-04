@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.artists.view.recycler
 
 import android.view.ViewGroup
-import com.nafanya.mp3world.core.listUtils.recycler.BaseViewHolderFactory
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseViewHolderFactory
 
 class ArtistViewHolderFactory : BaseViewHolderFactory<ArtistViewHolder> {
 

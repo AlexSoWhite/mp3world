@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.utils.TextUtil
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.databinding.PlaylistContainerViewBinding
 import com.nafanya.mp3world.features.allPlaylists.allPlaylists.recycler.AllPlaylistsItemViewHolder
 import com.nafanya.mp3world.features.allPlaylists.allPlaylists.recycler.AllPlaylistsListItemView

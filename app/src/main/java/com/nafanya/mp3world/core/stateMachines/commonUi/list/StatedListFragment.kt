@@ -2,9 +2,9 @@ package com.nafanya.mp3world.core.stateMachines.commonUi.list
 
 import androidx.annotation.CallSuper
 import androidx.viewbinding.ViewBinding
-import com.nafanya.mp3world.core.listUtils.recycler.BaseAdapter
-import com.nafanya.mp3world.core.listUtils.recycler.BaseListItem
-import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseAdapter
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseListItem
+import com.nafanya.mp3world.core.utils.listUtils.recycler.commonUi.BaseViewHolder
 import com.nafanya.mp3world.core.stateMachines.LState
 import com.nafanya.mp3world.core.stateMachines.State
 import com.nafanya.mp3world.core.stateMachines.commonUi.StatedFragment

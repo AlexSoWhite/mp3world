@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.allSongs.view
 
-import com.nafanya.mp3world.core.wrappers.SongWrapper
-import com.nafanya.mp3world.core.wrappers.LocalSong
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.DATE
 import com.nafanya.mp3world.features.songListViews.DateViewHolder

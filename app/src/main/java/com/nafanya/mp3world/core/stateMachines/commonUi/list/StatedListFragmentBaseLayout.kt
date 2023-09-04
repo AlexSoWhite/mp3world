@@ -10,7 +10,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nafanya.mp3world.core.listUtils.recycler.BaseListItem
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseListItem
 import com.nafanya.mp3world.databinding.FragmentListContainerLayoutBinding
 
 abstract class StatedListFragmentBaseLayout<DU, LI : BaseListItem> : StatedListFragment<

@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.features.albums.view.recycler
 
 import android.view.ViewGroup
-import com.nafanya.mp3world.core.listUtils.recycler.BaseViewHolderFactory
-import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseViewHolderFactory
+import com.nafanya.mp3world.core.utils.listUtils.recycler.commonUi.BaseViewHolder
 import com.nafanya.mp3world.features.albums.Album
 import java.lang.IllegalArgumentException
 

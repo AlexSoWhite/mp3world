@@ -10,7 +10,7 @@ import androidx.viewbinding.ViewBinding
 import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.stateMachines.State
-import com.nafanya.mp3world.core.view.BaseFragment
+import com.nafanya.mp3world.core.commonUi.BaseFragment
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.launch

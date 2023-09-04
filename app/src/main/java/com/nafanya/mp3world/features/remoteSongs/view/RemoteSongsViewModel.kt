@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.collectInScope
-import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
-import com.nafanya.mp3world.core.listUtils.title.TitleProcessorWrapper
-import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
+import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.commonUi.Data
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
-import com.nafanya.mp3world.core.wrappers.SongWrapper
-import com.nafanya.mp3world.core.wrappers.RemoteSong
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.features.downloading.DownloadInteractor
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
@@ -24,11 +25,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
     private val query: String,
     private val songSearchersProvider: SongSearchersProvider,
+    private val ioCoroutineProvider: IOCoroutineProvider,
     override val downloadInteractor: DownloadInteractor,
     override val mediaStoreInteractor: MediaStoreInteractor
 ) : StatedPlaylistViewModel(),
@@ -38,8 +42,9 @@ class RemoteSongsViewModel(
     private val songSearcher: SongSearcher
         get() = songSearchersProvider.getSongSearcher(HITMO_TOP)
 
+    private val mPlaylistFlow = MutableSharedFlow<List<RemoteSong>?>(replay = 1)
     override val playlistFlow: Flow<PlaylistWrapper>
-        get() = songSearcher.songList.map { it.asPlaylist(query) }
+        get() = mPlaylistFlow.map { it.asPlaylist(query) }
 
     private val titleProcessor = TitleProcessor<List<SongWrapper>>()
 
@@ -50,9 +55,13 @@ class RemoteSongsViewModel(
         model.load {
             titleProcessor.setup(this.model, viewModelScope)
             titleProcessor.setBaseTitle(query)
-            songSearcher.searchSongs(query)
+            ioCoroutineProvider.ioScope.launch {
+                songSearcher.searchSongs(query) {
+                    viewModelScope.launch { mPlaylistFlow.emit(it) }
+                }
+            }
             setDataSource(
-                songSearcher.songList.map {
+                mPlaylistFlow.map {
                     if (it == null) {
                         Data.Error(Error("no internet"))
                     } else {
@@ -64,7 +73,7 @@ class RemoteSongsViewModel(
                 if (it) {
                     playerInteractor.isPlayerInitialised.collectInScope(viewModelScope) { isInit ->
                         if (!isInit) {
-                            songSearcher.songList.collectInScope(viewModelScope) { songList ->
+                            mPlaylistFlow.collectInScope(viewModelScope) { songList ->
                                 if (songList?.isNotEmpty() == true) {
                                     playerInteractor.setPlaylist(songList.asPlaylist(query))
                                 }
@@ -82,13 +91,18 @@ class RemoteSongsViewModel(
 
     fun refresh() {
         model.refresh {
-            songSearcher.searchSongs(query)
+            ioCoroutineProvider.ioScope.launch {
+                songSearcher.searchSongs(query) {
+                    viewModelScope.launch { mPlaylistFlow.emit(it) }
+                }
+            }
         }
     }
 
     class Factory @AssistedInject constructor(
         @Assisted("query") private val query: String,
         private val downloadInteractor: DownloadInteractor,
+        private val ioCoroutineProvider: IOCoroutineProvider,
         private val mediaStoreInteractor: MediaStoreInteractor,
         private val songSearchersProvider: SongSearchersProvider
     ) : ViewModelProvider.Factory {
@@ -98,6 +112,7 @@ class RemoteSongsViewModel(
             return RemoteSongsViewModel(
                 query,
                 songSearchersProvider,
+                ioCoroutineProvider,
                 downloadInteractor,
                 mediaStoreInteractor
             ) as T

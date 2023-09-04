@@ -2,7 +2,7 @@ package com.nafanya.mp3world.features.downloading
 
 import android.content.Context
 import com.nafanya.mp3world.core.utils.showToast
-import com.nafanya.mp3world.core.wrappers.RemoteSong
+import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 
 /**
  * Interface for views that can trigger downloading

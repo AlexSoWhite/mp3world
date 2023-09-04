@@ -2,7 +2,7 @@ package com.nafanya.mp3world.features.downloading
 
 import android.content.Context
 import android.os.Environment
-import com.nafanya.mp3world.core.wrappers.RemoteSong
+import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import javax.inject.Inject
 
 /**

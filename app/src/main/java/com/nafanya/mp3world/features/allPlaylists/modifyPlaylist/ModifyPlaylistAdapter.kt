@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.allPlaylists.modifyPlaylist
 
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.SONG_ADDABLE_REMOVABLE
 import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder

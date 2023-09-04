@@ -6,8 +6,8 @@ import androidx.lifecycle.map
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.listManagers.ListManager
-import com.nafanya.mp3world.core.wrappers.LocalSong
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.features.favourites.model.FavouritesEntity
 import com.nafanya.mp3world.features.localStorage.api.FavouritesInteractor
 import com.nafanya.mp3world.features.localStorage.LocalStorageInteractor

@@ -3,8 +3,8 @@ package com.nafanya.mp3world.features.localStorage.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.model.PlaylistStorageEntity
 
 /**

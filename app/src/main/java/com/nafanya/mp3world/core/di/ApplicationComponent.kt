@@ -2,6 +2,7 @@ package com.nafanya.mp3world.core.di
 
 import android.content.Context
 import com.google.gson.Gson
+import com.nafanya.mp3world.core.di.viewModel.ViewModelFactoryModule
 import com.nafanya.mp3world.core.wrappers.di.BitmapFlowModelLoaderFactoryComponentProvider
 import com.nafanya.mp3world.core.wrappers.di.WrappersModule
 import com.nafanya.mp3world.features.albums.di.AlbumComponentProvider

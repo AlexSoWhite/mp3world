@@ -3,7 +3,7 @@ package com.nafanya.mp3world.features.allPlaylists.modifyPlaylist
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.view.BaseActivity
+import com.nafanya.mp3world.core.commonUi.BaseActivity
 import com.nafanya.mp3world.databinding.ActivityModifyPlaylistLayoutBinding
 
 class ModifyPlaylistActivity : BaseActivity<ActivityModifyPlaylistLayoutBinding>() {
