@@ -8,10 +8,7 @@
     <string name="albums">Альбомы</string>
     <string name="favourites">Избранное</string>
 
-    <string name="name">mp3world</string>
-    <string name="description">mp3world</string>
     <string name="player_transition">player_transition</string>
-    <string name="create">создать</string>
 
     <!-- different screen states -->
     <string name="loading">загрузка</string>
@@ -21,6 +18,7 @@
     <string name="modify_compositions">изменить композиции</string>
     <string name="add_songs">добавить композиции</string>
     <string name="no_playlists">создать плейлист</string>
+    <string name="create">создать</string>
     <string name="no_songs">нет песен</string>
     <string name="add_playlist">создать плейлист</string>
     <string name="enter_name">введите название</string>
@@ -28,6 +26,7 @@
     <string name="delete">удалить</string>
     <string name="cancel">отмена</string>
     <string name="changes_will_be_discarded">Изменения не будут сохранены. Продолжить?</string>
+    <string name="string_continue">продолжить</string>
     <string name="confirm_changes">сохранить изменения</string>
 
     <!-- albums functionality -->
@@ -45,7 +44,6 @@
     <!-- generic local song dialog texts -->
     <string name="song_description">%1$s - %2$s</string>
     <string name="download_song">загрузить песню %1$s - %2$s</string>
-    <string name="string_continue">продолжить</string>
     <string name="ready">готово</string>
 
     <!-- downloading functionality -->
