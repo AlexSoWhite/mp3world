@@ -7,8 +7,8 @@ import com.nafanya.mp3world.core.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
 import com.nafanya.mp3world.core.listUtils.title.TitleProcessorWrapper
-import com.nafanya.mp3world.core.stateMachines.common.Data
-import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
 import com.nafanya.mp3world.features.albums.Album
 import com.nafanya.mp3world.features.albums.AlbumListManager
 import com.nafanya.mp3world.features.albums.view.recycler.ALBUM

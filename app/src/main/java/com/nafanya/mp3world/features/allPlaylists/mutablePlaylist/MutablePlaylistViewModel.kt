@@ -15,7 +15,7 @@ import com.nafanya.mp3world.core.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.listUtils.title.TitleProcessor
 import com.nafanya.mp3world.core.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.stateMachines.common.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
 import com.nafanya.mp3world.core.wrappers.LocalSong
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager

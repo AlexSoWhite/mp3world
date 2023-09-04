@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.core.stateMachines.list
+package com.nafanya.mp3world.core.stateMachines.commonUi.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,10 +14,10 @@ import com.nafanya.mp3world.core.listUtils.recycler.BaseListItem
 import com.nafanya.mp3world.databinding.FragmentListContainerLayoutBinding
 
 abstract class StatedListFragmentBaseLayout<DU, LI : BaseListItem> : StatedListFragment<
-    FragmentListContainerLayoutBinding,
-    DU,
-    LI
-    >() {
+        FragmentListContainerLayoutBinding,
+        DU,
+        LI
+        >() {
 
     @get:DrawableRes
     abstract val emptyMockImageResource: Int

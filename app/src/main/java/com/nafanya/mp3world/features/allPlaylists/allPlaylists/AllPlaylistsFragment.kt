@@ -12,8 +12,8 @@ import com.nafanya.mp3world.core.listUtils.recycler.BaseAdapter
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
 import com.nafanya.mp3world.core.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.core.navigation.ActivityStarter
-import com.nafanya.mp3world.core.stateMachines.list.StatedListFragmentBaseLayout
-import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListFragmentBaseLayout
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.features.allPlaylists.allPlaylists.recycler.AllPlaylistsAdapter
 import com.nafanya.mp3world.features.allPlaylists.allPlaylists.recycler.AllPlaylistsListItem

@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.core.stateMachines.list
+package com.nafanya.mp3world.core.stateMachines.commonUi.list
 
 import androidx.annotation.CallSuper
 import androidx.viewbinding.ViewBinding
@@ -7,8 +7,8 @@ import com.nafanya.mp3world.core.listUtils.recycler.BaseListItem
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
 import com.nafanya.mp3world.core.stateMachines.LState
 import com.nafanya.mp3world.core.stateMachines.State
-import com.nafanya.mp3world.core.stateMachines.common.StatedFragment
-import com.nafanya.mp3world.core.stateMachines.common.StatedViewModel
+import com.nafanya.mp3world.core.stateMachines.commonUi.StatedFragment
+import com.nafanya.mp3world.core.stateMachines.commonUi.StatedViewModel
 
 abstract class StatedListFragment<
     VB : ViewBinding,

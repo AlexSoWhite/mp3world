@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.core.stateMachines.common
+package com.nafanya.mp3world.core.stateMachines.commonUi
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +22,9 @@ abstract class StatedViewModel<T>(
 
     val state: StateFlow<State<T>> = model.currentState
 
+    /**
+     * collects [dataSource] in [viewModelScope] to process its data and manage [state] of [model]
+     */
     open fun setDataSource(dataSource: Flow<Data<T>>) {
         viewModelScope.launch {
             dataSource.collect {

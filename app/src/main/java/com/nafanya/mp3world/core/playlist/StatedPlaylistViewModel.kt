@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.coroutines.collectInScope
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
-import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
 import com.nafanya.mp3world.core.viewModel.PlaylistViewModel
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper

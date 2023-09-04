@@ -6,9 +6,10 @@ import androidx.core.view.allViews
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.listUtils.recycler.BaseAdapter
 import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
-import com.nafanya.mp3world.core.stateMachines.list.StatedListFragmentBaseLayout
-import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListFragmentBaseLayout
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
 import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.SongListItem
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.player.PlayerInteractor
@@ -16,17 +17,18 @@ import javax.inject.Inject
 
 abstract class StatedPlaylistFragmentBaseLayout :
     StatedListFragmentBaseLayout<
-        SongWrapper,
-        SongListItem
-        >(),
-    PlaylistHolder {
+            SongWrapper,
+            SongListItem
+            >() {
 
     @Inject
     lateinit var playerInteractor: PlayerInteractor
 
+    abstract val playlistViewModel: StatedPlaylistViewModel
     final override val listViewModel: StatedListViewModel<SongWrapper, SongListItem>
         get() = playlistViewModel
 
+    abstract val songListAdapter: BaseSongListAdapter
     final override val adapter: BaseAdapter<SongListItem, out BaseViewHolder>
         get() = songListAdapter
 

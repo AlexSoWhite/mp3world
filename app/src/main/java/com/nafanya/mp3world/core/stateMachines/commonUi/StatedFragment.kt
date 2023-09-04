@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.core.stateMachines.common
+package com.nafanya.mp3world.core.stateMachines.commonUi
 
 import android.content.Context
 import android.os.Bundle

@@ -19,7 +19,7 @@ import com.nafanya.mp3world.core.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.listUtils.title.convertStateToTitle
 import com.nafanya.mp3world.core.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.stateMachines.State
-import com.nafanya.mp3world.core.stateMachines.common.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
 import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager

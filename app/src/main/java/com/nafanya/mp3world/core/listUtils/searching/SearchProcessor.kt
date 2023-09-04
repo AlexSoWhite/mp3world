@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.core.listUtils.searching
 
-import com.nafanya.mp3world.core.stateMachines.common.Data
-import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 

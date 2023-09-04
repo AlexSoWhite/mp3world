@@ -1,9 +1,9 @@
-package com.nafanya.mp3world.core.stateMachines.list
+package com.nafanya.mp3world.core.stateMachines.commonUi.list
 
 import com.nafanya.mp3world.core.listUtils.recycler.BaseListItem
 import com.nafanya.mp3world.core.stateMachines.ListStateModel
-import com.nafanya.mp3world.core.stateMachines.common.Data
-import com.nafanya.mp3world.core.stateMachines.common.StatedViewModel
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.StatedViewModel
 
 /**
  * Class that manages state of list
