@@ -1,17 +1,15 @@
 package com.nafanya.mp3world.features.allSongs.viewModel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.utils.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.utils.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.utils.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.utils.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.stateMachines.commonUi.Data
 import com.nafanya.mp3world.core.utils.timeConverters.DateConverter
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
@@ -24,6 +22,7 @@ import com.nafanya.mp3world.features.songListViews.DATE
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SongListItem
 import javax.inject.Inject
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class AllSongsViewModel @Inject constructor(
@@ -35,7 +34,9 @@ class AllSongsViewModel @Inject constructor(
     TitleProcessorWrapper<List<SongWrapper>>,
     FavouritesManagerProxy {
 
-    override val playlistFlow = songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow()
+    override val playlistFlow = songListManager.songList.map {
+        it.asAllSongsPlaylist()
+    }
 
     private val searchProcessor = SearchProcessor(
         QueryFilter(
@@ -56,7 +57,7 @@ class AllSongsViewModel @Inject constructor(
                 this@AllSongsViewModel,
                 songListManager.songList.map {
                     Data.Success(it.asAllSongsPlaylist().songList)
-                }.asFlow()
+                }
             )
         }
     }

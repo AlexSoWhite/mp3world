@@ -1,6 +1,5 @@
-package com.nafanya.mp3world.features.artists
+package com.nafanya.mp3world.features.albums
 
-import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
@@ -10,20 +9,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 
 /**
- * Object that holds artists data. Populated by [MediaStoreInteractor].
+ * Object that holds albums data. Populated by [MediaStoreInteractor]. Updates when [MediaStoreInteractor] is updated.
  */
 @Singleton
-class ArtistListManager @Inject constructor(
+class AlbumListManagerImpl @Inject constructor(
     mediaStoreInteractor: MediaStoreInteractor
-) : ListManager {
+) : AlbumListManager {
 
-    private val mArtists = mediaStoreInteractor
+    private val mAlbums = mediaStoreInteractor
         .allSongs
         .map { list ->
             list.groupBy {
-                Pair(it.artistId, it.artist)
+                Pair(it.albumId, it.album)
             }.map {
-                Artist(
+                Album(
                     id = it.key.first,
                     name = it.key.second,
                     imageSource = it.value[0],
@@ -34,13 +33,14 @@ class ArtistListManager @Inject constructor(
                 )
             }
         }
-    val artists: Flow<List<Artist>>
-        get() = mArtists
+
+    override val albums: Flow<List<Album>>
+        get() = mAlbums
 
     override fun getPlaylistByContainerId(id: Long): Flow<PlaylistWrapper> {
-        return artists.mapNotNull {
-            it.firstOrNull { artist ->
-                artist.id == id
+        return albums.mapNotNull {
+            it.firstOrNull { album ->
+                album.id == id
             }?.playlist
         }
     }

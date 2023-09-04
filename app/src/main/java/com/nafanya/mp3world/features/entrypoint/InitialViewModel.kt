@@ -1,10 +1,6 @@
 package com.nafanya.mp3world.features.entrypoint
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.stateMachines.StateModel
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
@@ -19,6 +15,7 @@ import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -28,7 +25,7 @@ import kotlinx.coroutines.launch
 @Suppress("LongParameterList")
 class InitialViewModel @Inject constructor(
     private val mediaStoreInteractor: MediaStoreInteractor,
-    private val dbHolder: LocalStorageInteractor,
+    private val localStorageInteractor: LocalStorageInteractor,
     private val playerInteractor: PlayerInteractor,
     private val songListManager: SongListManager,
     artistListManager: ArtistListManager,
@@ -42,20 +39,6 @@ class InitialViewModel @Inject constructor(
     val artists = artistListManager.artists.asIntModel()
     val albums = albumListManager.albums.asIntModel()
     val favourites = favouriteListManager.favorites.map { it.songList }.asIntModel()
-
-    private inline fun <reified T : List<Any>> LiveData<T>.asIntModel(): StateModel<Int> {
-        return StateModel<Int>().apply {
-            this.load {
-                viewModelScope.launch {
-                    this@asIntModel.asFlow().map {
-                        it.size
-                    }.collect {
-                        success(it)
-                    }
-                }
-            }
-        }
-    }
 
     private inline fun <reified T : List<Any>> Flow<T>.asIntModel(): StateModel<Int> {
         return StateModel<Int>().apply {
@@ -71,7 +54,7 @@ class InitialViewModel @Inject constructor(
         }
     }
 
-    private val localInitializer = Observer<List<LocalSong>> { list ->
+    private val localInitializer = FlowCollector<List<LocalSong>> { list ->
         viewModelScope.launch {
             playerInteractor.isPlayerInitialised.collect { isInitialized ->
                 if (!isInitialized) {
@@ -88,7 +71,7 @@ class InitialViewModel @Inject constructor(
                 // initialize songList
                 mediaStoreInteractor.readMediaStore()
                 // TODO flow
-                songListManager.songList.observeForever(localInitializer)
+                songListManager.songList.collect(localInitializer)
             }
         }
     }
@@ -106,8 +89,7 @@ class InitialViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        songListManager.songList.removeObserver(localInitializer)
-        dbHolder.closeDataBase()
+        localStorageInteractor.closeDataBase()
     }
 
     companion object {

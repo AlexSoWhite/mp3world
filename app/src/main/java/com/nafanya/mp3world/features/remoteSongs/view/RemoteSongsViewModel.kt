@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.collectInScope
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.stateMachines.commonUi.Data
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
@@ -44,7 +44,9 @@ class RemoteSongsViewModel(
 
     private val mPlaylistFlow = MutableSharedFlow<List<RemoteSong>?>(replay = 1)
     override val playlistFlow: Flow<PlaylistWrapper>
-        get() = mPlaylistFlow.map { it.asPlaylist(query) }
+        get() = mPlaylistFlow.map {
+            it.asPlaylist(query)
+        }
 
     private val titleProcessor = TitleProcessor<List<SongWrapper>>()
 

@@ -14,10 +14,10 @@ import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseListItem
 import com.nafanya.mp3world.databinding.FragmentListContainerLayoutBinding
 
 abstract class StatedListFragmentBaseLayout<DU, LI : BaseListItem> : StatedListFragment<
-        FragmentListContainerLayoutBinding,
-        DU,
-        LI
-        >() {
+    FragmentListContainerLayoutBinding,
+    DU,
+    LI
+    >() {
 
     @get:DrawableRes
     abstract val emptyMockImageResource: Int

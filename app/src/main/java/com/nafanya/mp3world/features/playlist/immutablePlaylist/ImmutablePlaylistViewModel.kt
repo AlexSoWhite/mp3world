@@ -3,22 +3,19 @@ package com.nafanya.mp3world.features.playlist.immutablePlaylist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listManagers.FAVOURITE_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.utils.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.utils.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.utils.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.utils.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.stateMachines.commonUi.Data
-import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.features.favourites.FavouritesManager
 import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
@@ -26,20 +23,25 @@ import com.nafanya.mp3world.features.songListViews.SongListItem
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ImmutablePlaylistViewModel(
-    private val favouriteListManager: FavouritesManager,
-    injectedPlaylist: Flow<PlaylistWrapper>,
+    listManagerProvider: ListManagerProvider,
+    listManagerKey: Int,
+    containerId: Long,
     baseTitle: String
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
     TitleProcessorWrapper<List<SongWrapper>>,
     FavouritesManagerProxy {
 
-    override val playlistFlow = injectedPlaylist
+    override val playlistFlow = listManagerProvider
+        .getListManager(listManagerKey)
+        .getPlaylistByContainerId(containerId)
+
+    private val favouritesManager =
+        (listManagerProvider.getListManager(FAVOURITE_LIST_MANAGER_KEY) as FavouritesManager)
 
     private val searchProcessor = SearchProcessor(QueryFilter(songQueryFilterCallback))
 
@@ -53,7 +55,7 @@ class ImmutablePlaylistViewModel(
             titleProcessor.setBaseTitle(baseTitle)
             searchProcessor.setup(
                 this@ImmutablePlaylistViewModel,
-                injectedPlaylist.map {
+                playlistFlow.map {
                     Data.Success(it.songList)
                 }
             )
@@ -68,17 +70,17 @@ class ImmutablePlaylistViewModel(
         searchProcessor.search(query)
     }
 
-    override fun isSongInFavourites(song: LocalSong) = favouriteListManager.isSongInFavourites(song)
+    override fun isSongInFavourites(song: LocalSong) = favouritesManager.isSongInFavourites(song)
 
     override fun addFavourite(song: LocalSong) {
         viewModelScope.launch {
-            favouriteListManager.add(song)
+            favouritesManager.add(song)
         }
     }
 
     override fun deleteFavourite(song: LocalSong) {
         viewModelScope.launch {
-            favouriteListManager.delete(song)
+            favouritesManager.delete(song)
         }
     }
 
@@ -91,17 +93,11 @@ class ImmutablePlaylistViewModel(
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val listManager = listManagerProvider.getListManager(listManagerKey)
-            val injectedPlaylist = if (listManager is FavouritesManager) {
-                listManager.favorites
-            } else {
-                listManager.getPlaylistByContainerId(containerId).map { it }
-            }
+
             return ImmutablePlaylistViewModel(
-                listManagerProvider.getListManager(
-                    FAVOURITE_LIST_MANAGER_KEY
-                ) as FavouritesManager,
-                injectedPlaylist.map { it }.asFlow() as Flow<PlaylistWrapper>,
+                listManagerProvider,
+                listManagerKey,
+                containerId,
                 playlistName
             ) as T
         }

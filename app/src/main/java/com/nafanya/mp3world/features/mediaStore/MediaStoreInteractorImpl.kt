@@ -31,11 +31,7 @@ class MediaStoreInteractorImpl @Inject constructor(
             .map {
                 it.sortedByDescending { song -> song.date }
             }
-            .shareIn(
-                ioCoroutineProvider.ioScope,
-                replay = 1,
-                started = SharingStarted.Lazily
-            )
+            .shareIn(ioCoroutineProvider.ioScope, SharingStarted.Lazily, replay = 1)
 
     /**
      * Sets managers data on main thread.

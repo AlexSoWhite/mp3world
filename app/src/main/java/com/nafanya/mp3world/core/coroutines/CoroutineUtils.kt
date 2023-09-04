@@ -2,6 +2,7 @@ package com.nafanya.mp3world.core.coroutines
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -33,5 +34,11 @@ inline fun <reified T> Flow<T>.collectLatestInScope(
         this@collectLatestInScope.collectLatest {
             onCollect.invoke(it)
         }
+    }
+}
+
+inline fun <reified T> MutableSharedFlow<T>.emitInScope(scope: CoroutineScope, value: T) {
+    scope.launch {
+        this@emitInScope.emit(value)
     }
 }

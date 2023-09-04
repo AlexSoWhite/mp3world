@@ -4,22 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.listManagers.ALL_SONGS_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.stateMachines.State
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.utils.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.utils.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.utils.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.utils.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.utils.listUtils.title.convertStateToTitle
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.stateMachines.State
-import com.nafanya.mp3world.core.stateMachines.commonUi.Data
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
@@ -30,7 +28,7 @@ import com.nafanya.mp3world.features.songListViews.SongListItem
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ModifyPlaylistViewModel(
@@ -42,7 +40,9 @@ class ModifyPlaylistViewModel(
     Searchable<SongWrapper>,
     TitleProcessorWrapper<List<SongWrapper>> {
 
-    override val playlistFlow = songListManager.songList.map { it.asAllSongsPlaylist() }.asFlow()
+    override val playlistFlow = songListManager.songList.map {
+        it.asAllSongsPlaylist()
+    }
 
     private val mModifyingPlaylist = MutableLiveData<PlaylistWrapper>()
     val modifyingPlaylist: LiveData<PlaylistWrapper>
@@ -62,18 +62,17 @@ class ModifyPlaylistViewModel(
                 this@ModifyPlaylistViewModel,
                 songListManager.songList.map {
                     Data.Success(it.asAllSongsPlaylist().songList)
-                }.asFlow()
+                }
             )
             model.currentState.collectLatestInScope(viewModelScope, ::proceedState)
-            viewModelScope.launch {
-                playlistListManager.getPlaylistByContainerId(playlistId).asFlow().collectLatest {
-                    if (it != null) {
-                        mModifyingPlaylist.postValue(it)
-                        songList.clear()
-                        songList.addAll(it.songList)
-                    }
+            playlistListManager
+                .getPlaylistByContainerId(playlistId)
+                .collectLatestInScope(viewModelScope) {
+                    mModifyingPlaylist.postValue(it)
+                    songList.clear()
+                    songList.addAll(it.songList)
+                    proceedState(model.currentState.value)
                 }
-            }
         }
     }
 

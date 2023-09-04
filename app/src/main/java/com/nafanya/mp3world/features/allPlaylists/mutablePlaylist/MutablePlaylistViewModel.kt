@@ -3,21 +3,19 @@ package com.nafanya.mp3world.features.allPlaylists.mutablePlaylist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.listManagers.ListManagerProvider
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.utils.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.utils.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.utils.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.utils.listUtils.searching.songQueryFilterCallback
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.stateMachines.commonUi.Data
-import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
 import com.nafanya.mp3world.features.favourites.FavouritesManager
 import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
@@ -40,12 +38,7 @@ class MutablePlaylistViewModel(
     TitleProcessorWrapper<List<SongWrapper>>,
     FavouritesManagerProxy {
 
-    override val playlistFlow = playlistListManager
-        .getPlaylistByContainerId(playlistId)
-        .asFlow()
-        .map {
-            it ?: throw IllegalArgumentException("playlist doesn't exist")
-        }
+    override val playlistFlow = playlistListManager.getPlaylistByContainerId(playlistId)
 
     private val searchProcessor = SearchProcessor(QueryFilter(songQueryFilterCallback))
 
@@ -60,12 +53,8 @@ class MutablePlaylistViewModel(
             searchProcessor.setup(
                 this,
                 playlistListManager.getPlaylistByContainerId(playlistId).map {
-                    if (it != null) {
-                        Data.Success(it.songList)
-                    } else {
-                        Data.Error(java.lang.Error("unknown playlist"))
-                    }
-                }.asFlow()
+                    Data.Success(it.songList)
+                }
             )
         }
     }

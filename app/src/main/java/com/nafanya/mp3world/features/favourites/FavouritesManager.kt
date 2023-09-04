@@ -1,19 +1,20 @@
 package com.nafanya.mp3world.features.favourites
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
+import com.nafanya.mp3world.core.coroutines.emitInScope
 import com.nafanya.mp3world.core.listManagers.ListManager
-import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.features.favourites.model.FavouritesEntity
-import com.nafanya.mp3world.features.localStorage.api.FavouritesInteractor
 import com.nafanya.mp3world.features.localStorage.LocalStorageInteractor
+import com.nafanya.mp3world.features.localStorage.api.FavouritesInteractor
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.map
 
 /**
  * Object that holds favourites data. Managed by [LocalStorageInteractor] and [MediaStoreInteractor].
@@ -21,15 +22,15 @@ import javax.inject.Singleton
 @Singleton
 class FavouritesManager @Inject constructor(
     private val favouriteListInteractor: FavouritesInteractor,
-    mediaStoreInteractor: MediaStoreInteractor,
-    ioCoroutineProvider: IOCoroutineProvider
-) : ListManager() {
+    private val ioCoroutineProvider: IOCoroutineProvider,
+    mediaStoreInteractor: MediaStoreInteractor
+) : ListManager {
 
-    private val mFavourites = MutableLiveData<PlaylistWrapper>()
-    val favorites: LiveData<PlaylistWrapper>
+    private val mFavourites = MutableSharedFlow<PlaylistWrapper>(replay = 1)
+    val favorites: Flow<PlaylistWrapper>
         get() = mFavourites
 
-    fun isSongInFavourites(song: LocalSong) = favorites
+    fun isSongInFavourites(song: LocalSong) = mFavourites
         .map { favourites ->
             favourites.songList.contains(song)
         }
@@ -49,14 +50,12 @@ class FavouritesManager @Inject constructor(
                     songList = songs,
                     name = "Избранное"
                 )
-                mFavourites.postValue(temp)
+                mFavourites.emitInScope(ioCoroutineProvider.ioScope, temp)
             }
         }
     }
 
-    override fun getPlaylistByContainerId(id: Long): LiveData<PlaylistWrapper?> {
-        return favorites.map { it }
-    }
+    override fun getPlaylistByContainerId(id: Long) = favorites
 
     suspend fun add(song: LocalSong) {
         favouriteListInteractor.addFavourite(FavouritesEntity(song.uri.toString()))

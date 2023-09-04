@@ -17,9 +17,9 @@ import javax.inject.Inject
 
 abstract class StatedPlaylistFragmentBaseLayout :
     StatedListFragmentBaseLayout<
-            SongWrapper,
-            SongListItem
-            >() {
+        SongWrapper,
+        SongListItem
+        >() {
 
     @Inject
     lateinit var playerInteractor: PlayerInteractor

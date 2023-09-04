@@ -11,9 +11,9 @@ import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.stateMachines.State
 import com.nafanya.mp3world.core.commonUi.BaseFragment
+import com.nafanya.mp3world.core.coroutines.collectInScope
 import dagger.Lazy
 import javax.inject.Inject
-import kotlinx.coroutines.launch
 
 abstract class StatedFragment<VB : ViewBinding, T> : BaseFragment<VB>() {
 
@@ -31,10 +31,8 @@ abstract class StatedFragment<VB : ViewBinding, T> : BaseFragment<VB>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launch {
-            statedViewModel.state.collect {
-                renderState(it)
-            }
+        statedViewModel.state.collectInScope(lifecycleScope) {
+            renderState(it)
         }
     }
 

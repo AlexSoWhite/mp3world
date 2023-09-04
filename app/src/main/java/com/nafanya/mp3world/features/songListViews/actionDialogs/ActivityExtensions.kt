@@ -2,6 +2,8 @@ package com.nafanya.mp3world.features.songListViews.actionDialogs
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
@@ -16,12 +18,14 @@ fun AppCompatActivity.defaultLocalSongActionDialog(
         val dialog = createDialog(song) {
             when (it) {
                 LocalSongAction.ADD_TO_FAVORITE -> { favouritesManagerProxy.addFavourite(song) }
-                LocalSongAction.REMOVE_FROM_FAVORITE -> { favouritesManagerProxy.deleteFavourite(song) }
+                LocalSongAction.REMOVE_FROM_FAVORITE -> {
+                    favouritesManagerProxy.deleteFavourite(song)
+                }
                 LocalSongAction.GO_TO_ALBUM -> navigateToAlbum(song)
                 LocalSongAction.GO_TO_ARTIST -> navigateToArtist(song)
             }
         }
-        favouritesManagerProxy.isSongInFavourites(song).observe(this) {
+        favouritesManagerProxy.isSongInFavourites(song).collectLatestInScope(lifecycleScope) {
             dialog.setIsFavorite(it)
         }
         dialog.show()

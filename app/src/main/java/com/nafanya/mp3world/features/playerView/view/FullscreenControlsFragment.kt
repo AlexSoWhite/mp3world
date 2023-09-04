@@ -22,15 +22,16 @@ import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
+import com.nafanya.mp3world.core.commonUi.BaseFragment
+import com.nafanya.mp3world.core.coroutines.collectInScope
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.utils.ColorExtractor
 import com.nafanya.mp3world.core.utils.animators.AoedeAlphaAnimation
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
-import com.nafanya.mp3world.core.commonUi.BaseFragment
+import com.nafanya.mp3world.core.wrappers.images.glide.CustomBitmapTarget
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
-import com.nafanya.mp3world.core.wrappers.song.SongWrapper
-import com.nafanya.mp3world.core.wrappers.images.glide.CustomBitmapTarget
 import com.nafanya.mp3world.databinding.PlayerControlViewFullscreenFragmentBinding
 import com.nafanya.mp3world.features.downloading.DownloadingView
 import com.nafanya.mp3world.features.downloading.DownloadingViewModel
@@ -155,7 +156,7 @@ class FullscreenControlsFragment :
     }
 
     private fun setupFavourite(song: LocalSong, actionButton: ShapeableImageView) {
-        viewModel.isSongInFavourites(song).observe(viewLifecycleOwner) {
+        viewModel.isSongInFavourites(song).collectInScope(lifecycleScope) {
             if (it) {
                 actionButton.setImageResource(R.drawable.icv_favorite_filled)
                 actionButton.setOnClickListener {
@@ -171,19 +172,18 @@ class FullscreenControlsFragment :
     }
 
     private fun adjustImage(song: SongWrapper) {
-        view?.findViewById<ShapeableImageView>(R.id.control_song_icon)?.let { imageView ->
-            Glide.with(this)
-                .asBitmap()
-                .load(song)
-                .into(
-                    CustomBitmapTarget(
-                        {
-                            imageView.setImageBitmap(it)
-                            proceedColor(it)
-                        }
-                    )
+        val imageView = requireView().findViewById<ShapeableImageView>(R.id.control_song_icon)
+        Glide.with(this)
+            .asBitmap()
+            .load(song)
+            .into(
+                CustomBitmapTarget(
+                    {
+                        imageView.setImageBitmap(it)
+                        proceedColor(it)
+                    }
                 )
-        }
+            )
     }
 
     private fun proceedColor(resource: Bitmap) {

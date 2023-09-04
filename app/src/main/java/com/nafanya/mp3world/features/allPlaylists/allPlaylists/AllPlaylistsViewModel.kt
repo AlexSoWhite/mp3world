@@ -2,22 +2,21 @@ package com.nafanya.mp3world.features.allPlaylists.allPlaylists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
 import com.nafanya.mp3world.core.utils.listUtils.searching.QueryFilter
 import com.nafanya.mp3world.core.utils.listUtils.searching.SearchProcessor
 import com.nafanya.mp3world.core.utils.listUtils.searching.Searchable
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
-import com.nafanya.mp3world.core.stateMachines.commonUi.Data
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
 import com.nafanya.mp3world.features.allPlaylists.allPlaylists.recycler.ADD_PLAYLIST_BUTTON
 import com.nafanya.mp3world.features.allPlaylists.allPlaylists.recycler.AllPlaylistsListItem
 import com.nafanya.mp3world.features.allPlaylists.allPlaylists.recycler.PLAYLIST
 import javax.inject.Inject
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class AllPlaylistsViewModel @Inject constructor(
@@ -45,7 +44,7 @@ class AllPlaylistsViewModel @Inject constructor(
             titleProcessor.setBaseTitle("Мои плейлисты")
             searchProcessor.setup(
                 this,
-                playlistListManager.playlists.map { Data.Success(it) }.asFlow()
+                playlistListManager.playlists.map { Data.Success(it) }
             )
         }
     }

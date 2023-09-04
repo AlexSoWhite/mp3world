@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.favourites
 
-import androidx.lifecycle.LiveData
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface to obtain adding and removing favourites. TO implement  it you should use
@@ -9,7 +9,7 @@ import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
  */
 interface FavouritesManagerProxy {
 
-    fun isSongInFavourites(song: LocalSong): LiveData<Boolean>
+    fun isSongInFavourites(song: LocalSong): Flow<Boolean>
 
     fun addFavourite(song: LocalSong)
 

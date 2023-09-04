@@ -3,7 +3,6 @@ package com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.coroutines.collectInScope
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
@@ -45,23 +44,21 @@ abstract class StatedPlaylistViewModel : StatedListViewModel<SongWrapper, SongLi
     }
 
     fun onSongClick(song: Song) {
-        viewModelScope.launch {
-            mIsInteractorBound.collectLatest {
-                if (it) {
-                    playlistFlow.take(1).collectLatest { playlistWrapper ->
-                        playerInteractor.setPlaylist(playlistWrapper)
-                        playerInteractor.setSong(song)
-                    }
-                } else {
-                    pendingSong = song
+        mIsInteractorBound.collectLatestInScope(viewModelScope) {
+            if (it) {
+                playlistFlow.take(1).collectLatestInScope(viewModelScope) { playlistWrapper ->
+                    playerInteractor.setPlaylist(playlistWrapper)
+                    playerInteractor.setSong(song)
                 }
+            } else {
+                pendingSong = song
             }
         }
     }
 
     fun bindInteractor(interactor: PlayerInteractor) {
         playerInteractor = interactor
-        playerInteractor.isPlaying.collectInScope(viewModelScope, mIsPlaying::setValue)
+        playerInteractor.isPlaying.collectLatestInScope(viewModelScope, mIsPlaying::setValue)
         playerInteractor.currentSong.collectLatestInScope(viewModelScope) {
             mCurrentSong.value = it as SongWrapper
         }

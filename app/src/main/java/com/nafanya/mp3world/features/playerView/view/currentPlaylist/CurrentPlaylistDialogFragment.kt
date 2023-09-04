@@ -45,17 +45,7 @@ class CurrentPlaylistDialogFragment :
     override val downloadingViewModel: DownloadingViewModel
         get() = viewModel
 
-    private val mixedAdapter = MixedAdapter().apply {
-        onClickCallback = { view, song ->
-            viewModel.onSongClick(song)
-            currentPlayingView = view
-        }
-        onLocalActionClickCallback = (requireActivity() as AppCompatActivity)
-            .defaultLocalSongActionDialog(viewModel)
-        onRemoteActionClickCallback = { song ->
-            download(requireActivity(), song)
-        }
-    }
+    private val mixedAdapter = MixedAdapter()
 
     private var mBinding: FragmentCurrentPlaylistDialogBinding? = null
     val binding
@@ -89,6 +79,17 @@ class CurrentPlaylistDialogFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mixedAdapter.apply {
+            onClickCallback = { view, song ->
+                viewModel.onSongClick(song)
+                currentPlayingView = view
+            }
+            onLocalActionClickCallback = (requireActivity() as AppCompatActivity)
+                .defaultLocalSongActionDialog(viewModel)
+            onRemoteActionClickCallback = { song ->
+                download(requireActivity(), song)
+            }
+        }
         binding.currentPlaylistRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mixedAdapter

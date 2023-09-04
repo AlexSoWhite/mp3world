@@ -1,11 +1,9 @@
 package com.nafanya.mp3world.features.allPlaylists
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
+import com.nafanya.mp3world.core.coroutines.emitInScope
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
@@ -14,6 +12,10 @@ import com.nafanya.mp3world.features.localStorage.api.AllPlaylistsInteractor
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.mapNotNull
 
 /**
  * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
@@ -21,13 +23,23 @@ import javax.inject.Singleton
 @Singleton
 class PlaylistListManager @Inject constructor(
     private val allPlaylistsInteractor: AllPlaylistsInteractor,
-    ioCoroutineProvider: IOCoroutineProvider,
+    private val ioCoroutineProvider: IOCoroutineProvider,
     mediaStoreInteractor: MediaStoreInteractor
-) : ListManager() {
+) : ListManager {
 
-    private val mPlaylists = MutableLiveData<List<PlaylistWrapper>>()
-    val playlists: LiveData<List<PlaylistWrapper>>
+    private val mPlaylists = MutableSharedFlow<List<PlaylistWrapper>>(replay = 1)
+    val playlists: SharedFlow<List<PlaylistWrapper>>
         get() = mPlaylists
+
+    /**
+     * If replay cache is empty, this will return empty list. Seems legit as we are setting
+     * it to empty list eventually if there are no playlists. Methods that calls for it
+     * should do it only after list was initialized
+     *
+     * TODO autogenerate necessary parameters to move it out of software responsibility
+     */
+    private val snapshot: List<PlaylistWrapper>
+        get() = playlists.replayCache[0]
 
     init {
         mediaStoreInteractor.allSongs.collectLatestInScope(ioCoroutineProvider.ioScope) { songs ->
@@ -56,13 +68,13 @@ class PlaylistListManager @Inject constructor(
                         )
                     )
                 }
-                mPlaylists.postValue(list)
+                mPlaylists.emitInScope(ioCoroutineProvider.ioScope, list)
             }
         }
     }
 
-    override fun getPlaylistByContainerId(id: Long): LiveData<PlaylistWrapper?> {
-        return playlists.map {
+    override fun getPlaylistByContainerId(id: Long): Flow<PlaylistWrapper> {
+        return playlists.mapNotNull {
             it.firstOrNull { playlist -> playlist.id == id }
         }
     }
@@ -70,9 +82,9 @@ class PlaylistListManager @Inject constructor(
     suspend fun addPlaylist(playlistName: String) {
         val entity = PlaylistWrapper(
             name = playlistName,
-            id = playlists.value?.maxOfOrNull { it.id + 1 } ?: 0,
+            id = snapshot.maxOfOrNull { it.id + 1 } ?: 0,
             songList = listOf(),
-            position = playlists.value?.maxOfOrNull { it.position + 1 } ?: 0
+            position = snapshot.maxOfOrNull { it.position + 1 } ?: 0
         ).toStorageEntity()
         allPlaylistsInteractor.apply {
             insert(entity.first)
@@ -82,7 +94,7 @@ class PlaylistListManager @Inject constructor(
 
     suspend fun updatePlaylist(playlist: PlaylistWrapper) {
         val temp = mutableListOf<PlaylistWrapper>()
-        playlists.value?.forEach {
+        snapshot.forEach {
             temp.add(it)
         }
         playlist.songList.forEach {

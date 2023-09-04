@@ -8,16 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.R
+import com.nafanya.mp3world.core.coroutines.collectInScope
 import com.nafanya.mp3world.core.di.ApplicationComponent
-import com.nafanya.mp3world.core.utils.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistFragmentBaseLayout
 import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.listUtils.searching.attachToTopBar
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.actionDialogs.defaultLocalSongActionDialog
 import javax.inject.Inject
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 
 class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
@@ -67,14 +67,12 @@ class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
     }
 
     private fun moveToModifyPlaylistActivity() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.playlistFlow.take(1).collect {
-                ActivityStarter.Builder()
-                    .with(requireContext())
-                    .createIntentToModifyPlaylistActivity(it)
-                    .build()
-                    .startActivity()
-            }
+        viewModel.playlistFlow.take(1).collectInScope(lifecycleScope) {
+            ActivityStarter.Builder()
+                .with(requireContext())
+                .createIntentToModifyPlaylistActivity(it)
+                .build()
+                .startActivity()
         }
     }
 
