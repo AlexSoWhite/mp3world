@@ -1,7 +1,6 @@
 package com.nafanya.mp3world.features.allSongs
 
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
-import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
