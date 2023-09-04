@@ -8,8 +8,9 @@ import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
-import com.nafanya.mp3world.features.downloading.DownloadInteractor
-import com.nafanya.mp3world.features.downloading.DownloadingViewModel
+import com.nafanya.mp3world.features.downloading.api.DownloadInteractor
+import com.nafanya.mp3world.features.downloading.api.DownloadResult
+import com.nafanya.mp3world.features.downloading.api.DownloadingViewModel
 import com.nafanya.mp3world.features.favourites.FavouritesManager
 import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
@@ -21,8 +22,8 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 class CurrentPlaylistViewModel @Inject constructor(
-    override val downloadInteractor: DownloadInteractor,
-    override val mediaStoreInteractor: MediaStoreInteractor,
+    private val downloadInteractor: DownloadInteractor,
+    private val mediaStoreInteractor: MediaStoreInteractor,
     private val favouritesManager: FavouritesManager,
     playerInteractor: PlayerInteractor
 ) : StatedPlaylistViewModel(),
@@ -56,5 +57,13 @@ class CurrentPlaylistViewModel @Inject constructor(
         viewModelScope.launch {
             favouritesManager.delete(song)
         }
+    }
+
+    override fun download(remoteSong: RemoteSong, callback: (DownloadResult) -> Unit) {
+        downloadInteractor.download(remoteSong, callback)
+    }
+
+    override fun resetMediaStore() {
+        mediaStoreInteractor.reset()
     }
 }

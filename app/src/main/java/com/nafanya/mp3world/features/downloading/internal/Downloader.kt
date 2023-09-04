@@ -1,16 +1,17 @@
-package com.nafanya.mp3world.features.downloading
+package com.nafanya.mp3world.features.downloading.internal
 
 import android.content.Context
 import android.os.Environment
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
-import javax.inject.Inject
+import com.nafanya.mp3world.features.downloading.api.DownloadResult
+import com.nafanya.mp3world.features.downloading.api.ResultType
 
 /**
  * Class that downloads song by [android.app.DownloadManager].
  * May be replaced with SoundCloud API call when it opens.
  */
 @Suppress("TooGenericExceptionCaught")
-class Downloader @Inject constructor(
+internal class Downloader(
     private val context: Context,
     private val downloadManagerInteractor: DownloadManagerInteractor
 ) {

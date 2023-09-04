@@ -33,14 +33,11 @@ import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.databinding.PlayerControlViewFullscreenFragmentBinding
-import com.nafanya.mp3world.features.downloading.DownloadingView
-import com.nafanya.mp3world.features.downloading.DownloadingViewModel
+import com.nafanya.mp3world.features.downloading.api.download
 import com.nafanya.mp3world.features.playerView.view.currentPlaylist.CurrentPlaylistDialogFragment
 import javax.inject.Inject
 
-class FullscreenControlsFragment :
-    BaseFragment<PlayerControlViewFullscreenFragmentBinding>(),
-    DownloadingView {
+class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
 
     private var previousColor: Int = -1
     private var isColorInitialized = false
@@ -49,8 +46,6 @@ class FullscreenControlsFragment :
     lateinit var factory: ViewModelProvider.Factory
 
     private val viewModel: PlayerViewModel by viewModels { factory }
-    override val downloadingViewModel: DownloadingViewModel
-        get() = viewModel
 
     private val controls = mutableListOf<View>()
 
@@ -149,7 +144,7 @@ class FullscreenControlsFragment :
             } else {
                 actionButton.setImageResource(R.drawable.icv_download)
                 actionButton.setOnClickListener {
-                    download(requireActivity(), song as RemoteSong)
+                    download(viewModel, song as RemoteSong)
                 }
             }
         }

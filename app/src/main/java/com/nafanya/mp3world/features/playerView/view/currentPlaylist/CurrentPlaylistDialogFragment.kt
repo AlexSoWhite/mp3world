@@ -18,17 +18,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
-import com.nafanya.mp3world.features.downloading.DownloadingView
-import com.nafanya.mp3world.features.downloading.DownloadingViewModel
+import com.nafanya.mp3world.features.downloading.api.download
 import com.nafanya.mp3world.features.songListViews.actionDialogs.defaultLocalSongActionDialog
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.take
 
-class CurrentPlaylistDialogFragment :
-    BottomSheetDialogFragment(),
-    DownloadingView {
+class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -41,9 +38,6 @@ class CurrentPlaylistDialogFragment :
     }
 
     private val viewModel: CurrentPlaylistViewModel by viewModels { factory }
-
-    override val downloadingViewModel: DownloadingViewModel
-        get() = viewModel
 
     private val mixedAdapter = MixedAdapter()
 
@@ -87,7 +81,7 @@ class CurrentPlaylistDialogFragment :
             onLocalActionClickCallback = (requireActivity() as AppCompatActivity)
                 .defaultLocalSongActionDialog(viewModel)
             onRemoteActionClickCallback = { song ->
-                download(requireActivity(), song)
+                download(viewModel, song)
             }
         }
         binding.currentPlaylistRecycler.apply {

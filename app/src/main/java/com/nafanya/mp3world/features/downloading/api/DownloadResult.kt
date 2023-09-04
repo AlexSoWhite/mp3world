@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.features.downloading
+package com.nafanya.mp3world.features.downloading.api
 
 enum class ResultType {
     SUCCESS,

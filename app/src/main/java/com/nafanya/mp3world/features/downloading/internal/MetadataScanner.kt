@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.features.downloading
+package com.nafanya.mp3world.features.downloading.internal
 
 import android.content.Context
 import android.media.MediaScannerConnection
@@ -13,7 +13,7 @@ enum class ScannerResult {
 /**
  * Class that adds song to MediaStore with all its metadata.
  */
-class MetadataScanner(
+internal class MetadataScanner(
     context: Context,
     private val path: String,
     private val onCompleteCallback: (ScannerResult) -> Unit

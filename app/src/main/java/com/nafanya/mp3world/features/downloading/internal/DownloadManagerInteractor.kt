@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.features.downloading
+package com.nafanya.mp3world.features.downloading.internal
 
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
 import androidx.annotation.WorkerThread
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * Class that works with [android.app.DownloadManager] and handles result using [BroadcastReceiver]
  */
-class DownloadManagerInteractor @Inject constructor(
+internal class DownloadManagerInteractor(
     private val context: Context
 ) {
 

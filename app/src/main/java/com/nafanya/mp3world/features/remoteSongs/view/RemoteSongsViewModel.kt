@@ -13,8 +13,9 @@ import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
-import com.nafanya.mp3world.features.downloading.DownloadInteractor
-import com.nafanya.mp3world.features.downloading.DownloadingViewModel
+import com.nafanya.mp3world.features.downloading.api.DownloadInteractor
+import com.nafanya.mp3world.features.downloading.api.DownloadResult
+import com.nafanya.mp3world.features.downloading.api.DownloadingViewModel
 import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.features.remoteSongs.songSearchers.HITMO_TOP
 import com.nafanya.mp3world.features.remoteSongs.songSearchers.SongSearcher
@@ -33,8 +34,8 @@ class RemoteSongsViewModel(
     private val query: String,
     private val songSearchersProvider: SongSearchersProvider,
     private val ioCoroutineProvider: IOCoroutineProvider,
-    override val downloadInteractor: DownloadInteractor,
-    override val mediaStoreInteractor: MediaStoreInteractor
+    private val downloadInteractor: DownloadInteractor,
+    private val mediaStoreInteractor: MediaStoreInteractor
 ) : StatedPlaylistViewModel(),
     DownloadingViewModel,
     TitleProcessorWrapper<List<SongWrapper>> {
@@ -99,6 +100,14 @@ class RemoteSongsViewModel(
                 }
             }
         }
+    }
+
+    override fun download(remoteSong: RemoteSong, callback: (DownloadResult) -> Unit) {
+        downloadInteractor.download(remoteSong, callback)
+    }
+
+    override fun resetMediaStore() {
+        mediaStoreInteractor.reset()
     }
 
     class Factory @AssistedInject constructor(
