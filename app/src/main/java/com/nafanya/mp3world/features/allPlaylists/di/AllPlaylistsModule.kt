@@ -6,6 +6,7 @@ import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.listManagers.ListManagerKey
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
 import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
+import com.nafanya.mp3world.features.allPlaylists.PlaylistListManagerImpl
 import com.nafanya.mp3world.features.allPlaylists.allPlaylists.AllPlaylistsViewModel
 import dagger.Binds
 import dagger.Module
@@ -16,9 +17,12 @@ interface AllPlaylistsModule {
 
     @Binds
     @[IntoMap ViewModelKey(AllPlaylistsViewModel::class)]
-    fun allPlaylistsViewModel(allPlaylistsViewModel: AllPlaylistsViewModel): ViewModel
+    fun bindViewModel(allPlaylistsViewModel: AllPlaylistsViewModel): ViewModel
 
     @Binds
     @[IntoMap ListManagerKey(PLAYLIST_LIST_MANAGER_KEY)]
-    fun playlistListManager(playlistListManager: PlaylistListManager): ListManager
+    fun bindIntoMap(playlistListManagerImpl: PlaylistListManagerImpl): ListManager
+
+    @Binds
+    fun bind(playlistListManagerImpl: PlaylistListManagerImpl): PlaylistListManager
 }
