@@ -19,7 +19,7 @@ class HitmoTopSongSearcher @Inject constructor(
     private val uriFactory: UriFactory
 ) : SongSearcher(client) {
 
-    private val baseUrl = "https://rur.hitmotop.com"
+    private val baseUrl = "https://rus.hitmotop.com"
 
     private val searchPrefix = "$baseUrl/search?q="
 
