@@ -20,7 +20,7 @@
         android:name=".core.di.PlayerApplication"
         tools:ignore="LockedOrientationActivity">
         <activity
-            android:name=".core.entrypoint.InitialActivity"
+            android:name=".features.entrypoint.InitialActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".core.entrypoint.MainActivity"
+            android:name=".features.entrypoint.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Mp3world.Launcher"
@@ -46,7 +46,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.allPlaylists.view.allPlaylists.AllPlaylistsActivity"
+        <activity android:name=".features.allPlaylists.allPlaylists.AllPlaylistsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
@@ -54,11 +54,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.allPlaylists.view.modifyPlaylist.ModifyPlaylistActivity"
+        <activity android:name=".features.allPlaylists.modifyPlaylist.ModifyPlaylistActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.allPlaylists.view.mutablePlaylist.MutablePlaylistActivity"
+        <activity android:name=".features.allPlaylists.mutablePlaylist.MutablePlaylistActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait" />
@@ -70,7 +70,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.favorites.view.FavouriteListActivity"
+        <activity android:name=".features.favourites.view.FavouritesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>

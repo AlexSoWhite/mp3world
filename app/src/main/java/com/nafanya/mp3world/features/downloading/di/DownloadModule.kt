@@ -1,16 +1,26 @@
 package com.nafanya.mp3world.features.downloading.di
 
-import androidx.lifecycle.ViewModel
-import com.nafanya.mp3world.core.di.ViewModelKey
-import com.nafanya.mp3world.features.downloading.DownloadViewModel
-import dagger.Binds
+import android.content.Context
+import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
+import com.nafanya.mp3world.core.coroutines.MainCoroutineProvider
+import com.nafanya.mp3world.features.downloading.api.DownloadInteractor
+import com.nafanya.mp3world.features.downloading.internal.DownloadInteractorImpl
+import com.nafanya.mp3world.features.downloading.internal.DownloadManagerInteractor
+import com.nafanya.mp3world.features.downloading.internal.Downloader
 import dagger.Module
-import dagger.multibindings.IntoMap
+import dagger.Provides
 
 @Module
-interface DownloadModule {
+class DownloadModule {
 
-    @Binds
-    @[IntoMap ViewModelKey(DownloadViewModel::class)]
-    fun providesDownloadViewModel(downloadViewModel: DownloadViewModel): ViewModel
+    @Provides
+    fun provideDownloadInteractor(
+        context: Context,
+        ioCoroutineProvider: IOCoroutineProvider,
+        mainCoroutineProvider: MainCoroutineProvider
+    ): DownloadInteractor {
+        val downloadManagerInteractor = DownloadManagerInteractor(context)
+        val downloader = Downloader(context, downloadManagerInteractor)
+        return DownloadInteractorImpl(downloader, ioCoroutineProvider, mainCoroutineProvider)
+    }
 }

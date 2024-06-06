@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.listUtils.recycler.views.BaseListItemView
+import com.nafanya.mp3world.core.utils.listUtils.recycler.commonUi.BaseListItemView
 import com.nafanya.mp3world.core.utils.TextUtil
 import com.nafanya.mp3world.databinding.PlaylistContainerViewBinding
 import com.nafanya.mp3world.features.albums.Album

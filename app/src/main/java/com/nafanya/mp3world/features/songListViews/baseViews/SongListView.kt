@@ -2,8 +2,8 @@ package com.nafanya.mp3world.features.songListViews.baseViews
 
 import android.content.Context
 import android.util.AttributeSet
-import com.nafanya.mp3world.core.listUtils.recycler.views.BaseListItemView
-import com.nafanya.mp3world.core.listUtils.recycler.views.BaseViewHolder
+import com.nafanya.mp3world.core.utils.listUtils.recycler.commonUi.BaseListItemView
+import com.nafanya.mp3world.core.utils.listUtils.recycler.commonUi.BaseViewHolder
 
 abstract class SongListView @JvmOverloads constructor(
     context: Context,

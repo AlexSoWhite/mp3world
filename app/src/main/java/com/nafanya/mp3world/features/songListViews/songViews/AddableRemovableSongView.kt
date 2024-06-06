@@ -5,8 +5,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.utils.dpToPx
-import com.nafanya.mp3world.core.wrappers.PlaylistWrapper
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.databinding.SongViewBinding
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.mp3world.features.songListViews.baseViews.SongViewHolder

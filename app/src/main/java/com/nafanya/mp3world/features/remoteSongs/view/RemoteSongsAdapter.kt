@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.remoteSongs.view
 
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
 import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder

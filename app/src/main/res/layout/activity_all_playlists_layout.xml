@@ -9,7 +9,7 @@
         android:id="@+id/all_playlists_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.nafanya.mp3world.features.allPlaylists.view.allPlaylists.AllPlaylistsFragment"
+        android:name="com.nafanya.mp3world.features.allPlaylists.allPlaylists.AllPlaylistsFragment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

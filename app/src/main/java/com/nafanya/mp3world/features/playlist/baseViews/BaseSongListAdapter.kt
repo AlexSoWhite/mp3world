@@ -4,8 +4,8 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.nafanya.mp3world.core.listUtils.recycler.BaseAdapter
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseAdapter
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.features.songListViews.ListItemType
 import com.nafanya.mp3world.features.songListViews.SongListItem
 import com.nafanya.mp3world.features.songListViews.SongListItemDiffUtilCallback

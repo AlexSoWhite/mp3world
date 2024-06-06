@@ -21,9 +21,9 @@ import com.nafanya.mp3world.core.listUtils.searching.SearchableFragment
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModel
 import com.nafanya.mp3world.core.viewModel.StatePlaylistViewModelDraggable
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.features.songListViews.songViews.RearrangeableSongView
-import com.nafanya.mp3world.features.allPlaylists.viewModel.MutablePlaylistViewModel
+import com.nafanya.mp3world.features.allPlaylists.mutablePlaylist.MutablePlaylistViewModel
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.playlist.baseViews.StatePlaylistHolderFragment
 import com.nafanya.mp3world.features.playlist.baseViews.StatePlaylistHolderFragmentDraggable
@@ -179,8 +179,8 @@ import com.nafanya.mp3world.features.songListViews.SONG_REARRANGEABLE
 import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
 import com.nafanya.mp3world.features.songListViews.songViews.RearrangeableSongViewHolder
 import com.nafanya.mp3world.features.songListViews.topButtonViews.ConfirmChangesButtonViewHolder
-import com.nafanya.mp3world.core.wrappers.SongWrapper
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 
 class MutablePlaylistAdapter(
     private val onSongClickCallback: (SongWrapper) -> Unit,

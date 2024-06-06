@@ -1,5 +1,7 @@
 package com.nafanya.mp3world.features.playerView.view.currentPlaylist
 
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
+import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
@@ -13,9 +15,9 @@ class MixedAdapter : BaseSongListAdapter() {
 
     lateinit var onClickCallback: (SongView, Song) -> Unit
 
-    lateinit var onLocalActionClickCallback: (Song) -> Unit
+    lateinit var onLocalActionClickCallback: (LocalSong) -> Unit
 
-    lateinit var onRemoteActionClickCallback: (Song) -> Unit
+    lateinit var onRemoteActionClickCallback: (RemoteSong) -> Unit
 
     override fun onBindViewHolder(holder: SongListItemViewHolder, position: Int) {
         val song = currentList[position].getDataAsSong()
@@ -26,7 +28,9 @@ class MixedAdapter : BaseSongListAdapter() {
                     onClickCallback = {
                         onClickCallback(it, song)
                     },
-                    onLocalActionClickCallback
+                    onActionClickedCallback = {
+                        onLocalActionClickCallback.invoke(it as LocalSong)
+                    }
                 )
             }
             SONG_REMOTE -> {
@@ -35,7 +39,9 @@ class MixedAdapter : BaseSongListAdapter() {
                     onClickCallback = {
                         onClickCallback(it, song)
                     },
-                    onRemoteActionClickCallback
+                    onActionClickedCallback = {
+                        onRemoteActionClickCallback.invoke(it as RemoteSong)
+                    }
                 )
             }
         }

@@ -7,41 +7,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.allViews
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.mp3world.core.wrappers.local.LocalSong
-import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
 import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
-import com.nafanya.mp3world.features.downloading.DownloadingView
-import com.nafanya.mp3world.features.downloading.DownloadingViewModel
-import com.nafanya.mp3world.features.favorites.viewModel.FavouriteListViewModel
-import com.nafanya.mp3world.features.songListViews.actionDialogs.LocalSongDialogHolder
+import com.nafanya.mp3world.features.downloading.api.download
+import com.nafanya.mp3world.features.songListViews.actionDialogs.defaultLocalSongActionDialog
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.player.PlayerInteractor
-import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.flow.take
 
-class CurrentPlaylistDialogFragment :
-    BottomSheetDialogFragment(),
-    DownloadingView,
-    LocalSongDialogHolder {
+class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
 
     @Inject
-    lateinit var factory: ViewModelFactory
-
-    @Inject
-    lateinit var favouriteListViewModel: Lazy<FavouriteListViewModel>
-
-    override val actualFavouriteListViewModel: FavouriteListViewModel
-        get() = favouriteListViewModel.get()
+    lateinit var factory: ViewModelProvider.Factory
 
     @Inject
     lateinit var interactor: PlayerInteractor
@@ -52,27 +39,7 @@ class CurrentPlaylistDialogFragment :
 
     private val viewModel: CurrentPlaylistViewModel by viewModels { factory }
 
-    override val downloadingViewModel: DownloadingViewModel
-        get() = viewModel
-
-    private val mixedAdapter = MixedAdapter().apply {
-        onClickCallback = { view, song ->
-            viewModel.onSongClick(song)
-            currentPlayingView = view
-        }
-        onLocalActionClickCallback = { song ->
-            val dialog = createDialog(requireActivity(), song as LocalSong)
-            actualFavouriteListViewModel
-                .isSongInFavourite(song)
-                .observe(viewLifecycleOwner) {
-                    dialog.setIsFavorite(it)
-                }
-            dialog.show()
-        }
-        onRemoteActionClickCallback = { song ->
-            download(requireActivity(), song as RemoteSong)
-        }
-    }
+    private val mixedAdapter = MixedAdapter()
 
     private var mBinding: FragmentCurrentPlaylistDialogBinding? = null
     val binding
@@ -106,6 +73,17 @@ class CurrentPlaylistDialogFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mixedAdapter.apply {
+            onClickCallback = { view, song ->
+                viewModel.onSongClick(song)
+                currentPlayingView = view
+            }
+            onLocalActionClickCallback = (requireActivity() as AppCompatActivity)
+                .defaultLocalSongActionDialog(viewModel)
+            onRemoteActionClickCallback = { song ->
+                download(viewModel, song)
+            }
+        }
         binding.currentPlaylistRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mixedAdapter

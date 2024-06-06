@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.playerView.di
 
 import androidx.lifecycle.ViewModel
-import com.nafanya.mp3world.core.di.ViewModelKey
+import com.nafanya.mp3world.core.di.viewModel.ViewModelKey
 import com.nafanya.mp3world.features.playerView.view.PlayerViewModel
 import com.nafanya.mp3world.features.playerView.view.currentPlaylist.CurrentPlaylistViewModel
 import dagger.Binds

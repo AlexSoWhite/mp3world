@@ -13,22 +13,22 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.view.BaseFragment
-import com.nafanya.mp3world.core.viewModel.ViewModelFactory
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.commonUi.BaseFragment
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.databinding.PlayerControlViewBottomFragmentBinding
 import javax.inject.Inject
 
 class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBinding>() {
 
     @Inject
-    lateinit var factory: ViewModelFactory
+    lateinit var factory: ViewModelProvider.Factory
 
     private val viewModel: PlayerViewModel by viewModels {
         factory

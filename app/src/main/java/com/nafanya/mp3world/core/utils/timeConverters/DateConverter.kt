@@ -6,12 +6,10 @@ import java.util.Locale
 /**
  * Class that converts timestamp to date.
  */
-class DateConverter {
+object DateConverter {
 
-    companion object {
-        private const val multiplier = 1000L
-        private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
-    }
+    private const val multiplier = 1000L
+    private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
 
     fun dateToString(arg: Long): String {
         return simpleDateFormat.format(arg * multiplier)

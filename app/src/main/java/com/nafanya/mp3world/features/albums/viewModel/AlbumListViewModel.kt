@@ -1,30 +1,47 @@
 package com.nafanya.mp3world.features.albums.viewModel
 
-import androidx.lifecycle.asFlow
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.listUtils.searching.SearchableStated
-import com.nafanya.mp3world.core.listUtils.searching.StatedQueryFilter
-import com.nafanya.mp3world.core.stateMachines.State
-import com.nafanya.mp3world.core.stateMachines.common.Data
-import com.nafanya.mp3world.core.stateMachines.list.StatedListViewModel
-import com.nafanya.mp3world.core.stateMachines.title.TitleViewModel
+import com.nafanya.mp3world.core.stateMachines.commonUi.Data
+import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
+import com.nafanya.mp3world.core.utils.listUtils.searching.QueryFilter
+import com.nafanya.mp3world.core.utils.listUtils.searching.SearchProcessor
+import com.nafanya.mp3world.core.utils.listUtils.searching.Searchable
+import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
+import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.features.albums.Album
 import com.nafanya.mp3world.features.albums.AlbumListManager
 import com.nafanya.mp3world.features.albums.view.recycler.ALBUM
 import com.nafanya.mp3world.features.albums.view.recycler.AlbumListItem
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 class AlbumListViewModel @Inject constructor(
     albumListManager: AlbumListManager
 ) : StatedListViewModel<Album, AlbumListItem>(),
-    SearchableStated<Album>,
-    TitleViewModel<List<Album>> {
+    Searchable<Album>,
+    TitleProcessorWrapper<List<Album>> {
 
-    override val queryFilter: StatedQueryFilter<Album> = StatedQueryFilter { album, query ->
-        album.name.contains(query, true)
+    private val searchProcessor = SearchProcessor<Album>(
+        QueryFilter { album, query ->
+            album.name.contains(query, true)
+        }
+    )
+
+    private val titleProcessor = TitleProcessor<List<Album>>()
+    override val title: LiveData<String>
+        get() = titleProcessor.title
+
+    init {
+        model.load {
+            titleProcessor.setup(model, viewModelScope)
+            // TODO: string resource
+            titleProcessor.setBaseTitle("Мои альбомы")
+            searchProcessor.setup(
+                this,
+                albumListManager.albums.map { Data.Success(it) }
+            )
+        }
     }
 
     override fun asListItems(list: List<Album>): List<AlbumListItem> {
@@ -33,21 +50,7 @@ class AlbumListViewModel @Inject constructor(
         }
     }
 
-    override val baseTitle = "Мои альбомы"
-    override val mTitle = MutableStateFlow(baseTitle)
-
-    override val stateMapper: (suspend (State<List<Album>>) -> State<List<Album>>)? = null
-
-    init {
-        model.load {
-            viewModelScope.launch {
-                setDataSourceFiltered(
-                    albumListManager.albums.asFlow().map {
-                        Data.Success(it)
-                    }
-                )
-                model.startListeningModelForTitle()
-            }
-        }
+    override fun search(query: String) {
+        searchProcessor.search(query)
     }
 }

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.wrappers.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.databinding.SongViewBinding
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.mp3world.features.songListViews.baseViews.SongViewHolder

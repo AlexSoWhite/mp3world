@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.songListViews
 
 import android.view.ViewGroup
-import com.nafanya.mp3world.core.listUtils.recycler.BaseViewHolderFactory
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseViewHolderFactory
 import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
 import com.nafanya.mp3world.features.songListViews.songViews.AddableRemovableSongView
 import com.nafanya.mp3world.features.songListViews.songViews.AddableRemovableSongViewHolder

@@ -1,8 +1,8 @@
 package com.nafanya.mp3world.features.remoteSongs.songSearchers
 
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
-import com.nafanya.mp3world.core.wrappers.UriFactory
-import com.nafanya.mp3world.core.wrappers.remote.RemoteSong
+import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
+import com.nafanya.mp3world.core.wrappers.song.UriFactory
 import javax.inject.Inject
 import okhttp3.OkHttpClient
 import org.jsoup.nodes.Document
@@ -16,11 +16,10 @@ import org.jsoup.select.Elements
 // TODO pagination
 class HitmoTopSongSearcher @Inject constructor(
     client: OkHttpClient,
-    private val uriFactory: UriFactory,
-    private val timeConverter: TimeConverter
+    private val uriFactory: UriFactory
 ) : SongSearcher(client) {
 
-    private val baseUrl = "https://rur.hitmotop.com"
+    private val baseUrl = "https://rus.hitmotop.com"
 
     private val searchPrefix = "$baseUrl/search?q="
 
@@ -32,7 +31,7 @@ class HitmoTopSongSearcher @Inject constructor(
     override fun parseNode(index: Int, element: Element): RemoteSong {
         val title = element.getElementsByClass("track__title").text()
         val artist = element.getElementsByClass("track__desc").text()
-        val duration = timeConverter.stringToDuration(
+        val duration = TimeConverter.stringToDuration(
             element.getElementsByClass("track__fulltime").text()
         )
         val artUrl = element
