@@ -61,7 +61,7 @@ class SongImageBitmapFactoryImpl @Inject constructor(
         )
     }
 
-    // todo: make suspend
+    // todo: make suspend?
     override fun getBitmapForSong(song: SongWrapper, size: Size?): SharedFlow<Bitmap> {
         return when (song) {
             is RemoteSong -> getBitmapForRemoteSong(song)

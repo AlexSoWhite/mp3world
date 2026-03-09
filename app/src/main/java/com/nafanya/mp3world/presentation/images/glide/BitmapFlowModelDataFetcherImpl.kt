@@ -21,6 +21,7 @@ class BitmapFlowModelDataFetcherImpl(
     private val ioCoroutineProvider: IOCoroutineProvider
 ) : DataFetcher<InputStream> {
 
+    // todo: should check under what circumstances it is called because it definitely should not load image in application scope
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
         ioCoroutineProvider.ioScope.launch {
             try {

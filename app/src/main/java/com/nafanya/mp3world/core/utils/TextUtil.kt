@@ -2,7 +2,7 @@ package com.nafanya.mp3world.core.utils
 
 @Suppress("MagicNumber")
 /**
- * TODO string res
+ * TODO this should be in string plurals
  */
 object TextUtil {
 
