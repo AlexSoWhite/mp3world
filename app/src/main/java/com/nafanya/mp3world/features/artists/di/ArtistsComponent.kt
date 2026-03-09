@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.artists.di
 
-import com.nafanya.mp3world.features.artists.view.ArtistListFragment
+import com.nafanya.mp3world.features.artists.presentation.ArtistListFragment
 import dagger.Subcomponent
 
 @Subcomponent

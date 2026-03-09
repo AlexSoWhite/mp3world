@@ -16,8 +16,8 @@ import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.features.favourites.FavouritesManager
-import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
+import com.nafanya.mp3world.features.favourites.domain.FavouritesManager
+import com.nafanya.mp3world.features.favourites.domain.FavouritesManagerProxy
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SongListItem
 import dagger.assisted.Assisted
@@ -70,7 +70,7 @@ class ImmutablePlaylistViewModel(
         searchProcessor.search(query)
     }
 
-    override fun isSongInFavourites(song: LocalSong) = favouritesManager.isSongInFavourites(song)
+    override fun isSongInFavourites(song: LocalSong) = favouritesManager.observeIsSongInFavorites(song)
 
     override fun addFavourite(song: LocalSong) {
         viewModelScope.launch {

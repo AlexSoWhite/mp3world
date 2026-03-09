@@ -20,7 +20,7 @@ import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
-import com.nafanya.mp3world.core.commonUi.BaseFragment
+import com.nafanya.mp3world.presentation.commonUi.BaseFragment
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.databinding.PlayerControlViewBottomFragmentBinding
 import javax.inject.Inject

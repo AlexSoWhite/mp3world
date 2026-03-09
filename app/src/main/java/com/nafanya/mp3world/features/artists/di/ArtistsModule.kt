@@ -5,9 +5,9 @@ import com.nafanya.mp3world.core.di.viewModel.ViewModelKey
 import com.nafanya.mp3world.core.listManagers.ARTIST_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.listManagers.ListManagerKey
-import com.nafanya.mp3world.features.artists.ArtistListManager
-import com.nafanya.mp3world.features.artists.ArtistListManagerImpl
-import com.nafanya.mp3world.features.artists.viewModel.ArtistListViewModel
+import com.nafanya.mp3world.features.artists.domain.ArtistListManager
+import com.nafanya.mp3world.features.artists.domain.ArtistListManagerImpl
+import com.nafanya.mp3world.features.artists.presentation.ArtistListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

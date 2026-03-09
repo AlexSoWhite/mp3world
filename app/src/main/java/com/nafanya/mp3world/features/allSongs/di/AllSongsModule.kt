@@ -5,9 +5,9 @@ import com.nafanya.mp3world.core.di.viewModel.ViewModelKey
 import com.nafanya.mp3world.core.listManagers.ALL_SONGS_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.ListManager
 import com.nafanya.mp3world.core.listManagers.ListManagerKey
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.allSongs.SongListManagerImpl
-import com.nafanya.mp3world.features.allSongs.viewModel.AllSongsViewModel
+import com.nafanya.mp3world.features.allSongs.domain.SongListProvider
+import com.nafanya.mp3world.features.allSongs.domain.SongListManagerImpl
+import com.nafanya.mp3world.features.allSongs.presentation.AllSongsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -24,5 +24,5 @@ interface AllSongsModule {
     fun bindIntoMap(songListManager: SongListManagerImpl): ListManager
 
     @Binds
-    fun bind(songListManager: SongListManagerImpl): SongListManager
+    fun bind(songListManager: SongListManagerImpl): SongListProvider
 }

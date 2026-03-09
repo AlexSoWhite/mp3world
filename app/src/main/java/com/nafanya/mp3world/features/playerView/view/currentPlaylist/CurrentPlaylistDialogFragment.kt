@@ -18,7 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
-import com.nafanya.mp3world.features.downloading.api.download
+import com.nafanya.mp3world.data.downloading.api.download
 import com.nafanya.mp3world.features.songListViews.actionDialogs.defaultLocalSongActionDialog
 import com.nafanya.mp3world.features.songListViews.baseViews.SongView
 import com.nafanya.player.PlayerInteractor
@@ -31,7 +31,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
     lateinit var factory: ViewModelProvider.Factory
 
     @Inject
-    lateinit var interactor: PlayerInteractor
+    lateinit var playerInteractor: PlayerInteractor
 
     companion object {
         const val MAX_DIALOG_SIZE = 0.7f
@@ -67,7 +67,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
         )
         binding.root.maxHeight = (resources.displayMetrics.heightPixels * MAX_DIALOG_SIZE).toInt()
         binding.root.minHeight = (resources.displayMetrics.heightPixels * MAX_DIALOG_SIZE).toInt()
-        viewModel.bindInteractor(interactor)
+        viewModel.bindPlayerInteractor(playerInteractor)
         return binding.root
     }
 

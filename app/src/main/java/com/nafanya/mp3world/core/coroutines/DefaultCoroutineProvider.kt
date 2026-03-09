@@ -4,7 +4,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 
 /**
- * Should be used for computations
+ * Should be used for computations and general background work
  */
 class DefaultCoroutineProvider @Inject constructor() {
 

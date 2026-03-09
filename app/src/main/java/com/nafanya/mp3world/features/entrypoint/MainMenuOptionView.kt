@@ -15,6 +15,9 @@ import java.lang.IllegalArgumentException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+// todo: it causes crashes sometimes
+// Caused by: android.view.InflateException: Binary XML file line #24 in com.nafanya.mp3world.full:layout/activity_main_layout: Binary XML
+// file line #24 in com.nafanya.mp3world.full:layout/activity_main_layout: Error inflating class com.nafanya.mp3world.features.entrypoint.MainMenuOptionView
 class MainMenuOptionView @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,

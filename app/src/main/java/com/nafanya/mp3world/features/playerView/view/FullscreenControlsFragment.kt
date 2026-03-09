@@ -22,21 +22,22 @@ import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.commonUi.BaseFragment
+import com.nafanya.mp3world.presentation.commonUi.BaseFragment
 import com.nafanya.mp3world.core.coroutines.collectInScope
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.utils.ColorExtractor
 import com.nafanya.mp3world.core.utils.animators.AoedeAlphaAnimation
 import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
-import com.nafanya.mp3world.core.wrappers.images.glide.CustomBitmapTarget
+import com.nafanya.mp3world.presentation.images.glide.CustomBitmapTarget
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.databinding.PlayerControlViewFullscreenFragmentBinding
-import com.nafanya.mp3world.features.downloading.api.download
+import com.nafanya.mp3world.data.downloading.api.download
 import com.nafanya.mp3world.features.playerView.view.currentPlaylist.CurrentPlaylistDialogFragment
 import javax.inject.Inject
 
+@Suppress("TooManyFunctions")
 class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
 
     private var previousColor: Int = -1

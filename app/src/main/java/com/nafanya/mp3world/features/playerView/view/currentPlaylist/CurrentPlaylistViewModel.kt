@@ -8,12 +8,12 @@ import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
-import com.nafanya.mp3world.features.downloading.api.DownloadInteractor
-import com.nafanya.mp3world.features.downloading.api.DownloadResult
-import com.nafanya.mp3world.features.downloading.api.DownloadingViewModel
-import com.nafanya.mp3world.features.favourites.FavouritesManager
-import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
-import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
+import com.nafanya.mp3world.data.downloading.api.DownloadInteractor
+import com.nafanya.mp3world.data.downloading.api.DownloadResult
+import com.nafanya.mp3world.data.downloading.api.DownloadingViewModel
+import com.nafanya.mp3world.features.favourites.domain.FavouritesManager
+import com.nafanya.mp3world.features.favourites.domain.FavouritesManagerProxy
+import com.nafanya.mp3world.data.mediaStore.MediaStoreInteractor
 import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.features.songListViews.SONG_REMOTE
 import com.nafanya.mp3world.features.songListViews.SongListItem
@@ -45,7 +45,7 @@ class CurrentPlaylistViewModel @Inject constructor(
         return newList
     }
 
-    override fun isSongInFavourites(song: LocalSong) = favouritesManager.isSongInFavourites(song)
+    override fun isSongInFavourites(song: LocalSong) = favouritesManager.observeIsSongInFavorites(song)
 
     override fun addFavourite(song: LocalSong) {
         viewModelScope.launch {

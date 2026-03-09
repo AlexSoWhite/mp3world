@@ -41,7 +41,7 @@ abstract class StatedPlaylistFragmentBaseLayout :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        playlistViewModel.bindInteractor(playerInteractor)
+        playlistViewModel.bindPlayerInteractor(playerInteractor)
         playlistViewModel.currentSong.observe(viewLifecycleOwner) { song ->
             // remove indicator from old view
             currentPlayingView?.updateCurrentSong(song)

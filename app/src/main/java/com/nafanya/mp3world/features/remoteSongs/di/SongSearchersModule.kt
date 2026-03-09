@@ -1,13 +1,13 @@
 package com.nafanya.mp3world.features.remoteSongs.di
 
-import com.nafanya.mp3world.features.remoteSongs.songSearchers.HITMO_TOP
-import com.nafanya.mp3world.features.remoteSongs.songSearchers.HitmoTopSongSearcher
-import com.nafanya.mp3world.features.remoteSongs.songSearchers.MUSMORE
-import com.nafanya.mp3world.features.remoteSongs.songSearchers.MusMoreSongSearcher
-import com.nafanya.mp3world.features.remoteSongs.songSearchers.SongSearcher
-import com.nafanya.mp3world.features.remoteSongs.songSearchers.SongSearcherKey
-import com.nafanya.mp3world.features.remoteSongs.songSearchers.ZVUCH
-import com.nafanya.mp3world.features.remoteSongs.songSearchers.ZvuchSongSearcher
+import com.nafanya.mp3world.features.remoteSongs.data.HITMO_TOP
+import com.nafanya.mp3world.features.remoteSongs.data.HitmoTopSongSearcher
+import com.nafanya.mp3world.features.remoteSongs.data.MUSMORE
+import com.nafanya.mp3world.features.remoteSongs.data.MusMoreSongSearcher
+import com.nafanya.mp3world.features.remoteSongs.data.SongSearcher
+import com.nafanya.mp3world.features.remoteSongs.data.SongSearcherKey
+import com.nafanya.mp3world.features.remoteSongs.data.ZVUCH
+import com.nafanya.mp3world.features.remoteSongs.data.ZvuchSongSearcher
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

@@ -6,7 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
+import com.nafanya.mp3world.features.favourites.domain.FavouritesManagerProxy
 
 /**
  * Creates default local song action dialog

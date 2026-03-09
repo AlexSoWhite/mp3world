@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.albums.di
 
-import com.nafanya.mp3world.features.albums.view.AlbumListFragment
+import com.nafanya.mp3world.features.albums.presentation.AlbumListFragment
 import dagger.Subcomponent
 
 @Subcomponent

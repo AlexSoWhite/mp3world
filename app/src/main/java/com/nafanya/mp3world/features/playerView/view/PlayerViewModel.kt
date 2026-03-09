@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
-import com.nafanya.mp3world.features.downloading.api.DownloadInteractor
-import com.nafanya.mp3world.features.downloading.api.DownloadResult
-import com.nafanya.mp3world.features.downloading.api.DownloadingViewModel
-import com.nafanya.mp3world.features.favourites.FavouritesManager
-import com.nafanya.mp3world.features.favourites.FavouritesManagerProxy
-import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
+import com.nafanya.mp3world.data.downloading.api.DownloadInteractor
+import com.nafanya.mp3world.data.downloading.api.DownloadResult
+import com.nafanya.mp3world.data.downloading.api.DownloadingViewModel
+import com.nafanya.mp3world.features.favourites.domain.FavouritesManager
+import com.nafanya.mp3world.features.favourites.domain.FavouritesManagerProxy
+import com.nafanya.mp3world.data.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class PlayerViewModel @Inject constructor(
     val currentSong = playerInteractor.currentSong
     val currentPlaylist = playerInteractor.currentPlaylist
 
-    override fun isSongInFavourites(song: LocalSong) = favouriteListManager.isSongInFavourites(song)
+    override fun isSongInFavourites(song: LocalSong) = favouriteListManager.observeIsSongInFavorites(song)
 
     override fun addFavourite(song: LocalSong) {
         viewModelScope.launch {

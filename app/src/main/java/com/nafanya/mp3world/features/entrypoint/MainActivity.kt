@@ -15,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.navigation.ActivityStarter
-import com.nafanya.mp3world.core.commonUi.BaseActivity
+import com.nafanya.mp3world.presentation.commonUi.BaseActivity
 import com.nafanya.mp3world.databinding.ActivityMainLayoutBinding
 import com.nafanya.mp3world.features.foregroundService.ForegroundService
 import com.nafanya.mp3world.features.foregroundService.ServiceMonitor
@@ -43,11 +43,11 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
             .inject(this)
         super.onCreate(savedInstanceState)
         supportActionBar?.displayOptions = DISPLAY_SHOW_TITLE
-        checkPermissions()
+        checkPermissionsAndInitializeLists()
     }
 
     // part of onCreate
-    private fun checkPermissions() {
+    private fun checkPermissionsAndInitializeLists() {
         val permissionRead = Manifest.permission.READ_EXTERNAL_STORAGE
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(permissionRead) != PackageManager.PERMISSION_GRANTED) {
@@ -109,7 +109,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        checkPermissions()
+        checkPermissionsAndInitializeLists()
     }
 
     override fun onDestroy() {

@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.remoteSongs.di
 
-import com.nafanya.mp3world.features.remoteSongs.view.RemoteSongsFragment
+import com.nafanya.mp3world.features.remoteSongs.presentation.RemoteSongsFragment
 import dagger.Subcomponent
 
 @Subcomponent(

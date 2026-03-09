@@ -4,14 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.stateMachines.StateModel
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.features.albums.AlbumListManager
-import com.nafanya.mp3world.features.allPlaylists.PlaylistListManager
-import com.nafanya.mp3world.features.allSongs.SongListManager
-import com.nafanya.mp3world.features.allSongs.asAllSongsPlaylist
-import com.nafanya.mp3world.features.artists.ArtistListManager
-import com.nafanya.mp3world.features.favourites.FavouritesManager
-import com.nafanya.mp3world.features.localStorage.LocalStorageInteractor
-import com.nafanya.mp3world.features.mediaStore.MediaStoreInteractor
+import com.nafanya.mp3world.features.albums.domain.AlbumListManager
+import com.nafanya.mp3world.features.userPlaylists.domain.PlaylistListManager
+import com.nafanya.mp3world.features.allSongs.domain.SongListProvider
+import com.nafanya.mp3world.features.allSongs.domain.asAllSongsPlaylist
+import com.nafanya.mp3world.features.artists.domain.ArtistListManager
+import com.nafanya.mp3world.features.favourites.domain.FavouritesManager
+import com.nafanya.mp3world.data.localStorage.LocalStorageInteractor
+import com.nafanya.mp3world.data.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -27,24 +27,24 @@ class InitialViewModel @Inject constructor(
     private val mediaStoreInteractor: MediaStoreInteractor,
     private val localStorageInteractor: LocalStorageInteractor,
     private val playerInteractor: PlayerInteractor,
-    private val songListManager: SongListManager,
+    private val songListManager: SongListProvider,
     artistListManager: ArtistListManager,
     playlistListManager: PlaylistListManager,
     albumListManager: AlbumListManager,
     favouriteListManager: FavouritesManager
 ) : ViewModel() {
 
-    val songModel = songListManager.songList.asIntModel()
-    val playlists = playlistListManager.playlists.asIntModel()
-    val artists = artistListManager.artists.asIntModel()
-    val albums = albumListManager.albums.asIntModel()
-    val favourites = favouriteListManager.favorites.map { it.songList }.asIntModel()
+    val songModel = songListManager.songList.loadIntModel()
+    val playlists = playlistListManager.playlists.loadIntModel()
+    val artists = artistListManager.artists.loadIntModel()
+    val albums = albumListManager.albums.loadIntModel()
+    val favourites = favouriteListManager.favorites.map { it.songList }.loadIntModel()
 
-    private inline fun <reified T : List<Any>> Flow<T>.asIntModel(): StateModel<Int> {
+    private inline fun <reified T : List<Any>> Flow<T>.loadIntModel(): StateModel<Int> {
         return StateModel<Int>().apply {
             this.load {
                 viewModelScope.launch {
-                    this@asIntModel.map {
+                    this@loadIntModel.map {
                         it.size
                     }.collect {
                         success(it)
@@ -69,7 +69,7 @@ class InitialViewModel @Inject constructor(
             if (!isInitialized) {
                 isInitialized = true
                 // initialize songList
-                mediaStoreInteractor.readMediaStore()
+                mediaStoreInteractor.initializeSongList()
                 // TODO flow
                 songListManager.songList.collect(localInitializer)
             }

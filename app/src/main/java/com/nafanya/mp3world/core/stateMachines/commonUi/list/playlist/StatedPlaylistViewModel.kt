@@ -56,7 +56,8 @@ abstract class StatedPlaylistViewModel : StatedListViewModel<SongWrapper, SongLi
         }
     }
 
-    fun bindInteractor(interactor: PlayerInteractor) {
+    // todo: why it cannot be injected?
+    fun bindPlayerInteractor(interactor: PlayerInteractor) {
         playerInteractor = interactor
         playerInteractor.isPlaying.collectLatestInScope(viewModelScope, mIsPlaying::setValue)
         playerInteractor.currentSong.collectLatestInScope(viewModelScope) {

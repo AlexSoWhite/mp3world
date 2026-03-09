@@ -1,0 +1,19 @@
+package com.nafanya.mp3world.features.artists.presentation.recycler
+
+import android.view.ViewGroup
+import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseViewHolderFactory
+
+class ArtistViewHolderFactory : BaseViewHolderFactory<ArtistViewHolder> {
+
+    override fun create(
+        viewType: Int,
+        parent: ViewGroup
+    ): ArtistViewHolder = with(parent) {
+        return when (viewType) {
+            ARTIST -> {
+                ArtistViewHolder(ArtistView(parent.context))
+            }
+            else -> ArtistViewHolder(ArtistView(context))
+        }
+    }
+}

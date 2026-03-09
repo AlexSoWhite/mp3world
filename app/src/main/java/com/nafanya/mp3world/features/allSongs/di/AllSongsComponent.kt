@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.features.allSongs.di
 
-import com.nafanya.mp3world.features.allSongs.view.AllSongsFragment
+import com.nafanya.mp3world.features.allSongs.presentation.AllSongsFragment
 import dagger.Subcomponent
 
 @Subcomponent
