@@ -2,8 +2,6 @@ package com.nafanya.mp3world.presentation.playlist.base_views
 
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseAdapter
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.presentation.song_list_views.ListItemType
@@ -13,15 +11,18 @@ import com.nafanya.mp3world.presentation.song_list_views.SongListItemViewHolderF
 import com.nafanya.mp3world.presentation.song_list_views.base_views.SongListItemViewHolder
 import com.nafanya.mp3world.presentation.song_list_views.base_views.SongView
 import com.nafanya.mp3world.presentation.song_list_views.base_views.SongViewHolder
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 abstract class BaseSongListAdapter :
     BaseAdapter<SongListItem, SongListItemViewHolder>(SongListItemDiffUtilCallback) {
 
     private var mCurrentPlayingSong: SongWrapper? = null
 
-    private val mCurrentSelectedView = MutableLiveData<SongView>()
-    val currentSelectedView: LiveData<SongView>
-        get() = mCurrentSelectedView
+    // todo: this is probably very inefficient, maybe should add playback state to song model instead
+    private val _currentSelectedView = MutableStateFlow<SongView?>(null)
+    val currentSelectedView: StateFlow<SongView?>
+        get() = _currentSelectedView
 
     override val viewHolderFactory: SongListItemViewHolderFactory by lazy {
         SongListItemViewHolderFactory()
@@ -43,7 +44,7 @@ abstract class BaseSongListAdapter :
         if (holder is SongViewHolder) {
             val songView = holder.itemView as SongView
             songView.setOnSongSelectedListener {
-                mCurrentSelectedView.value = it
+                _currentSelectedView.value = it
             }
             mCurrentPlayingSong?.let {
                 holder.updateIsPlaying(it)

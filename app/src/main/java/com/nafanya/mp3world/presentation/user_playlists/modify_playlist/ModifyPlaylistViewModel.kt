@@ -1,7 +1,5 @@
 package com.nafanya.mp3world.presentation.user_playlists.modify_playlist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -30,7 +28,9 @@ import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -49,9 +49,9 @@ class ModifyPlaylistViewModel(
         it.asAllSongsPlaylist()
     }
 
-    private val mModifyingPlaylist = MutableLiveData<PlaylistWrapper>()
-    val modifyingPlaylist: LiveData<PlaylistWrapper>
-        get() = mModifyingPlaylist
+    private val _playlistUnderModification = MutableSharedFlow<PlaylistWrapper>(replay = 1)
+    val playlistUnderModification: SharedFlow<PlaylistWrapper>
+        get() = _playlistUnderModification
 
     private val songList = mutableListOf<SongWrapper>()
 
@@ -73,10 +73,12 @@ class ModifyPlaylistViewModel(
             userPlaylistsInteractor
                 .getPlaylistByContainerId(playlistId)
                 .collectLatestInScope(viewModelScope) {
-                    mModifyingPlaylist.postValue(it)
-                    songList.clear()
-                    songList.addAll(it.songList)
-                    processState(model.currentState.value)
+                    viewModelScope.launch {
+                        _playlistUnderModification.emit(it)
+                        songList.clear()
+                        songList.addAll(it.songList)
+                        processState(model.currentState.value)
+                    }
                 }
         }
     }
@@ -105,7 +107,7 @@ class ModifyPlaylistViewModel(
     }
 
     fun confirmChanges() {
-        val oldPlaylist = modifyingPlaylist.value!!
+        val oldPlaylist = playlistUnderModification.replayCache[0]
         viewModelScope.launch {
             userPlaylistsInteractor.updatePlaylist(
                 oldPlaylist.copy(songList = songList)

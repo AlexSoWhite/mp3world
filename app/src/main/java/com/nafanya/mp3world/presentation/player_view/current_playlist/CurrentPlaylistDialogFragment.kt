@@ -100,7 +100,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
             }
 
             lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.CREATED) {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
                     viewModel.currentSong.collectLatest { song ->
                         // remove indicator from old view
                         currentPlayingView?.updateCurrentSong(song)
@@ -119,17 +119,21 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
             }
 
             lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.CREATED) {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
                     viewModel.isPlaying.collectLatest {
                         currentPlayingView?.updateIsPlaying(it)
                     }
                 }
             }
-        }
 
-        mixedAdapter.currentSelectedView.observe(viewLifecycleOwner) {
-            currentPlayingView = it
-            currentPlayingView?.updateIsPlaying(viewModel.isPlaying.value)
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    mixedAdapter.currentSelectedView.collectLatest {
+                        currentPlayingView = it
+                        currentPlayingView?.updateIsPlaying(viewModel.isPlaying.value)
+                    }
+                }
+            }
         }
 
         binding.dismissCurrentPlaylistDialog.setOnClickListener {

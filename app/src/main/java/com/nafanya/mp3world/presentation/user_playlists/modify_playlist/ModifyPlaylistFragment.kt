@@ -54,15 +54,21 @@ class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.modifyingPlaylist.observe(viewLifecycleOwner) {
-            modifyPlaylistAdapter.setModifyingPlaylist(it)
-            modifyPlaylistAdapter.notifyDataSetChanged()
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.title.collectLatest {
-                    val activity = requireActivity() as AppCompatActivity
-                    activity.supportActionBar?.title = it.getText(activity)
+        with(viewLifecycleOwner) {
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    viewModel.playlistUnderModification.collectLatest {
+                        modifyPlaylistAdapter.setModifyingPlaylist(it)
+                        modifyPlaylistAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    viewModel.title.collectLatest {
+                        val activity = requireActivity() as AppCompatActivity
+                        activity.supportActionBar?.title = it.getText(activity)
+                    }
                 }
             }
         }

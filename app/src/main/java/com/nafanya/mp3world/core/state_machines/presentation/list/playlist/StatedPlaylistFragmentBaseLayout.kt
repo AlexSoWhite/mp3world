@@ -49,7 +49,7 @@ abstract class StatedPlaylistFragmentBaseLayout :
         playlistViewModel.init()
         with(viewLifecycleOwner) {
             lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.CREATED) {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
                     playlistViewModel.currentSong.collectLatest { song ->
                         // remove indicator from old view
                         currentPlayingView?.updateCurrentSong(song)
@@ -63,13 +63,17 @@ abstract class StatedPlaylistFragmentBaseLayout :
                 }
             }
             lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.CREATED) {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
                     playlistViewModel.isPlaying.collectLatest { currentPlayingView?.updateIsPlaying(it) }
                 }
             }
-            songListAdapter.currentSelectedView.observe(viewLifecycleOwner) {
-                currentPlayingView = it
-                currentPlayingView?.updateIsPlaying(playlistViewModel.isPlaying.value)
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    songListAdapter.currentSelectedView.collectLatest {
+                        currentPlayingView = it
+                        currentPlayingView?.updateIsPlaying(playlistViewModel.isPlaying.value)
+                    }
+                }
             }
         }
     }
