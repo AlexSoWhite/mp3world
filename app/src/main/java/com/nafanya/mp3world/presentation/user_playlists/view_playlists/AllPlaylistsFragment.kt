@@ -63,7 +63,7 @@ class AllPlaylistsFragment : StatedListFragmentBaseLayout<PlaylistWrapper, AllPl
     override val emptyMockImageResource: Int
         get() = R.drawable.playlist_add
     override val emptyMockTextResource: Int
-        get() = R.string.add_playlist
+        get() = R.string.no_playlists
 
     override fun onInject(applicationComponent: ApplicationComponent) {
         applicationComponent.allPlaylistsComponent.inject(this)

@@ -77,6 +77,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:text="@string/ready" />
+        android:text="@string/confirm" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
