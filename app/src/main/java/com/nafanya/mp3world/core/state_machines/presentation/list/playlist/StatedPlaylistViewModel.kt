@@ -7,7 +7,7 @@ import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.state_machines.presentation.list.StatedListViewModel
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
-import com.nafanya.mp3world.features.song_list_views.SongListItem
+import com.nafanya.mp3world.presentation.song_list_views.SongListItem
 import com.nafanya.player.PlayerInteractor
 import com.nafanya.player.Song
 import kotlinx.coroutines.flow.Flow

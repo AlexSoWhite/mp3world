@@ -1,6 +1,6 @@
 package com.nafanya.mp3world.core.wrappers.di
 
-import com.nafanya.mp3world.presentation.images.glide.BitmapFlowModelLoaderFactory
+import com.nafanya.mp3world.presentation.core.images.glide.BitmapFlowModelLoaderFactory
 import dagger.Subcomponent
 
 @Subcomponent

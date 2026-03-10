@@ -6,7 +6,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/bottom_control_view_fragment_container"
-        android:name="com.nafanya.mp3world.features.player_view.presentation.BottomControlViewFragment"
+        android:name="com.nafanya.mp3world.presentation.player_view.BottomControlViewFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

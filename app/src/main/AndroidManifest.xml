@@ -20,7 +20,7 @@
         android:name=".core.di.PlayerApplication"
         tools:ignore="LockedOrientationActivity">
         <activity
-            android:name=".features.entrypoint.InitialActivity"
+            android:name=".presentation.entrypoint.InitialActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".features.entrypoint.MainActivity"
+            android:name=".presentation.entrypoint.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Mp3world.Launcher"
@@ -42,44 +42,44 @@
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name=".features.all_songs.presentation.AllSongsActivity"
+        <activity android:name=".presentation.all_songs.AllSongsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.user_playlists.presentation.view_playlists.AllPlaylistsActivity"
+        <activity android:name=".presentation.user_playlists.view_playlists.AllPlaylistsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.playlist.immutable_playlist.ImmutablePlaylistActivity"
+        <activity android:name=".presentation.playlist.immutable_playlist.ImmutablePlaylistActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.user_playlists.presentation.modify_playlist.ModifyPlaylistActivity"
+        <activity android:name=".presentation.user_playlists.modify_playlist.ModifyPlaylistActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.user_playlists.presentation.mutable_playlist.MutablePlaylistActivity"
+        <activity android:name=".presentation.user_playlists.mutable_playlist.MutablePlaylistActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait" />
-        <activity android:name=".features.artists.presentation.ArtistListActivity"
+        <activity android:name=".presentation.artists.ArtistListActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.albums.presentation.AlbumListActivity"
+        <activity android:name=".presentation.albums.AlbumListActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.favourites.view.FavouritesActivity"
+        <activity android:name=".presentation.favourites.FavouritesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.remote_songs.presentation.RemoteSongsActivity"
+        <activity android:name=".presentation.remote_songs.RemoteSongsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.player_view.presentation.FullScreenPlayerActivity"
+        <activity android:name=".presentation.player_view.FullScreenPlayerActivity"
             android:screenOrientation="portrait"/>
-        <service android:name=".features.foreground_service.ForegroundService" />
+        <service android:name=".presentation.foreground_service.ForegroundService" />
     </application>
 </manifest>

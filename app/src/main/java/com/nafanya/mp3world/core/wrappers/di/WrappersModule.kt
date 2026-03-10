@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.core.wrappers.di
 
-import com.nafanya.mp3world.presentation.images.SongImageBitmapFactory
-import com.nafanya.mp3world.presentation.images.SongImageBitmapFactoryImpl
+import com.nafanya.mp3world.presentation.core.images.SongImageBitmapFactory
+import com.nafanya.mp3world.presentation.core.images.SongImageBitmapFactoryImpl
 import com.nafanya.mp3world.core.wrappers.song.UriFactory
 import com.nafanya.mp3world.core.wrappers.song.UriFactoryImpl
 import dagger.Binds

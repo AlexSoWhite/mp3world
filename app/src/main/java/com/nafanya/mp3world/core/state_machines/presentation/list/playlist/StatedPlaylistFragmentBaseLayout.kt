@@ -9,9 +9,9 @@ import com.nafanya.mp3world.core.utils.list_utils.recycler.view.BaseViewHolder
 import com.nafanya.mp3world.core.state_machines.presentation.list.StatedListFragmentBaseLayout
 import com.nafanya.mp3world.core.state_machines.presentation.list.StatedListViewModel
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
-import com.nafanya.mp3world.features.playlist.base_views.BaseSongListAdapter
-import com.nafanya.mp3world.features.song_list_views.SongListItem
-import com.nafanya.mp3world.features.song_list_views.base_views.SongView
+import com.nafanya.mp3world.presentation.playlist.base_views.BaseSongListAdapter
+import com.nafanya.mp3world.presentation.song_list_views.SongListItem
+import com.nafanya.mp3world.presentation.song_list_views.base_views.SongView
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 
