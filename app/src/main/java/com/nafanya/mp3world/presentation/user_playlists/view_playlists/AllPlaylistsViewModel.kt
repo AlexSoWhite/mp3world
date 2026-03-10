@@ -11,7 +11,7 @@ import com.nafanya.mp3world.core.utils.list_utils.searching.Searchable
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
-import com.nafanya.mp3world.domain.user_playlists.UserPlaylistInteractor
+import com.nafanya.mp3world.domain.user_playlists.UserPlaylistsInteractor
 import com.nafanya.mp3world.presentation.user_playlists.view_playlists.recycler.ADD_PLAYLIST_BUTTON
 import com.nafanya.mp3world.presentation.user_playlists.view_playlists.recycler.AllPlaylistsListItem
 import com.nafanya.mp3world.presentation.user_playlists.view_playlists.recycler.PLAYLIST
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class AllPlaylistsViewModel @Inject constructor(
-    private val playlistListManager: UserPlaylistInteractor,
+    private val playlistListManager: UserPlaylistsInteractor,
 ) : StatedListViewModel<PlaylistWrapper, AllPlaylistsListItem>(),
     Searchable<PlaylistWrapper>,
     TitleProcessorWrapper<List<PlaylistWrapper>> {

@@ -17,7 +17,7 @@ import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.domain.user_playlists.UserPlaylistInteractor
+import com.nafanya.mp3world.domain.user_playlists.UserPlaylistsInteractor
 import com.nafanya.mp3world.domain.favourites.FavouritesProvider
 import com.nafanya.mp3world.domain.favourites.FavouritesManager
 import com.nafanya.mp3world.presentation.song_list_views.MODIFY_PLAYLIST_BUTTON
@@ -40,7 +40,7 @@ class MutablePlaylistViewModel(
 
     private val playlistListManager = playlistProviderMapWrapper.getPlaylistProvider(
         PLAYLIST_LIST_MANAGER_KEY
-    ) as UserPlaylistInteractor
+    ) as UserPlaylistsInteractor
 
     private val favouritesManager = playlistProviderMapWrapper.getPlaylistProvider(
         FAVOURITE_LIST_MANAGER_KEY

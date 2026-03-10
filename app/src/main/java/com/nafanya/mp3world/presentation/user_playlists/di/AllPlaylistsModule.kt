@@ -5,8 +5,8 @@ import com.nafanya.mp3world.core.di.view_model.ViewModelKey
 import com.nafanya.mp3world.core.list_managers.PlaylistProvider
 import com.nafanya.mp3world.core.list_managers.ListManagerKey
 import com.nafanya.mp3world.core.list_managers.PLAYLIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.domain.user_playlists.UserPlaylistInteractor
-import com.nafanya.mp3world.domain.user_playlists.UserPlaylistInteractorImpl
+import com.nafanya.mp3world.domain.user_playlists.UserPlaylistsInteractor
+import com.nafanya.mp3world.domain.user_playlists.UserPlaylistsInteractorImpl
 import com.nafanya.mp3world.presentation.user_playlists.view_playlists.AllPlaylistsViewModel
 import dagger.Binds
 import dagger.Module
@@ -21,8 +21,8 @@ interface AllPlaylistsModule {
 
     @Binds
     @[IntoMap ListManagerKey(PLAYLIST_LIST_MANAGER_KEY)]
-    fun bindIntoMap(playlistListManagerImpl: UserPlaylistInteractorImpl): PlaylistProvider
+    fun bindIntoMap(playlistListManagerImpl: UserPlaylistsInteractorImpl): PlaylistProvider
 
     @Binds
-    fun bind(playlistListManagerImpl: UserPlaylistInteractorImpl): UserPlaylistInteractor
+    fun bind(playlistListManagerImpl: UserPlaylistsInteractorImpl): UserPlaylistsInteractor
 }

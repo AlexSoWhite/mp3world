@@ -19,11 +19,11 @@ import kotlinx.coroutines.flow.mapNotNull
  * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
  */
 @Singleton
-class UserPlaylistInteractorImpl @Inject constructor(
+class UserPlaylistsInteractorImpl @Inject constructor(
     private val userPlaylistsRepository: UserPlaylistsRepository,
     private val ioCoroutineProvider: IOCoroutineProvider,
     mediaStoreInteractor: MediaStoreInteractor
-) : UserPlaylistInteractor {
+) : UserPlaylistsInteractor {
 
     private val mPlaylists = MutableSharedFlow<List<PlaylistWrapper>>(replay = 1)
     override val playlists: Flow<List<PlaylistWrapper>>

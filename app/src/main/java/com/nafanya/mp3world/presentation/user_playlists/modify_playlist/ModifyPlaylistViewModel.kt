@@ -20,7 +20,7 @@ import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.utils.list_utils.title.convertStateToTitle
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
-import com.nafanya.mp3world.domain.user_playlists.UserPlaylistInteractor
+import com.nafanya.mp3world.domain.user_playlists.UserPlaylistsInteractor
 import com.nafanya.mp3world.domain.all_songs.SongPlaylistProvider
 import com.nafanya.mp3world.domain.all_songs.asAllSongsPlaylist
 import com.nafanya.mp3world.presentation.song_list_views.SONG_ADDABLE_REMOVABLE
@@ -32,15 +32,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ModifyPlaylistViewModel(
-    private val playlistListManager: UserPlaylistInteractor,
+    private val userPlaylistsInteractor: UserPlaylistsInteractor,
     private val playlistName: String,
     playlistId: Long,
-    songListManager: SongPlaylistProvider
+    songListProvider: SongPlaylistProvider
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
     TitleProcessorWrapper<List<SongWrapper>> {
 
-    override val playlistFlow = songListManager.songList.map {
+    override val playlistFlow = songListProvider.songList.map {
         it.asAllSongsPlaylist()
     }
 
@@ -60,12 +60,12 @@ class ModifyPlaylistViewModel(
         model.load {
             searchProcessor.setup(
                 this@ModifyPlaylistViewModel,
-                songListManager.songList.map {
+                songListProvider.songList.map {
                     Data.Success(it.asAllSongsPlaylist().songList)
                 }
             )
             model.currentState.collectLatestInScope(viewModelScope, ::proceedState)
-            playlistListManager
+            userPlaylistsInteractor
                 .getPlaylistByContainerId(playlistId)
                 .collectLatestInScope(viewModelScope) {
                     mModifyingPlaylist.postValue(it)
@@ -97,7 +97,7 @@ class ModifyPlaylistViewModel(
     fun confirmChanges() {
         val oldPlaylist = modifyingPlaylist.value!!
         viewModelScope.launch {
-            playlistListManager.updatePlaylist(
+            userPlaylistsInteractor.updatePlaylist(
                 oldPlaylist.copy(songList = songList)
             )
         }
@@ -124,7 +124,7 @@ class ModifyPlaylistViewModel(
             require(playlistId > -1)
             val playlistListManager = playlistProviderMapWrapper.getPlaylistProvider(
                 PLAYLIST_LIST_MANAGER_KEY
-            ) as UserPlaylistInteractor
+            ) as UserPlaylistsInteractor
             val songListManager = playlistProviderMapWrapper.getPlaylistProvider(
                 ALL_SONGS_LIST_MANAGER_KEY
             ) as SongPlaylistProvider

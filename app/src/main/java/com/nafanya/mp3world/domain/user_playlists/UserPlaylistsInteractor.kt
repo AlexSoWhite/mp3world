@@ -4,7 +4,7 @@ import com.nafanya.mp3world.core.list_managers.PlaylistProvider
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import kotlinx.coroutines.flow.Flow
 
-interface UserPlaylistInteractor : PlaylistProvider {
+interface UserPlaylistsInteractor : PlaylistProvider {
 
     val playlists: Flow<List<PlaylistWrapper>>
 

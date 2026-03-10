@@ -30,13 +30,13 @@ import kotlinx.coroutines.launch
 class AllSongsViewModel @Inject constructor(
     private val mediaStoreInteractor: MediaStoreInteractor,
     private val favouritesManager: FavouritesProvider,
-    songListManager: SongPlaylistProvider
+    songListProvider: SongPlaylistProvider
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
     TitleProcessorWrapper<List<SongWrapper>>,
     FavouritesManager {
 
-    override val playlistFlow = songListManager.songList.map {
+    override val playlistFlow = songListProvider.songList.map {
         it.asAllSongsPlaylist()
     }
 
@@ -57,7 +57,7 @@ class AllSongsViewModel @Inject constructor(
             titleProcessor.setBaseTitle("Мои песни")
             searchProcessor.setup(
                 this@AllSongsViewModel,
-                songListManager.songList.map {
+                songListProvider.songList.map {
                     Data.Success(it.asAllSongsPlaylist().songList)
                 }
             )

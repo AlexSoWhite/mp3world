@@ -17,7 +17,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 
 class ArtistListViewModel @Inject constructor(
-    artistListManager: ArtistPlaylistProvider
+    artistListProvider: ArtistPlaylistProvider
 ) : StatedListViewModel<Artist, ArtistListItem>(),
     Searchable<Artist>,
     TitleProcessorWrapper<List<Artist>> {
@@ -39,7 +39,7 @@ class ArtistListViewModel @Inject constructor(
             titleProcessor.setBaseTitle("Исполнители")
             searchProcessor.setup(
                 this,
-                artistListManager.artists.map { Data.Success(it) }
+                artistListProvider.artists.map { Data.Success(it) }
             )
         }
     }

@@ -41,7 +41,7 @@ class RemoteSongsViewModel(
     TitleProcessorWrapper<List<SongWrapper>> {
 
     private val songSearcher: SongSearcher
-        get() = songSearchersProvider.getSongSearcher(HITMO_TOP)
+        get() = songSearchersProvider.getSongSearcher(HITMO_TOP) // todo: unite with others just in case?
 
     private val mPlaylistFlow = MutableSharedFlow<List<RemoteSong>?>(replay = 1)
     override val playlistFlow: Flow<PlaylistWrapper>

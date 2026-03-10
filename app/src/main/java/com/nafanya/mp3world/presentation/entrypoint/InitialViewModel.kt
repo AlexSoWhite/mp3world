@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.state_machines.StateModel
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.domain.albums.AlbumPlaylistProvider
-import com.nafanya.mp3world.domain.user_playlists.UserPlaylistInteractor
+import com.nafanya.mp3world.domain.user_playlists.UserPlaylistsInteractor
 import com.nafanya.mp3world.domain.all_songs.SongPlaylistProvider
 import com.nafanya.mp3world.domain.all_songs.asAllSongsPlaylist
 import com.nafanya.mp3world.domain.artists.ArtistPlaylistProvider
@@ -29,7 +29,7 @@ class InitialViewModel @Inject constructor(
     private val playerInteractor: PlayerInteractor,
     private val songListManager: SongPlaylistProvider,
     artistListManager: ArtistPlaylistProvider,
-    playlistListManager: UserPlaylistInteractor,
+    playlistListManager: UserPlaylistsInteractor,
     albumListManager: AlbumPlaylistProvider,
     favouriteListManager: FavouritesProvider
 ) : ViewModel() {
