@@ -99,10 +99,6 @@ class RemoteSongsViewModel(
 
     override fun download(remoteSong: RemoteSong) = downloadInteractor.download(remoteSong)
 
-    override fun resetMediaStore() {
-        mediaStoreInteractor.reset()
-    }
-
     class Factory @AssistedInject constructor(
         @Assisted("query") private val query: String,
         private val downloadInteractor: DownloadInteractor,

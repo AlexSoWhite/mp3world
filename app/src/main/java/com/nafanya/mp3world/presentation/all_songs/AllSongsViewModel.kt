@@ -51,7 +51,7 @@ class AllSongsViewModel @Inject constructor(
     )
 
     private val titleProcessor = TitleProcessor<List<SongWrapper>>(
-        baseTitleRes = R.string.add_songs
+        baseTitleRes = R.string.my_songs
     )
     override val title: StateFlow<TitleModel>
         get() = titleProcessor.title

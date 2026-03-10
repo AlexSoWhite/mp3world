@@ -23,7 +23,6 @@ fun Fragment.download(
                     applicationContext.showToast(
                         applicationContext.getString(R.string.download_finished, song.artist, song.title)
                     )
-                    downloadingViewModel.resetMediaStore()
                 }
                 ResultType.ERROR -> applicationContext.showToast(
                     applicationContext.getString(R.string.error)

@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
  */
 class PlayerViewModel @Inject constructor(
     private val downloadInteractor: DownloadInteractor,
-    private val mediaStoreInteractor: MediaStoreInteractor,
     private val favouriteListManager: FavouritesProvider,
     playerInteractor: PlayerInteractor
 ) : ViewModel(), DownloadingViewModel, FavouritesManager {
@@ -43,8 +42,4 @@ class PlayerViewModel @Inject constructor(
     }
 
     override fun download(remoteSong: RemoteSong) = downloadInteractor.download(remoteSong)
-
-    override fun resetMediaStore() {
-        mediaStoreInteractor.reset()
-    }
 }

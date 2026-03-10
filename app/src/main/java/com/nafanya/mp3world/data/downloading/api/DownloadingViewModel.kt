@@ -6,11 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface for view models that can trigger downloading.
- * To implement it use [DownloadInteractor] and [MediaStoreInteractor].
+ * To implement it use [DownloadInteractor].
  */
 interface DownloadingViewModel {
 
     fun download(remoteSong: RemoteSong): Flow<DownloadResult>
-
-    fun resetMediaStore()
 }
