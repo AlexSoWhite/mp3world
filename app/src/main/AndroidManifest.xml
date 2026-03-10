@@ -42,11 +42,11 @@
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name=".features.allSongs.presentation.AllSongsActivity"
+        <activity android:name=".features.all_songs.presentation.AllSongsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.userPlaylists.allPlaylists.AllPlaylistsActivity"
+        <activity android:name=".features.user_playlists.presentation.view_playlists.AllPlaylistsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
@@ -54,11 +54,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.userPlaylists.modifyPlaylist.ModifyPlaylistActivity"
+        <activity android:name=".features.user_playlists.presentation.modify_playlist.ModifyPlaylistActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.userPlaylists.mutablePlaylist.MutablePlaylistActivity"
+        <activity android:name=".features.user_playlists.presentation.mutable_playlist.MutablePlaylistActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait" />
@@ -74,7 +74,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>
-        <activity android:name=".features.remoteSongs.presentation.RemoteSongsActivity"
+        <activity android:name=".features.remote_songs.presentation.RemoteSongsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"/>

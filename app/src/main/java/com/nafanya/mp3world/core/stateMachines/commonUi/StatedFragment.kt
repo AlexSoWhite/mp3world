@@ -15,6 +15,10 @@ import com.nafanya.mp3world.core.coroutines.collectInScope
 import dagger.Lazy
 import javax.inject.Inject
 
+/**
+ * Fragment that takes care of basic state processing - collects [StatedViewModel.state] and calls
+ * corresponding render methods.
+ */
 abstract class StatedFragment<VB : ViewBinding, T> : BaseFragment<VB>() {
 
     @Inject
@@ -36,6 +40,10 @@ abstract class StatedFragment<VB : ViewBinding, T> : BaseFragment<VB>() {
         }
     }
 
+    /**
+     * Simply calls corresponding render method based on state. Note that this class does not
+     * process empty state since that state is present only for lists.
+     */
     protected open fun renderState(state: State<T>) = when (state) {
         is State.Error -> renderError(state.error)
         is State.Initializing -> renderInitializing()

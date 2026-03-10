@@ -8,15 +8,15 @@ import com.nafanya.mp3world.core.listManagers.FAVOURITE_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.features.albums.presentation.AlbumListActivity
-import com.nafanya.mp3world.features.userPlaylists.allPlaylists.AllPlaylistsActivity
-import com.nafanya.mp3world.features.userPlaylists.modifyPlaylist.ModifyPlaylistActivity
-import com.nafanya.mp3world.features.userPlaylists.mutablePlaylist.MutablePlaylistActivity
-import com.nafanya.mp3world.features.allSongs.presentation.AllSongsActivity
+import com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.AllPlaylistsActivity
+import com.nafanya.mp3world.features.user_playlists.presentation.modify_playlist.ModifyPlaylistActivity
+import com.nafanya.mp3world.features.user_playlists.presentation.mutable_playlist.MutablePlaylistActivity
+import com.nafanya.mp3world.features.all_songs.presentation.AllSongsActivity
 import com.nafanya.mp3world.features.artists.presentation.ArtistListActivity
 import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity
 import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity.Companion.PLAYLIST_NAME
-import com.nafanya.mp3world.features.remoteSongs.presentation.RemoteSongsActivity
-import com.nafanya.mp3world.features.remoteSongs.presentation.RemoteSongsActivity.Companion.QUERY
+import com.nafanya.mp3world.features.remote_songs.presentation.RemoteSongsActivity
+import com.nafanya.mp3world.features.remote_songs.presentation.RemoteSongsActivity.Companion.QUERY
 
 // todo: this is definitely a suboptimal approach
 // todo: launching an activity for each screen is probably not the way

@@ -5,12 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.stateMachines.StateModel
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.features.albums.domain.AlbumListManager
-import com.nafanya.mp3world.features.userPlaylists.domain.PlaylistListManager
-import com.nafanya.mp3world.features.allSongs.domain.SongListProvider
-import com.nafanya.mp3world.features.allSongs.domain.asAllSongsPlaylist
+import com.nafanya.mp3world.features.user_playlists.domain.PlaylistListManager
+import com.nafanya.mp3world.features.all_songs.domain.SongListProvider
+import com.nafanya.mp3world.features.all_songs.domain.asAllSongsPlaylist
 import com.nafanya.mp3world.features.artists.domain.ArtistListManager
 import com.nafanya.mp3world.features.favourites.domain.FavouritesManager
-import com.nafanya.mp3world.data.localStorage.LocalStorageInteractor
+import com.nafanya.mp3world.data.local_storage.LocalStorageRepository
 import com.nafanya.mp3world.data.mediaStore.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 @Suppress("LongParameterList")
 class InitialViewModel @Inject constructor(
     private val mediaStoreInteractor: MediaStoreInteractor,
-    private val localStorageInteractor: LocalStorageInteractor,
+    private val localStorageRepository: LocalStorageRepository, // todo: maybe should be a domain level model
     private val playerInteractor: PlayerInteractor,
     private val songListManager: SongListProvider,
     artistListManager: ArtistListManager,
@@ -89,7 +89,7 @@ class InitialViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        localStorageInteractor.closeDataBase()
+        localStorageRepository.closeDatabase()
     }
 
     companion object {

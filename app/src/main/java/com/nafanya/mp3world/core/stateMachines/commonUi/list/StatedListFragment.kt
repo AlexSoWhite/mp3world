@@ -10,6 +10,10 @@ import com.nafanya.mp3world.core.stateMachines.State
 import com.nafanya.mp3world.core.stateMachines.commonUi.StatedFragment
 import com.nafanya.mp3world.core.stateMachines.commonUi.StatedViewModel
 
+/**
+ * [StatedFragment] with additional functionality to render [LState.Empty]. Submits data to recycler
+ * when necessary.
+ */
 abstract class StatedListFragment<
     VB : ViewBinding,
     DU,

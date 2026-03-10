@@ -23,7 +23,7 @@ abstract class StatedViewModel<T>(
     val state: StateFlow<State<T>> = model.currentState
 
     /**
-     * collects [dataSource] in [viewModelScope] to process its data and manage [state] of [model]
+     * Collects [dataSource] in [viewModelScope] to process its data and manage [state] of [model].
      */
     open fun setDataSource(dataSource: Flow<Data<T>>) {
         viewModelScope.launch {

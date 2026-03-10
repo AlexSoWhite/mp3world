@@ -5,9 +5,9 @@ import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.coroutines.emitInScope
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.features.favourites.data.FavouritesEntity
-import com.nafanya.mp3world.data.localStorage.LocalStorageInteractor
-import com.nafanya.mp3world.data.localStorage.api.FavouritesInteractor
+import com.nafanya.mp3world.data.favourites.FavouritesEntity
+import com.nafanya.mp3world.data.local_storage.LocalStorageRepository
+import com.nafanya.mp3world.data.local_storage.api.FavouritesRepository
 import com.nafanya.mp3world.data.mediaStore.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 
 /**
- * Object that holds favourites data. Managed by [LocalStorageInteractor] and [MediaStoreInteractor].
+ * Object that holds favourites data. Managed by [LocalStorageRepository] and [MediaStoreInteractor].
  */
 @Singleton
 class FavouritesManagerImpl @Inject constructor(
-    private val favouriteListInteractor: FavouritesInteractor,
+    private val favouriteListInteractor: FavouritesRepository,
     private val ioCoroutineProvider: IOCoroutineProvider,
     mediaStoreInteractor: MediaStoreInteractor
 ) : FavouritesManager {
@@ -39,7 +39,7 @@ class FavouritesManagerImpl @Inject constructor(
         mediaStoreInteractor.allSongs.collectLatestInScope(
             ioCoroutineProvider.ioScope
         ) { songList ->
-            favouriteListInteractor.getFavouritesUris().collectLatestInScope(
+            favouriteListInteractor.observeFavouritesUris().collectLatestInScope(
                 ioCoroutineProvider.ioScope
             ) { uris ->
                 val songs = songList
