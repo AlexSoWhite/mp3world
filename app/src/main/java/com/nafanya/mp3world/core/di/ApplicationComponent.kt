@@ -1,7 +1,9 @@
 package com.nafanya.mp3world.core.di
 
 import android.content.Context
+import android.os.Build
 import com.google.gson.Gson
+import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.core.di.view_model.ViewModelFactoryModule
 import com.nafanya.mp3world.core.wrappers.di.BitmapFlowModelLoaderFactoryComponentProvider
 import com.nafanya.mp3world.core.wrappers.di.WrappersModule
@@ -28,6 +30,7 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Scope
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 
 @Component(
@@ -76,6 +79,12 @@ interface ApplicationComponent :
 
         @BindsInstance
         fun okHttpClient(client: OkHttpClient): Builder
+
+        @BindsInstance
+        fun dispatchersProvider(dispatchersProvider: DispatchersProvider): Builder
+
+        @BindsInstance
+        fun applicationScope(scope: CoroutineScope): Builder
 
         fun build(): ApplicationComponent
     }

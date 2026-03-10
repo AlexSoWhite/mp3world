@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SongImageBitmapFactory {
 
-    fun getBitmapForSong(song: SongWrapper, size: Size? = null): Flow<Bitmap>
+    suspend fun getBitmapForSong(song: SongWrapper, size: Size? = null): Bitmap
 }

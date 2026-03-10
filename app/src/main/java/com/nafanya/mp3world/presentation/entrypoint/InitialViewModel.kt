@@ -87,6 +87,7 @@ class InitialViewModel @Inject constructor(
         playerInteractor.suspendPlayer()
     }
 
+    // todo: check if we really have to do it manually
     override fun onCleared() {
         super.onCleared()
         localStorageRepository.closeDatabase()

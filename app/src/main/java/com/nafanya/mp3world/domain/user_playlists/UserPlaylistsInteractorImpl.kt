@@ -1,7 +1,6 @@
 package com.nafanya.mp3world.domain.user_playlists
 
 import android.net.Uri
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.coroutines.emitInScope
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
@@ -11,17 +10,22 @@ import com.nafanya.mp3world.data.local_storage.api.UserPlaylistsRepository
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 
 /**
  * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
 class UserPlaylistsInteractorImpl @Inject constructor(
     private val userPlaylistsRepository: UserPlaylistsRepository,
-    private val ioCoroutineProvider: IOCoroutineProvider,
+    private val applicationScope: CoroutineScope,
     mediaStoreInteractor: MediaStoreInteractor
 ) : UserPlaylistsInteractor {
 
@@ -40,34 +44,32 @@ class UserPlaylistsInteractorImpl @Inject constructor(
         get() = mPlaylists.replayCache[0]
 
     init {
-        mediaStoreInteractor.allSongs.collectLatestInScope(ioCoroutineProvider.ioScope) { songs ->
-            userPlaylistsRepository.observeUserPlaylists().collectLatestInScope(
-                ioCoroutineProvider.ioScope
-            ) { entries ->
-                val list = mutableListOf<PlaylistWrapper>()
-                entries.sortedByDescending {
-                    it.playlistEntity.position
-                }.forEach {
-                    val songList = mutableListOf<SongWrapper>()
-                    it.songEntities.forEach { entity ->
-                        songs.firstOrNull { song ->
-                            Uri.parse(entity.uri) == song.uri
-                        }?.let { localSong ->
-                            songList.add(localSong)
-                        }
+        mediaStoreInteractor.allSongs.flatMapLatest { songs ->
+            userPlaylistsRepository.observeUserPlaylists().map { entries -> Pair(songs, entries) }
+        }.collectLatestInScope(applicationScope) { (songs, entries) ->
+            val list = mutableListOf<PlaylistWrapper>()
+            entries.sortedByDescending {
+                it.playlistEntity.position
+            }.forEach {
+                val songList = mutableListOf<SongWrapper>()
+                it.songEntities.forEach { entity ->
+                    songs.firstOrNull { song ->
+                        Uri.parse(entity.uri) == song.uri
+                    }?.let { localSong ->
+                        songList.add(localSong)
                     }
-                    list.add(
-                        PlaylistWrapper(
-                            songList = songList,
-                            id = it.playlistEntity.id,
-                            name = it.playlistEntity.name,
-                            position = it.playlistEntity.position,
-                            imageSource = songList.firstOrNull()
-                        )
-                    )
                 }
-                mPlaylists.emitInScope(ioCoroutineProvider.ioScope, list)
+                list.add(
+                    PlaylistWrapper(
+                        songList = songList,
+                        id = it.playlistEntity.id,
+                        name = it.playlistEntity.name,
+                        position = it.playlistEntity.position,
+                        imageSource = songList.firstOrNull()
+                    )
+                )
             }
+            mPlaylists.emitInScope(applicationScope, list)
         }
     }
 

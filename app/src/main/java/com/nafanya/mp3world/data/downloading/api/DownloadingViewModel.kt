@@ -2,6 +2,7 @@ package com.nafanya.mp3world.data.downloading.api
 
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface for view models that can trigger downloading.
@@ -9,7 +10,7 @@ import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
  */
 interface DownloadingViewModel {
 
-    fun download(remoteSong: RemoteSong, callback: (DownloadResult) -> Unit)
+    fun download(remoteSong: RemoteSong): Flow<DownloadResult>
 
     fun resetMediaStore()
 }

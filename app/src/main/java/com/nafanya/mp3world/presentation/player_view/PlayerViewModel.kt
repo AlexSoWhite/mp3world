@@ -12,6 +12,7 @@ import com.nafanya.mp3world.domain.favourites.FavouritesManager
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -43,9 +44,7 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    override fun download(remoteSong: RemoteSong, callback: (DownloadResult) -> Unit) {
-        downloadInteractor.download(remoteSong, callback)
-    }
+    override fun download(remoteSong: RemoteSong) = downloadInteractor.download(remoteSong)
 
     override fun resetMediaStore() {
         mediaStoreInteractor.reset()

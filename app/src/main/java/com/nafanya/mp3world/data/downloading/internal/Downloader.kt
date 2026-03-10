@@ -5,6 +5,9 @@ import android.os.Environment
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.data.downloading.api.DownloadResult
 import com.nafanya.mp3world.data.downloading.api.ResultType
+import kotlin.coroutines.resume
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * Class that downloads song by [android.app.DownloadManager].
@@ -24,32 +27,35 @@ internal class Downloader(
 
     suspend fun download(
         song: RemoteSong,
-        callback: (DownloadResult) -> Unit
-    ) {
+    ): DownloadResult {
         val url = song.uri.toString()
         val fileName = "${song.artist} - ${song.title}.mp3"
-        try {
-            downloadManagerInteractor.downloadFromUrl(url, fileName).collect { name ->
-                if (name!!.isNotEmpty()) {
-                    scan(name, callback)
-                }
+        return try {
+            val name = downloadManagerInteractor.downloadFromUrl(url, fileName)
+            if (name!!.isNotEmpty()) {
+                scan(name)
+            } else {
+                DownloadResult(ResultType.ERROR) // todo: we probably never get here
             }
         } catch (exception: Exception) {
-            callback(DownloadResult(ResultType.ERROR))
+            DownloadResult(ResultType.ERROR)
         }
     }
 
     /**
-     * Use [MetadataScanner] to submit automatically all media metadata to downloaded file
+     * Use [MetadataScanner] to submit automatically all media metadata to downloaded file.
      */
-    private fun scan(name: String, callback: (DownloadResult) -> Unit) {
-        MetadataScanner(context, "$DOWNLOAD_DIR/$name") {
-            when (it) {
-                ScannerResult.SUCCESS -> {
-                    callback(DownloadResult(ResultType.SUCCESS))
-                }
-                ScannerResult.FAILED -> {
-                    callback(DownloadResult(ResultType.ERROR))
+    private suspend fun scan(name: String): DownloadResult {
+        return suspendCancellableCoroutine { continuation ->
+            MetadataScanner(context, "$DOWNLOAD_DIR/$name") {
+                when (it) {
+                    ScannerResult.SUCCESS -> {
+                        continuation.resume(DownloadResult(ResultType.SUCCESS))
+                    }
+
+                    ScannerResult.FAILED -> {
+                        continuation.resume(DownloadResult(ResultType.ERROR))
+                    }
                 }
             }
         }

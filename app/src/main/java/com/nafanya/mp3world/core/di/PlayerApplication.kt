@@ -2,12 +2,18 @@ package com.nafanya.mp3world.core.di
 
 import android.app.Application
 import com.google.gson.Gson
+import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.player.PlayerInteractor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 
 class PlayerApplication : Application() {
 
     lateinit var applicationComponent: ApplicationComponent
+
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun onCreate() {
         super.onCreate()
@@ -16,6 +22,8 @@ class PlayerApplication : Application() {
             .playerInteractor(PlayerInteractor(this))
             .gson(Gson())
             .okHttpClient(OkHttpClient())
+            .dispatchersProvider(DispatchersProvider())
+            .applicationScope(applicationScope)
             .build()
     }
 }

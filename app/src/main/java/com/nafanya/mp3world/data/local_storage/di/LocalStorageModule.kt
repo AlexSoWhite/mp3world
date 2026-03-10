@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.data.local_storage.di
 
 import android.content.Context
+import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.data.local_storage.api.UserPlaylistsRepository
 import com.nafanya.mp3world.data.local_storage.api.FavouritesRepository
 import com.nafanya.mp3world.data.local_storage.LocalStorageRepository
@@ -13,10 +14,11 @@ class LocalStorageModule {
 
     @Provides
     @Singleton
-    fun localStorageInteractor(
-        context: Context
+    fun localStorageRepository(
+        context: Context,
+        dispatchersProvider: DispatchersProvider
     ): LocalStorageRepository {
-        return LocalStorageRepository(context)
+        return LocalStorageRepository(context, dispatchersProvider)
     }
 
     @Provides

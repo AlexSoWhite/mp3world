@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.domain.favourites
 
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
 import com.nafanya.mp3world.core.coroutines.emitInScope
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
@@ -11,17 +10,21 @@ import com.nafanya.mp3world.data.local_storage.api.FavouritesRepository
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 /**
  * Object that holds favourites data. Managed by [LocalStorageRepository] and [MediaStoreInteractor].
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
 class FavouritesProviderImpl @Inject constructor(
     private val favouriteListInteractor: FavouritesRepository,
-    private val ioCoroutineProvider: IOCoroutineProvider,
+    private val applicationScope: CoroutineScope,
     mediaStoreInteractor: MediaStoreInteractor
 ) : FavouritesProvider {
 
@@ -35,22 +38,17 @@ class FavouritesProviderImpl @Inject constructor(
         }
 
     init {
-        // todo: this looks weird, should be revisited
-        mediaStoreInteractor.allSongs.collectLatestInScope(
-            ioCoroutineProvider.ioScope
-        ) { songList ->
-            favouriteListInteractor.observeFavouritesUris().collectLatestInScope(
-                ioCoroutineProvider.ioScope
-            ) { uris ->
-                val songs = songList
-                    .filter { uris.contains(it.uri) }
-                // TODO: string resource
-                val temp = PlaylistWrapper(
-                    songList = songs,
-                    name = "Избранное"
-                )
-                _favorites.emitInScope(ioCoroutineProvider.ioScope, temp)
-            }
+        mediaStoreInteractor.allSongs.flatMapLatest { songs ->
+            favouriteListInteractor.observeFavouritesUris().map { entries -> Pair(songs, entries) }
+        }.collectLatestInScope(applicationScope) { (songList, uris) ->
+            val songs = songList
+                .filter { uris.contains(it.uri) }
+            // TODO: string resource
+            val temp = PlaylistWrapper(
+                songList = songs,
+                name = "Избранное"
+            )
+            _favorites.emitInScope(applicationScope, temp)
         }
     }
 

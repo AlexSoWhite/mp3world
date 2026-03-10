@@ -5,6 +5,5 @@ import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 
 interface MediaStoreReader {
 
-    @WorkerThread
-    fun readMediaStore(): List<LocalSong>
+    suspend fun readMediaStore(): List<LocalSong>
 }

@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
 import com.nafanya.mp3world.core.coroutines.collectInScope
 import com.nafanya.mp3world.core.state_machines.presentation.Data
 import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistViewModel
@@ -14,7 +13,6 @@ import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.data.downloading.api.DownloadInteractor
-import com.nafanya.mp3world.data.downloading.api.DownloadResult
 import com.nafanya.mp3world.data.downloading.api.DownloadingViewModel
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.mp3world.data.remote_songs.HITMO_TOP
@@ -33,7 +31,6 @@ import kotlinx.coroutines.launch
 class RemoteSongsViewModel(
     private val query: String,
     private val songSearchersProvider: SongSearchersProvider,
-    private val ioCoroutineProvider: IOCoroutineProvider,
     private val downloadInteractor: DownloadInteractor,
     private val mediaStoreInteractor: MediaStoreInteractor
 ) : StatedPlaylistViewModel(),
@@ -58,10 +55,9 @@ class RemoteSongsViewModel(
         model.load {
             titleProcessor.setup(this.model, viewModelScope)
             titleProcessor.setBaseTitle(query)
-            ioCoroutineProvider.ioScope.launch {
-                songSearcher.searchSongs(query) {
-                    viewModelScope.launch { mPlaylistFlow.emit(it) }
-                }
+            viewModelScope.launch {
+                val songs = songSearcher.searchSongs(query)
+                mPlaylistFlow.emit(songs)
             }
             setDataSource(
                 mPlaylistFlow.map {
@@ -94,17 +90,14 @@ class RemoteSongsViewModel(
 
     fun refresh() {
         model.refresh {
-            ioCoroutineProvider.ioScope.launch {
-                songSearcher.searchSongs(query) {
-                    viewModelScope.launch { mPlaylistFlow.emit(it) }
-                }
+            viewModelScope.launch {
+                val songs = songSearcher.searchSongs(query)
+                mPlaylistFlow.emit(songs)
             }
         }
     }
 
-    override fun download(remoteSong: RemoteSong, callback: (DownloadResult) -> Unit) {
-        downloadInteractor.download(remoteSong, callback)
-    }
+    override fun download(remoteSong: RemoteSong) = downloadInteractor.download(remoteSong)
 
     override fun resetMediaStore() {
         mediaStoreInteractor.reset()
@@ -113,7 +106,6 @@ class RemoteSongsViewModel(
     class Factory @AssistedInject constructor(
         @Assisted("query") private val query: String,
         private val downloadInteractor: DownloadInteractor,
-        private val ioCoroutineProvider: IOCoroutineProvider,
         private val mediaStoreInteractor: MediaStoreInteractor,
         private val songSearchersProvider: SongSearchersProvider
     ) : ViewModelProvider.Factory {
@@ -123,7 +115,6 @@ class RemoteSongsViewModel(
             return RemoteSongsViewModel(
                 query,
                 songSearchersProvider,
-                ioCoroutineProvider,
                 downloadInteractor,
                 mediaStoreInteractor
             ) as T

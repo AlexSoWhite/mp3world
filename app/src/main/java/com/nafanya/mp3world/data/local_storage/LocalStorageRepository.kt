@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.room.Room
+import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.data.core.local.AppDatabase
 import com.nafanya.mp3world.data.user_playlists.PlaylistSongsEntity
 import com.nafanya.mp3world.data.user_playlists.PlaylistStorageEntity
@@ -13,6 +14,7 @@ import com.nafanya.mp3world.data.local_storage.api.UserPlaylistsRepository
 import com.nafanya.mp3world.data.local_storage.api.FavouritesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 @Suppress("MagicNumber")
 /**
@@ -20,7 +22,8 @@ import kotlinx.coroutines.flow.map
  * @property context holds application context.
  */
 class LocalStorageRepository(
-    private val context: Context
+    private val context: Context,
+    private val dispatchersProvider: DispatchersProvider
 ) : FavouritesRepository, UserPlaylistsRepository {
 
     private val db: AppDatabase = Room.databaseBuilder(
@@ -33,11 +36,11 @@ class LocalStorageRepository(
         return db.favouritesDao().getAll().map { list -> list.map { it.toUri() } }
     }
 
-    override suspend fun addFavourite(entity: FavouritesEntity) {
+    override suspend fun addFavourite(entity: FavouritesEntity) = withContext(dispatchersProvider.io) {
         db.favouritesDao().insert(entity)
     }
 
-    override suspend fun deleteFavourite(entity: FavouritesEntity) {
+    override suspend fun deleteFavourite(entity: FavouritesEntity) = withContext(dispatchersProvider.io) {
         db.favouritesDao().delete(entity)
     }
 
@@ -45,26 +48,26 @@ class LocalStorageRepository(
         return db.userPlaylistsDao().getAll()
     }
 
-    override suspend fun insert(entity: PlaylistStorageEntity) {
+    override suspend fun insert(entity: PlaylistStorageEntity) = withContext(dispatchersProvider.io) {
         db.userPlaylistsDao().insert(entity)
     }
 
-    override suspend fun insertSongs(songs: List<PlaylistSongsEntity>) {
+    override suspend fun insertSongs(songs: List<PlaylistSongsEntity>) = withContext(dispatchersProvider.io) {
         db.userPlaylistsDao().insertSongs(songs)
     }
 
-    override suspend fun delete(entity: PlaylistStorageEntity) {
+    override suspend fun delete(entity: PlaylistStorageEntity) = withContext(dispatchersProvider.io) {
         db.userPlaylistsDao().delete(entity)
     }
 
-    override suspend fun update(entity: PlaylistStorageEntity) {
+    override suspend fun update(entity: PlaylistStorageEntity) = withContext(dispatchersProvider.io) {
         db.userPlaylistsDao().update(entity)
     }
 
     override suspend fun update(
         oldEntity: PlaylistStorageEntity,
         newEntity: Pair<PlaylistStorageEntity, List<PlaylistSongsEntity>>
-    ) {
+    ) = withContext(dispatchersProvider.io) {
         db.userPlaylistsDao().update(oldEntity, newEntity)
     }
 

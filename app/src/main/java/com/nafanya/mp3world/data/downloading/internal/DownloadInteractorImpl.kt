@@ -1,28 +1,27 @@
 package com.nafanya.mp3world.data.downloading.internal
 
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
-import com.nafanya.mp3world.core.coroutines.MainCoroutineProvider
-import com.nafanya.mp3world.core.coroutines.inScope
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.data.downloading.api.DownloadInteractor
 import com.nafanya.mp3world.data.downloading.api.DownloadResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 /**
- * Wrapper class that holds [Downloader] and launches [Downloader.download]
- * in [IOCoroutineProvider.ioScope], handling result in [MainCoroutineProvider.mainScope]
+ * Wrapper class that holds [Downloader] and launches [Downloader.download] in [applicationScope]
  */
 internal class DownloadInteractorImpl(
     private val downloader: Downloader,
-    private val ioCoroutineProvider: IOCoroutineProvider,
-    private val mainCoroutineProvider: MainCoroutineProvider
+    private val applicationScope: CoroutineScope
 ) : DownloadInteractor {
 
-    override fun download(song: RemoteSong, callback: (DownloadResult) -> Unit) {
-        ioCoroutineProvider.ioScope.launch {
-            downloader.download(song) {
-                callback.inScope(mainCoroutineProvider.mainScope, it)
-            }
+    override fun download(song: RemoteSong): Flow<DownloadResult> {
+        val resultFlow = MutableSharedFlow<DownloadResult>()
+        applicationScope.launch {
+            val result = downloader.download(song)
+            resultFlow.emit(result)
         }
+        return resultFlow
     }
 }

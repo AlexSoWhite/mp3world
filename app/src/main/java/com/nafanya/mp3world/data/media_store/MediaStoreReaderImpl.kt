@@ -3,16 +3,19 @@ package com.nafanya.mp3world.data.media_store
 import android.content.Context
 import android.provider.MediaStore
 import androidx.annotation.WorkerThread
+import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.core.wrappers.song.UriFactory
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import javax.inject.Inject
+import kotlinx.coroutines.withContext
 
 /**
  * TODO: file observer
  */
 class MediaStoreReaderImpl @Inject constructor(
     private val context: Context,
-    private val uriFactory: UriFactory
+    private val uriFactory: UriFactory,
+    private val dispatchersProvider: DispatchersProvider
 ) : MediaStoreReader {
 
     // get all the fields from media storage
@@ -27,7 +30,7 @@ class MediaStoreReaderImpl @Inject constructor(
 
     @Suppress("LongMethod", "NestedBlockDepth")
     @WorkerThread
-    override fun readMediaStore(): List<LocalSong> {
+    override suspend fun readMediaStore(): List<LocalSong> = withContext(dispatchersProvider.io) {
         val query = context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             projection,
@@ -77,6 +80,6 @@ class MediaStoreReaderImpl @Inject constructor(
                 }
             }
         }
-        return list
+        return@withContext list
     }
 }

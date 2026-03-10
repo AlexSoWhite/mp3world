@@ -13,8 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.coroutines.DefaultCoroutineProvider
-import com.nafanya.mp3world.core.coroutines.IOCoroutineProvider
+import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
@@ -23,9 +22,10 @@ import java.lang.Exception
 import java.lang.NullPointerException
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlin.coroutines.resume
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -38,69 +38,61 @@ import okio.IOException
 class SongImageBitmapFactoryImpl @Inject constructor(
     private val context: Context,
     private val okHttpClient: OkHttpClient,
-    private val ioCoroutineProvider: IOCoroutineProvider,
-    private val defaultCoroutineProvider: DefaultCoroutineProvider
+    private val dispatchersProvider: DispatchersProvider
 ) : SongImageBitmapFactory {
 
     companion object {
-        private const val artDimension = 500
+        private const val ART_DIMENSION = 500
     }
 
     private val defaultBitmap: Bitmap
 
     init {
         val options = BitmapFactory.Options()
-        options.outWidth = artDimension
-        options.outHeight = artDimension
+        options.outWidth = ART_DIMENSION
+        options.outHeight = ART_DIMENSION
         defaultBitmap = AppCompatResources.getDrawable(
             context,
             R.drawable.song_icon_preview
         )!!.toBitmap(
-            artDimension,
-            artDimension
+            ART_DIMENSION,
+            ART_DIMENSION
         )
     }
 
     // todo: make suspend?
-    override fun getBitmapForSong(song: SongWrapper, size: Size?): SharedFlow<Bitmap> {
+    override suspend fun getBitmapForSong(song: SongWrapper, size: Size?): Bitmap {
         return when (song) {
             is RemoteSong -> getBitmapForRemoteSong(song)
-            is LocalSong -> getBitmapForLocalSong(song, size ?: Size(artDimension, artDimension))
+            is LocalSong -> getBitmapForLocalSong(song, size ?: Size(ART_DIMENSION, ART_DIMENSION))
             else -> throw IllegalArgumentException("unknown song type ${song.javaClass}")
         }
     }
 
-    private fun getBitmapForRemoteSong(song: RemoteSong): SharedFlow<Bitmap> {
-        val flow = MutableSharedFlow<Bitmap>()
-        ioCoroutineProvider.ioScope.launch {
-            kotlin.runCatching {
-                val request = Request.Builder().url(song.artUrl).build()
-                okHttpClient.newCall(request)
-                    .enqueue(
-                        responseCallback = object : Callback {
-                            override fun onFailure(call: Call, e: java.io.IOException) {
-                                ioCoroutineProvider.ioScope.launch {
-                                    flow.emit(defaultBitmap)
-                                }
-                            }
+    private suspend fun getBitmapForRemoteSong(song: RemoteSong): Bitmap = withContext(dispatchersProvider.io) {
+        return@withContext suspendCancellableCoroutine { continuation ->
+            val request = Request.Builder().url(song.artUrl).build()
+            okHttpClient.newCall(request)
+                .enqueue(
+                    responseCallback = object : Callback {
+                        override fun onFailure(call: Call, e: java.io.IOException) {
+                            continuation.resume(defaultBitmap)
+                        }
 
-                            override fun onResponse(call: Call, response: Response) {
-                                defaultCoroutineProvider.defaultScope.launch {
-                                    val bitmap = BitmapFactory
-                                        .decodeStream(
-                                            response.body?.byteStream()
-                                        )
-                                    flow.emit(bitmap)
+                        override fun onResponse(call: Call, response: Response) {
+                            launch {
+                                withContext(dispatchersProvider.default) {
+                                    val bitmap = BitmapFactory.decodeStream(response.body?.byteStream())
+                                    continuation.resume(bitmap)
                                 }
                             }
                         }
-                    )
-            }
+                    }
+                )
         }
-        return flow
     }
 
-    private fun getBitmapForLocalSong(song: LocalSong, size: Size): SharedFlow<Bitmap> {
+    private suspend fun getBitmapForLocalSong(song: LocalSong, size: Size): Bitmap {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             getBitmapForLocalSongFromQ(song, size)
         } else {
@@ -109,32 +101,28 @@ class SongImageBitmapFactoryImpl @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun getBitmapForLocalSongFromQ(song: LocalSong, size: Size): SharedFlow<Bitmap> {
-        val flow = MutableSharedFlow<Bitmap>()
-        defaultCoroutineProvider.defaultScope.launch {
-            try {
-                val bitmap = context
-                    .contentResolver
-                    ?.loadThumbnail(
-                        song.uri,
-                        size,
-                        null
-                    )!!
-                flow.emit(bitmap)
-            } catch (exception: IOException) {
-                flow.emit(defaultBitmap)
-            } catch (exception: NullPointerException) {
-                flow.emit(defaultBitmap)
-            } catch (exception: FileNotFoundException) {
-                flow.emit(defaultBitmap)
-            } catch (exception: Exception) {
-                flow.emit(defaultBitmap)
-            }
+    private suspend fun getBitmapForLocalSongFromQ(song: LocalSong, size: Size): Bitmap = withContext(dispatchersProvider.default) {
+        return@withContext try {
+            val bitmap = context
+                .contentResolver
+                ?.loadThumbnail(
+                    song.uri,
+                    size,
+                    null
+                )!!
+            bitmap
+        } catch (exception: IOException) {
+            defaultBitmap
+        } catch (exception: NullPointerException) {
+            defaultBitmap
+        } catch (exception: FileNotFoundException) {
+            defaultBitmap
+        } catch (exception: Exception) {
+            defaultBitmap
         }
-        return flow
     }
 
-    private fun getBitmapForLocalSongPreQ(song: LocalSong): SharedFlow<Bitmap> {
+    private suspend fun getBitmapForLocalSongPreQ(song: LocalSong): Bitmap {
         val artworkUri = Uri.parse("content://media/external/audio/albumart")
         val albumUri = ContentUris.withAppendedId(artworkUri, song.albumId)
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -145,40 +133,32 @@ class SongImageBitmapFactoryImpl @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
-    private fun getBitmapForLocalSongP(albumUri: Uri): SharedFlow<Bitmap> {
-        val flow = MutableSharedFlow<Bitmap>()
-        defaultCoroutineProvider.defaultScope.launch {
-            try {
-                val source = ImageDecoder.createSource(
-                    context.contentResolver!!,
-                    albumUri
-                )
-                val bitmap = ImageDecoder.decodeBitmap(source)
-                flow.emit(bitmap)
-            } catch (exception: IOException) {
-                flow.emit(defaultBitmap)
-            } catch (exception: Exception) {
-                flow.emit(defaultBitmap)
-            }
+    private suspend fun getBitmapForLocalSongP(albumUri: Uri): Bitmap = withContext(dispatchersProvider.default) {
+        return@withContext try {
+            val source = ImageDecoder.createSource(
+                context.contentResolver!!,
+                albumUri
+            )
+            val bitmap = ImageDecoder.decodeBitmap(source)
+            bitmap
+        } catch (exception: IOException) {
+            defaultBitmap
+        } catch (exception: Exception) {
+            defaultBitmap
         }
-        return flow
     }
 
-    private fun getBitmapForLocalSongPreP(albumUri: Uri): SharedFlow<Bitmap> {
-        val flow = MutableSharedFlow<Bitmap>()
-        ioCoroutineProvider.ioScope.launch {
-            try {
-                val bitmap = MediaStore.Images.Media.getBitmap(
-                    context.contentResolver,
-                    albumUri
-                )
-                flow.emit(bitmap)
-            } catch (exception: IOException) {
-                flow.emit(defaultBitmap)
-            } catch (exception: Exception) {
-                flow.emit(defaultBitmap)
-            }
+    private suspend fun getBitmapForLocalSongPreP(albumUri: Uri): Bitmap = withContext(dispatchersProvider.io) {
+        return@withContext try {
+            val bitmap = MediaStore.Images.Media.getBitmap(
+                context.contentResolver,
+                albumUri
+            )
+            bitmap
+        } catch (exception: IOException) {
+            defaultBitmap
+        } catch (exception: Exception) {
+            defaultBitmap
         }
-        return flow
     }
 }

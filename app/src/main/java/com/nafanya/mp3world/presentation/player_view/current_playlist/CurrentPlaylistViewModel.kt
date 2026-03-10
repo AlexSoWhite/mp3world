@@ -59,9 +59,8 @@ class CurrentPlaylistViewModel @Inject constructor(
         }
     }
 
-    override fun download(remoteSong: RemoteSong, callback: (DownloadResult) -> Unit) {
-        downloadInteractor.download(remoteSong, callback)
-    }
+    override fun download(remoteSong: RemoteSong) = downloadInteractor.download(remoteSong)
+
 
     override fun resetMediaStore() {
         mediaStoreInteractor.reset()
