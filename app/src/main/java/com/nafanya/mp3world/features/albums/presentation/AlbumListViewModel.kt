@@ -2,22 +2,22 @@ package com.nafanya.mp3world.features.albums.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.stateMachines.commonUi.Data
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.StatedListViewModel
-import com.nafanya.mp3world.core.utils.listUtils.searching.QueryFilter
-import com.nafanya.mp3world.core.utils.listUtils.searching.SearchProcessor
-import com.nafanya.mp3world.core.utils.listUtils.searching.Searchable
-import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
-import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
+import com.nafanya.mp3world.core.state_machines.presentation.Data
+import com.nafanya.mp3world.core.state_machines.presentation.list.StatedListViewModel
+import com.nafanya.mp3world.core.utils.list_utils.searching.QueryFilter
+import com.nafanya.mp3world.core.utils.list_utils.searching.SearchProcessor
+import com.nafanya.mp3world.core.utils.list_utils.searching.Searchable
+import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessor
+import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.features.albums.domain.Album
-import com.nafanya.mp3world.features.albums.domain.AlbumListManager
+import com.nafanya.mp3world.features.albums.domain.AlbumPlaylistProvider
 import com.nafanya.mp3world.features.albums.presentation.recycler.ALBUM
 import com.nafanya.mp3world.features.albums.presentation.recycler.AlbumListItem
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 
 class AlbumListViewModel @Inject constructor(
-    albumListManager: AlbumListManager
+    albumListManager: AlbumPlaylistProvider
 ) : StatedListViewModel<Album, AlbumListItem>(),
     Searchable<Album>,
     TitleProcessorWrapper<List<Album>> {

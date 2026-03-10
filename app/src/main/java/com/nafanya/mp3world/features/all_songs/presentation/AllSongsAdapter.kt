@@ -2,13 +2,13 @@ package com.nafanya.mp3world.features.all_songs.presentation
 
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.songListViews.DATE
-import com.nafanya.mp3world.features.songListViews.DateViewHolder
-import com.nafanya.mp3world.features.songListViews.SONG_LOCAL_IMMUTABLE
-import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
-import com.nafanya.mp3world.features.songListViews.baseViews.SongView
-import com.nafanya.mp3world.features.songListViews.songViews.ImmutableLocalSongViewHolder
+import com.nafanya.mp3world.features.playlist.base_views.BaseSongListAdapter
+import com.nafanya.mp3world.features.song_list_views.DATE
+import com.nafanya.mp3world.features.song_list_views.DateViewHolder
+import com.nafanya.mp3world.features.song_list_views.SONG_LOCAL_IMMUTABLE
+import com.nafanya.mp3world.features.song_list_views.base_views.SongListItemViewHolder
+import com.nafanya.mp3world.features.song_list_views.base_views.SongView
+import com.nafanya.mp3world.features.song_list_views.song_views.ImmutableLocalSongViewHolder
 
 class AllSongsAdapter(
     private val onSongItemClickCallback: (SongWrapper, SongView) -> Unit,

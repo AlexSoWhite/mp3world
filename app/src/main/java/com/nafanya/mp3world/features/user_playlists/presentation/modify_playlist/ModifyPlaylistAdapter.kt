@@ -2,11 +2,11 @@ package com.nafanya.mp3world.features.user_playlists.presentation.modify_playlis
 
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
-import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.songListViews.SONG_ADDABLE_REMOVABLE
-import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
-import com.nafanya.mp3world.features.songListViews.baseViews.SongView
-import com.nafanya.mp3world.features.songListViews.songViews.AddableRemovableSongViewHolder
+import com.nafanya.mp3world.features.playlist.base_views.BaseSongListAdapter
+import com.nafanya.mp3world.features.song_list_views.SONG_ADDABLE_REMOVABLE
+import com.nafanya.mp3world.features.song_list_views.base_views.SongListItemViewHolder
+import com.nafanya.mp3world.features.song_list_views.base_views.SongView
+import com.nafanya.mp3world.features.song_list_views.song_views.AddableRemovableSongViewHolder
 
 class ModifyPlaylistAdapter(
     private var modifyingPlaylist: PlaylistWrapper? = null,

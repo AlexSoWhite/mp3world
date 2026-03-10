@@ -4,25 +4,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.listManagers.FAVOURITE_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listManagers.ListManagerProvider
-import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.stateMachines.commonUi.Data
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.utils.listUtils.searching.QueryFilter
-import com.nafanya.mp3world.core.utils.listUtils.searching.SearchProcessor
-import com.nafanya.mp3world.core.utils.listUtils.searching.Searchable
-import com.nafanya.mp3world.core.utils.listUtils.searching.songQueryFilterCallback
-import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessor
-import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
+import com.nafanya.mp3world.core.list_managers.FAVOURITE_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.list_managers.ListManagerProvider
+import com.nafanya.mp3world.core.list_managers.PLAYLIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.state_machines.presentation.Data
+import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.list_utils.searching.QueryFilter
+import com.nafanya.mp3world.core.utils.list_utils.searching.SearchProcessor
+import com.nafanya.mp3world.core.utils.list_utils.searching.Searchable
+import com.nafanya.mp3world.core.utils.list_utils.searching.songQueryFilterCallback
+import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessor
+import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.features.user_playlists.domain.PlaylistListManager
-import com.nafanya.mp3world.features.favourites.domain.FavouritesManager
+import com.nafanya.mp3world.features.user_playlists.domain.UserPlaylistInteractor
+import com.nafanya.mp3world.features.favourites.domain.FavouritesProvider
 import com.nafanya.mp3world.features.favourites.domain.FavouritesManagerProxy
-import com.nafanya.mp3world.features.songListViews.MODIFY_PLAYLIST_BUTTON
-import com.nafanya.mp3world.features.songListViews.SONG_REARRANGEABLE
-import com.nafanya.mp3world.features.songListViews.SongListItem
+import com.nafanya.mp3world.features.song_list_views.MODIFY_PLAYLIST_BUTTON
+import com.nafanya.mp3world.features.song_list_views.SONG_REARRANGEABLE
+import com.nafanya.mp3world.features.song_list_views.SongListItem
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -40,11 +40,11 @@ class MutablePlaylistViewModel(
 
     private val playlistListManager = listManagerProvider.getListManager(
         PLAYLIST_LIST_MANAGER_KEY
-    ) as PlaylistListManager
+    ) as UserPlaylistInteractor
 
     private val favouritesManager = listManagerProvider.getListManager(
         FAVOURITE_LIST_MANAGER_KEY
-    ) as FavouritesManager
+    ) as FavouritesProvider
 
     override val playlistFlow = playlistListManager.getPlaylistByContainerId(playlistId)
 

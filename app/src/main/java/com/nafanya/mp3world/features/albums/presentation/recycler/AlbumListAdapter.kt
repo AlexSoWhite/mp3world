@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.albums.presentation.recycler
 
-import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseAdapter
-import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseViewHolderFactory
+import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseAdapter
+import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseViewHolderFactory
 import com.nafanya.mp3world.features.albums.domain.Album
 
 class AlbumListAdapter(

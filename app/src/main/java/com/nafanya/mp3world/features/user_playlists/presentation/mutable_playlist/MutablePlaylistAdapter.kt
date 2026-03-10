@@ -2,15 +2,15 @@ package com.nafanya.mp3world.features.user_playlists.presentation.mutable_playli
 
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.songListViews.CONFIRM_CHANGES_BUTTON
-import com.nafanya.mp3world.features.songListViews.MODIFY_PLAYLIST_BUTTON
-import com.nafanya.mp3world.features.songListViews.SONG_REARRANGEABLE
-import com.nafanya.mp3world.features.songListViews.baseViews.SongListItemViewHolder
-import com.nafanya.mp3world.features.songListViews.baseViews.SongView
-import com.nafanya.mp3world.features.songListViews.songViews.RearrangeableSongViewHolder
-import com.nafanya.mp3world.features.songListViews.topButtonViews.ConfirmChangesButtonViewHolder
-import com.nafanya.mp3world.features.songListViews.topButtonViews.ModifyPlaylistButtonViewHolder
+import com.nafanya.mp3world.features.playlist.base_views.BaseSongListAdapter
+import com.nafanya.mp3world.features.song_list_views.CONFIRM_CHANGES_BUTTON
+import com.nafanya.mp3world.features.song_list_views.MODIFY_PLAYLIST_BUTTON
+import com.nafanya.mp3world.features.song_list_views.SONG_REARRANGEABLE
+import com.nafanya.mp3world.features.song_list_views.base_views.SongListItemViewHolder
+import com.nafanya.mp3world.features.song_list_views.base_views.SongView
+import com.nafanya.mp3world.features.song_list_views.song_views.RearrangeableSongViewHolder
+import com.nafanya.mp3world.features.song_list_views.top_button_views.ConfirmChangesButtonViewHolder
+import com.nafanya.mp3world.features.song_list_views.top_button_views.ModifyPlaylistButtonViewHolder
 
 class MutablePlaylistAdapter : BaseSongListAdapter() {
 

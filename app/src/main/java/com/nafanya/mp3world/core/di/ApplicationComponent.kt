@@ -2,7 +2,7 @@ package com.nafanya.mp3world.core.di
 
 import android.content.Context
 import com.google.gson.Gson
-import com.nafanya.mp3world.core.di.viewModel.ViewModelFactoryModule
+import com.nafanya.mp3world.core.di.view_model.ViewModelFactoryModule
 import com.nafanya.mp3world.core.wrappers.di.BitmapFlowModelLoaderFactoryComponentProvider
 import com.nafanya.mp3world.core.wrappers.di.WrappersModule
 import com.nafanya.mp3world.features.albums.di.AlbumComponentProvider
@@ -17,10 +17,10 @@ import com.nafanya.mp3world.data.downloading.di.DownloadModule
 import com.nafanya.mp3world.features.entrypoint.di.EntrypointComponentProvider
 import com.nafanya.mp3world.features.favourites.di.FavouritesModule
 import com.nafanya.mp3world.features.favourites.di.FavouritesComponentProvider
-import com.nafanya.mp3world.features.foregroundService.di.ForegroundServiceComponentProvider
+import com.nafanya.mp3world.features.foreground_service.di.ForegroundServiceComponentProvider
 import com.nafanya.mp3world.data.local_storage.di.LocalStorageModule
-import com.nafanya.mp3world.data.mediaStore.di.MediaStoreModule
-import com.nafanya.mp3world.features.playerView.di.PlayerViewComponentProvider
+import com.nafanya.mp3world.data.media_store.di.MediaStoreModule
+import com.nafanya.mp3world.features.player_view.di.PlayerViewComponentProvider
 import com.nafanya.mp3world.features.playlist.di.PlaylistComponentProvider
 import com.nafanya.mp3world.features.remote_songs.di.RemoteSongsComponentProvider
 import com.nafanya.player.PlayerInteractor

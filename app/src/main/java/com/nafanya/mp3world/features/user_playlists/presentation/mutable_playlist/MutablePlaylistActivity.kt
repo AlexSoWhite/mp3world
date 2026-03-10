@@ -3,7 +3,7 @@ package com.nafanya.mp3world.features.user_playlists.presentation.mutable_playli
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.presentation.commonUi.BaseActivity
+import com.nafanya.mp3world.presentation.common_ui.BaseActivity
 import com.nafanya.mp3world.databinding.ActivityMutablePlaylistLayoutBinding
 
 class MutablePlaylistActivity : BaseActivity<ActivityMutablePlaylistLayoutBinding>() {

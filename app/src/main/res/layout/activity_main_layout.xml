@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:name="com.nafanya.mp3world.features.playerView.view.BottomControlViewFragment"
+        android:name="com.nafanya.mp3world.features.player_view.presentation.BottomControlViewFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -3,11 +3,11 @@ package com.nafanya.mp3world.features.favourites.view
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.nafanya.mp3world.R
-import com.nafanya.mp3world.core.listManagers.FAVOURITE_LIST_MANAGER_KEY
-import com.nafanya.mp3world.presentation.commonUi.BaseActivity
+import com.nafanya.mp3world.core.list_managers.FAVOURITE_LIST_MANAGER_KEY
+import com.nafanya.mp3world.presentation.common_ui.BaseActivity
 import com.nafanya.mp3world.databinding.ActivityImmutablePlaylistLayoutBinding
-import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity.Companion.LIST_MANAGER_KEY
-import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistFragment
+import com.nafanya.mp3world.features.playlist.immutable_playlist.ImmutablePlaylistActivity.Companion.LIST_MANAGER_KEY
+import com.nafanya.mp3world.features.playlist.immutable_playlist.ImmutablePlaylistFragment
 
 class FavouritesActivity : BaseActivity<ActivityImmutablePlaylistLayoutBinding>() {
 

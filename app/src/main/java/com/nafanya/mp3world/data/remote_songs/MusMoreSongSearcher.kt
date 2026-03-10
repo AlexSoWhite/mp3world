@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.data.remote_songs
 
 import com.google.gson.Gson
-import com.nafanya.mp3world.core.utils.timeConverters.TimeConverter
+import com.nafanya.mp3world.core.utils.time_converters.TimeConverter
 import com.nafanya.mp3world.core.wrappers.song.UriFactory
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import javax.inject.Inject

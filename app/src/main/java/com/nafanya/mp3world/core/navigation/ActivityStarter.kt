@@ -2,10 +2,10 @@ package com.nafanya.mp3world.core.navigation
 
 import android.content.Context
 import android.content.Intent
-import com.nafanya.mp3world.core.listManagers.ALBUM_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listManagers.ARTIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listManagers.FAVOURITE_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.list_managers.ALBUM_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.list_managers.ARTIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.list_managers.FAVOURITE_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.list_managers.PLAYLIST_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.features.albums.presentation.AlbumListActivity
 import com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.AllPlaylistsActivity
@@ -13,8 +13,8 @@ import com.nafanya.mp3world.features.user_playlists.presentation.modify_playlist
 import com.nafanya.mp3world.features.user_playlists.presentation.mutable_playlist.MutablePlaylistActivity
 import com.nafanya.mp3world.features.all_songs.presentation.AllSongsActivity
 import com.nafanya.mp3world.features.artists.presentation.ArtistListActivity
-import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity
-import com.nafanya.mp3world.features.playlist.immutablePlaylist.ImmutablePlaylistActivity.Companion.PLAYLIST_NAME
+import com.nafanya.mp3world.features.playlist.immutable_playlist.ImmutablePlaylistActivity
+import com.nafanya.mp3world.features.playlist.immutable_playlist.ImmutablePlaylistActivity.Companion.PLAYLIST_NAME
 import com.nafanya.mp3world.features.remote_songs.presentation.RemoteSongsActivity
 import com.nafanya.mp3world.features.remote_songs.presentation.RemoteSongsActivity.Companion.QUERY
 

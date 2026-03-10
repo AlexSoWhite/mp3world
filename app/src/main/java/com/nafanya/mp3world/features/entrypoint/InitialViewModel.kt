@@ -2,16 +2,16 @@ package com.nafanya.mp3world.features.entrypoint
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.stateMachines.StateModel
+import com.nafanya.mp3world.core.state_machines.StateModel
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
-import com.nafanya.mp3world.features.albums.domain.AlbumListManager
-import com.nafanya.mp3world.features.user_playlists.domain.PlaylistListManager
-import com.nafanya.mp3world.features.all_songs.domain.SongListProvider
+import com.nafanya.mp3world.features.albums.domain.AlbumPlaylistProvider
+import com.nafanya.mp3world.features.user_playlists.domain.UserPlaylistInteractor
+import com.nafanya.mp3world.features.all_songs.domain.SongPlaylistProvider
 import com.nafanya.mp3world.features.all_songs.domain.asAllSongsPlaylist
-import com.nafanya.mp3world.features.artists.domain.ArtistListManager
-import com.nafanya.mp3world.features.favourites.domain.FavouritesManager
+import com.nafanya.mp3world.features.artists.domain.ArtistPlaylistProvider
+import com.nafanya.mp3world.features.favourites.domain.FavouritesProvider
 import com.nafanya.mp3world.data.local_storage.LocalStorageRepository
-import com.nafanya.mp3world.data.mediaStore.MediaStoreInteractor
+import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -27,11 +27,11 @@ class InitialViewModel @Inject constructor(
     private val mediaStoreInteractor: MediaStoreInteractor,
     private val localStorageRepository: LocalStorageRepository, // todo: maybe should be a domain level model
     private val playerInteractor: PlayerInteractor,
-    private val songListManager: SongListProvider,
-    artistListManager: ArtistListManager,
-    playlistListManager: PlaylistListManager,
-    albumListManager: AlbumListManager,
-    favouriteListManager: FavouritesManager
+    private val songListManager: SongPlaylistProvider,
+    artistListManager: ArtistPlaylistProvider,
+    playlistListManager: UserPlaylistInteractor,
+    albumListManager: AlbumPlaylistProvider,
+    favouriteListManager: FavouritesProvider
 ) : ViewModel() {
 
     val songModel = songListManager.songList.loadIntModel()

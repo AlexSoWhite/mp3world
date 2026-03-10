@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface to obtain adding and removing favourites. To implement it you should use
- * [FavouritesManager]
+ * [FavouritesProvider]
  */
 interface FavouritesManagerProxy {
 

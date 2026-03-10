@@ -8,8 +8,8 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.navigation.ActivityStarter
-import com.nafanya.mp3world.core.stateMachines.State
-import com.nafanya.mp3world.core.stateMachines.StateModel
+import com.nafanya.mp3world.core.state_machines.State
+import com.nafanya.mp3world.core.state_machines.StateModel
 import com.nafanya.mp3world.databinding.MainMenuItemViewBinding
 import java.lang.IllegalArgumentException
 import kotlinx.coroutines.CoroutineScope

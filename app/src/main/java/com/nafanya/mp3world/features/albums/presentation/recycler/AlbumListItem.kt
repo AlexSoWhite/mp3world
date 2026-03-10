@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.albums.presentation.recycler
 
 import androidx.recyclerview.widget.DiffUtil
-import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseListItem
+import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseListItem
 import com.nafanya.mp3world.features.albums.domain.Album
 
 const val ALBUM = 0

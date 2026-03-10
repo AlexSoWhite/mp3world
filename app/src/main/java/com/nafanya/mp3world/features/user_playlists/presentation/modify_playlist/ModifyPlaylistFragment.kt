@@ -11,11 +11,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.ApplicationComponent
-import com.nafanya.mp3world.core.utils.listUtils.searching.DefaultOnQueryTextListener
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistFragmentBaseLayout
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.list_utils.searching.DefaultOnQueryTextListener
+import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistFragmentBaseLayout
+import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.features.user_playlists.presentation.modify_playlist.ModifyPlaylistActivity.Companion.PLAYLIST_NAME
-import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
+import com.nafanya.mp3world.features.playlist.base_views.BaseSongListAdapter
 import javax.inject.Inject
 
 class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {

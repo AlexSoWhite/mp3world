@@ -11,11 +11,11 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.coroutines.collectInScope
 import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.navigation.ActivityStarter
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistFragmentBaseLayout
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.utils.listUtils.searching.attachToTopBar
-import com.nafanya.mp3world.features.playlist.baseViews.BaseSongListAdapter
-import com.nafanya.mp3world.features.songListViews.actionDialogs.defaultLocalSongActionDialog
+import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistFragmentBaseLayout
+import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.list_utils.searching.attachToTopBar
+import com.nafanya.mp3world.features.playlist.base_views.BaseSongListAdapter
+import com.nafanya.mp3world.features.song_list_views.action_dialogs.defaultLocalSongActionDialog
 import javax.inject.Inject
 import kotlinx.coroutines.flow.take
 

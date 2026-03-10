@@ -15,10 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.core.navigation.ActivityStarter
-import com.nafanya.mp3world.presentation.commonUi.BaseActivity
+import com.nafanya.mp3world.presentation.common_ui.BaseActivity
 import com.nafanya.mp3world.databinding.ActivityMainLayoutBinding
-import com.nafanya.mp3world.features.foregroundService.ForegroundService
-import com.nafanya.mp3world.features.foregroundService.ServiceMonitor
+import com.nafanya.mp3world.features.foreground_service.ForegroundService
+import com.nafanya.mp3world.features.foreground_service.ServiceMonitor
 import javax.inject.Inject
 
 class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {

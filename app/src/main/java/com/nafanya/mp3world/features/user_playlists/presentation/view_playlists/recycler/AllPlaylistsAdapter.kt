@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.recycler
 
-import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseAdapter
-import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseViewHolderFactory
+import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseAdapter
+import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseViewHolderFactory
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.recycler.views.AddPlaylistButtonViewHolder
 import com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.recycler.views.PlaylistViewHolder

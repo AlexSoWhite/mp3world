@@ -1,7 +1,7 @@
 package com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.recycler
 
 import android.view.ViewGroup
-import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseViewHolderFactory
+import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseViewHolderFactory
 import com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.recycler.views.AddPlaylistButtonViewHolder
 import com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.recycler.views.AddPlaylistsButton
 import com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.recycler.views.PlaylistView

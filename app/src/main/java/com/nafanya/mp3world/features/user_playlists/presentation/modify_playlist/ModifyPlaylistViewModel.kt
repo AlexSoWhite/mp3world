@@ -6,25 +6,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.coroutines.collectLatestInScope
-import com.nafanya.mp3world.core.listManagers.ALL_SONGS_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listManagers.ListManagerProvider
-import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.stateMachines.State
-import com.nafanya.mp3world.core.stateMachines.commonUi.Data
-import com.nafanya.mp3world.core.stateMachines.commonUi.list.playlist.StatedPlaylistViewModel
-import com.nafanya.mp3world.core.utils.listUtils.searching.QueryFilter
-import com.nafanya.mp3world.core.utils.listUtils.searching.SearchProcessor
-import com.nafanya.mp3world.core.utils.listUtils.searching.Searchable
-import com.nafanya.mp3world.core.utils.listUtils.searching.songQueryFilterCallback
-import com.nafanya.mp3world.core.utils.listUtils.title.TitleProcessorWrapper
-import com.nafanya.mp3world.core.utils.listUtils.title.convertStateToTitle
+import com.nafanya.mp3world.core.list_managers.ALL_SONGS_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.list_managers.ListManagerProvider
+import com.nafanya.mp3world.core.list_managers.PLAYLIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.state_machines.State
+import com.nafanya.mp3world.core.state_machines.presentation.Data
+import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.list_utils.searching.QueryFilter
+import com.nafanya.mp3world.core.utils.list_utils.searching.SearchProcessor
+import com.nafanya.mp3world.core.utils.list_utils.searching.Searchable
+import com.nafanya.mp3world.core.utils.list_utils.searching.songQueryFilterCallback
+import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
+import com.nafanya.mp3world.core.utils.list_utils.title.convertStateToTitle
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
-import com.nafanya.mp3world.features.user_playlists.domain.PlaylistListManager
-import com.nafanya.mp3world.features.all_songs.domain.SongListProvider
+import com.nafanya.mp3world.features.user_playlists.domain.UserPlaylistInteractor
+import com.nafanya.mp3world.features.all_songs.domain.SongPlaylistProvider
 import com.nafanya.mp3world.features.all_songs.domain.asAllSongsPlaylist
-import com.nafanya.mp3world.features.songListViews.SONG_ADDABLE_REMOVABLE
-import com.nafanya.mp3world.features.songListViews.SongListItem
+import com.nafanya.mp3world.features.song_list_views.SONG_ADDABLE_REMOVABLE
+import com.nafanya.mp3world.features.song_list_views.SongListItem
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -32,10 +32,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ModifyPlaylistViewModel(
-    private val playlistListManager: PlaylistListManager,
+    private val playlistListManager: UserPlaylistInteractor,
     private val playlistName: String,
     playlistId: Long,
-    songListManager: SongListProvider
+    songListManager: SongPlaylistProvider
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
     TitleProcessorWrapper<List<SongWrapper>> {
@@ -124,10 +124,10 @@ class ModifyPlaylistViewModel(
             require(playlistId > -1)
             val playlistListManager = listManagerProvider.getListManager(
                 PLAYLIST_LIST_MANAGER_KEY
-            ) as PlaylistListManager
+            ) as UserPlaylistInteractor
             val songListManager = listManagerProvider.getListManager(
                 ALL_SONGS_LIST_MANAGER_KEY
-            ) as SongListProvider
+            ) as SongPlaylistProvider
             return ModifyPlaylistViewModel(
                 playlistListManager,
                 playlistName,

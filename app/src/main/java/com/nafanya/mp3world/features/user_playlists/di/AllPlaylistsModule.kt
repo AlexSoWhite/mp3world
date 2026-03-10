@@ -1,12 +1,12 @@
 package com.nafanya.mp3world.features.user_playlists.di
 
 import androidx.lifecycle.ViewModel
-import com.nafanya.mp3world.core.di.viewModel.ViewModelKey
-import com.nafanya.mp3world.core.listManagers.ListManager
-import com.nafanya.mp3world.core.listManagers.ListManagerKey
-import com.nafanya.mp3world.core.listManagers.PLAYLIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.features.user_playlists.domain.PlaylistListManager
-import com.nafanya.mp3world.features.user_playlists.domain.PlaylistListManagerImpl
+import com.nafanya.mp3world.core.di.view_model.ViewModelKey
+import com.nafanya.mp3world.core.list_managers.PlaylistProvider
+import com.nafanya.mp3world.core.list_managers.ListManagerKey
+import com.nafanya.mp3world.core.list_managers.PLAYLIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.features.user_playlists.domain.UserPlaylistInteractor
+import com.nafanya.mp3world.features.user_playlists.domain.UserPlaylistInteractorImpl
 import com.nafanya.mp3world.features.user_playlists.presentation.view_playlists.AllPlaylistsViewModel
 import dagger.Binds
 import dagger.Module
@@ -21,8 +21,8 @@ interface AllPlaylistsModule {
 
     @Binds
     @[IntoMap ListManagerKey(PLAYLIST_LIST_MANAGER_KEY)]
-    fun bindIntoMap(playlistListManagerImpl: PlaylistListManagerImpl): ListManager
+    fun bindIntoMap(playlistListManagerImpl: UserPlaylistInteractorImpl): PlaylistProvider
 
     @Binds
-    fun bind(playlistListManagerImpl: PlaylistListManagerImpl): PlaylistListManager
+    fun bind(playlistListManagerImpl: UserPlaylistInteractorImpl): UserPlaylistInteractor
 }

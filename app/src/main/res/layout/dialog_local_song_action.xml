@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/favourite_action" />
 
-    <com.nafanya.mp3world.features.songListViews.actionDialogs.DialogOptionView
+    <com.nafanya.mp3world.features.song_list_views.action_dialogs.DialogOptionView
         android:id="@+id/favourite_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@id/song_description"
         app:layout_constraintBottom_toTopOf="@id/go_to_album" />
 
-    <com.nafanya.mp3world.features.songListViews.actionDialogs.DialogOptionView
+    <com.nafanya.mp3world.features.song_list_views.action_dialogs.DialogOptionView
         android:id="@+id/go_to_album"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@id/favourite_action"
         app:layout_constraintBottom_toTopOf="@id/go_to_artist" />
 
-    <com.nafanya.mp3world.features.songListViews.actionDialogs.DialogOptionView
+    <com.nafanya.mp3world.features.song_list_views.action_dialogs.DialogOptionView
         android:id="@+id/go_to_artist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

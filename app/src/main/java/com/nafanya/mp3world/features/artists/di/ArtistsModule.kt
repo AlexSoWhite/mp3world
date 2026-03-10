@@ -1,12 +1,12 @@
 package com.nafanya.mp3world.features.artists.di
 
 import androidx.lifecycle.ViewModel
-import com.nafanya.mp3world.core.di.viewModel.ViewModelKey
-import com.nafanya.mp3world.core.listManagers.ARTIST_LIST_MANAGER_KEY
-import com.nafanya.mp3world.core.listManagers.ListManager
-import com.nafanya.mp3world.core.listManagers.ListManagerKey
-import com.nafanya.mp3world.features.artists.domain.ArtistListManager
-import com.nafanya.mp3world.features.artists.domain.ArtistListManagerImpl
+import com.nafanya.mp3world.core.di.view_model.ViewModelKey
+import com.nafanya.mp3world.core.list_managers.ARTIST_LIST_MANAGER_KEY
+import com.nafanya.mp3world.core.list_managers.PlaylistProvider
+import com.nafanya.mp3world.core.list_managers.ListManagerKey
+import com.nafanya.mp3world.features.artists.domain.ArtistPlaylistProvider
+import com.nafanya.mp3world.features.artists.domain.ArtistPlaylistProviderImpl
 import com.nafanya.mp3world.features.artists.presentation.ArtistListViewModel
 import dagger.Binds
 import dagger.Module
@@ -21,8 +21,8 @@ interface ArtistsModule {
 
     @Binds
     @[IntoMap ListManagerKey(ARTIST_LIST_MANAGER_KEY)]
-    fun bindIntoMap(artistListManager: ArtistListManagerImpl): ListManager
+    fun bindIntoMap(artistListManager: ArtistPlaylistProviderImpl): PlaylistProvider
 
     @Binds
-    fun bind(artistListManager: ArtistListManagerImpl): ArtistListManager
+    fun bind(artistListManager: ArtistPlaylistProviderImpl): ArtistPlaylistProvider
 }

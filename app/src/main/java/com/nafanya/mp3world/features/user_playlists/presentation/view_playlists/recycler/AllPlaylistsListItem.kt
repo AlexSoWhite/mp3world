@@ -2,7 +2,7 @@ package com.nafanya.mp3world.features.user_playlists.presentation.view_playlists
 
 import androidx.annotation.IntDef
 import androidx.recyclerview.widget.DiffUtil
-import com.nafanya.mp3world.core.utils.listUtils.recycler.BaseListItem
+import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseListItem
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 
 @Retention(AnnotationRetention.SOURCE)

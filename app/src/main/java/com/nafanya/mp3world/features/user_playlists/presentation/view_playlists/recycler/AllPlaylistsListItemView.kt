@@ -2,8 +2,8 @@ package com.nafanya.mp3world.features.user_playlists.presentation.view_playlists
 
 import android.content.Context
 import android.util.AttributeSet
-import com.nafanya.mp3world.core.utils.listUtils.recycler.commonUi.BaseListItemView
-import com.nafanya.mp3world.core.utils.listUtils.recycler.commonUi.BaseViewHolder
+import com.nafanya.mp3world.core.utils.list_utils.recycler.view.BaseListItemView
+import com.nafanya.mp3world.core.utils.list_utils.recycler.view.BaseViewHolder
 
 abstract class AllPlaylistsListItemView @JvmOverloads constructor(
     context: Context,
