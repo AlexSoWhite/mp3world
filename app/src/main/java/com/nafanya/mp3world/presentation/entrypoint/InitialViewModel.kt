@@ -56,7 +56,7 @@ class InitialViewModel @Inject constructor(
 
     private val localInitializer = FlowCollector<List<LocalSong>> { list ->
         viewModelScope.launch {
-            playerInteractor.isPlayerInitialised.collect { isInitialized ->
+            playerInteractor.isFirstSongSubmitted.collect { isInitialized ->
                 if (!isInitialized) {
                     playerInteractor.setPlaylist(list.asAllSongsPlaylist())
                 }

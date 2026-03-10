@@ -25,7 +25,7 @@ class CurrentPlaylistViewModel @Inject constructor(
     private val downloadInteractor: DownloadInteractor,
     private val mediaStoreInteractor: MediaStoreInteractor,
     private val favouritesManager: FavouritesProvider,
-    playerInteractor: PlayerInteractor
+    override val playerInteractor: PlayerInteractor
 ) : StatedPlaylistViewModel(),
     DownloadingViewModel,
     FavouritesManager {

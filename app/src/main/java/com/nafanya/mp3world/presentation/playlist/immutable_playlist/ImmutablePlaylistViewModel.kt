@@ -20,6 +20,7 @@ import com.nafanya.mp3world.domain.favourites.FavouritesProvider
 import com.nafanya.mp3world.domain.favourites.FavouritesManager
 import com.nafanya.mp3world.presentation.song_list_views.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
+import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -28,6 +29,7 @@ import kotlinx.coroutines.launch
 
 class ImmutablePlaylistViewModel(
     playlistProviderMapWrapper: PlaylistProviderMapWrapper,
+    override val playerInteractor: PlayerInteractor,
     listManagerKey: Int,
     containerId: Long,
     baseTitle: String
@@ -89,6 +91,7 @@ class ImmutablePlaylistViewModel(
         @Assisted("containerId") private val containerId: Long,
         @Assisted("playlistName") private val playlistName: String,
         private val playlistProviderMapWrapper: PlaylistProviderMapWrapper,
+        private val playerInteractor: PlayerInteractor
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -96,6 +99,7 @@ class ImmutablePlaylistViewModel(
 
             return ImmutablePlaylistViewModel(
                 playlistProviderMapWrapper,
+                playerInteractor,
                 listManagerKey,
                 containerId,
                 playlistName

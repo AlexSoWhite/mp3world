@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.nafanya.mp3world.core.coroutines.collectInScope
 import com.nafanya.mp3world.core.state_machines.presentation.Data
 import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessor
@@ -20,11 +19,15 @@ import com.nafanya.mp3world.data.remote_songs.SongSearcher
 import com.nafanya.mp3world.data.remote_songs.SongSearchersProvider
 import com.nafanya.mp3world.presentation.song_list_views.SONG_REMOTE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
+import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -32,7 +35,8 @@ class RemoteSongsViewModel(
     private val query: String,
     private val songSearchersProvider: SongSearchersProvider,
     private val downloadInteractor: DownloadInteractor,
-    private val mediaStoreInteractor: MediaStoreInteractor
+    private val mediaStoreInteractor: MediaStoreInteractor,
+    override val playerInteractor: PlayerInteractor
 ) : StatedPlaylistViewModel(),
     DownloadingViewModel,
     TitleProcessorWrapper<List<SongWrapper>> {
@@ -68,16 +72,12 @@ class RemoteSongsViewModel(
                     }
                 }
             )
-            mIsInteractorBound.collectInScope(viewModelScope) {
-                if (it) {
-                    playerInteractor.isPlayerInitialised.collectInScope(viewModelScope) { isInit ->
-                        if (!isInit) {
-                            mPlaylistFlow.collectInScope(viewModelScope) { songList ->
-                                if (songList?.isNotEmpty() == true) {
-                                    playerInteractor.setPlaylist(songList.asPlaylist(query))
-                                }
-                            }
-                        }
+            viewModelScope.launch {
+                // set initial playlist using remote songs if there are no songs on device
+                playerInteractor.isFirstSongSubmitted.filter { !it }.first()
+                mPlaylistFlow.collectLatest { songList ->
+                    if (songList?.isNotEmpty() == true) {
+                        playerInteractor.setPlaylist(songList.asPlaylist(query))
                     }
                 }
             }
@@ -107,7 +107,8 @@ class RemoteSongsViewModel(
         @Assisted("query") private val query: String,
         private val downloadInteractor: DownloadInteractor,
         private val mediaStoreInteractor: MediaStoreInteractor,
-        private val songSearchersProvider: SongSearchersProvider
+        private val songSearchersProvider: SongSearchersProvider,
+        private val playerInteractor: PlayerInteractor
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -116,7 +117,8 @@ class RemoteSongsViewModel(
                 query,
                 songSearchersProvider,
                 downloadInteractor,
-                mediaStoreInteractor
+                mediaStoreInteractor,
+                playerInteractor
             ) as T
         }
 

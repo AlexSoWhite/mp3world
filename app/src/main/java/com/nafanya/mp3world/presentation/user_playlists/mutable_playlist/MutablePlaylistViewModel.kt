@@ -23,6 +23,7 @@ import com.nafanya.mp3world.domain.favourites.FavouritesManager
 import com.nafanya.mp3world.presentation.song_list_views.MODIFY_PLAYLIST_BUTTON
 import com.nafanya.mp3world.presentation.song_list_views.SONG_REARRANGEABLE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
+import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,6 +32,7 @@ import kotlinx.coroutines.launch
 
 class MutablePlaylistViewModel(
     playlistProviderMapWrapper: PlaylistProviderMapWrapper,
+    override val playerInteractor: PlayerInteractor,
     playlistId: Long,
     playlistName: String
 ) : StatedPlaylistViewModel(),
@@ -94,6 +96,7 @@ class MutablePlaylistViewModel(
 
     class Factory @AssistedInject constructor(
         private val playlistProviderMapWrapper: PlaylistProviderMapWrapper,
+        private val playerInteractor: PlayerInteractor,
         @Assisted("playlistId") private val playlistId: Long,
         @Assisted("playlistName") private var playlistName: String
     ) : ViewModelProvider.Factory {
@@ -102,6 +105,7 @@ class MutablePlaylistViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MutablePlaylistViewModel(
                 playlistProviderMapWrapper,
+                playerInteractor,
                 playlistId,
                 playlistName
             ) as T

@@ -16,34 +16,32 @@ class PlayerInteractor(
     context: Context
 ) {
 
+    // todo: verify that it should be Job
     private val playerInteractorScope = CoroutineScope(Job() + Dispatchers.IO)
 
     /**
      * Player itself (extended object with customized logic).
      */
-    private val mPlayer = AoedePlayer(context)
-
+    private val _player = AoedePlayer(context)
     /**
      * Player itself (default part that can be passed to the view).
      */
     val player: Player
-        get() = mPlayer.player
+        get() = _player.player
 
-    private val mCurrentSong = MutableSharedFlow<Song>(replay = 1)
-
+    private val _currentSong = MutableSharedFlow<Song>(replay = 1)
     /**
-     * Song to that player is currently seek.
+     * Song to that player is currently playing.
      */
     val currentSong: SharedFlow<Song>
-        get() = mCurrentSong
+        get() = _currentSong
 
-    private val mIsPlaying = MutableSharedFlow<Boolean>(replay = 1)
-
+    private val _isPlaying = MutableSharedFlow<Boolean>(replay = 1)
     /**
      * Value which represents current playback state.
      */
     val isPlaying: SharedFlow<Boolean>
-        get() = mIsPlaying
+        get() = _isPlaying
 
     /**
      * Object that connects [AoedePlayer] state with its LiveData.
@@ -51,12 +49,12 @@ class PlayerInteractor(
     private var listener: Listener = Listener(this).apply {
         setOnCurrentSongUpdateListener {
             playerInteractorScope.launch {
-                mCurrentSong.emit(it)
+                _currentSong.emit(it)
             }
         }
         setOnIsPlayingChangeListener {
             playerInteractorScope.launch {
-                mIsPlaying.emit(it)
+                _isPlaying.emit(it)
             }
         }
     }
@@ -65,36 +63,36 @@ class PlayerInteractor(
      * Playlist which is currently submitted to the player.
      */
     val currentPlaylist: LiveData<Playlist>
-        get() = mPlayer.currentPlaylist
+        get() = _player.currentPlaylist
 
-    private val mIsPlayerInitialized = MutableStateFlow(false)
+    private val _isFirstSongSubmitted = MutableStateFlow(false)
 
     /**
      * [AoedePlayer] considered as initialized when the first song is submitted.
      */
-    val isPlayerInitialised: StateFlow<Boolean>
-        get() = mIsPlayerInitialized
+    val isFirstSongSubmitted: StateFlow<Boolean>
+        get() = _isFirstSongSubmitted
 
     init {
-        mPlayer.addListener(listener)
+        _player.addListener(listener)
         playerInteractorScope.launch {
             currentSong.collect {
-                if (!isPlayerInitialised.value) {
-                    mIsPlayerInitialized.value = true
+                if (!isFirstSongSubmitted.value) {
+                    _isFirstSongSubmitted.value = true
                 }
             }
         }
     }
 
     fun setPlaylist(playlist: Playlist) {
-        mPlayer.setPlaylist(playlist)
+        _player.setPlaylist(playlist)
     }
 
     fun setSong(song: Song) {
-        mPlayer.setSong(song)
+        _player.setSong(song)
     }
 
     fun suspendPlayer() {
-        mPlayer.suspend()
+        _player.suspend()
     }
 }

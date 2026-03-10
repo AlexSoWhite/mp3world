@@ -10,8 +10,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.allViews
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -23,7 +25,9 @@ import com.nafanya.mp3world.presentation.song_list_views.action_dialogs.defaultL
 import com.nafanya.mp3world.presentation.song_list_views.base_views.SongView
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
-import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
 
@@ -67,7 +71,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
         )
         binding.root.maxHeight = (resources.displayMetrics.heightPixels * MAX_DIALOG_SIZE).toInt()
         binding.root.minHeight = (resources.displayMetrics.heightPixels * MAX_DIALOG_SIZE).toInt()
-        viewModel.bindPlayerInteractor(playerInteractor)
+        viewModel.init()
         return binding.root
     }
 
@@ -88,33 +92,46 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mixedAdapter
         }
-        lifecycleScope.launchWhenCreated {
-            viewModel.playlistFlow.take(1).collect {
-                mixedAdapter.submitList(viewModel.asListItems(it.songList))
-                binding.currentPlaylistTitle.text = it.name
+        with(viewLifecycleOwner) {
+            lifecycleScope.launch {
+                val playlistWrapper = viewModel.playlistFlow.first()
+                mixedAdapter.submitList(viewModel.asListItems(playlistWrapper.songList))
+                binding.currentPlaylistTitle.text = playlistWrapper.name
             }
-        }
-        viewModel.currentSong.observe(viewLifecycleOwner) { song ->
-            // remove indicator from old view
-            currentPlayingView?.updateCurrentSong(song)
-            binding.currentPlaylistRecycler.allViews.filter {
-                it is SongView
-            }.forEach { view ->
-                with(view as SongView) {
-                    if (updateCurrentSong(song)) {
-                        currentPlayingView = this
+
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.CREATED) {
+                    viewModel.currentSong.collectLatest { song ->
+                        // remove indicator from old view
+                        currentPlayingView?.updateCurrentSong(song)
+                        binding.currentPlaylistRecycler.allViews.filter {
+                            it is SongView
+                        }.forEach { view ->
+                            with(view as SongView) {
+                                if (updateCurrentSong(song)) {
+                                    currentPlayingView = this
+                                }
+                            }
+                        }
+                        mixedAdapter.setCurrentPlayingSong(song)
                     }
                 }
             }
-            mixedAdapter.setCurrentPlayingSong(song)
+
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.CREATED) {
+                    viewModel.isPlaying.collectLatest {
+                        currentPlayingView?.updateIsPlaying(it)
+                    }
+                }
+            }
         }
+
         mixedAdapter.currentSelectedView.observe(viewLifecycleOwner) {
             currentPlayingView = it
-            currentPlayingView?.updateIsPlaying(viewModel.isPlaying.value!!)
+            currentPlayingView?.updateIsPlaying(viewModel.isPlaying.value)
         }
-        viewModel.isPlaying.observe(viewLifecycleOwner) {
-            currentPlayingView?.updateIsPlaying(it)
-        }
+
         binding.dismissCurrentPlaylistDialog.setOnClickListener {
             dismiss()
         }

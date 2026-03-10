@@ -21,6 +21,7 @@ import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.mp3world.presentation.song_list_views.DATE
 import com.nafanya.mp3world.presentation.song_list_views.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
+import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 class AllSongsViewModel @Inject constructor(
     private val mediaStoreInteractor: MediaStoreInteractor,
     private val favouritesManager: FavouritesProvider,
+    override val playerInteractor: PlayerInteractor,
     songListProvider: SongPlaylistProvider
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,

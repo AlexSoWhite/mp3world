@@ -4,11 +4,11 @@ import android.net.Uri
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 
 @Suppress("LongParameterList")
-class LocalSong(
-    uri: Uri,
-    title: String,
-    artist: String,
-    duration: Long,
+data class LocalSong(
+    override val uri: Uri,
+    override val title: String,
+    override val artist: String,
+    override val duration: Long,
     val date: Long,
     val artistId: Long,
     val albumId: Long,

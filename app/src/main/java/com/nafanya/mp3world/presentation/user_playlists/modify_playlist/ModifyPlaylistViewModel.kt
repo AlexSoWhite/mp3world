@@ -25,6 +25,7 @@ import com.nafanya.mp3world.domain.all_songs.SongPlaylistProvider
 import com.nafanya.mp3world.domain.all_songs.asAllSongsPlaylist
 import com.nafanya.mp3world.presentation.song_list_views.SONG_ADDABLE_REMOVABLE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
+import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -33,6 +34,7 @@ import kotlinx.coroutines.launch
 
 class ModifyPlaylistViewModel(
     private val userPlaylistsInteractor: UserPlaylistsInteractor,
+    override val playerInteractor: PlayerInteractor,
     private val playlistName: String,
     playlistId: Long,
     songListProvider: SongPlaylistProvider
@@ -116,7 +118,8 @@ class ModifyPlaylistViewModel(
     class Factory @AssistedInject constructor(
         @Assisted("playlistId") private val playlistId: Long,
         @Assisted("playlistName") private val playlistName: String,
-        private val playlistProviderMapWrapper: PlaylistProviderMapWrapper
+        private val playlistProviderMapWrapper: PlaylistProviderMapWrapper,
+        private val playerInteractor: PlayerInteractor
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
@@ -130,6 +133,7 @@ class ModifyPlaylistViewModel(
             ) as SongPlaylistProvider
             return ModifyPlaylistViewModel(
                 playlistListManager,
+                playerInteractor,
                 playlistName,
                 playlistId,
                 songListManager

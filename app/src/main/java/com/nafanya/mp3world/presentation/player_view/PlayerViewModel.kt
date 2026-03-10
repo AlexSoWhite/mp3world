@@ -5,14 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.data.downloading.api.DownloadInteractor
-import com.nafanya.mp3world.data.downloading.api.DownloadResult
 import com.nafanya.mp3world.data.downloading.api.DownloadingViewModel
 import com.nafanya.mp3world.domain.favourites.FavouritesProvider
 import com.nafanya.mp3world.domain.favourites.FavouritesManager
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -25,7 +23,7 @@ class PlayerViewModel @Inject constructor(
     playerInteractor: PlayerInteractor
 ) : ViewModel(), DownloadingViewModel, FavouritesManager {
 
-    val isPlayerInitialised = playerInteractor.isPlayerInitialised
+    val isPlayerInitialised = playerInteractor.isFirstSongSubmitted
     val player = playerInteractor.player
     val currentSong = playerInteractor.currentSong
     val currentPlaylist = playerInteractor.currentPlaylist

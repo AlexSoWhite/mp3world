@@ -3,6 +3,9 @@ package com.nafanya.mp3world.core.state_machines.presentation.list.playlist
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.allViews
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseAdapter
 import com.nafanya.mp3world.core.utils.list_utils.recycler.view.BaseViewHolder
@@ -14,6 +17,8 @@ import com.nafanya.mp3world.presentation.song_list_views.SongListItem
 import com.nafanya.mp3world.presentation.song_list_views.base_views.SongView
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 abstract class StatedPlaylistFragmentBaseLayout :
     StatedListFragmentBaseLayout<
@@ -41,23 +46,31 @@ abstract class StatedPlaylistFragmentBaseLayout :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        playlistViewModel.bindPlayerInteractor(playerInteractor)
-        playlistViewModel.currentSong.observe(viewLifecycleOwner) { song ->
-            // remove indicator from old view
-            currentPlayingView?.updateCurrentSong(song)
-            binding.recycler.allViews.filter {
-                it is SongView
-            }.forEach { view ->
-                (view as SongView).updateCurrentSong(song)
+        playlistViewModel.init()
+        with(viewLifecycleOwner) {
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.CREATED) {
+                    playlistViewModel.currentSong.collectLatest { song ->
+                        // remove indicator from old view
+                        currentPlayingView?.updateCurrentSong(song)
+                        binding.recycler.allViews.filter {
+                            it is SongView
+                        }.forEach { view ->
+                            (view as SongView).updateCurrentSong(song)
+                        }
+                        songListAdapter.setCurrentPlayingSong(song)
+                    }
+                }
             }
-            songListAdapter.setCurrentPlayingSong(song)
-        }
-        songListAdapter.currentSelectedView.observe(viewLifecycleOwner) {
-            currentPlayingView = it
-            currentPlayingView?.updateIsPlaying(playlistViewModel.isPlaying.value!!)
-        }
-        playlistViewModel.isPlaying.observe(viewLifecycleOwner) {
-            currentPlayingView?.updateIsPlaying(it)
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.CREATED) {
+                    playlistViewModel.isPlaying.collectLatest { currentPlayingView?.updateIsPlaying(it) }
+                }
+            }
+            songListAdapter.currentSelectedView.observe(viewLifecycleOwner) {
+                currentPlayingView = it
+                currentPlayingView?.updateIsPlaying(playlistViewModel.isPlaying.value)
+            }
         }
     }
 

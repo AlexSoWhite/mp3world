@@ -13,7 +13,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 /**
- * Object that monitors [PlayerInteractor.isPlayerInitialised] and starts [ForegroundService]
+ * Object that monitors [PlayerInteractor.isFirstSongSubmitted] and starts [ForegroundService]
  * when necessary.
  */
 @Singleton
@@ -26,7 +26,7 @@ class ServiceMonitor @Inject constructor(
     @Suppress("Deprecation")
     fun startMonitoring() {
         starterScope.launch {
-            playerInteractor.isPlayerInitialised.collect { isInit ->
+            playerInteractor.isFirstSongSubmitted.collect { isInit ->
                 if (isInit) {
                     val activityManager =
                         context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
