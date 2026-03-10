@@ -1,13 +1,14 @@
 package com.nafanya.mp3world.presentation.user_playlists.view_playlists
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.state_machines.presentation.Data
 import com.nafanya.mp3world.core.state_machines.presentation.list.StatedListViewModel
 import com.nafanya.mp3world.core.utils.list_utils.searching.QueryFilter
 import com.nafanya.mp3world.core.utils.list_utils.searching.SearchProcessor
 import com.nafanya.mp3world.core.utils.list_utils.searching.Searchable
+import com.nafanya.mp3world.core.utils.list_utils.title.TitleModel
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
@@ -16,6 +17,7 @@ import com.nafanya.mp3world.presentation.user_playlists.view_playlists.recycler.
 import com.nafanya.mp3world.presentation.user_playlists.view_playlists.recycler.AllPlaylistsListItem
 import com.nafanya.mp3world.presentation.user_playlists.view_playlists.recycler.PLAYLIST
 import javax.inject.Inject
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -33,15 +35,15 @@ class AllPlaylistsViewModel @Inject constructor(
         }
     )
 
-    private val titleProcessor = TitleProcessor<List<PlaylistWrapper>>()
-    override val title: LiveData<String>
+    private val titleProcessor = TitleProcessor<List<PlaylistWrapper>>(
+        baseTitleRes = R.string.my_playlists
+    )
+    override val title: StateFlow<TitleModel>
         get() = titleProcessor.title
 
     init {
         model.load {
             titleProcessor.setup(model, viewModelScope)
-            // TODO string resource
-            titleProcessor.setBaseTitle("Мои плейлисты")
             searchProcessor.setup(
                 this,
                 playlistListManager.playlists.map { Data.Success(it) }

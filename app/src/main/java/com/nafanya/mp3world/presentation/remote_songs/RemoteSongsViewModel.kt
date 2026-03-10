@@ -1,11 +1,11 @@
 package com.nafanya.mp3world.presentation.remote_songs
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.state_machines.presentation.Data
 import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistViewModel
+import com.nafanya.mp3world.core.utils.list_utils.title.TitleModel
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
@@ -25,6 +25,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -50,15 +51,14 @@ class RemoteSongsViewModel(
             it.asPlaylist(query)
         }
 
-    private val titleProcessor = TitleProcessor<List<SongWrapper>>()
+    private val titleProcessor = TitleProcessor<List<SongWrapper>>(baseTitleString = query)
 
-    override val title: LiveData<String>
+    override val title: StateFlow<TitleModel>
         get() = titleProcessor.title
 
     init {
         model.load {
             titleProcessor.setup(this.model, viewModelScope)
-            titleProcessor.setBaseTitle(query)
             viewModelScope.launch {
                 val songs = songSearcher.searchSongs(query)
                 mPlaylistFlow.emit(songs)

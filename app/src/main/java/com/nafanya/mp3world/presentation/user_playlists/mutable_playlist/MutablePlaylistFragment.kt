@@ -6,7 +6,9 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.coroutines.collectInScope
 import com.nafanya.mp3world.core.di.ApplicationComponent
@@ -17,7 +19,9 @@ import com.nafanya.mp3world.core.utils.list_utils.searching.attachToTopBar
 import com.nafanya.mp3world.presentation.playlist.base_views.BaseSongListAdapter
 import com.nafanya.mp3world.presentation.song_list_views.action_dialogs.defaultLocalSongActionDialog
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 
 class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
@@ -61,8 +65,13 @@ class MutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
         binding.emptyMock.root.setOnClickListener {
             moveToModifyPlaylistActivity()
         }
-        viewModel.title.observe(viewLifecycleOwner) {
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.title.collectLatest {
+                    val activity = requireActivity() as AppCompatActivity
+                    activity.supportActionBar?.title = it.getText(activity)
+                }
+            }
         }
     }
 

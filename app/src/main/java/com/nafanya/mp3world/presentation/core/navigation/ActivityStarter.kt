@@ -2,6 +2,7 @@ package com.nafanya.mp3world.presentation.core.navigation
 
 import android.content.Context
 import android.content.Intent
+import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.list_managers.ALBUM_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.list_managers.ARTIST_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.list_managers.FAVOURITE_LIST_MANAGER_KEY
@@ -15,6 +16,7 @@ import com.nafanya.mp3world.presentation.all_songs.AllSongsActivity
 import com.nafanya.mp3world.presentation.artists.ArtistListActivity
 import com.nafanya.mp3world.presentation.playlist.immutable_playlist.ImmutablePlaylistActivity
 import com.nafanya.mp3world.presentation.playlist.immutable_playlist.ImmutablePlaylistActivity.Companion.PLAYLIST_NAME
+import com.nafanya.mp3world.presentation.playlist.immutable_playlist.ImmutablePlaylistActivity.Companion.PLAYLIST_NAME_RES
 import com.nafanya.mp3world.presentation.remote_songs.RemoteSongsActivity
 import com.nafanya.mp3world.presentation.remote_songs.RemoteSongsActivity.Companion.QUERY
 
@@ -73,7 +75,7 @@ class ActivityStarter private constructor(
         fun createIntentToFavouritesActivity(): Builder {
             intent = Intent(context, ImmutablePlaylistActivity::class.java)
             intent.putExtra(ImmutablePlaylistActivity.LIST_MANAGER_KEY, FAVOURITE_LIST_MANAGER_KEY)
-            intent.putExtra(PLAYLIST_NAME, "Избранное")
+            intent.putExtra(PLAYLIST_NAME_RES, R.string.favourites)
             return this
         }
 

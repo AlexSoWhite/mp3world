@@ -6,6 +6,9 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseAdapter
@@ -18,6 +21,8 @@ import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.presentation.user_playlists.view_playlists.recycler.AllPlaylistsAdapter
 import com.nafanya.mp3world.presentation.user_playlists.view_playlists.recycler.AllPlaylistsListItem
 import com.nafanya.mp3world.presentation.user_playlists.view_playlists.recycler.ClickType
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class AllPlaylistsFragment : StatedListFragmentBaseLayout<PlaylistWrapper, AllPlaylistsListItem>() {
 
@@ -72,8 +77,13 @@ class AllPlaylistsFragment : StatedListFragmentBaseLayout<PlaylistWrapper, AllPl
                     viewModel.addEmptyPlaylistWithName(it)
                 }.show()
         }
-        viewModel.title.observe(viewLifecycleOwner) {
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.title.collectLatest {
+                    val activity = requireActivity() as AppCompatActivity
+                    activity.supportActionBar?.title = it.getText(activity)
+                }
+            }
         }
     }
 

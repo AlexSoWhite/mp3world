@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistFragmentBaseLayout
@@ -13,6 +16,8 @@ import com.nafanya.mp3world.data.downloading.api.download
 import com.nafanya.mp3world.presentation.playlist.base_views.BaseSongListAdapter
 import com.nafanya.mp3world.presentation.remote_songs.RemoteSongsActivity.Companion.QUERY
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class RemoteSongsFragment :
     StatedPlaylistFragmentBaseLayout(),
@@ -46,8 +51,13 @@ class RemoteSongsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.title.observe(viewLifecycleOwner) {
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.title.collectLatest {
+                    val activity = requireActivity() as AppCompatActivity
+                    activity.supportActionBar?.title = it.getText(activity)
+                }
+            }
         }
         binding.refreshToggle.isEnabled = true
         binding.refreshToggle.setOnRefreshListener {

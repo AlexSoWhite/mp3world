@@ -9,6 +9,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.utils.list_utils.searching.DefaultOnQueryTextListener
@@ -17,6 +20,8 @@ import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.State
 import com.nafanya.mp3world.presentation.user_playlists.modify_playlist.ModifyPlaylistActivity.Companion.PLAYLIST_NAME
 import com.nafanya.mp3world.presentation.playlist.base_views.BaseSongListAdapter
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
@@ -53,8 +58,13 @@ class ModifyPlaylistFragment : StatedPlaylistFragmentBaseLayout() {
             modifyPlaylistAdapter.setModifyingPlaylist(it)
             modifyPlaylistAdapter.notifyDataSetChanged()
         }
-        viewModel.title.observe(viewLifecycleOwner) {
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.title.collectLatest {
+                    val activity = requireActivity() as AppCompatActivity
+                    activity.supportActionBar?.title = it.getText(activity)
+                }
+            }
         }
     }
 

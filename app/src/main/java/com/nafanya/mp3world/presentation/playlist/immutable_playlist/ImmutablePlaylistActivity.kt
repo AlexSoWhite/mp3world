@@ -12,6 +12,7 @@ class ImmutablePlaylistActivity : BaseActivity<ActivityImmutablePlaylistLayoutBi
         const val LIST_MANAGER_KEY = "LIST_MANAGER_KEY"
         const val CONTAINER_ID = "CONTAINER_ID"
         const val PLAYLIST_NAME = "PLAYLIST_NAME"
+        const val PLAYLIST_NAME_RES = "PLAYLIST_NAME_RES"
     }
 
     override fun inflate(layoutInflater: LayoutInflater): ActivityImmutablePlaylistLayoutBinding {
@@ -24,6 +25,7 @@ class ImmutablePlaylistActivity : BaseActivity<ActivityImmutablePlaylistLayoutBi
         arguments.putInt(LIST_MANAGER_KEY, intent.getIntExtra(LIST_MANAGER_KEY, -1))
         arguments.putLong(CONTAINER_ID, intent.getLongExtra(CONTAINER_ID, -1))
         arguments.putString(PLAYLIST_NAME, intent.getStringExtra(PLAYLIST_NAME))
+        arguments.putInt(PLAYLIST_NAME_RES, intent.getIntExtra(PLAYLIST_NAME_RES, -1))
         val fragment = ImmutablePlaylistFragment()
         fragment.arguments = arguments
         supportFragmentManager.beginTransaction()

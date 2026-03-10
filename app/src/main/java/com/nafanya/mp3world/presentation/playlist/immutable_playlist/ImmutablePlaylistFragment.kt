@@ -6,6 +6,9 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.nafanya.mp3world.core.di.ApplicationComponent
 import com.nafanya.mp3world.core.utils.list_utils.searching.attachToTopBar
 import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistFragmentBaseLayout
@@ -13,6 +16,8 @@ import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.State
 import com.nafanya.mp3world.presentation.playlist.base_views.BaseSongListAdapter
 import com.nafanya.mp3world.presentation.song_list_views.action_dialogs.defaultLocalSongActionDialog
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class ImmutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
@@ -22,7 +27,8 @@ class ImmutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
         immutableFactory.create(
             arguments?.getInt(ImmutablePlaylistActivity.LIST_MANAGER_KEY, -1) ?: -1,
             arguments?.getLong(ImmutablePlaylistActivity.CONTAINER_ID, -1) ?: -1,
-            arguments?.getString(ImmutablePlaylistActivity.PLAYLIST_NAME) ?: ""
+            arguments?.getString(ImmutablePlaylistActivity.PLAYLIST_NAME),
+            arguments?.getInt(ImmutablePlaylistActivity.PLAYLIST_NAME_RES, -1)?.takeIf { it > -1 }
         )
     }
 
@@ -46,8 +52,13 @@ class ImmutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.title.observe(viewLifecycleOwner) {
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = it
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.title.collectLatest {
+                    val activity = requireActivity() as AppCompatActivity
+                    activity.supportActionBar?.title = it.getText(activity)
+                }
+            }
         }
     }
 

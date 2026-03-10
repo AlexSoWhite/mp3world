@@ -16,8 +16,9 @@ import com.nafanya.mp3world.core.utils.list_utils.searching.QueryFilter
 import com.nafanya.mp3world.core.utils.list_utils.searching.SearchProcessor
 import com.nafanya.mp3world.core.utils.list_utils.searching.Searchable
 import com.nafanya.mp3world.core.utils.list_utils.searching.songQueryFilterCallback
+import com.nafanya.mp3world.core.utils.list_utils.title.TitleModel
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
-import com.nafanya.mp3world.core.utils.list_utils.title.convertStateToTitle
+import com.nafanya.mp3world.core.utils.list_utils.title.convertStateToCount
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.domain.user_playlists.UserPlaylistsInteractor
@@ -29,6 +30,8 @@ import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -54,9 +57,9 @@ class ModifyPlaylistViewModel(
 
     private val searchProcessor = SearchProcessor(QueryFilter(songQueryFilterCallback))
 
-    private val mTitle = MutableLiveData(playlistName)
-    override val title: LiveData<String>
-        get() = mTitle
+    private val _title = MutableStateFlow(TitleModel.Builder().withBaseString(playlistName).build())
+    override val title: StateFlow<TitleModel>
+        get() = _title
 
     init {
         model.load {
@@ -66,14 +69,14 @@ class ModifyPlaylistViewModel(
                     Data.Success(it.asAllSongsPlaylist().songList)
                 }
             )
-            model.currentState.collectLatestInScope(viewModelScope, ::proceedState)
+            model.currentState.collectLatestInScope(viewModelScope, ::processState)
             userPlaylistsInteractor
                 .getPlaylistByContainerId(playlistId)
                 .collectLatestInScope(viewModelScope) {
                     mModifyingPlaylist.postValue(it)
                     songList.clear()
                     songList.addAll(it.songList)
-                    proceedState(model.currentState.value)
+                    processState(model.currentState.value)
                 }
         }
     }
@@ -88,12 +91,17 @@ class ModifyPlaylistViewModel(
         searchProcessor.search(query)
     }
 
-    private fun proceedState(state: State<List<SongWrapper>>) {
+    private fun processState(state: State<List<SongWrapper>>) {
         val newState = when (state) {
             is State.Success, is State.Updated -> State.Success(songList)
             else -> state
         }
-        mTitle.value = convertStateToTitle(newState, playlistName)
+        val builder = TitleModel.Builder().withBaseString(playlistName)
+        val count = convertStateToCount(newState)
+        if (count != null) {
+            builder.withCount(count)
+        }
+        _title.value = builder.build()
     }
 
     fun confirmChanges() {
@@ -107,12 +115,12 @@ class ModifyPlaylistViewModel(
 
     fun addSongToCopyOfPlaylist(song: SongWrapper) {
         songList.add(0, song)
-        proceedState(model.currentState.value)
+        processState(model.currentState.value)
     }
 
     fun removeSongFromCopyOfPlaylist(song: SongWrapper) {
         songList.remove(song)
-        proceedState(model.currentState.value)
+        processState(model.currentState.value)
     }
 
     class Factory @AssistedInject constructor(

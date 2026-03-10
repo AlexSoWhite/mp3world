@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.presentation.playlist.immutable_playlist
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -12,6 +11,7 @@ import com.nafanya.mp3world.core.utils.list_utils.searching.QueryFilter
 import com.nafanya.mp3world.core.utils.list_utils.searching.SearchProcessor
 import com.nafanya.mp3world.core.utils.list_utils.searching.Searchable
 import com.nafanya.mp3world.core.utils.list_utils.searching.songQueryFilterCallback
+import com.nafanya.mp3world.core.utils.list_utils.title.TitleModel
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessor
 import com.nafanya.mp3world.core.utils.list_utils.title.TitleProcessorWrapper
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
@@ -24,6 +24,7 @@ import com.nafanya.player.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -32,7 +33,8 @@ class ImmutablePlaylistViewModel(
     override val playerInteractor: PlayerInteractor,
     listManagerKey: Int,
     containerId: Long,
-    baseTitle: String
+    playlistName: String?,
+    playlistNameRes: Int?
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
     TitleProcessorWrapper<List<SongWrapper>>,
@@ -47,14 +49,17 @@ class ImmutablePlaylistViewModel(
 
     private val searchProcessor = SearchProcessor(QueryFilter(songQueryFilterCallback))
 
-    private val titleProcessor = TitleProcessor<List<SongWrapper>>()
-    override val title: LiveData<String>
+    private val titleProcessor = if (playlistName != null) {
+        TitleProcessor<List<SongWrapper>>(baseTitleString = playlistName)
+    } else {
+        TitleProcessor(baseTitleRes = playlistNameRes)
+    }
+    override val title: StateFlow<TitleModel>
         get() = titleProcessor.title
 
     init {
         model.load {
             titleProcessor.setup(model, viewModelScope)
-            titleProcessor.setBaseTitle(baseTitle)
             searchProcessor.setup(
                 this@ImmutablePlaylistViewModel,
                 playlistFlow.map {
@@ -89,7 +94,8 @@ class ImmutablePlaylistViewModel(
     class Factory @AssistedInject constructor(
         @Assisted("listManagerKey") private val listManagerKey: Int,
         @Assisted("containerId") private val containerId: Long,
-        @Assisted("playlistName") private val playlistName: String,
+        @Assisted("playlistName") private val playlistName: String?,
+        @Assisted("playlistNameRes") private val playlistNameRes: Int?,
         private val playlistProviderMapWrapper: PlaylistProviderMapWrapper,
         private val playerInteractor: PlayerInteractor
     ) : ViewModelProvider.Factory {
@@ -102,7 +108,8 @@ class ImmutablePlaylistViewModel(
                 playerInteractor,
                 listManagerKey,
                 containerId,
-                playlistName
+                playlistName,
+                playlistNameRes
             ) as T
         }
 
@@ -112,7 +119,8 @@ class ImmutablePlaylistViewModel(
             fun create(
                 @Assisted("listManagerKey") listManagerKey: Int,
                 @Assisted("containerId") containerId: Long,
-                @Assisted("playlistName") playlistName: String
+                @Assisted("playlistName") playlistName: String?,
+                @Assisted("playlistNameRes") playlistNameRes: Int?
             ): Factory
         }
     }
