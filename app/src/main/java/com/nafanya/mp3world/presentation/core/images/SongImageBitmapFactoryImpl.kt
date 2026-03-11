@@ -101,26 +101,27 @@ class SongImageBitmapFactoryImpl @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    private suspend fun getBitmapForLocalSongFromQ(song: LocalSong, size: Size): Bitmap = withContext(dispatchersProvider.default) {
-        return@withContext try {
-            val bitmap = context
-                .contentResolver
-                ?.loadThumbnail(
-                    song.uri,
-                    size,
-                    null
-                )!!
-            bitmap
-        } catch (exception: IOException) {
-            defaultBitmap
-        } catch (exception: NullPointerException) {
-            defaultBitmap
-        } catch (exception: FileNotFoundException) {
-            defaultBitmap
-        } catch (exception: Exception) {
-            defaultBitmap
+    private suspend fun getBitmapForLocalSongFromQ(song: LocalSong, size: Size): Bitmap =
+        withContext(dispatchersProvider.default) {
+            return@withContext try {
+                val bitmap = context
+                    .contentResolver
+                    ?.loadThumbnail(
+                        song.uri,
+                        size,
+                        null
+                    )!!
+                bitmap
+            } catch (exception: IOException) {
+                defaultBitmap
+            } catch (exception: NullPointerException) {
+                defaultBitmap
+            } catch (exception: FileNotFoundException) {
+                defaultBitmap
+            } catch (exception: Exception) {
+                defaultBitmap
+            }
         }
-    }
 
     private suspend fun getBitmapForLocalSongPreQ(song: LocalSong): Bitmap {
         val artworkUri = Uri.parse("content://media/external/audio/albumart")
