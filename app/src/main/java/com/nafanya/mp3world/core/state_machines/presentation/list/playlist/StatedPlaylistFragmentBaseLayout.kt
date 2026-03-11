@@ -18,6 +18,7 @@ import com.nafanya.mp3world.presentation.song_list_views.base_views.SongView
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 abstract class StatedPlaylistFragmentBaseLayout :
@@ -50,7 +51,8 @@ abstract class StatedPlaylistFragmentBaseLayout :
         with(viewLifecycleOwner) {
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    playlistViewModel.currentSong.collectLatest { song ->
+                    // todo: do something else when null?
+                    playlistViewModel.currentSong.filterNotNull().collectLatest { song ->
                         // remove indicator from old view
                         currentPlayingView?.updateCurrentSong(song)
                         binding.recycler.allViews.filter {

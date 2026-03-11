@@ -34,8 +34,8 @@ abstract class StatedPlaylistViewModel : StatedListViewModel<SongWrapper, SongLi
     private var _isPlaying = MutableStateFlow(false)
     val isPlaying: StateFlow<Boolean> get() = _isPlaying.asStateFlow()
 
-    private val _currentSong = MutableSharedFlow<SongWrapper>(replay = 1)
-    val currentSong: SharedFlow<SongWrapper>
+    private val _currentSong = MutableSharedFlow<SongWrapper?>(replay = 1)
+    val currentSong: SharedFlow<SongWrapper?>
         get() = _currentSong
 
     fun init() {
@@ -43,7 +43,7 @@ abstract class StatedPlaylistViewModel : StatedListViewModel<SongWrapper, SongLi
         playerInteractor.isPlaying.collectLatestInScope(viewModelScope) { _isPlaying.value = it }
         playerInteractor.currentSong.collectLatestInScope(viewModelScope) {
             Log.d(TAG, "current song updated: $it")
-            _currentSong.emitInScope(viewModelScope, it as SongWrapper)
+            _currentSong.emitInScope(viewModelScope, it as? SongWrapper)
         }
     }
 

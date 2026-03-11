@@ -1,6 +1,5 @@
 package com.nafanya.mp3world.presentation.user_playlists.view_playlists
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.state_machines.presentation.Data
@@ -27,8 +26,6 @@ class AllPlaylistsViewModel @Inject constructor(
     Searchable<PlaylistWrapper>,
     TitleProcessorWrapper<List<PlaylistWrapper>> {
 
-    private var isModifyingPlaylistsTrigger = MutableLiveData(Unit)
-
     private val searchProcessor = SearchProcessor<PlaylistWrapper>(
         QueryFilter { playlist, s ->
             playlist.name.contains(s, true)
@@ -52,14 +49,12 @@ class AllPlaylistsViewModel @Inject constructor(
     }
 
     fun addEmptyPlaylistWithName(name: String) {
-        isModifyingPlaylistsTrigger.value = Unit
         viewModelScope.launch {
             playlistListManager.addPlaylist(name)
         }
     }
 
     fun deletePlaylist(playlist: PlaylistWrapper) {
-        isModifyingPlaylistsTrigger.value = Unit
         viewModelScope.launch {
             playlistListManager.deletePlaylist(playlist)
         }

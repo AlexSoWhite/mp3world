@@ -36,6 +36,8 @@ import com.nafanya.mp3world.databinding.PlayerControlViewFullscreenFragmentBindi
 import com.nafanya.mp3world.data.downloading.api.download
 import com.nafanya.mp3world.presentation.player_view.current_playlist.CurrentPlaylistDialogFragment
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 
 @Suppress("TooManyFunctions")
 class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
@@ -88,7 +90,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
             }
         }
         lifecycleScope.launchWhenCreated {
-            viewModel.currentSong.collect {
+            viewModel.currentSong.filterNotNull().collectLatest {
                 renderSong(it as SongWrapper)
             }
         }

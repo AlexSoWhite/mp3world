@@ -2,8 +2,6 @@ package com.nafanya.player
 
 import android.content.Context
 import android.os.Bundle
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.IllegalSeekPositionException
@@ -11,17 +9,19 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.MediaMetadata
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.nafanya.player.Listener.Companion.URI_KEY
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 internal class AoedePlayer(context: Context) {
 
     /**
      * Extended player with custom behavior.
      */
-    private val mPlayer: AoedePlayerWrapper = AoedePlayerWrapper(
+    private val _player: AoedePlayerWrapper = AoedePlayerWrapper(
         ExoPlayer.Builder(context).build()
     )
     internal val player: AoedePlayerWrapper
-        get() = mPlayer
+        get() = _player
 
     /**
      * Setting to true when first mediaItem is loaded, needed to decide
@@ -32,12 +32,9 @@ internal class AoedePlayer(context: Context) {
     /**
      * current playlist, to navigate between items in it
      */
-    private val mCurrentPlaylist = MutableLiveData<Playlist>()
-    internal val currentPlaylist: LiveData<Playlist>
-        get() = mCurrentPlaylist
-
-    private val mPlaylist: Playlist?
-        get() = mCurrentPlaylist.value
+    private val _currentPlaylist = MutableStateFlow<Playlist?>(null)
+    internal val currentPlaylist: StateFlow<Playlist?>
+        get() = _currentPlaylist
 
     init {
         player.exoPlayer.apply {
@@ -61,8 +58,8 @@ internal class AoedePlayer(context: Context) {
         // creating copy of playlist to continue playing deleted from playlist songs
         // TODO for what?
         player.clearMediaItems()
-        mCurrentPlaylist.value = playlist
-        mPlaylist?.songList?.forEach {
+        _currentPlaylist.value = playlist
+        playlist.songList.forEach {
             /**
              * when this method is called for the first time, it ends with
              * moving player to initialized state
@@ -82,7 +79,7 @@ internal class AoedePlayer(context: Context) {
      * @throws IllegalSeekPositionException if song doesn't appear in playlist.
      */
     internal fun setSong(song: Song) {
-        val idx = mPlaylist?.songList?.indexOf(song)
+        val idx = currentPlaylist.value?.songList?.indexOf(song)
         try {
             if (idx != null) {
                 player.seekToDefaultPosition(idx)

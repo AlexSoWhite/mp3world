@@ -1,7 +1,5 @@
 package com.nafanya.mp3world.presentation.player_view.current_playlist
 
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
@@ -9,16 +7,15 @@ import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.data.downloading.api.DownloadInteractor
-import com.nafanya.mp3world.data.downloading.api.DownloadResult
 import com.nafanya.mp3world.data.downloading.api.DownloadingViewModel
 import com.nafanya.mp3world.domain.favourites.FavouritesProvider
 import com.nafanya.mp3world.domain.favourites.FavouritesManager
-import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.mp3world.presentation.song_list_views.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.presentation.song_list_views.SONG_REMOTE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class CurrentPlaylistViewModel @Inject constructor(
@@ -31,7 +28,7 @@ class CurrentPlaylistViewModel @Inject constructor(
 
     override val playlistFlow = playerInteractor.currentPlaylist.map {
         it as PlaylistWrapper
-    }.asFlow()
+    }
 
     override fun asListItems(list: List<SongWrapper>): List<SongListItem> {
         val newList = mutableListOf<SongListItem>()

@@ -24,6 +24,8 @@ import com.nafanya.mp3world.presentation.core.common_ui.BaseFragment
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.databinding.PlayerControlViewBottomFragmentBinding
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 
 class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBinding>() {
 
@@ -63,7 +65,7 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
             }
         }
         lifecycleScope.launchWhenCreated {
-            viewModel.currentSong.collect {
+            viewModel.currentSong.filterNotNull().collectLatest {
                 binding.root.isVisible = true
                 renderSong(it as SongWrapper)
             }
