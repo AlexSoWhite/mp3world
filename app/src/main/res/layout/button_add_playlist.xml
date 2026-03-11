@@ -25,7 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/add_playlist"
+        android:text="@string/no_playlists"
         android:textSize="20sp"
         android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"

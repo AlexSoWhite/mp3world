@@ -70,6 +70,7 @@ dependencies {
     implementation(Dependencies.AndroidX.coreKtx)
     implementation(Dependencies.AndroidX.constraintLayout)
     implementation(Dependencies.AndroidX.viewModel)
+    implementation(Dependencies.AndroidX.lifecycleRuntime)
     implementation(Dependencies.AndroidX.paging)
     // to use 'by viewModels()'
     implementation(Dependencies.AndroidX.fragmentKtx)

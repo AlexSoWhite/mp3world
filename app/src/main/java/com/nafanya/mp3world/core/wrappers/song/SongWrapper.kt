@@ -5,9 +5,9 @@ import com.nafanya.player.Song
 
 abstract class SongWrapper(
     uri: Uri,
-    val title: String,
-    val artist: String,
-    val duration: Long
+    open val title: String,
+    open val artist: String,
+    open val duration: Long
 ) : Song(uri) {
 
     override fun equals(other: Any?): Boolean {

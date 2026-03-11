@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">mp3world</string>
+
+    <!-- main title name -->
+    <string name="my_songs">My songs</string>
+    <string name="my_playlists">My playlists</string>
+    <string name="artists">Artists</string>
+    <string name="albums">Albums</string>
+    <string name="favourites">Favourites</string>
+
+    <!-- different screen states -->
+    <string name="loading">Loading</string>
+    <string name="nothing_found">Nothing found</string>
+
+    <!-- local playlists functionality -->
+    <string name="modify_compositions">Change songs</string>
+    <string name="add_songs">Add songs</string>
+    <string name="no_playlists">@string/add_playlist</string>
+    <string name="create">Create</string>
+    <string name="no_songs">No songs</string>
+    <string name="add_playlist">Create a playlist</string>
+    <string name="enter_name">Enter playlist name</string>
+    <string name="delete_playlist_message">Delete playlist %1$s?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="changes_will_be_discarded">Changes will not be saved. Proceed?</string>
+    <string name="string_continue">Proceed</string>
+    <string name="confirm_changes">Save changes</string>
+
+    <!-- albums functionality -->
+    <string name="no_albums">No albums</string>
+    <string name="go_to_album">Go to album %1$s</string>
+
+    <!-- artists functionality -->
+    <string name="no_artists">No artists</string>
+    <string name="go_to_artist">Go to artist %1$s</string>
+
+    <!-- favourites functionality -->
+    <string name="add_to_favourites">Add to favourites</string>
+    <string name="remove_from_favourites">Remove from favourites</string>
+
+    <!-- generic local song dialog texts -->
+    <string name="song_description">%1$s - %2$s</string>
+    <string name="download_song">Download song %1$s - %2$s</string>
+    <string name="confirm">OK</string>
+
+    <!-- downloading functionality -->
+    <string name="download_started">Download started</string>
+    <string name="download_finished">%1$s - %2$s downloaded</string>
+    <string name="error">Error</string>
+</resources>

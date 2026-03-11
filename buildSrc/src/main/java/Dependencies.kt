@@ -6,23 +6,22 @@ object Dependencies {
             const val appCompat = "1.4.1"
             const val coreCtx = "1.7.0"
             const val constraintLayot = "2.1.3"
-            const val viewModelKtx = "2.4.1"
+            const val ktx = "2.4.1"
             const val paging = "3.1.1"
             const val fragmentKtx = "1.1.0"
             const val swipeRefreshLayout = "1.1.0"
-            const val liveData = "2.5.1"
         }
 
         const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
         const val coreKtx = "androidx.core:core-ktx:${Versions.coreCtx}"
         const val constraintLayout =
             "androidx.constraintlayout:constraintlayout:${Versions.constraintLayot}"
-        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.viewModelKtx}"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.ktx}"
+        const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.ktx}"
         const val paging = "androidx.paging:paging-runtime-ktx:${Versions.paging}"
         const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"
         const val swipeRefreshLayout =
             "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
-        const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.liveData}"
     }
 
     object Coroutines {

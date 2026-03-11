@@ -7,7 +7,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/albums_fragment_container"
-        android:name="com.nafanya.mp3world.features.albums.view.AlbumListFragment"
+        android:name="com.nafanya.mp3world.presentation.albums.AlbumListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"

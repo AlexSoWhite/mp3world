@@ -6,7 +6,7 @@
     android:id="@+id/main_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.entrypoint.MainActivity"
+    tools:context=".presentation.entrypoint.MainActivity"
     android:background="@drawable/background_gradient"
     android:paddingTop="50dp">
 
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3">
 
-        <com.nafanya.mp3world.features.entrypoint.MainMenuOptionView
+        <com.nafanya.mp3world.presentation.entrypoint.MainMenuOptionView
             android:id="@+id/all_songs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             app:description="@string/my_songs"
             app:option="all_songs" />
 
-        <com.nafanya.mp3world.features.entrypoint.MainMenuOptionView
+        <com.nafanya.mp3world.presentation.entrypoint.MainMenuOptionView
             android:id="@+id/playlists"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             app:description="@string/my_playlists"
             app:option="all_playlists" />
 
-        <com.nafanya.mp3world.features.entrypoint.MainMenuOptionView
+        <com.nafanya.mp3world.presentation.entrypoint.MainMenuOptionView
             android:id="@+id/artists"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
             app:description="@string/artists"
             app:option="artists" />
 
-        <com.nafanya.mp3world.features.entrypoint.MainMenuOptionView
+        <com.nafanya.mp3world.presentation.entrypoint.MainMenuOptionView
             android:id="@+id/albums"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             app:description="@string/albums"
             app:option="albums" />
 
-        <com.nafanya.mp3world.features.entrypoint.MainMenuOptionView
+        <com.nafanya.mp3world.presentation.entrypoint.MainMenuOptionView
             android:id="@+id/favourites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:name="com.nafanya.mp3world.features.playerView.view.BottomControlViewFragment"
+        android:name="com.nafanya.mp3world.presentation.player_view.BottomControlViewFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

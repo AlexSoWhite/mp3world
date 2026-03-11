@@ -1,0 +1,64 @@
+package com.nafanya.mp3world.domain.favourites
+
+import com.nafanya.mp3world.core.coroutines.collectLatestInScope
+import com.nafanya.mp3world.core.coroutines.emitInScope
+import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
+import com.nafanya.mp3world.data.favourites.FavouritesEntity
+import com.nafanya.mp3world.data.local_storage.LocalStorageRepository
+import com.nafanya.mp3world.data.local_storage.api.FavouritesRepository
+import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+
+/**
+ * Object that holds favourites data. Managed by [LocalStorageRepository] and [MediaStoreInteractor].
+ */
+@OptIn(ExperimentalCoroutinesApi::class)
+@Singleton
+class FavouritesProviderImpl @Inject constructor(
+    private val favouriteListInteractor: FavouritesRepository,
+    private val applicationScope: CoroutineScope,
+    mediaStoreInteractor: MediaStoreInteractor
+) : FavouritesProvider {
+
+    private val _favorites = MutableSharedFlow<PlaylistWrapper>(replay = 1)
+    override val favorites: Flow<PlaylistWrapper>
+        get() = _favorites
+
+    override fun observeIsSongInFavorites(song: LocalSong) = _favorites
+        .map { favourites ->
+            favourites.songList.contains(song)
+        }
+
+    init {
+        mediaStoreInteractor.allSongs.flatMapLatest { songs ->
+            favouriteListInteractor.observeFavouritesUris().map { entries -> Pair(songs, entries) }
+        }.collectLatestInScope(applicationScope) { (songList, uris) ->
+            val songs = songList
+                .filter { uris.contains(it.uri) }
+            // TODO: string resource
+            val temp = PlaylistWrapper(
+                songList = songs,
+                name = "Избранное"
+            )
+            _favorites.emitInScope(applicationScope, temp)
+        }
+    }
+
+    override fun getPlaylistByContainerId(id: Long) = favorites
+
+    override suspend fun add(song: LocalSong) {
+        favouriteListInteractor.addFavourite(FavouritesEntity(song.uri.toString()))
+    }
+
+    override suspend fun delete(song: LocalSong) {
+        favouriteListInteractor.deleteFavourite(FavouritesEntity(song.uri.toString()))
+    }
+}
