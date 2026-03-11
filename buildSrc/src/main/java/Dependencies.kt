@@ -10,7 +10,6 @@ object Dependencies {
             const val paging = "3.1.1"
             const val fragmentKtx = "1.1.0"
             const val swipeRefreshLayout = "1.1.0"
-            const val liveData = "2.5.1"
         }
 
         const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
@@ -23,7 +22,6 @@ object Dependencies {
         const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"
         const val swipeRefreshLayout =
             "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
-        const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.liveData}"
     }
 
     object Coroutines {

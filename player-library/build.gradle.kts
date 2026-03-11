@@ -26,7 +26,6 @@ android {
 
 dependencies {
 
-    implementation(Dependencies.AndroidX.liveData)
     implementation(Dependencies.Coroutines.coroutinesCore)
     implementation(Dependencies.Google.exoplayer)
 

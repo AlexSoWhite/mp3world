@@ -1,14 +1,17 @@
 package com.nafanya.mp3world.presentation.player_view
 
+import android.graphics.Bitmap
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nafanya.mp3world.core.utils.ColorExtractor
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.data.downloading.api.DownloadInteractor
 import com.nafanya.mp3world.data.downloading.api.DownloadingViewModel
 import com.nafanya.mp3world.domain.favourites.FavouritesProvider
 import com.nafanya.mp3world.domain.favourites.FavouritesManager
-import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.player.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -19,6 +22,7 @@ import kotlinx.coroutines.launch
 class PlayerViewModel @Inject constructor(
     private val downloadInteractor: DownloadInteractor,
     private val favouriteListManager: FavouritesProvider,
+    private val colorExtractor: ColorExtractor,
     playerInteractor: PlayerInteractor
 ) : ViewModel(), DownloadingViewModel, FavouritesManager {
 
@@ -42,4 +46,7 @@ class PlayerViewModel @Inject constructor(
     }
 
     override fun download(remoteSong: RemoteSong) = downloadInteractor.download(remoteSong)
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    suspend fun getAverageColorWithNoWhiteComponent(art: Bitmap) = colorExtractor.getAverageColorWithNoWhiteComponent(art)
 }
