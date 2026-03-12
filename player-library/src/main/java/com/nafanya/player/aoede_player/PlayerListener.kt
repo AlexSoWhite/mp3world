@@ -13,7 +13,6 @@ internal class PlayerListener(
 ) : Player.Listener {
 
     companion object {
-        const val URI_KEY = "uri"
         private const val TAG = "_PlayerListener"
     }
 
@@ -34,7 +33,7 @@ internal class PlayerListener(
         super.onMediaItemTransition(mediaItem, reason)
         mediaItem?.let {
             player.currentPlaylist.value?.songList?.first {
-                it.uri == mediaItem.mediaMetadata.extras!!.getParcelable(URI_KEY)
+                it.uri == mediaItem.mediaMetadata.extras!!.getParcelable(Song.URI_KEY)
             }?.let { newSong ->
                 onCurrentSongUpdateListener?.invoke(newSong)
             }

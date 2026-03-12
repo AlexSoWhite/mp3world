@@ -13,11 +13,25 @@ import com.nafanya.player.aoede_player.PlayerListener
 @Suppress("UnnecessaryAbstractClass")
 abstract class Song(open val uri: Uri) {
 
+    companion object {
+        const val SONG_TYPE_KEY = "SONG_TYPE_KEY"
+        const val URI_KEY = "uri"
+    }
+
+    abstract fun getSongType(): Int
+
+    /**
+     * Puts [Song] fields to [MediaItem] metadata. Puts [getSongType] result there as well.
+     *
+     * [uri] filed is put in extras by [URI_KEY]. Additionally [uri] is submitted via designated method for player.
+     * [getSongType] result is put in extras by [SONG_TYPE_KEY]
+     */
     @CallSuper
     open fun toMediaItem(): MediaItem {
         val extras = Bundle()
         // uri for responding to media item change
-        extras.putParcelable(PlayerListener.URI_KEY, this.uri)
+        extras.putParcelable(URI_KEY, this.uri)
+        extras.putInt(SONG_TYPE_KEY, getSongType())
         return MediaItem.Builder()
             .setUri(uri)
             .setMediaMetadata(

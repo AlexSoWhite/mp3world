@@ -47,6 +47,5 @@ class PlayerViewModel @Inject constructor(
 
     override fun download(remoteSong: RemoteSong) = downloadInteractor.download(remoteSong)
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     suspend fun getAverageColorWithNoWhiteComponent(art: Bitmap) = colorExtractor.getAverageColorWithNoWhiteComponent(art)
 }

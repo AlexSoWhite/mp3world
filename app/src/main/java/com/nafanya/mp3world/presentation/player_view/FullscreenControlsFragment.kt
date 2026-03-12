@@ -5,16 +5,13 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.toColor
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -41,6 +38,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import androidx.core.graphics.toColorInt
 
 @Suppress("TooManyFunctions")
 class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
@@ -60,7 +58,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         private const val TAG = "_FullScreenControls"
     }
 
-    private var previousColor: Int = Color.parseColor(DEFAULT_BACKGROUND_COLOR)
+    private var previousColor: Int = DEFAULT_BACKGROUND_COLOR.toColorInt()
 
     override fun inflate(
         inflater: LayoutInflater,
@@ -202,22 +200,11 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
     }
 
     private fun processColor(resource: Bitmap) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    animateChanges(resource)
-                }
-            }
-        } else {
-            binding.root.setBackgroundColor(
-                Color.parseColor(DEFAULT_BACKGROUND_COLOR)
-            )
-            updateBarsColor(Color.parseColor(DEFAULT_BACKGROUND_COLOR))
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            animateChanges(resource)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    @Suppress("NestedBlockDepth")
     private suspend fun animateChanges(art: Bitmap) = with(requireView()) {
         val averageColor = viewModel.getAverageColorWithNoWhiteComponent(art)
         val colorFrom = previousColor
@@ -227,7 +214,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         colorAnimation.duration = BACKGROUND_DURATION
         colorAnimation.addUpdateListener {
             val controlsColor = calculateControlsColor(
-                (it.animatedValue as Int).toColor()
+                (it.animatedValue as Int)
             )
             root.setBackgroundColor(it.animatedValue as Int)
             updateBarsColor(it.animatedValue as Int)
@@ -242,11 +229,10 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         colorAnimation.start()
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun calculateControlsColor(color: Color): Int {
-        val controlsRed = (color.red() + 2.0f) / COMPONENTS_AMOUNT
-        val controlsGreen = (color.green() + 2.0f) / COMPONENTS_AMOUNT
-        val controlsBlue = (color.blue() + 2.0f) / COMPONENTS_AMOUNT
+    private fun calculateControlsColor(color: Int): Int {
+        val controlsRed = (Color.red(color) + 2 * 255)  / (COMPONENTS_AMOUNT * 255.toFloat())
+        val controlsGreen = (Color.green(color) + 2 * 255) / (COMPONENTS_AMOUNT * 255.toFloat())
+        val controlsBlue = (Color.blue(color) + 2 * 255) / (COMPONENTS_AMOUNT * 255.toFloat())
         return Color.valueOf(controlsRed, controlsGreen, controlsBlue).toArgb()
     }
 
