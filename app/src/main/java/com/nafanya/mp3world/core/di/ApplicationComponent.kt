@@ -1,7 +1,6 @@
 package com.nafanya.mp3world.core.di
 
 import android.content.Context
-import android.os.Build
 import com.google.gson.Gson
 import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.core.di.view_model.ViewModelFactoryModule
@@ -25,7 +24,7 @@ import com.nafanya.mp3world.data.media_store.di.MediaStoreModule
 import com.nafanya.mp3world.presentation.player_view.di.PlayerViewComponentProvider
 import com.nafanya.mp3world.presentation.playlist.di.PlaylistComponentProvider
 import com.nafanya.mp3world.presentation.remote_songs.di.RemoteSongsComponentProvider
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.interactor.PlayerInteractor
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Scope

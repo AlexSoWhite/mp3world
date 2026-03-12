@@ -15,7 +15,7 @@ import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.presentation.playlist.base_views.BaseSongListAdapter
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
 import com.nafanya.mp3world.presentation.song_list_views.base_views.SongView
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.interactor.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull

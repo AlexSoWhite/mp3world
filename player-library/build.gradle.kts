@@ -26,8 +26,12 @@ android {
 
 dependencies {
 
+    implementation(Dependencies.AndroidX.coreKtx)
     implementation(Dependencies.Coroutines.coroutinesCore)
-    implementation(Dependencies.Google.exoplayer)
+    implementation(Dependencies.AndroidX.media3Exoplayer)
+    implementation(Dependencies.AndroidX.media3Session)
+    implementation(Dependencies.AndroidX.media3ExoplayerDash)
+    implementation(Dependencies.AndroidX.media3Ui)
 
     testImplementation(Dependencies.Testing.junit)
     androidTestImplementation(Dependencies.Testing.androidXjunit)

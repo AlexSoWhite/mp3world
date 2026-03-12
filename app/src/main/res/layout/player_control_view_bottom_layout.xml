@@ -98,7 +98,7 @@
             app:layout_constraintEnd_toStartOf="@id/exo_play_pause"/>
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@id/exo_play_pause"
+            android:id="@id/exo_pause"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center_vertical"
@@ -107,7 +107,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/exo_next"
-            tools:src="@drawable/play" />
+            app:srcCompat="@drawable/pause" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@id/exo_play"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toEndOf="@id/exo_prev"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/exo_next"
+            app:srcCompat="@drawable/play" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/exo_next"
@@ -123,7 +135,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.exoplayer2.ui.DefaultTimeBar
+    <androidx.media3.ui.DefaultTimeBar
         android:id="@+id/exo_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

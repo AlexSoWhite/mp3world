@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.presentation.entrypoint
 
 import android.Manifest
+import android.app.ActivityManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -10,6 +11,7 @@ import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.R
@@ -18,7 +20,6 @@ import com.nafanya.mp3world.presentation.core.navigation.ActivityStarter
 import com.nafanya.mp3world.presentation.core.common_ui.BaseActivity
 import com.nafanya.mp3world.databinding.ActivityMainLayoutBinding
 import com.nafanya.mp3world.presentation.foreground_service.ForegroundService
-import com.nafanya.mp3world.presentation.foreground_service.ServiceMonitor
 import javax.inject.Inject
 
 class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
@@ -26,12 +27,6 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     val viewModel: InitialViewModel by viewModels { factory }
-
-    /**
-     * Service initializer.
-     */
-    @Inject
-    lateinit var serviceMonitor: ServiceMonitor
 
     override fun inflate(layoutInflater: LayoutInflater): ActivityMainLayoutBinding {
         return ActivityMainLayoutBinding.inflate(layoutInflater)
@@ -49,25 +44,35 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
     // part of onCreate
     private fun checkPermissionsAndInitializeLists() {
         val permissionRead = Manifest.permission.READ_EXTERNAL_STORAGE
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(permissionRead) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(permissionRead), 0) // triggers onPermissionResult
-                return
-            }
+        if (checkSelfPermission(permissionRead) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(permissionRead), 0) // triggers onPermissionResult
+            return
         }
         val permissionWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
         if (
-            Build.VERSION.SDK_INT <= Build.VERSION_CODES.P &&
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.P
         ) {
             if (checkSelfPermission(permissionWrite) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(permissionWrite), 0)
                 return
             }
         }
-        viewModel.initializeLists()
-        serviceMonitor.startMonitoring()
+        startService()
         initMainMenu()
+    }
+
+    private fun startService() {
+        val activityManager =
+            this.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val runningServices = activityManager.getRunningServices(Integer.MAX_VALUE)
+        val isServiceRunning = runningServices
+            ?.find { it.service.className == ForegroundService::class.java.name }
+            ?.foreground == true
+        if (!isServiceRunning) {
+            val intent =
+                Intent(this.applicationContext, ForegroundService::class.java)
+            ContextCompat.startForegroundService(this.applicationContext, intent)
+        }
     }
 
     @Suppress("LongMethod")

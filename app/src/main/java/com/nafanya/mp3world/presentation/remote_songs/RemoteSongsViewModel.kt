@@ -19,17 +19,17 @@ import com.nafanya.mp3world.data.remote_songs.SongSearcher
 import com.nafanya.mp3world.data.remote_songs.SongSearchersProvider
 import com.nafanya.mp3world.presentation.song_list_views.SONG_REMOTE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.interactor.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 class RemoteSongsViewModel(
@@ -74,9 +74,12 @@ class RemoteSongsViewModel(
             )
             viewModelScope.launch {
                 // set initial playlist using remote songs if there are no songs on device
-                playerInteractor.isFirstSongSubmitted.filter { !it }.first()
-                mPlaylistFlow.collectLatest { songList ->
-                    if (songList?.isNotEmpty() == true) {
+                combine(
+                    playerInteractor.isPlayerPresent,
+                    playerInteractor.isPlayerReady,
+                    mPlaylistFlow.filter { it?.isNotEmpty() == true }.take(1)
+                ) { isPresent, isPresentAndSongSubmitted, songList ->
+                    if (isPresent && !isPresentAndSongSubmitted) {
                         playerInteractor.setPlaylist(songList.asPlaylist(query))
                     }
                 }

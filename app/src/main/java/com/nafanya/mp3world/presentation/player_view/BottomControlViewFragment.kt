@@ -3,8 +3,8 @@ package com.nafanya.mp3world.presentation.player_view
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +13,12 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.util.RepeatModeUtil
 import com.bumptech.glide.Glide
-import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
@@ -25,9 +27,13 @@ import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.databinding.PlayerControlViewBottomFragmentBinding
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 
 class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBinding>() {
+
+    private companion object {
+        const val TAG = "_BottomControlView"
+    }
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -55,19 +61,27 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.playerControlView.showTimeoutMs = 0
-        lifecycleScope.launchWhenCreated {
-            viewModel.isPlayerInitialised.collect {
-                if (it) {
-                    binding.playerControlView.player = viewModel.player
-                } else {
-                    binding.playerControlView.player = null
+        with(viewLifecycleOwner) {
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    viewModel.isPlayerReady.collectLatest {
+                        Log.d(TAG, "isPlayerReady: $it, player: ${viewModel.player}")
+                        binding.playerControlView.player = if (it) {
+                            viewModel.player
+                        } else {
+                            null
+                        }
+                    }
                 }
             }
-        }
-        lifecycleScope.launchWhenCreated {
-            viewModel.currentSong.filterNotNull().collectLatest {
-                binding.root.isVisible = true
-                renderSong(it as SongWrapper)
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    viewModel.currentSong.collectLatest {
+                        Log.d(TAG, "song received: $it")
+                        binding.root.isVisible = it != null
+                        (it as? SongWrapper)?.let { wrapper -> renderSong(wrapper) }
+                    }
+                }
             }
         }
         binding.playerControlView.repeatToggleModes =
@@ -91,17 +105,14 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
     }
 
     private fun toFullScreen() {
-        var bundle: Bundle? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            val options = ActivityOptions.makeSceneTransitionAnimation(
-                requireActivity(),
-                Pair.create(
-                    view?.findViewById<ShapeableImageView>(R.id.control_song_icon),
-                    context?.getString(R.string.player_transition)
-                )
+        val options = ActivityOptions.makeSceneTransitionAnimation(
+            requireActivity(),
+            Pair.create(
+                view?.findViewById<ShapeableImageView>(R.id.control_song_icon),
+                context?.getString(R.string.player_transition)
             )
-            bundle = options.toBundle()
-        }
+        )
+        val bundle = options.toBundle()
 
         val intent = Intent(requireActivity(), FullScreenPlayerActivity::class.java)
         requireActivity().startActivity(intent, bundle)

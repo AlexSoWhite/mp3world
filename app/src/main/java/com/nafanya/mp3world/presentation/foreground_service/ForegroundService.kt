@@ -5,28 +5,35 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
-import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH
-import com.nafanya.mp3world.R
+import androidx.media3.common.Player
+import androidx.media3.common.util.NotificationUtil.IMPORTANCE_HIGH
+import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaSessionService
+import androidx.media3.ui.PlayerNotificationManager
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.presentation.entrypoint.InitialActivity
-import com.nafanya.mp3world.core.wrappers.song.SongWrapper
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.mp3world.R
+import com.nafanya.player.interactor.PlayerInteractor
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 // TODO customize
-class ForegroundService : Service() {
+class ForegroundService : MediaSessionService() {
 
     companion object {
-        const val CHANNEL_ID = "playback_channel"
+        private const val CHANNEL_ID = "playback_channel"
+        private const val TAG = "_ForegroundService"
     }
 
     /**
@@ -37,10 +44,14 @@ class ForegroundService : Service() {
 
     @Inject
     lateinit var playerInteractor: PlayerInteractor
-    private val player: Player
-        get() = playerInteractor.player
+
+    // todo: it should be released and live alongside player (as intended by android developers)
+    private var mediaSession: MediaSession? = null
+
+    private val foregroundServiceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     override fun onCreate() {
+        Log.d(TAG, "onCreate")
         (application as PlayerApplication).applicationComponent
             .foregroundServiceComponent()
             .inject(this)
@@ -58,20 +69,27 @@ class ForegroundService : Service() {
                 .setContentText("").build()
             startForeground(1, notification)
         }
-        playerNotificationManager = PlayerNotificationManager
-            .Builder(this, 1, CHANNEL_ID)
-            .setChannelImportance(IMPORTANCE_HIGH)
-            .setMediaDescriptionAdapter(Adapter(this))
-            .setNotificationListener(NotificationListener())
-            .setSmallIconResourceId(R.drawable.icv_music_notificatioin)
-            .build().apply {
-                setPriority(PRIORITY_HIGH)
-                setUseFastForwardAction(false)
-                setUseRewindAction(false)
-                setUseNextActionInCompactView(true)
-                setUsePreviousActionInCompactView(true)
-                setPlayer(player)
-            }
+
+        val player = playerInteractor.initializePlayerIfNeeded(this)
+        mediaSession = MediaSession.Builder(this, player).build()
+
+        foregroundServiceScope.launch {
+            playerInteractor.isPlayerReady.filter { it }.first()
+            playerNotificationManager = PlayerNotificationManager
+                .Builder(this@ForegroundService, 1, CHANNEL_ID)
+                .setChannelImportance(IMPORTANCE_HIGH)
+                .setMediaDescriptionAdapter(Adapter(this@ForegroundService))
+                .setNotificationListener(NotificationListener())
+                .setSmallIconResourceId(R.drawable.icv_music_notificatioin)
+                .build().apply {
+                    setPriority(PRIORITY_HIGH)
+                    setUseFastForwardAction(false)
+                    setUseRewindAction(false)
+                    setUseNextActionInCompactView(true)
+                    setUsePreviousActionInCompactView(true)
+                    setPlayer(player)
+                }
+        }
     }
 
     /**
@@ -81,28 +99,22 @@ class ForegroundService : Service() {
         private val context: Context
     ) : PlayerNotificationManager.MediaDescriptionAdapter {
 
+        private val TAG = ForegroundService.TAG + "Adapter"
+
         /**
          * Song title.
          */
         override fun getCurrentContentTitle(player: Player): CharSequence {
-            val song = playerInteractor
-                .currentPlaylist
-                .value
-                ?.songList
-                ?.get(player.currentMediaItemIndex) as SongWrapper
-            return song.title
+            Log.d(TAG, "contentTitle requested, item: ${player.currentMediaItem}")
+            return player.currentMediaItem?.mediaMetadata?.title ?:""
         }
 
         /**
          * Song artist.
          */
         override fun getCurrentContentText(player: Player): CharSequence {
-            val song = playerInteractor
-                .currentPlaylist
-                .value
-                ?.songList
-                ?.get(player.currentMediaItemIndex) as SongWrapper
-            return song.artist
+            Log.d(TAG, "contentText requested, item: ${player.currentMediaItem}")
+            return player.currentMediaItem?.mediaMetadata?.artist ?:""
         }
 
         /**
@@ -112,6 +124,7 @@ class ForegroundService : Service() {
             player: Player,
             callback: PlayerNotificationManager.BitmapCallback
         ): Bitmap? {
+            Log.d(TAG, "contentLargeIcon requested")
             return null
         }
 
@@ -121,21 +134,12 @@ class ForegroundService : Service() {
         @SuppressLint("UnspecifiedImmutableFlag")
         override fun createCurrentContentIntent(player: Player): PendingIntent? {
             val intentToMain = Intent(context, InitialActivity::class.java)
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.getActivity(
-                    context,
-                    0,
-                    intentToMain,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-            } else {
-                PendingIntent.getActivity(
-                    context,
-                    0,
-                    intentToMain,
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                )
-            }
+            return PendingIntent.getActivity(
+                context,
+                0,
+                intentToMain,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
         }
     }
 
@@ -149,21 +153,20 @@ class ForegroundService : Service() {
             notification: Notification,
             ongoing: Boolean
         ) {
+            Log.d(TAG, "onNotificationPosted, notification: $notification")
             super.onNotificationPosted(notificationId, notification, ongoing)
             this@ForegroundService.startForeground(notificationId, notification)
         }
 
         override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
+            Log.d(TAG, "onNotificationCancelled")
             super.onNotificationCancelled(notificationId, dismissedByUser)
             stopSelf()
         }
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.d(TAG, "onStartCommand")
         super.onStartCommand(intent, flags, startId)
         return START_STICKY
     }
@@ -172,7 +175,14 @@ class ForegroundService : Service() {
      * Destroying service.
      */
     override fun onDestroy() {
-        super.onDestroy()
         playerNotificationManager.setPlayer(null)
+        mediaSession?.run {
+            playerInteractor.releasePlayer()
+            release()
+            mediaSession = null
+        }
+        super.onDestroy()
     }
+
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = mediaSession
 }

@@ -1,17 +1,20 @@
-package com.nafanya.player
+package com.nafanya.player.aoede_player
 
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
+import android.util.Log
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import com.nafanya.player.Song
 
 /**
  * TODO: statistic
  */
-internal class Listener(
-    private val playerInteractor: PlayerInteractor
+internal class PlayerListener(
+    private val player: AoedePlayer
 ) : Player.Listener {
 
     companion object {
         const val URI_KEY = "uri"
+        private const val TAG = "_PlayerListener"
     }
 
     private var onCurrentSongUpdateListener: ((Song) -> Unit)? = null
@@ -27,9 +30,10 @@ internal class Listener(
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        Log.d(TAG, "onMediaItemTransition")
         super.onMediaItemTransition(mediaItem, reason)
         mediaItem?.let {
-            playerInteractor.currentPlaylist.value?.songList?.first {
+            player.currentPlaylist.value?.songList?.first {
                 it.uri == mediaItem.mediaMetadata.extras!!.getParcelable(URI_KEY)
             }?.let { newSong ->
                 onCurrentSongUpdateListener?.invoke(newSong)
@@ -38,6 +42,7 @@ internal class Listener(
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
+        Log.d(TAG, "onIsPlayingChanged isPlaying: $isPlaying")
         onIsPlayingChangedListener?.invoke(isPlaying)
     }
 }

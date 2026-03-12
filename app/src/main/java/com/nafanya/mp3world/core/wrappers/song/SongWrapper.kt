@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.core.wrappers.song
 
 import android.net.Uri
+import androidx.media3.common.MediaItem
 import com.nafanya.player.Song
 
 abstract class SongWrapper(
@@ -20,5 +21,17 @@ abstract class SongWrapper(
         result = 31 * result + artist.hashCode()
         result = 31 * result + duration.hashCode()
         return result
+    }
+
+    override fun toMediaItem(): MediaItem {
+        val baseMediaItem = super.toMediaItem()
+        val baseMetadata = baseMediaItem.mediaMetadata
+        return baseMediaItem.buildUpon()
+            .setMediaMetadata(
+                baseMetadata.buildUpon()
+                    .setTitle(title)
+                    .setArtist(artist)
+                    .build()
+            ).build()
     }
 }

@@ -23,7 +23,7 @@ import com.nafanya.mp3world.domain.favourites.FavouritesManager
 import com.nafanya.mp3world.presentation.song_list_views.MODIFY_PLAYLIST_BUTTON
 import com.nafanya.mp3world.presentation.song_list_views.SONG_REARRANGEABLE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.interactor.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

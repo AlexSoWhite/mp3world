@@ -1,33 +1,52 @@
-package com.nafanya.player
+package com.nafanya.player.aoede_player
 
 import android.content.Context
-import android.os.Bundle
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.IllegalSeekPositionException
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.MediaMetadata
-import com.google.android.exoplayer2.audio.AudioAttributes
-import com.nafanya.player.Listener.Companion.URI_KEY
+import android.util.Log
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
+import androidx.media3.common.IllegalSeekPositionException
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+@UnstableApi
 internal class AoedePlayer(context: Context) {
+
+    private companion object {
+        const val TAG = "_AoedePlayer"
+    }
+
+    private val _isPlaying = MutableStateFlow(false)
+    internal val isPlaying: StateFlow<Boolean> get() = _isPlaying
+
+    private val _currentSong = MutableStateFlow<Song?>(null)
+    internal val currentSong = _currentSong
+
+    /**
+     * Object that connects [AoedePlayer] with public flows.
+     */
+    private val playerListener: PlayerListener = PlayerListener(this).apply {
+        setOnCurrentSongUpdateListener {
+            Log.d(TAG, "current song updated: $it")
+            _currentSong.value = it
+        }
+        setOnIsPlayingChangeListener {
+            Log.d(TAG, "playback state changed to $it")
+            _isPlaying.value = it
+        }
+    }
 
     /**
      * Extended player with custom behavior.
      */
-    private val _player: AoedePlayerWrapper = AoedePlayerWrapper(
+    private val _player: ExoPlayerWrapper = ExoPlayerWrapper(
         ExoPlayer.Builder(context).build()
-    )
-    internal val player: AoedePlayerWrapper
+    ).apply { this.addListener(playerListener) }
+    internal val player: ExoPlayerWrapper
         get() = _player
-
-    /**
-     * Setting to true when first mediaItem is loaded, needed to decide
-     * whether to start playing after song selected or not.
-     */
-    private var isInitialized = false
 
     /**
      * current playlist, to navigate between items in it
@@ -41,20 +60,17 @@ internal class AoedePlayer(context: Context) {
             setHandleAudioBecomingNoisy(true)
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
-                .setContentType(C.CONTENT_TYPE_MUSIC)
+                .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
                 .build()
             setAudioAttributes(audioAttributes, true)
         }
-    }
-
-    internal fun addListener(listener: Listener) {
-        player.addListener(listener)
     }
 
     /**
      * Resets player playlist. Must be called before resetting a song.
      */
     internal fun setPlaylist(playlist: Playlist) {
+        Log.d(TAG, "setPlaylist")
         // creating copy of playlist to continue playing deleted from playlist songs
         // TODO for what?
         player.clearMediaItems()
@@ -66,11 +82,7 @@ internal class AoedePlayer(context: Context) {
              */
             player.addMediaItem(it.toMediaItem())
         }
-        if (isInitialized) {
-            player.prepare()
-        } else {
-            isInitialized = true
-        }
+        player.prepare()
     }
 
     /**
@@ -79,6 +91,7 @@ internal class AoedePlayer(context: Context) {
      * @throws IllegalSeekPositionException if song doesn't appear in playlist.
      */
     internal fun setSong(song: Song) {
+        Log.d(TAG, "setSong")
         val idx = currentPlaylist.value?.songList?.indexOf(song)
         try {
             if (idx != null) {
@@ -90,20 +103,8 @@ internal class AoedePlayer(context: Context) {
         }
     }
 
-    private fun Song.toMediaItem(): MediaItem {
-        val extras = Bundle()
-        extras.putParcelable(URI_KEY, this.uri)
-        return MediaItem.Builder()
-            .setUri(uri)
-            .setMediaMetadata(
-                MediaMetadata.Builder()
-                    .setExtras(extras)
-                    .build()
-            )
-            .build()
-    }
-
     internal fun suspend() {
+        Log.d(TAG, "suspend")
         player.pause()
     }
 }

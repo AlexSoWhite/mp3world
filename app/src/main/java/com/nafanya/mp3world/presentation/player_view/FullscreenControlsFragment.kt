@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +20,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.util.RepeatModeUtil
+import androidx.media3.ui.DefaultTimeBar
 import com.bumptech.glide.Glide
-import com.google.android.exoplayer2.ui.DefaultTimeBar
-import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.presentation.core.common_ui.BaseFragment
@@ -55,6 +56,8 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         private const val BACKGROUND_DURATION = 600L
         private const val DEFAULT_BACKGROUND_COLOR = "#767685"
         private const val COMPONENTS_AMOUNT = 3
+
+        private const val TAG = "_FullScreenControls"
     }
 
     private var previousColor: Int = Color.parseColor(DEFAULT_BACKGROUND_COLOR)
@@ -88,14 +91,20 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         with(viewLifecycleOwner) {
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    viewModel.isPlayerInitialised.collect {
-                        binding.controlsFullscreen.player = viewModel.player
+                    viewModel.isPlayerReady.collectLatest {
+                        Log.d(TAG, "isPlayerReady: $it, player: ${viewModel.player}")
+                        binding.controlsFullscreen.player = if (it) {
+                            viewModel.player
+                        } else {
+                            null
+                        }
                     }
                 }
             }
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.RESUMED) {
                     viewModel.currentSong.filterNotNull().collectLatest {
+                        Log.d(TAG, "song received: $it")
                         renderSong(it as SongWrapper)
                     }
                 }
@@ -109,7 +118,8 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         with(view) {
             controls.addAll(
                 listOf(
-                    findViewById<ShapeableImageView>(R.id.exo_play_pause),
+                    findViewById<ShapeableImageView>(R.id.exo_play),
+                    findViewById<ShapeableImageView>(R.id.exo_pause),
                     findViewById<ShapeableImageView>(R.id.exo_prev),
                     findViewById<ShapeableImageView>(R.id.exo_next),
                     findViewById<ShapeableImageView>(R.id.exo_repeat_toggle),
@@ -241,8 +251,8 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
     }
 
     private fun updateBarsColor(color: Int) {
-        requireActivity().window.statusBarColor = color
-        requireActivity().window.navigationBarColor = color
+        activity?.window?.statusBarColor = color
+        activity?.window?.navigationBarColor = color
     }
 
     override fun onDestroyView() {
