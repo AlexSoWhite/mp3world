@@ -37,6 +37,10 @@ abstract class SongWrapper(
         return result
     }
 
+    override fun MediaItem.toSong(): Song? {
+        return this.toSongWrapper()
+    }
+
     /**
      * Adds [SongWrapper] fields to [MediaItem] metadata.
      *
@@ -63,7 +67,7 @@ abstract class SongWrapper(
     }
 }
 
-fun MediaItem.toSong(): Song? {
+fun MediaItem.toSongWrapper(): Song? {
     return when (val songType = this.mediaMetadata.extras?.getInt(Song.SONG_TYPE_KEY)) {
         SongType.LOCAL.ordinal -> LocalSong.fromMediaItem(this)
         SongType.REMOTE.ordinal -> RemoteSong.fromMediaItem(this)

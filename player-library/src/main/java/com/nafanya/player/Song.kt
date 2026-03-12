@@ -20,6 +20,8 @@ abstract class Song(open val uri: Uri) {
 
     abstract fun getSongType(): Int
 
+    abstract fun MediaItem.toSong(): Song?
+
     /**
      * Puts [Song] fields to [MediaItem] metadata. Puts [getSongType] result there as well.
      *

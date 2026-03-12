@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import androidx.activity.viewModels
@@ -23,6 +24,10 @@ import com.nafanya.mp3world.presentation.foreground_service.ForegroundService
 import javax.inject.Inject
 
 class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
+
+    private companion object {
+        const val TAG = "_MainActivity"
+    }
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -42,6 +47,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
     }
 
     // part of onCreate
+    // todo: request rationale
     private fun checkPermissionsAndInitializeLists() {
         val permissionRead = Manifest.permission.READ_EXTERNAL_STORAGE
         if (checkSelfPermission(permissionRead) != PackageManager.PERMISSION_GRANTED) {
@@ -57,11 +63,15 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
                 return
             }
         }
-        startService()
         initMainMenu()
     }
 
-    private fun startService() {
+    override fun onResume() {
+        super.onResume()
+        startServiceIfNeeded()
+    }
+
+    private fun startServiceIfNeeded() {
         val activityManager =
             this.getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val runningServices = activityManager.getRunningServices(Integer.MAX_VALUE)
@@ -118,8 +128,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
     }
 
     override fun onDestroy() {
-        applicationContext.stopService(Intent(this, ForegroundService::class.java))
-        viewModel.suspendPlayer()
+        Log.d(TAG, "onDestroy")
         super.onDestroy()
     }
 

@@ -11,33 +11,27 @@ import com.nafanya.player.Playlist
 import com.nafanya.player.Song
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 @UnstableApi
-internal class AoedePlayer(context: Context) {
+internal class AoedePlayer(
+    context: Context,
+    mediaItemConverter: MediaItemConverter
+) {
 
     private companion object {
         const val TAG = "_AoedePlayer"
     }
 
-    private val _isPlaying = MutableStateFlow(false)
-    internal val isPlaying: StateFlow<Boolean> get() = _isPlaying
-
-    private val _currentSong = MutableStateFlow<Song?>(null)
-    internal val currentSong = _currentSong
 
     /**
      * Object that connects [AoedePlayer] with public flows.
      */
-    private val playerListener: PlayerListener = PlayerListener(this).apply {
-        setOnCurrentSongUpdateListener {
-            Log.d(TAG, "current song updated: $it")
-            _currentSong.value = it
-        }
-        setOnIsPlayingChangeListener {
-            Log.d(TAG, "playback state changed to $it")
-            _isPlaying.value = it
-        }
-    }
+    private val playerListener: PlayerListener = PlayerListener(mediaItemConverter)
+
+    internal val isPlaying = playerListener.isPlaying
+
+    internal val currentSong = playerListener.currentSong
 
     /**
      * Extended player with custom behavior.
@@ -45,15 +39,14 @@ internal class AoedePlayer(context: Context) {
     private val _player: ExoPlayerWrapper = ExoPlayerWrapper(
         ExoPlayer.Builder(context).build()
     ).apply { this.addListener(playerListener) }
-    internal val player: ExoPlayerWrapper
-        get() = _player
+
+    internal val player: ExoPlayerWrapper get() = _player
 
     /**
      * current playlist, to navigate between items in it
      */
     private val _currentPlaylist = MutableStateFlow<Playlist?>(null)
-    internal val currentPlaylist: StateFlow<Playlist?>
-        get() = _currentPlaylist
+    internal val currentPlaylist: StateFlow<Playlist?> get() = _currentPlaylist.asStateFlow()
 
     init {
         player.exoPlayer.apply {
@@ -70,7 +63,7 @@ internal class AoedePlayer(context: Context) {
      * Resets player playlist. Must be called before resetting a song.
      */
     internal fun setPlaylist(playlist: Playlist) {
-        Log.d(TAG, "setPlaylist")
+        Log.d(TAG, "setPlaylist: $playlist")
         // creating copy of playlist to continue playing deleted from playlist songs
         // TODO for what?
         player.clearMediaItems()
@@ -91,7 +84,7 @@ internal class AoedePlayer(context: Context) {
      * @throws IllegalSeekPositionException if song doesn't appear in playlist.
      */
     internal fun setSong(song: Song) {
-        Log.d(TAG, "setSong")
+        Log.d(TAG, "setSong: $song")
         val idx = currentPlaylist.value?.songList?.indexOf(song)
         try {
             if (idx != null) {
@@ -101,10 +94,5 @@ internal class AoedePlayer(context: Context) {
         } catch (e: IllegalSeekPositionException) {
             throw e
         }
-    }
-
-    internal fun suspend() {
-        Log.d(TAG, "suspend")
-        player.pause()
     }
 }

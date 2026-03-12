@@ -15,6 +15,7 @@ import com.nafanya.mp3world.data.downloading.api.DownloadInteractor
 import com.nafanya.mp3world.data.downloading.api.DownloadingViewModel
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.mp3world.data.remote_songs.HITMO_TOP
+import com.nafanya.mp3world.data.remote_songs.MUSMORE
 import com.nafanya.mp3world.data.remote_songs.SongSearcher
 import com.nafanya.mp3world.data.remote_songs.SongSearchersProvider
 import com.nafanya.mp3world.presentation.song_list_views.SONG_REMOTE
@@ -26,6 +27,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -36,7 +38,6 @@ class RemoteSongsViewModel(
     private val query: String,
     private val songSearchersProvider: SongSearchersProvider,
     private val downloadInteractor: DownloadInteractor,
-    private val mediaStoreInteractor: MediaStoreInteractor,
     override val playerInteractor: PlayerInteractor
 ) : StatedPlaylistViewModel(),
     DownloadingViewModel,
@@ -82,7 +83,7 @@ class RemoteSongsViewModel(
                     if (isPresent && !isPresentAndSongSubmitted) {
                         playerInteractor.setPlaylist(songList.asPlaylist(query))
                     }
-                }
+                }.collect()
             }
         }
     }
@@ -116,7 +117,6 @@ class RemoteSongsViewModel(
                 query,
                 songSearchersProvider,
                 downloadInteractor,
-                mediaStoreInteractor,
                 playerInteractor
             ) as T
         }

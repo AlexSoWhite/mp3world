@@ -6,6 +6,7 @@ import androidx.media3.common.Player
 import com.nafanya.player.Playlist
 import com.nafanya.player.Song
 import com.nafanya.player.aoede_player.AoedePlayer
+import com.nafanya.player.aoede_player.MediaItemConverter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -91,11 +92,11 @@ internal class PlayerInteractorImpl : PlayerInteractor {
         }
     }
 
-    override fun initializePlayerIfNeeded(context: Context): Player {
+    override fun initializePlayerIfNeeded(context: Context, mediaItemConverter: MediaItemConverter): Player {
         Log.d(TAG, "initializePlayerIfNeeded")
         if (_player == null) {
             Log.d(TAG, "initializePlayerIfNeeded - initializing")
-            _player = AoedePlayer(context)
+            _player = AoedePlayer(context, mediaItemConverter)
             Log.d(TAG, "initializePlayerIfNeeded, player: $_player, exoPlayer: $player")
             _isPlayerPresent.value = true
         }
@@ -137,7 +138,7 @@ internal class PlayerInteractorImpl : PlayerInteractor {
         Log.d(TAG, "suspendPlayer")
         executeWhenPlayerIsPresentAsync {
             Log.d(TAG, "suspend - player present")
-            _player?.suspend()
+            _player?.player?.pause()
         }
     }
 }

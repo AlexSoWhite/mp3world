@@ -189,6 +189,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         Glide.with(this)
             .asBitmap()
             .load(song)
+            .placeholder(R.drawable.song_icon_preview)
             .into(
                 CustomBitmapTarget(
                     {

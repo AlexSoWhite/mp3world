@@ -4,44 +4,38 @@ import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.nafanya.player.Song
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * TODO: statistic
  */
 internal class PlayerListener(
-    private val player: AoedePlayer
+    private val mediaItemConverter: MediaItemConverter
 ) : Player.Listener {
 
     companion object {
         private const val TAG = "_PlayerListener"
     }
 
-    private var onCurrentSongUpdateListener: ((Song) -> Unit)? = null
+    private val _isPlaying = MutableStateFlow(false)
+    internal val isPlaying: StateFlow<Boolean> get() = _isPlaying.asStateFlow()
 
-    private var onIsPlayingChangedListener: ((Boolean) -> Unit)? = null
-
-    internal fun setOnCurrentSongUpdateListener(callback: (Song) -> Unit) {
-        onCurrentSongUpdateListener = callback
-    }
-
-    internal fun setOnIsPlayingChangeListener(callback: (Boolean) -> Unit) {
-        onIsPlayingChangedListener = callback
-    }
+    private val _currentSong = MutableStateFlow<Song?>(null)
+    internal val currentSong: StateFlow<Song?> = _currentSong.asStateFlow()
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         Log.d(TAG, "onMediaItemTransition")
         super.onMediaItemTransition(mediaItem, reason)
         mediaItem?.let {
-            player.currentPlaylist.value?.songList?.first {
-                it.uri == mediaItem.mediaMetadata.extras!!.getParcelable(Song.URI_KEY)
-            }?.let { newSong ->
-                onCurrentSongUpdateListener?.invoke(newSong)
-            }
+            val song = mediaItemConverter.getSongFromMediaItem(it)
+            _currentSong.value = song
         }
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         Log.d(TAG, "onIsPlayingChanged isPlaying: $isPlaying")
-        onIsPlayingChangedListener?.invoke(isPlaying)
+        _isPlaying.value = isPlaying
     }
 }
