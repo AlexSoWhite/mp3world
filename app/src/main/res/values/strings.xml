@@ -50,4 +50,5 @@
     <string name="download_started">Загрузка начата</string>
     <string name="download_finished">%1$s - %2$s загружено</string>
     <string name="error">Ошибка</string>
+    <string name="foreground_idle_title">В ожидании музыки</string>
 </resources>

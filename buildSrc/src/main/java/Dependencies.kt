@@ -10,6 +10,7 @@ object Dependencies {
             const val paging = "3.1.1"
             const val fragmentKtx = "1.1.0"
             const val swipeRefreshLayout = "1.1.0"
+            const val media3 = "1.1.0"
         }
 
         const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
@@ -22,6 +23,10 @@ object Dependencies {
         const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"
         const val swipeRefreshLayout =
             "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
+        const val media3Exoplayer = "androidx.media3:media3-exoplayer:${Versions.media3}"
+        const val media3ExoplayerDash = "androidx.media3:media3-exoplayer-dash:${Versions.media3}"
+        const val media3Session = "androidx.media3:media3-session:${Versions.media3}"
+        const val media3Ui = "androidx.media3:media3-ui:${Versions.media3}"
     }
 
     object Coroutines {

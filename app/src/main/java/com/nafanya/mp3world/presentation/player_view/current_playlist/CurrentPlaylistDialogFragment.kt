@@ -23,7 +23,7 @@ import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
 import com.nafanya.mp3world.data.downloading.api.download
 import com.nafanya.mp3world.presentation.song_list_views.action_dialogs.defaultLocalSongActionDialog
 import com.nafanya.mp3world.presentation.song_list_views.base_views.SongView
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.interactor.PlayerInteractor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull

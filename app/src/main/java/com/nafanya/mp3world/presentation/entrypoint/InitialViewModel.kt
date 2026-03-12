@@ -1,9 +1,9 @@
 package com.nafanya.mp3world.presentation.entrypoint
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.state_machines.StateModel
-import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.domain.albums.AlbumPlaylistProvider
 import com.nafanya.mp3world.domain.user_playlists.UserPlaylistsInteractor
 import com.nafanya.mp3world.domain.all_songs.SongPlaylistProvider
@@ -12,10 +12,14 @@ import com.nafanya.mp3world.domain.artists.ArtistPlaylistProvider
 import com.nafanya.mp3world.domain.favourites.FavouritesProvider
 import com.nafanya.mp3world.data.local_storage.LocalStorageRepository
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.interactor.PlayerInteractor
 import javax.inject.Inject
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -34,6 +38,10 @@ class InitialViewModel @Inject constructor(
     favouriteListManager: FavouritesProvider
 ) : ViewModel() {
 
+    private companion object {
+        const val TAG = "_InitialViewModel"
+    }
+
     val songModel = songListManager.songList.loadIntModel()
     val playlists = playlistListManager.playlists.loadIntModel()
     val artists = artistListManager.artists.loadIntModel()
@@ -46,7 +54,7 @@ class InitialViewModel @Inject constructor(
                 viewModelScope.launch {
                     this@loadIntModel.map {
                         it.size
-                    }.collect {
+                    }.collectLatest {
                         success(it)
                     }
                 }
@@ -54,46 +62,23 @@ class InitialViewModel @Inject constructor(
         }
     }
 
-    private val localInitializer = FlowCollector<List<LocalSong>> { list ->
+    init {
         viewModelScope.launch {
-            playerInteractor.isFirstSongSubmitted.collect { isInitialized ->
-                if (!isInitialized) {
-                    playerInteractor.setPlaylist(list.asAllSongsPlaylist())
-                }
+            val songListDeferred = async { songListManager.songList.first() }
+            mediaStoreInteractor.initializeSongList()
+
+            combine(playerInteractor.isPlayerPresent, playerInteractor.isPlayerReady) { present, ready ->
+                present && !ready
+            }.filter { it }.collectLatest {
+                Log.d(TAG, "player is present but not ready, submit initial playlist")
+                playerInteractor.setPlaylist(songListDeferred.await().asAllSongsPlaylist())
             }
         }
-    }
-
-    fun initializeLists() {
-        viewModelScope.launch {
-            if (!isInitialized) {
-                isInitialized = true
-                // initialize songList
-                mediaStoreInteractor.initializeSongList()
-                // TODO flow
-                songListManager.songList.collect(localInitializer)
-            }
-        }
-    }
-
-    /**
-     * Called when [MainActivity] goes to destroyed state.
-     * It's decided to keep player state when app is closed, so it can be restored if app opens
-     * after a short period of time. So we simply pause the player when app is closed.
-     *
-     * TODO fix it as system shows annoying notification
-     */
-    fun suspendPlayer() {
-        playerInteractor.suspendPlayer()
     }
 
     // todo: check if we really have to do it manually
     override fun onCleared() {
         super.onCleared()
         localStorageRepository.closeDatabase()
-    }
-
-    companion object {
-        private var isInitialized = false
     }
 }

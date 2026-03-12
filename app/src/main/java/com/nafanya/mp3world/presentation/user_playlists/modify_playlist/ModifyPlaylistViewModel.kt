@@ -24,7 +24,7 @@ import com.nafanya.mp3world.domain.all_songs.SongPlaylistProvider
 import com.nafanya.mp3world.domain.all_songs.asAllSongsPlaylist
 import com.nafanya.mp3world.presentation.song_list_views.SONG_ADDABLE_REMOVABLE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.interactor.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

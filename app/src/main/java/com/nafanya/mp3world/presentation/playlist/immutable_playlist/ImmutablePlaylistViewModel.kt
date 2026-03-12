@@ -20,7 +20,7 @@ import com.nafanya.mp3world.domain.favourites.FavouritesProvider
 import com.nafanya.mp3world.domain.favourites.FavouritesManager
 import com.nafanya.mp3world.presentation.song_list_views.SONG_LOCAL_IMMUTABLE
 import com.nafanya.mp3world.presentation.song_list_views.SongListItem
-import com.nafanya.player.PlayerInteractor
+import com.nafanya.player.interactor.PlayerInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

@@ -1,60 +1,69 @@
-package com.nafanya.player
+package com.nafanya.player.aoede_player
 
 import android.content.Context
-import android.os.Bundle
-import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.IllegalSeekPositionException
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.MediaMetadata
-import com.google.android.exoplayer2.audio.AudioAttributes
-import com.nafanya.player.Listener.Companion.URI_KEY
+import android.util.Log
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
+import androidx.media3.common.IllegalSeekPositionException
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import com.nafanya.player.Playlist
+import com.nafanya.player.Song
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-internal class AoedePlayer(context: Context) {
+@UnstableApi
+internal class AoedePlayer(
+    context: Context,
+    mediaItemConverter: MediaItemConverter
+) {
+
+    private companion object {
+        const val TAG = "_AoedePlayer"
+    }
+
+
+    /**
+     * Object that connects [AoedePlayer] with public flows.
+     */
+    private val playerListener: PlayerListener = PlayerListener(mediaItemConverter)
+
+    internal val isPlaying = playerListener.isPlaying
+
+    internal val currentSong = playerListener.currentSong
 
     /**
      * Extended player with custom behavior.
      */
-    private val _player: AoedePlayerWrapper = AoedePlayerWrapper(
+    private val _player: ExoPlayerWrapper = ExoPlayerWrapper(
         ExoPlayer.Builder(context).build()
-    )
-    internal val player: AoedePlayerWrapper
-        get() = _player
+    ).apply { this.addListener(playerListener) }
 
-    /**
-     * Setting to true when first mediaItem is loaded, needed to decide
-     * whether to start playing after song selected or not.
-     */
-    private var isInitialized = false
+    internal val player: ExoPlayerWrapper get() = _player
 
     /**
      * current playlist, to navigate between items in it
      */
     private val _currentPlaylist = MutableStateFlow<Playlist?>(null)
-    internal val currentPlaylist: StateFlow<Playlist?>
-        get() = _currentPlaylist
+    internal val currentPlaylist: StateFlow<Playlist?> get() = _currentPlaylist.asStateFlow()
 
     init {
         player.exoPlayer.apply {
             setHandleAudioBecomingNoisy(true)
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
-                .setContentType(C.CONTENT_TYPE_MUSIC)
+                .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
                 .build()
             setAudioAttributes(audioAttributes, true)
         }
-    }
-
-    internal fun addListener(listener: Listener) {
-        player.addListener(listener)
     }
 
     /**
      * Resets player playlist. Must be called before resetting a song.
      */
     internal fun setPlaylist(playlist: Playlist) {
+        Log.d(TAG, "setPlaylist: $playlist")
         // creating copy of playlist to continue playing deleted from playlist songs
         // TODO for what?
         player.clearMediaItems()
@@ -66,11 +75,7 @@ internal class AoedePlayer(context: Context) {
              */
             player.addMediaItem(it.toMediaItem())
         }
-        if (isInitialized) {
-            player.prepare()
-        } else {
-            isInitialized = true
-        }
+        player.prepare()
     }
 
     /**
@@ -79,6 +84,7 @@ internal class AoedePlayer(context: Context) {
      * @throws IllegalSeekPositionException if song doesn't appear in playlist.
      */
     internal fun setSong(song: Song) {
+        Log.d(TAG, "setSong: $song")
         val idx = currentPlaylist.value?.songList?.indexOf(song)
         try {
             if (idx != null) {
@@ -88,22 +94,5 @@ internal class AoedePlayer(context: Context) {
         } catch (e: IllegalSeekPositionException) {
             throw e
         }
-    }
-
-    private fun Song.toMediaItem(): MediaItem {
-        val extras = Bundle()
-        extras.putParcelable(URI_KEY, this.uri)
-        return MediaItem.Builder()
-            .setUri(uri)
-            .setMediaMetadata(
-                MediaMetadata.Builder()
-                    .setExtras(extras)
-                    .build()
-            )
-            .build()
-    }
-
-    internal fun suspend() {
-        player.pause()
     }
 }

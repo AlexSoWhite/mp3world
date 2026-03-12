@@ -16,12 +16,11 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
-import com.nafanya.mp3world.core.wrappers.song.SongWrapper
+import com.nafanya.player.Song
 import java.io.FileNotFoundException
 import java.lang.Exception
 import java.lang.NullPointerException
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -34,7 +33,6 @@ import okhttp3.Response
 import okio.IOException
 
 @Suppress("TooGenericExceptionCaught")
-@Singleton
 class SongImageBitmapFactoryImpl @Inject constructor(
     private val context: Context,
     private val okHttpClient: OkHttpClient,
@@ -60,8 +58,7 @@ class SongImageBitmapFactoryImpl @Inject constructor(
         )
     }
 
-    // todo: make suspend?
-    override suspend fun getBitmapForSong(song: SongWrapper, size: Size?): Bitmap {
+    override suspend fun getBitmapForSong(song: Song, size: Size?): Bitmap {
         return when (song) {
             is RemoteSong -> getBitmapForRemoteSong(song)
             is LocalSong -> getBitmapForLocalSong(song, size ?: Size(ART_DIMENSION, ART_DIMENSION))

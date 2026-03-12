@@ -5,23 +5,21 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.toColor
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.util.RepeatModeUtil
+import androidx.media3.ui.DefaultTimeBar
 import com.bumptech.glide.Glide
-import com.google.android.exoplayer2.ui.DefaultTimeBar
-import com.google.android.exoplayer2.util.RepeatModeUtil
 import com.google.android.material.imageview.ShapeableImageView
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.presentation.core.common_ui.BaseFragment
@@ -40,6 +38,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import androidx.core.graphics.toColorInt
 
 @Suppress("TooManyFunctions")
 class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
@@ -55,9 +54,11 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         private const val BACKGROUND_DURATION = 600L
         private const val DEFAULT_BACKGROUND_COLOR = "#767685"
         private const val COMPONENTS_AMOUNT = 3
+
+        private const val TAG = "_FullScreenControls"
     }
 
-    private var previousColor: Int = Color.parseColor(DEFAULT_BACKGROUND_COLOR)
+    private var previousColor: Int = DEFAULT_BACKGROUND_COLOR.toColorInt()
 
     override fun inflate(
         inflater: LayoutInflater,
@@ -88,14 +89,20 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         with(viewLifecycleOwner) {
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    viewModel.isPlayerInitialised.collect {
-                        binding.controlsFullscreen.player = viewModel.player
+                    viewModel.isPlayerReady.collectLatest {
+                        Log.d(TAG, "isPlayerReady: $it, player: ${viewModel.player}")
+                        binding.controlsFullscreen.player = if (it) {
+                            viewModel.player
+                        } else {
+                            null
+                        }
                     }
                 }
             }
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.RESUMED) {
                     viewModel.currentSong.filterNotNull().collectLatest {
+                        Log.d(TAG, "song received: $it")
                         renderSong(it as SongWrapper)
                     }
                 }
@@ -109,7 +116,8 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         with(view) {
             controls.addAll(
                 listOf(
-                    findViewById<ShapeableImageView>(R.id.exo_play_pause),
+                    findViewById<ShapeableImageView>(R.id.exo_play),
+                    findViewById<ShapeableImageView>(R.id.exo_pause),
                     findViewById<ShapeableImageView>(R.id.exo_prev),
                     findViewById<ShapeableImageView>(R.id.exo_next),
                     findViewById<ShapeableImageView>(R.id.exo_repeat_toggle),
@@ -181,6 +189,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         Glide.with(this)
             .asBitmap()
             .load(song)
+            .placeholder(R.drawable.song_icon_preview)
             .into(
                 CustomBitmapTarget(
                     {
@@ -192,22 +201,11 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
     }
 
     private fun processColor(resource: Bitmap) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                    animateChanges(resource)
-                }
-            }
-        } else {
-            binding.root.setBackgroundColor(
-                Color.parseColor(DEFAULT_BACKGROUND_COLOR)
-            )
-            updateBarsColor(Color.parseColor(DEFAULT_BACKGROUND_COLOR))
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            animateChanges(resource)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    @Suppress("NestedBlockDepth")
     private suspend fun animateChanges(art: Bitmap) = with(requireView()) {
         val averageColor = viewModel.getAverageColorWithNoWhiteComponent(art)
         val colorFrom = previousColor
@@ -217,7 +215,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         colorAnimation.duration = BACKGROUND_DURATION
         colorAnimation.addUpdateListener {
             val controlsColor = calculateControlsColor(
-                (it.animatedValue as Int).toColor()
+                (it.animatedValue as Int)
             )
             root.setBackgroundColor(it.animatedValue as Int)
             updateBarsColor(it.animatedValue as Int)
@@ -232,17 +230,16 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         colorAnimation.start()
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun calculateControlsColor(color: Color): Int {
-        val controlsRed = (color.red() + 2.0f) / COMPONENTS_AMOUNT
-        val controlsGreen = (color.green() + 2.0f) / COMPONENTS_AMOUNT
-        val controlsBlue = (color.blue() + 2.0f) / COMPONENTS_AMOUNT
+    private fun calculateControlsColor(color: Int): Int {
+        val controlsRed = (Color.red(color) + 2 * 255)  / (COMPONENTS_AMOUNT * 255.toFloat())
+        val controlsGreen = (Color.green(color) + 2 * 255) / (COMPONENTS_AMOUNT * 255.toFloat())
+        val controlsBlue = (Color.blue(color) + 2 * 255) / (COMPONENTS_AMOUNT * 255.toFloat())
         return Color.valueOf(controlsRed, controlsGreen, controlsBlue).toArgb()
     }
 
     private fun updateBarsColor(color: Int) {
-        requireActivity().window.statusBarColor = color
-        requireActivity().window.navigationBarColor = color
+        activity?.window?.statusBarColor = color
+        activity?.window?.navigationBarColor = color
     }
 
     override fun onDestroyView() {

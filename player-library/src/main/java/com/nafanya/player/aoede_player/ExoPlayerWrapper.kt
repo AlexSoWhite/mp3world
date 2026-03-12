@@ -1,21 +1,39 @@
-package com.nafanya.player
+package com.nafanya.player.aoede_player
 
 import android.animation.ValueAnimator
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ForwardingPlayer
-import com.google.android.exoplayer2.Player
+import android.util.Log
+import androidx.media3.common.ForwardingPlayer
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
 
-class AoedePlayerWrapper(
+@UnstableApi
+internal class ExoPlayerWrapper(
     val exoPlayer: ExoPlayer,
     private val configuration: PlayerConfiguration = DefaultConfiguration
 ) : ForwardingPlayer(exoPlayer) {
 
+    private companion object {
+        const val TAG = "_ExoPlayerWrapper"
+    }
+
     override fun pause() {
+        Log.d(TAG, "pause")
         exoPlayer.smoothlyDecreaseVolumeAndPause()
     }
 
     override fun play() {
+        Log.d(TAG, "play")
         exoPlayer.playAndSmoothlyIncreaseVolume()
+    }
+
+    fun toggle() {
+        Log.d(TAG, "toggle")
+        if (exoPlayer.isPlaying) {
+            pause()
+        } else {
+            play()
+        }
     }
 
     private fun Player.playAndSmoothlyIncreaseVolume() {

@@ -48,4 +48,5 @@
     <string name="download_started">Download started</string>
     <string name="download_finished">%1$s - %2$s downloaded</string>
     <string name="error">Error</string>
+    <string name="foreground_idle_title">Waiting for songs</string>
 </resources>

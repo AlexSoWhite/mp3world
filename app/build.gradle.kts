@@ -75,9 +75,11 @@ dependencies {
     // to use 'by viewModels()'
     implementation(Dependencies.AndroidX.fragmentKtx)
     implementation(Dependencies.AndroidX.swipeRefreshLayout)
+    implementation(Dependencies.AndroidX.media3Exoplayer)
+    implementation(Dependencies.AndroidX.media3Ui)
+    implementation(Dependencies.AndroidX.media3Session)
 
     implementation(Dependencies.Google.material)
-    implementation(Dependencies.Google.exoplayer)
 
     implementation(Dependencies.Coroutines.coroutinesCore)
     implementation(Dependencies.Coroutines.coroutinesAndroid)
