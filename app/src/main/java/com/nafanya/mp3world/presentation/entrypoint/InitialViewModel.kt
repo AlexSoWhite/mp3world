@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.presentation.entrypoint
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nafanya.mp3world.core.state_machines.StateModel
@@ -68,21 +69,11 @@ class InitialViewModel @Inject constructor(
 
             combine(playerInteractor.isPlayerPresent, playerInteractor.isPlayerReady) { present, ready ->
                 present && !ready
-            }.filter { it }.first()
-
-            playerInteractor.setPlaylist(songListDeferred.await().asAllSongsPlaylist())
+            }.filter { it }.collectLatest {
+                Log.d(TAG, "player is present but not ready, submit initial playlist")
+                playerInteractor.setPlaylist(songListDeferred.await().asAllSongsPlaylist())
+            }
         }
-    }
-
-    /**
-     * Called when [MainActivity] goes to destroyed state.
-     * It's decided to keep player state when app is closed, so it can be restored if app opens
-     * after a short period of time. So we simply pause the player when app is closed.
-     *
-     * TODO fix it as system shows annoying notification
-     */
-    fun suspendPlayer() {
-        playerInteractor.suspendPlayer()
     }
 
     // todo: check if we really have to do it manually

@@ -72,6 +72,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
     }
 
     private fun startServiceIfNeeded() {
+        Log.d(TAG, "startServiceIfNeeded")
         val activityManager =
             this.getSystemService(ACTIVITY_SERVICE) as ActivityManager
         val runningServices = activityManager.getRunningServices(Integer.MAX_VALUE)
@@ -79,6 +80,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
             ?.find { it.service.className == ForegroundService::class.java.name }
             ?.foreground == true
         if (!isServiceRunning) {
+            Log.d(TAG, "startServiceIfNeeded - service is not in foreground, restarting")
             val intent =
                 Intent(this.applicationContext, ForegroundService::class.java)
             ContextCompat.startForegroundService(this.applicationContext, intent)
