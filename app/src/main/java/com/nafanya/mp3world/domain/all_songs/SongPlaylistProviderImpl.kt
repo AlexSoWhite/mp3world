@@ -4,14 +4,12 @@ import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /**
  * Class that holds all songs data
  */
-@Singleton
 class SongPlaylistProviderImpl @Inject constructor(
     mediaStoreInteractor: MediaStoreInteractor
 ) : SongPlaylistProvider {

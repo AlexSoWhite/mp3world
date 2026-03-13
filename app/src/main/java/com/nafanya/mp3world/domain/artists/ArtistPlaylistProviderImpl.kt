@@ -16,8 +16,7 @@ class ArtistPlaylistProviderImpl @Inject constructor(
     mediaStoreInteractor: MediaStoreInteractor
 ) : ArtistPlaylistProvider {
 
-    // todo: maybe can be simplified
-    private val mArtists = mediaStoreInteractor
+    private val _artists = mediaStoreInteractor
         .allSongs
         .map { list ->
             val artistsIdMap = mutableMapOf<String, Long>()
@@ -48,7 +47,7 @@ class ArtistPlaylistProviderImpl @Inject constructor(
             }
         }
     override val artists: Flow<List<Artist>>
-        get() = mArtists
+        get() = _artists
 
     override fun getPlaylistByContainerId(id: Long): Flow<PlaylistWrapper> {
         return artists.mapNotNull {

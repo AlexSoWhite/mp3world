@@ -8,8 +8,8 @@ import com.nafanya.mp3world.core.wrappers.di.BitmapFlowModelLoaderFactoryCompone
 import com.nafanya.mp3world.core.wrappers.di.WrappersModule
 import com.nafanya.mp3world.domain.albums.di.AlbumComponentProvider
 import com.nafanya.mp3world.domain.albums.di.AlbumModule
-import com.nafanya.mp3world.presentation.user_playlists.di.AllPlaylistsComponentProvider
-import com.nafanya.mp3world.presentation.user_playlists.di.AllPlaylistsModule
+import com.nafanya.mp3world.domain.user_playlists.di.AllPlaylistsComponentProvider
+import com.nafanya.mp3world.domain.user_playlists.di.AllPlaylistsModule
 import com.nafanya.mp3world.domain.all_songs.di.AllSongsComponentProvider
 import com.nafanya.mp3world.domain.all_songs.di.AllSongsModule
 import com.nafanya.mp3world.domain.artists.di.ArtistsComponentProvider
@@ -27,7 +27,6 @@ import com.nafanya.mp3world.presentation.remote_songs.di.RemoteSongsComponentPro
 import com.nafanya.player.interactor.PlayerInteractor
 import dagger.BindsInstance
 import dagger.Component
-import javax.inject.Scope
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient

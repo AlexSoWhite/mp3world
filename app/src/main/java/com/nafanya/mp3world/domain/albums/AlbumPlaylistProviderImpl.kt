@@ -3,7 +3,6 @@ package com.nafanya.mp3world.domain.albums
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -11,7 +10,6 @@ import kotlinx.coroutines.flow.mapNotNull
 /**
  * Object that holds albums data. Populated by [MediaStoreInteractor]. Updates when [MediaStoreInteractor] is updated.
  */
-@Singleton
 class AlbumPlaylistProviderImpl @Inject constructor(
     mediaStoreInteractor: MediaStoreInteractor
 ) : AlbumPlaylistProvider {

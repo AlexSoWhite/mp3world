@@ -14,8 +14,7 @@ data class Album(
     var imageSource: SongWrapper?
 ) {
     override fun equals(other: Any?): Boolean {
-        if (this.id == (other as Album).id) return true
-        return false
+        return this.id == (other as Album).id
     }
 
     override fun hashCode(): Int {

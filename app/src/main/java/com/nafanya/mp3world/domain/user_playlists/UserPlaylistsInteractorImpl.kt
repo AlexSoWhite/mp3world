@@ -9,7 +9,6 @@ import com.nafanya.mp3world.data.user_playlists.toStorageEntity
 import com.nafanya.mp3world.data.local_storage.api.UserPlaylistsRepository
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -17,12 +16,12 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import androidx.core.net.toUri
 
 /**
  * Object that holds favourites data. Managed by DataBaseHolder and LocalStorageProvider.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
-@Singleton
 class UserPlaylistsInteractorImpl @Inject constructor(
     private val userPlaylistsRepository: UserPlaylistsRepository,
     private val applicationScope: CoroutineScope,
@@ -54,7 +53,7 @@ class UserPlaylistsInteractorImpl @Inject constructor(
                 val songList = mutableListOf<SongWrapper>()
                 it.songEntities.forEach { entity ->
                     songs.firstOrNull { song ->
-                        Uri.parse(entity.uri) == song.uri
+                        entity.uri.toUri() == song.uri
                     }?.let { localSong ->
                         songList.add(localSong)
                     }
