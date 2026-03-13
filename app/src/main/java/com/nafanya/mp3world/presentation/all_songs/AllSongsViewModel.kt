@@ -16,8 +16,6 @@ import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.domain.all_songs.SongPlaylistProvider
 import com.nafanya.mp3world.domain.all_songs.asAllSongsPlaylist
-import com.nafanya.mp3world.domain.favourites.FavouritesProvider
-import com.nafanya.mp3world.domain.favourites.FavouritesManager
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.mp3world.presentation.song_list_views.DATE
 import com.nafanya.mp3world.presentation.song_list_views.SONG_LOCAL_IMMUTABLE
@@ -32,13 +30,11 @@ import kotlinx.coroutines.launch
 // но это не точно
 class AllSongsViewModel @Inject constructor(
     private val mediaStoreInteractor: MediaStoreInteractor,
-    private val favouritesManager: FavouritesProvider,
     override val playerInteractor: PlayerInteractor,
     songListProvider: SongPlaylistProvider
 ) : StatedPlaylistViewModel(),
     Searchable<SongWrapper>,
-    TitleProcessorWrapper<List<SongWrapper>>,
-    FavouritesManager {
+    TitleProcessorWrapper<List<SongWrapper>> {
 
     override val playlistFlow = songListProvider.songList.map {
         it.asAllSongsPlaylist()
@@ -71,20 +67,6 @@ class AllSongsViewModel @Inject constructor(
     fun refresh() {
         model.refresh {
             mediaStoreInteractor.reset()
-        }
-    }
-
-    override fun isSongInFavourites(song: LocalSong) = favouritesManager.observeIsSongInFavorites(song)
-
-    override fun addFavourite(song: LocalSong) {
-        viewModelScope.launch {
-            favouritesManager.add(song)
-        }
-    }
-
-    override fun deleteFavourite(song: LocalSong) {
-        viewModelScope.launch {
-            favouritesManager.delete(song)
         }
     }
 

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.detekt)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -55,6 +56,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     namespace = "com.nafanya.mp3world"
 }
@@ -64,11 +66,16 @@ dependencies {
     implementation(project(":player-library"))
 
     implementation(libs.androidx.appCompat)
-    // to use 'by viewModels()'
     implementation(libs.androidx.fragmentKtx)
     implementation(libs.androidx.swipeRefreshLayout)
     implementation(libs.androidx.media3Ui)
     implementation(libs.androidx.media3Session)
+
+    implementation(platform(libs.androidx.composeBom))
+    implementation(libs.androidx.composeRuntime)
+    implementation(libs.androidx.composeFoundation)
+    debugImplementation(libs.androidx.composeUiTooling)
+    implementation(libs.androidx.composeMaterial)
 
     implementation(libs.google.material)
 

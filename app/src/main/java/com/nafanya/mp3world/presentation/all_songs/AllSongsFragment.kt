@@ -15,7 +15,7 @@ import com.nafanya.mp3world.core.utils.list_utils.searching.attachToTopBar
 import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistFragmentBaseLayout
 import com.nafanya.mp3world.core.state_machines.presentation.list.playlist.StatedPlaylistViewModel
 import com.nafanya.mp3world.presentation.playlist.base_views.BaseSongListAdapter
-import com.nafanya.mp3world.presentation.song_list_views.action_dialogs.defaultLocalSongActionDialog
+import com.nafanya.mp3world.presentation.song_list_views.action_dialogs.bottomSheetLocalSongActionDialog
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -30,8 +30,7 @@ class AllSongsFragment :
     private val allSongsAdapter: AllSongsAdapter by lazy {
         AllSongsAdapter(
             onSongItemClickCallback = ::onSongClick,
-            onActionClickedCallback = (requireActivity() as AppCompatActivity)
-                .defaultLocalSongActionDialog(viewModel)
+            onActionClickedCallback = (requireActivity() as AppCompatActivity).bottomSheetLocalSongActionDialog()
         )
     }
     override val songListAdapter: BaseSongListAdapter
