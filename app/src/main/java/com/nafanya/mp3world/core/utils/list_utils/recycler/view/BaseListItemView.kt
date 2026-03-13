@@ -14,8 +14,8 @@ abstract class BaseListItemView @JvmOverloads constructor(
 
     init {
         layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            LayoutParams.MATCH_PARENT,
+            LayoutParams.WRAP_CONTENT
         )
     }
 }

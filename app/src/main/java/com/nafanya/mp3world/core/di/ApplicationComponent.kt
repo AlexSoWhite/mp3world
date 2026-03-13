@@ -88,12 +88,3 @@ interface ApplicationComponent :
         fun build(): ApplicationComponent
     }
 }
-
-@Scope
-annotation class AppScope
-
-@Scope
-annotation class MainActivityScope
-
-@Scope
-annotation class FragmentScope

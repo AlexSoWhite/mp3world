@@ -53,6 +53,7 @@ abstract class StatedFragment<VB : ViewBinding, T> : BaseFragment<VB>() {
         else -> throw IllegalStateException("Unknown state ${state.javaClass.canonicalName}")
     }
 
+    // todo(New API)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)
         if (item.itemId == android.R.id.home) {

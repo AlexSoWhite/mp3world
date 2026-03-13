@@ -8,10 +8,10 @@ import java.util.Locale
  */
 object DateConverter {
 
-    private const val multiplier = 1000L
+    private const val MILLISECONDS_IN_ONE_SECOND = 1000L
     private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("ru", "RU"))
 
-    fun dateToString(arg: Long): String {
-        return simpleDateFormat.format(arg * multiplier)
+    fun millisecondsToDateString(arg: Long): String {
+        return simpleDateFormat.format(arg * MILLISECONDS_IN_ONE_SECOND)
     }
 }
