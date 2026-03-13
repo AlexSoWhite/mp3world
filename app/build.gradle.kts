@@ -61,6 +61,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    namespace = "com.nafanya.mp3world"
 }
 
 dependencies {
