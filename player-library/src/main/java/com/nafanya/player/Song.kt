@@ -7,7 +7,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 
 /**
- * @param uri [Uri] for [AoedePlayer]
+ * @param uri [Uri] for [com.nafanya.player.aoede_player.AoedePlayer]
  */
 @Suppress("UnnecessaryAbstractClass")
 abstract class Song(open val uri: Uri) {
