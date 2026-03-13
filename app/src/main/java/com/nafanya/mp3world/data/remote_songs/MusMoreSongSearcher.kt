@@ -49,7 +49,7 @@ class MusMoreSongSearcher @Inject constructor(
             uri = uriFactory.getUri(songUrl),
             artUrl = artUrl,
             title = title,
-            artist = artist,
+            artists = emptyList(), // todo?
             duration = duration
         )
     }

@@ -11,6 +11,10 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("libs")
+        create("plugins")
+    }
 }
 rootProject.name = "mp3world"
 include(":app")

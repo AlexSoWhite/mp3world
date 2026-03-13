@@ -2,10 +2,10 @@ package com.nafanya.mp3world.core.wrappers.song.remote
 
 import android.net.Uri
 import android.os.Bundle
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.Log
+import com.nafanya.mp3world.core.wrappers.song.ArtistMetadata
 import com.nafanya.mp3world.core.wrappers.song.SongType
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.player.Song
@@ -13,10 +13,10 @@ import com.nafanya.player.Song
 data class RemoteSong(
     override val uri: Uri,
     override val title: String,
-    override val artist: String,
+    override val artists: List<ArtistMetadata>,
     override val duration: Long,
     val artUrl: String
-) : SongWrapper(uri, title, artist, duration) {
+) : SongWrapper(uri, title, artists, duration) {
 
     override fun getSongType(): Int = SongType.REMOTE.ordinal
 
@@ -47,7 +47,7 @@ data class RemoteSong(
                 return RemoteSong(
                     uri = extras.getParcelable(URI_KEY)!!, // from Song
                     title = metadata.title!!.toString(), // from SongWrapper
-                    artist = metadata.artist!!.toString(), // from SongWrapper
+                    artists = (extras.getParcelableArray(ARTIST_ARRAY_KEY) as Array<ArtistMetadata>).asList(), // from SongWrapper
                     duration = extras.getLong(DURATION_KEY), // from SongWrapper
                     artUrl = extras.getString(ART_URL_KEY)!!
                 )

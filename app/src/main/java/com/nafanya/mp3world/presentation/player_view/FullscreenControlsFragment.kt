@@ -39,8 +39,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import androidx.core.graphics.toColorInt
+import androidx.media3.common.util.UnstableApi
+import com.nafanya.mp3world.core.wrappers.song.joinArtists
 
 @Suppress("TooManyFunctions")
+@UnstableApi // everything from media3 is unstable
 class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
 
     @Inject
@@ -145,7 +148,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         titleView?.text = song.title
         titleView?.isSelected = true
         val artistView = findViewById<TextView>(R.id.control_fullscreen_track_artist)
-        artistView?.text = song.artist
+        artistView?.text = song.artists.joinArtists()
         artistView?.isSelected = true
         val durationView = findViewById<TextView>(R.id.duration)
         val timeView = findViewById<TextView>(R.id.time)
@@ -201,6 +204,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
     }
 
     private fun processColor(resource: Bitmap) {
+        // todo(New API)
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             animateChanges(resource)
         }
@@ -237,6 +241,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         return Color.valueOf(controlsRed, controlsGreen, controlsBlue).toArgb()
     }
 
+    // todo(New API)
     private fun updateBarsColor(color: Int) {
         activity?.window?.statusBarColor = color
         activity?.window?.navigationBarColor = color

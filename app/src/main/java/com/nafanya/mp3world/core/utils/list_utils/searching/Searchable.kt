@@ -2,7 +2,6 @@ package com.nafanya.mp3world.core.utils.list_utils.searching
 
 import android.view.Menu
 import android.view.MenuInflater
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.nafanya.mp3world.R
@@ -19,7 +18,7 @@ interface Searchable<DU> {
 
 /**
  * Extension method to invoke an a [Searchable] viewModel inside a
- * [AppCompatActivity.onCreateOptionsMenu] or [Fragment.onCreateOptionsMenu] to add search ui
+ * [androidx.appcompat.app.AppCompatActivity.onCreateOptionsMenu] or [Fragment.onCreateOptionsMenu] to add search ui
  */
 fun <T> Searchable<T>.attachToTopBar(): (menu: Menu, inflater: MenuInflater) -> Unit {
     return { menu, inflater ->

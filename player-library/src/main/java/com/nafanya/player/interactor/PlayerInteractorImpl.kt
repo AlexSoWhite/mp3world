@@ -3,6 +3,7 @@ package com.nafanya.player.interactor
 import android.content.Context
 import android.util.Log
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import com.nafanya.player.Playlist
 import com.nafanya.player.Song
 import com.nafanya.player.aoede_player.AoedePlayer
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+@UnstableApi // everything from media3 is unstable
 internal class PlayerInteractorImpl : PlayerInteractor {
 
     private companion object {

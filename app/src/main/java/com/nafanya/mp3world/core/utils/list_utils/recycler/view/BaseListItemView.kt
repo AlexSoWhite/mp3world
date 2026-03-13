@@ -3,19 +3,19 @@ package com.nafanya.mp3world.core.utils.list_utils.recycler.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseListItemView @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     defStyle: Int = 0
-) : ConstraintLayout(context, attributeSet, defStyle) {
+) : LinearLayout(context, attributeSet, defStyle) {
 
     init {
         layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            LayoutParams.MATCH_PARENT,
+            LayoutParams.WRAP_CONTENT
         )
     }
 }

@@ -2,11 +2,11 @@ package com.nafanya.mp3world.data.downloading.internal
 
 import android.content.Context
 import android.os.Environment
+import com.nafanya.mp3world.core.wrappers.song.joinArtists
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.data.downloading.api.DownloadResult
 import com.nafanya.mp3world.data.downloading.api.ResultType
 import kotlin.coroutines.resume
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
@@ -29,7 +29,7 @@ internal class Downloader(
         song: RemoteSong,
     ): DownloadResult {
         val url = song.uri.toString()
-        val fileName = "${song.artist} - ${song.title}.mp3"
+        val fileName = "${song.artists.joinArtists()} - ${song.title}.mp3"
         return try {
             val name = downloadManagerInteractor.downloadFromUrl(url, fileName)
             if (name!!.isNotEmpty()) {

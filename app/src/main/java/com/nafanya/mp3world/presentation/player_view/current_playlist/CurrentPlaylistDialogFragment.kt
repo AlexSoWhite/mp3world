@@ -21,7 +21,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.databinding.FragmentCurrentPlaylistDialogBinding
 import com.nafanya.mp3world.data.downloading.api.download
-import com.nafanya.mp3world.presentation.song_list_views.action_dialogs.defaultLocalSongActionDialog
 import com.nafanya.mp3world.presentation.song_list_views.base_views.SongView
 import com.nafanya.player.interactor.PlayerInteractor
 import javax.inject.Inject
@@ -29,6 +28,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import androidx.core.graphics.toColorInt
+import com.nafanya.mp3world.presentation.song_list_views.action_dialogs.bottomSheetLocalSongActionDialog
 
 class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
 
@@ -83,8 +84,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
                 viewModel.onSongClick(song)
                 currentPlayingView = view
             }
-            onLocalActionClickCallback = (requireActivity() as AppCompatActivity)
-                .defaultLocalSongActionDialog(viewModel)
+            onLocalActionClickCallback = (requireActivity() as AppCompatActivity).bottomSheetLocalSongActionDialog()
             onRemoteActionClickCallback = { song ->
                 download(viewModel, song)
             }
@@ -146,7 +146,7 @@ class CurrentPlaylistDialogFragment : BottomSheetDialogFragment() {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         dialog.behavior.skipCollapsed = true
-        dialog.window?.navigationBarColor = Color.parseColor("#373232")
+        dialog.window?.navigationBarColor = "#373232".toColorInt()
         return dialog
     }
 

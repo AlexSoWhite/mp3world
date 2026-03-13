@@ -17,7 +17,6 @@ import com.nafanya.mp3world.core.utils.list_utils.searching.attachToTopBar
 import com.nafanya.mp3world.presentation.core.navigation.ActivityStarter
 import com.nafanya.mp3world.core.state_machines.presentation.list.StatedListFragmentBaseLayout
 import com.nafanya.mp3world.core.state_machines.presentation.list.StatedListViewModel
-import com.nafanya.mp3world.core.utils.list_utils.title.TitleModel
 import com.nafanya.mp3world.domain.albums.Album
 import com.nafanya.mp3world.presentation.albums.recycler.AlbumListAdapter
 import com.nafanya.mp3world.presentation.albums.recycler.AlbumListItem
@@ -61,6 +60,7 @@ class AlbumListFragment : StatedListFragmentBaseLayout<Album, AlbumListItem>() {
         }
     }
 
+    // todo(New API)
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         viewModel.attachToTopBar().invoke(menu, inflater)
     }

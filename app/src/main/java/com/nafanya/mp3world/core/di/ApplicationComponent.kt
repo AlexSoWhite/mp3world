@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.core.di
 
 import android.content.Context
+import androidx.media3.common.util.UnstableApi
 import com.google.gson.Gson
 import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.core.di.view_model.ViewModelFactoryModule
@@ -8,16 +9,16 @@ import com.nafanya.mp3world.core.wrappers.di.BitmapFlowModelLoaderFactoryCompone
 import com.nafanya.mp3world.core.wrappers.di.WrappersModule
 import com.nafanya.mp3world.domain.albums.di.AlbumComponentProvider
 import com.nafanya.mp3world.domain.albums.di.AlbumModule
-import com.nafanya.mp3world.presentation.user_playlists.di.AllPlaylistsComponentProvider
-import com.nafanya.mp3world.presentation.user_playlists.di.AllPlaylistsModule
+import com.nafanya.mp3world.domain.user_playlists.di.AllPlaylistsComponentProvider
+import com.nafanya.mp3world.domain.user_playlists.di.AllPlaylistsModule
 import com.nafanya.mp3world.domain.all_songs.di.AllSongsComponentProvider
 import com.nafanya.mp3world.domain.all_songs.di.AllSongsModule
 import com.nafanya.mp3world.domain.artists.di.ArtistsComponentProvider
 import com.nafanya.mp3world.domain.artists.di.ArtistsModule
 import com.nafanya.mp3world.data.downloading.di.DownloadModule
 import com.nafanya.mp3world.presentation.entrypoint.di.EntrypointComponentProvider
-import com.nafanya.mp3world.presentation.favourites.di.FavouritesModule
-import com.nafanya.mp3world.presentation.favourites.di.FavouritesComponentProvider
+import com.nafanya.mp3world.domain.favourites.di.FavouritesModule
+import com.nafanya.mp3world.domain.favourites.di.FavouritesComponentProvider
 import com.nafanya.mp3world.presentation.foreground_service.di.ForegroundServiceComponentProvider
 import com.nafanya.mp3world.data.local_storage.di.LocalStorageModule
 import com.nafanya.mp3world.data.media_store.di.MediaStoreModule
@@ -27,11 +28,11 @@ import com.nafanya.mp3world.presentation.remote_songs.di.RemoteSongsComponentPro
 import com.nafanya.player.interactor.PlayerInteractor
 import dagger.BindsInstance
 import dagger.Component
-import javax.inject.Scope
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 
+@UnstableApi
 @Component(
     modules = [
         ViewModelFactoryModule::class,
@@ -88,12 +89,3 @@ interface ApplicationComponent :
         fun build(): ApplicationComponent
     }
 }
-
-@Scope
-annotation class AppScope
-
-@Scope
-annotation class MainActivityScope
-
-@Scope
-annotation class FragmentScope

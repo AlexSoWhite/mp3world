@@ -134,6 +134,7 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
         super.onDestroy()
     }
 
+    // todo(New API)
     override fun onBackPressed() {
         finishAfterTransition()
         super.onBackPressed()

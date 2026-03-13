@@ -30,8 +30,8 @@ abstract class SongSearcher(
 
                     override fun onResponse(call: Call, response: Response) {
                         val list = mutableListOf<RemoteSong>()
-                        response.body?.let {
-                            val doc = Jsoup.parseBodyFragment(it.string())
+                        response.body.run {
+                            val doc = Jsoup.parseBodyFragment(string())
                             splitDocument(doc).forEachIndexed { index, element ->
                                 val model = parseNode(index, element)
                                 list.add(model)

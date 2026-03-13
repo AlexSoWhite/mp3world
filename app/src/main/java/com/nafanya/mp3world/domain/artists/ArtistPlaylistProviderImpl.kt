@@ -1,9 +1,10 @@
 package com.nafanya.mp3world.domain.artists
 
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
+import com.nafanya.mp3world.core.wrappers.song.SongWrapper
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import javax.inject.Inject
-import javax.inject.Singleton
+import kotlin.collections.forEach
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -11,30 +12,42 @@ import kotlinx.coroutines.flow.mapNotNull
 /**
  * Object that holds artists data. Populated by [MediaStoreInteractor].
  */
-@Singleton
 class ArtistPlaylistProviderImpl @Inject constructor(
     mediaStoreInteractor: MediaStoreInteractor
 ) : ArtistPlaylistProvider {
 
-    private val mArtists = mediaStoreInteractor
+    private val _artists = mediaStoreInteractor
         .allSongs
         .map { list ->
-            list.groupBy {
-                Pair(it.artistId, it.artist)
-            }.map {
+            val artistsIdMap = mutableMapOf<String, Long>()
+            val artistsSongsMap = mutableMapOf<String, List<SongWrapper>?>()
+            list.forEach { song ->
+                val artists = song.artists
+                artists.forEach { artist ->
+                    if (artistsIdMap.contains(artist.name)) {
+                        artistsSongsMap[artist.name] = mutableListOf(song).plus(artistsSongsMap[artist.name]!!)
+                    } else {
+                        artistsIdMap[artist.name] = artist.id
+                        artistsSongsMap[artist.name] = mutableListOf(song)
+                    }
+                }
+            }
+
+            artistsIdMap.map { (name, id) ->
+                val songs = artistsSongsMap[name] ?: emptyList()
                 Artist(
-                    id = it.key.first,
-                    name = it.key.second,
-                    imageSource = it.value[0],
+                    id = id,
+                    name = name,
+                    imageSource = songs.getOrNull(0),
                     playlist = PlaylistWrapper(
-                        it.value,
-                        name = it.key.second
+                        songList = songs,
+                        name = name
                     )
                 )
             }
         }
     override val artists: Flow<List<Artist>>
-        get() = mArtists
+        get() = _artists
 
     override fun getPlaylistByContainerId(id: Long): Flow<PlaylistWrapper> {
         return artists.mapNotNull {

@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class TitleModel private constructor(
     private var baseString: String? = null,
-    @StringRes private var baseResource: Int? = null,
+    @StringRes private var baseResource: Int? = null, // todo(New API)
     private var count: Int? = null
 ) {
 

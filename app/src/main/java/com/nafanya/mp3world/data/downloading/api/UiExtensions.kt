@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.utils.showToast
+import com.nafanya.mp3world.core.wrappers.song.joinArtists
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ fun Fragment.download(
             when (it.type) {
                 ResultType.SUCCESS -> {
                     applicationContext.showToast(
-                        applicationContext.getString(R.string.download_finished, song.artist, song.title)
+                        applicationContext.getString(R.string.download_finished, song.artists.joinArtists(), song.title)
                     )
                 }
                 ResultType.ERROR -> applicationContext.showToast(

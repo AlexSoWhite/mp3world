@@ -1,39 +1,30 @@
 plugins {
-    id(Plugins.Android.library)
-    id(Plugins.Detekt.plugin)
-    kotlin(Plugins.Kotlin.android)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.detekt)
 }
 
 android {
-    compileSdk = BuildConfig.compileSdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = BuildConfig.minSdk
-        targetSdk = BuildConfig.targetSdk
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    namespace = "com.nafanya.player"
 }
 
 dependencies {
 
-    implementation(Dependencies.AndroidX.coreKtx)
-    implementation(Dependencies.Coroutines.coroutinesCore)
-    implementation(Dependencies.AndroidX.media3Exoplayer)
-    implementation(Dependencies.AndroidX.media3Session)
-    implementation(Dependencies.AndroidX.media3ExoplayerDash)
-    implementation(Dependencies.AndroidX.media3Ui)
+    implementation(libs.androidx.coreKtx) // for @CallSuper annotation
+    implementation(libs.androidx.media3Exoplayer)
 
-    testImplementation(Dependencies.Testing.junit)
-    androidTestImplementation(Dependencies.Testing.androidXjunit)
-    androidTestImplementation(Dependencies.Testing.espressoCore)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espressoCore)
 }

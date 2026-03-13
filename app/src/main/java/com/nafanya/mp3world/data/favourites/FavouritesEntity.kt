@@ -5,8 +5,6 @@ import androidx.room.PrimaryKey
 
 /**
  * Class that holds favourite song id. Can be added to local Room database.
- *
- * todo: this should not be here
  */
 @Entity
 data class FavouritesEntity(

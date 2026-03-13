@@ -10,7 +10,6 @@ import com.nafanya.mp3world.domain.all_songs.SongPlaylistProvider
 import com.nafanya.mp3world.domain.all_songs.asAllSongsPlaylist
 import com.nafanya.mp3world.domain.artists.ArtistPlaylistProvider
 import com.nafanya.mp3world.domain.favourites.FavouritesProvider
-import com.nafanya.mp3world.data.local_storage.LocalStorageRepository
 import com.nafanya.mp3world.data.media_store.MediaStoreInteractor
 import com.nafanya.player.interactor.PlayerInteractor
 import javax.inject.Inject
@@ -23,13 +22,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-/**
- * TODO: remove initialization logic
- */
 @Suppress("LongParameterList")
 class InitialViewModel @Inject constructor(
     private val mediaStoreInteractor: MediaStoreInteractor,
-    private val localStorageRepository: LocalStorageRepository, // todo: maybe should be a domain level model
     private val playerInteractor: PlayerInteractor,
     private val songListManager: SongPlaylistProvider,
     artistListManager: ArtistPlaylistProvider,
@@ -74,11 +69,5 @@ class InitialViewModel @Inject constructor(
                 playerInteractor.setPlaylist(songListDeferred.await().asAllSongsPlaylist())
             }
         }
-    }
-
-    // todo: check if we really have to do it manually
-    override fun onCleared() {
-        super.onCleared()
-        localStorageRepository.closeDatabase()
     }
 }

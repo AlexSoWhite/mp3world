@@ -5,6 +5,7 @@ import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.data.local_storage.api.UserPlaylistsRepository
 import com.nafanya.mp3world.data.local_storage.api.FavouritesRepository
 import com.nafanya.mp3world.data.local_storage.LocalStorageRepository
+import com.nafanya.mp3world.data.local_storage.LocalStorageRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -18,7 +19,7 @@ class LocalStorageModule {
         context: Context,
         dispatchersProvider: DispatchersProvider
     ): LocalStorageRepository {
-        return LocalStorageRepository(context, dispatchersProvider)
+        return LocalStorageRepositoryImpl(context, dispatchersProvider)
     }
 
     @Provides

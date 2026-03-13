@@ -1,29 +1,29 @@
 import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id(Plugins.Android.application) version Plugins.Android.version apply false
-    id(Plugins.Android.library) version Plugins.Android.version apply false
-    id(Plugins.Detekt.plugin) version Plugins.Detekt.version
-    kotlin(Plugins.Kotlin.jvm) version Plugins.Kotlin.version
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.detekt)
 }
 
 dependencies {
-    implementation(kotlin(Plugins.Kotlin.standardLibrary))
-    detektPlugins(Plugins.Detekt.formatterDependency)
+    detektPlugins(libs.detekt.formatting)
 }
+
 repositories {
     google()
     mavenCentral()
 }
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
+
+kotlin {
+    compilerOptions {
+        languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+    }
 }
 
 tasks.register("detektAll", Detekt::class.java) {

@@ -11,6 +11,7 @@ import com.nafanya.mp3world.presentation.albums.AlbumListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import javax.inject.Singleton
 
 @Module
 interface AlbumModule {
@@ -20,9 +21,11 @@ interface AlbumModule {
     fun bindViewModel(albumListViewModel: AlbumListViewModel): ViewModel
 
     @Binds
+    @Singleton
     @[IntoMap ListManagerKey(ALBUM_LIST_MANAGER_KEY)]
     fun bindListManagerIntoMap(albumListManagerImpl: AlbumPlaylistProviderImpl): PlaylistProvider
 
     @Binds
+    @Singleton
     fun bindListManager(albumListManagerImpl: AlbumPlaylistProviderImpl): AlbumPlaylistProvider
 }

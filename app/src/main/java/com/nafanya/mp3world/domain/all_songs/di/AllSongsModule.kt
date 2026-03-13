@@ -11,6 +11,7 @@ import com.nafanya.mp3world.presentation.all_songs.AllSongsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import javax.inject.Singleton
 
 @Module
 interface AllSongsModule {
@@ -20,9 +21,11 @@ interface AllSongsModule {
     fun bindViewModel(allSongsViewModel: AllSongsViewModel): ViewModel
 
     @Binds
+    @Singleton
     @[IntoMap ListManagerKey(ALL_SONGS_LIST_MANAGER_KEY)]
     fun bindIntoMap(songListManager: SongPlaylistProviderImpl): PlaylistProvider
 
     @Binds
+    @Singleton
     fun bind(songListManager: SongPlaylistProviderImpl): SongPlaylistProvider
 }

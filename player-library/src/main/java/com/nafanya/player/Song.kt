@@ -5,10 +5,9 @@ import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
-import com.nafanya.player.aoede_player.PlayerListener
 
 /**
- * @param uri [Uri] for [AoedePlayer]
+ * @param uri [Uri] for [com.nafanya.player.aoede_player.AoedePlayer]
  */
 @Suppress("UnnecessaryAbstractClass")
 abstract class Song(open val uri: Uri) {

@@ -1,17 +1,17 @@
 plugins {
-    id(Plugins.Android.application)
-    id(Plugins.Detekt.plugin)
-    kotlin(Plugins.Kotlin.android)
-    kotlin(Plugins.Kotlin.kapt)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
-    compileSdk = BuildConfig.compileSdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.nafanya.mp3world"
-        minSdk = BuildConfig.minSdk
-        targetSdk = BuildConfig.targetSdk
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 2
         versionName = "1.0.1"
 
@@ -19,7 +19,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas".toString())
+                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
             }
         }
     }
@@ -38,7 +38,7 @@ android {
     }
     sourceSets {
         // Adds exported schema location as test app assets.
-        getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+        getByName("androidTest").assets.directories.add("$projectDir/schemas")
     }
     buildTypes {
         getByName("release") {
@@ -54,59 +54,50 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
+    namespace = "com.nafanya.mp3world"
 }
 
 dependencies {
 
-    implementation(project(Projects.playerLibrary))
+    implementation(project(":player-library"))
 
-    implementation(Dependencies.AndroidX.appCompat)
-    implementation(Dependencies.AndroidX.coreKtx)
-    implementation(Dependencies.AndroidX.constraintLayout)
-    implementation(Dependencies.AndroidX.viewModel)
-    implementation(Dependencies.AndroidX.lifecycleRuntime)
-    implementation(Dependencies.AndroidX.paging)
-    // to use 'by viewModels()'
-    implementation(Dependencies.AndroidX.fragmentKtx)
-    implementation(Dependencies.AndroidX.swipeRefreshLayout)
-    implementation(Dependencies.AndroidX.media3Exoplayer)
-    implementation(Dependencies.AndroidX.media3Ui)
-    implementation(Dependencies.AndroidX.media3Session)
+    implementation(libs.androidx.appCompat)
+    implementation(libs.androidx.fragmentKtx)
+    implementation(libs.androidx.swipeRefreshLayout)
+    implementation(libs.androidx.media3Ui)
+    implementation(libs.androidx.media3Session)
 
-    implementation(Dependencies.Google.material)
+    implementation(platform(libs.androidx.composeBom))
+    implementation(libs.androidx.composeRuntime)
+    implementation(libs.androidx.composeFoundation)
+    debugImplementation(libs.androidx.composeUiTooling)
+    implementation(libs.androidx.composeMaterial)
 
-    implementation(Dependencies.Coroutines.coroutinesCore)
-    implementation(Dependencies.Coroutines.coroutinesAndroid)
+    implementation(libs.google.material)
 
-    implementation(Dependencies.Web.okHttp3)
-    implementation(Dependencies.Web.jsoup)
+    implementation(libs.squareup.okhttp3)
+    implementation(libs.jsoup)
 
-    implementation(Dependencies.Images.glide)
-    kapt(Dependencies.Images.glideCompiler)
+    implementation(libs.bumptech.glide)
+    kapt(libs.bumptech.glideCompiler)
 
-    implementation(Dependencies.LocalDb.roomKtx)
-    implementation(Dependencies.LocalDb.gson)
-    kapt(Dependencies.LocalDb.roomCompiler)
-    androidTestImplementation(Dependencies.LocalDb.roomTesting)
+    implementation(libs.androidx.roomKtx)
+    implementation(libs.google.gson)
+    kapt(libs.androidx.roomCompiler)
+    androidTestImplementation(libs.androidx.roomTesting)
 
-    implementation(Dependencies.DI.dagger)
-    kapt(Dependencies.DI.daggerCompiler)
+    implementation(libs.google.dagger)
+    kapt(libs.google.daggerCompiler)
 
     // debugImplementation because LeakCanary should only run in debug builds.
     // debugImplementation(Dependencies.Debug.leakCanary)
 
-    testImplementation(Dependencies.Testing.junit)
-    testImplementation(Dependencies.Testing.coreTesting)
-    androidTestImplementation(Dependencies.Testing.androidXjunit)
-    androidTestImplementation(Dependencies.Testing.espressoCore)
-}
-
-kapt {
-    correctErrorTypes = true
+    testImplementation(libs.junit)
+    testImplementation(libs.android.coreTesting)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espressoCore)
 }

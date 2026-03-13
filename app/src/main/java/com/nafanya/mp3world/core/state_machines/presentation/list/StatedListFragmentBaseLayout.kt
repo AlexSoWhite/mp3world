@@ -50,6 +50,7 @@ abstract class StatedListFragmentBaseLayout<DU, LI : BaseListItem> : StatedListF
         renderEmpty()
     }
 
+    // todo(New API)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

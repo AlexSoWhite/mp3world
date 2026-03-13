@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.map
  * Object that holds favourites data. Managed by [LocalStorageRepository] and [MediaStoreInteractor].
  */
 @OptIn(ExperimentalCoroutinesApi::class)
-@Singleton
 class FavouritesProviderImpl @Inject constructor(
     private val favouriteListInteractor: FavouritesRepository,
     private val applicationScope: CoroutineScope,

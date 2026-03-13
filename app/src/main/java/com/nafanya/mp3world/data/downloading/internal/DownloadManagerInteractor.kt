@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import androidx.core.net.toUri
 
 /**
  * Class that works with [android.app.DownloadManager] and handles result using [BroadcastReceiver]
@@ -29,9 +30,9 @@ internal class DownloadManagerInteractor(
      * Downloads song from [url].
      */
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    suspend fun downloadFromUrl(url: String, fileName: String): String? = withContext(dispatchersProvider.io) {
+    suspend fun downloadFromUrl(url: String, fileName: String): String = withContext(dispatchersProvider.io) {
         val downloadManager = applicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val uri = Uri.parse(url)
+        val uri = url.toUri()
         val request = DownloadManager.Request(uri)
         request.setTitle(fileName)
         request.setNotificationVisibility(
