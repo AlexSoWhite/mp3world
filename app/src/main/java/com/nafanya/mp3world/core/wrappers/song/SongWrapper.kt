@@ -2,13 +2,13 @@ package com.nafanya.mp3world.core.wrappers.song
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcel
 import android.os.Parcelable
 import androidx.core.os.bundleOf
 import androidx.media3.common.MediaItem
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.player.Song
-import kotlinx.parcelize.Parcelize
 
 // for media item extras
 enum class SongType {
@@ -16,11 +16,33 @@ enum class SongType {
     REMOTE
 }
 
-@Parcelize
 data class ArtistMetadata(
     val id: Long,
     val name: String
-) : Parcelable
+) : Parcelable {
+
+    constructor(parcel: Parcel) : this(
+        parcel.readLong(),
+        parcel.readString() ?: ""
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
+        parcel.writeString(name)
+    }
+
+    override fun describeContents(): Int = 0
+
+    companion object CREATOR : Parcelable.Creator<ArtistMetadata> {
+        override fun createFromParcel(parcel: Parcel): ArtistMetadata {
+            return ArtistMetadata(parcel)
+        }
+
+        override fun newArray(size: Int): Array<ArtistMetadata?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
 
 abstract class SongWrapper(
     uri: Uri,

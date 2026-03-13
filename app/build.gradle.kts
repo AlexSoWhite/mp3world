@@ -1,9 +1,10 @@
 plugins {
-    id(libs.plugins.android.application.get().pluginId)
-    id(libs.plugins.detekt.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
-    id(libs.plugins.kotlin.parcelize.get().pluginId)
-    id(libs.plugins.kotlin.kapt.get().pluginId)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.detekt)
+//    id(libs.plugins.kotlin.android.get().pluginId)
+    alias(libs.plugins.kotlin.parcelize)
+//    id("org.jetbrains.kotlin.plugin.parcelize")
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -55,9 +56,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         viewBinding = true
     }
@@ -108,6 +106,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espressoCore)
 }
 
-kapt {
-    correctErrorTypes = true
-}
+//kapt {
+//    correctErrorTypes = true
+//}

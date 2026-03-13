@@ -1,8 +1,7 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
-    id(libs.plugins.detekt.get().pluginId)
-    id(libs.plugins.kotlin.android.get().pluginId)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.detekt)
+//    id(libs.plugins.kotlin.android.get().pluginId)
 }
 
 android {
@@ -10,7 +9,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -18,9 +16,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
     namespace = "com.nafanya.player"
 }
