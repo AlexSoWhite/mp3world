@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import androidx.core.graphics.toColorInt
+import com.nafanya.mp3world.core.wrappers.song.joinArtists
 
 @Suppress("TooManyFunctions")
 class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragmentBinding>() {
@@ -145,7 +146,7 @@ class FullscreenControlsFragment : BaseFragment<PlayerControlViewFullscreenFragm
         titleView?.text = song.title
         titleView?.isSelected = true
         val artistView = findViewById<TextView>(R.id.control_fullscreen_track_artist)
-        artistView?.text = song.artist
+        artistView?.text = song.artists.joinArtists()
         artistView?.isSelected = true
         val durationView = findViewById<TextView>(R.id.duration)
         val timeView = findViewById<TextView>(R.id.time)

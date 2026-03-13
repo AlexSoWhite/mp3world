@@ -21,5 +21,6 @@ class QueryFilter<T>(
 }
 
 val songQueryFilterCallback = { songWrapper: SongWrapper, s: String ->
-    songWrapper.title.contains(s, true) || songWrapper.artist.contains(s, true)
+    songWrapper.title.contains(s, true) ||
+            songWrapper.artists.map { it.name }.any { it.contains(s, true) }
 }

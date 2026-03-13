@@ -24,6 +24,7 @@ import com.nafanya.mp3world.R
 import com.nafanya.mp3world.core.di.PlayerApplication
 import com.nafanya.mp3world.presentation.core.common_ui.BaseFragment
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.joinArtists
 import com.nafanya.mp3world.databinding.PlayerControlViewBottomFragmentBinding
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
@@ -94,7 +95,7 @@ class BottomControlViewFragment : BaseFragment<PlayerControlViewBottomFragmentBi
     }
 
     private fun renderSong(song: SongWrapper) {
-        view?.findViewById<TextView>(R.id.control_track_artist)?.text = song.artist
+        view?.findViewById<TextView>(R.id.control_track_artist)?.text = song.artists.joinArtists()
         view?.findViewById<TextView>(R.id.control_track_title)?.text = song.title
         view?.findViewById<ShapeableImageView>(R.id.control_song_icon)?.let {
             Glide.with(requireActivity())

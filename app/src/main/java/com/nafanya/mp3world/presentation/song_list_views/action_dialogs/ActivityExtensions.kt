@@ -56,13 +56,13 @@ fun Activity.navigateToAlbum(song: LocalSong) {
 }
 
 fun Activity.navigateToArtist(song: LocalSong) {
-    ActivityStarter
-        .Builder()
-        .with(this)
-        .createIntentToImmutablePlaylistActivityFromArtist(
-            song.artistId,
-            song.artist
-        )
-        .build()
-        .startActivity()
+//    ActivityStarter
+//        .Builder()
+//        .with(this)
+//        .createIntentToImmutablePlaylistActivityFromArtist(
+//            song.artistIds,
+//            song.artistString
+//        )
+//        .build()
+//        .startActivity()
 }

@@ -17,6 +17,7 @@ object Plugins {
         const val kapt = "kapt"
         const val jvm = "jvm"
         const val standardLibrary = "stdlib-jdk8"
+        const val parcellize = "kotlin-parcelize"
         const val version = "1.6.21"
     }
 }

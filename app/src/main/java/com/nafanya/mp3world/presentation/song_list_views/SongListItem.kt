@@ -4,6 +4,7 @@ import androidx.annotation.IntDef
 import androidx.recyclerview.widget.DiffUtil
 import com.nafanya.mp3world.core.utils.list_utils.recycler.BaseListItem
 import com.nafanya.mp3world.core.wrappers.song.SongWrapper
+import com.nafanya.mp3world.core.wrappers.song.joinArtists
 
 @Retention(AnnotationRetention.SOURCE)
 @IntDef(
@@ -27,7 +28,7 @@ const val MODIFY_PLAYLIST_BUTTON = 6
 const val CONFIRM_CHANGES_BUTTON = 7
 
 data class SongListItem(
-    @ListItemType
+    @property:ListItemType
     override val itemType: Int,
     override val data: Any
 ) : BaseListItem() {
@@ -66,11 +67,11 @@ val SongListItemDiffUtilCallback = object : DiffUtil.ItemCallback<SongListItem>(
                 val song1 = oldItem.getDataAsSong()
                 val song2 = newItem.getDataAsSong()
                 (song1.uri == song2.uri) &&
-                    (song1.title == song2.title) &&
-                    (song1.artist == song2.artist) &&
+                    ((song1.title compareTo song2.title) == 0) &&
+                    ((song1.artists.joinArtists() compareTo song2.artists.joinArtists()) == 0) &&
                     (song1.duration == song2.duration)
             }
-            DATE -> oldItem.getDataAsDate() == newItem.getDataAsDate()
+            DATE -> (oldItem.getDataAsDate() compareTo newItem.getDataAsDate()) == 0
             else -> true
         }
     }

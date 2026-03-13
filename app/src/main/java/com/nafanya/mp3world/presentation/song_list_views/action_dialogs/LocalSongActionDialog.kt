@@ -3,7 +3,9 @@ package com.nafanya.mp3world.presentation.song_list_views.action_dialogs
 import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
+import androidx.core.view.isVisible
 import com.nafanya.mp3world.R
+import com.nafanya.mp3world.core.wrappers.song.joinArtists
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.databinding.DialogLocalSongActionBinding
 
@@ -36,9 +38,10 @@ class LocalSongActionDialog(
                 actionListener?.invoke(LocalSongAction.GO_TO_ARTIST)
                 dismiss()
             }
-            goToArtist.description.text = song.artist
+//            goToArtist.description.text = song.artistString
+            goToArtist.isVisible = false // todo: rework
             songDescription.text =
-                context.getString(R.string.song_description, song.artist, song.title)
+                context.getString(R.string.song_description, song.artists.joinArtists(), song.title)
             songDescription.isSelected = true
             dismissLocalActionDialog.setOnClickListener {
                 this@LocalSongActionDialog.dismiss()
