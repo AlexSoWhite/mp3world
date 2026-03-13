@@ -201,30 +201,33 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@id/exo_pause"
+            <FrameLayout
+                android:id="@+id/exo_play_pause"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/exo_next"
                 app:layout_constraintStart_toEndOf="@id/exo_prev"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/pause" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@id/exo_play"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/exo_next"
-                app:layout_constraintStart_toEndOf="@id/exo_prev"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/play"
-                tools:visibility="gone"/>
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@id/exo_pause"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/pause" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@id/exo_play"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/play"
+                    tools:visibility="gone"/>
+
+            </FrameLayout>
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/exo_next"

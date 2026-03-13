@@ -12,8 +12,8 @@ android {
         applicationId = "com.nafanya.mp3world"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -74,7 +74,7 @@ dependencies {
     implementation(platform(libs.androidx.composeBom))
     implementation(libs.androidx.composeRuntime)
     implementation(libs.androidx.composeFoundation)
-    debugImplementation(libs.androidx.composeUiTooling)
+    implementation(libs.androidx.composeUiTooling)
     implementation(libs.androidx.composeMaterial)
 
     implementation(libs.google.material)
