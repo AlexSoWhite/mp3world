@@ -134,8 +134,7 @@ private fun LocalSongActionDialogPreview() {
                 ArtistMetadata(id = 0, name = "VOJ"),
                 ArtistMetadata(id = 1, name = "Narvent")
             ),
-            songAlbum = "Download"
-            ,
+            songAlbum = "Download",
             isFavorite = false
         ) {}
     }
