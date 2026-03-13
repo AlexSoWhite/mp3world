@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.detekt)
-//    id(libs.plugins.kotlin.android.get().pluginId)
 }
 
 android {
@@ -22,12 +21,8 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.coreKtx)
-    implementation(libs.kotlinx.coroutinesCore)
+    implementation(libs.androidx.coreKtx) // for @CallSuper annotation
     implementation(libs.androidx.media3Exoplayer)
-    implementation(libs.androidx.media3Session)
-    implementation(libs.androidx.media3ExoplayerDash)
-    implementation(libs.androidx.media3Ui)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

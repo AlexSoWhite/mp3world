@@ -4,9 +4,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
-//    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.kapt) apply false
-    alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.detekt)
 }
@@ -23,7 +21,6 @@ repositories {
 kotlin {
     compilerOptions {
         languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
-        // Optional: Set jvmTarget
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
     }
 }

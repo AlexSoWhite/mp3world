@@ -1,9 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.detekt)
-//    id(libs.plugins.kotlin.android.get().pluginId)
-    alias(libs.plugins.kotlin.parcelize)
-//    id("org.jetbrains.kotlin.plugin.parcelize")
     alias(libs.plugins.kotlin.kapt)
 }
 
@@ -21,7 +18,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas".toString())
+                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
             }
         }
     }
@@ -40,7 +37,7 @@ android {
     }
     sourceSets {
         // Adds exported schema location as test app assets.
-        getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+        getByName("androidTest").assets.directories.add("$projectDir/schemas")
     }
     buildTypes {
         getByName("release") {
@@ -67,21 +64,13 @@ dependencies {
     implementation(project(":player-library"))
 
     implementation(libs.androidx.appCompat)
-    implementation(libs.androidx.coreKtx)
-    implementation(libs.androidx.constraintLayout)
-    implementation(libs.androidx.viewModel)
-    implementation(libs.androidx.lifecycleRuntime)
     // to use 'by viewModels()'
     implementation(libs.androidx.fragmentKtx)
     implementation(libs.androidx.swipeRefreshLayout)
-    implementation(libs.androidx.media3Exoplayer)
     implementation(libs.androidx.media3Ui)
     implementation(libs.androidx.media3Session)
 
     implementation(libs.google.material)
-
-    implementation(libs.kotlinx.coroutinesCore)
-    implementation(libs.kotlinx.coroutinesAndroid)
 
     implementation(libs.squareup.okhttp3)
     implementation(libs.jsoup)
@@ -105,7 +94,3 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espressoCore)
 }
-
-//kapt {
-//    correctErrorTypes = true
-//}
