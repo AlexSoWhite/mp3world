@@ -2,7 +2,6 @@ package com.nafanya.mp3world.data.user_playlists
 
 import com.nafanya.mp3world.core.wrappers.playlist.PlaylistWrapper
 
-// todo: all this package should be inside localStorage package
 fun PlaylistWrapper.toStorageEntity(): Pair<PlaylistStorageEntity, List<PlaylistSongsEntity>> {
     val playlistEntity = PlaylistStorageEntity(
         id = this.id,
