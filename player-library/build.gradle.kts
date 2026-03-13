@@ -1,18 +1,18 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id(Plugins.Android.library)
-    id(Plugins.Detekt.plugin)
-    kotlin(Plugins.Kotlin.android)
+    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.detekt.get().pluginId)
+    id(libs.plugins.kotlin.android.get().pluginId)
 }
 
 android {
-    compileSdk = BuildConfig.compileSdk
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = BuildConfig.minSdk
-        targetSdk = BuildConfig.targetSdk
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     compileOptions {
@@ -26,14 +26,14 @@ android {
 
 dependencies {
 
-    implementation(Dependencies.AndroidX.coreKtx)
-    implementation(Dependencies.Coroutines.coroutinesCore)
-    implementation(Dependencies.AndroidX.media3Exoplayer)
-    implementation(Dependencies.AndroidX.media3Session)
-    implementation(Dependencies.AndroidX.media3ExoplayerDash)
-    implementation(Dependencies.AndroidX.media3Ui)
+    implementation(libs.androidx.coreKtx)
+    implementation(libs.kotlinx.coroutinesCore)
+    implementation(libs.androidx.media3Exoplayer)
+    implementation(libs.androidx.media3Session)
+    implementation(libs.androidx.media3ExoplayerDash)
+    implementation(libs.androidx.media3Ui)
 
-    testImplementation(Dependencies.Testing.junit)
-    androidTestImplementation(Dependencies.Testing.androidXjunit)
-    androidTestImplementation(Dependencies.Testing.espressoCore)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espressoCore)
 }

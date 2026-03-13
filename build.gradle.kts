@@ -1,18 +1,21 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("DSL_SCOPE_VIOLATION")
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id(Plugins.Android.application) version Plugins.Android.version apply false
-    id(Plugins.Android.library) version Plugins.Android.version apply false
-    id(Plugins.Detekt.plugin) version Plugins.Detekt.version
-    kotlin(Plugins.Kotlin.jvm) version Plugins.Kotlin.version
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.detekt)
 }
 
 dependencies {
-    implementation(kotlin(Plugins.Kotlin.standardLibrary))
-    detektPlugins(Plugins.Detekt.formatterDependency)
+    detektPlugins(libs.detekt.formatting)
 }
+
 repositories {
     google()
     mavenCentral()
