@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.presentation.favourites.di
+package com.nafanya.mp3world.domain.favourites.di
 
 import com.nafanya.mp3world.presentation.favourites.FavouritesActivity
 import dagger.Subcomponent

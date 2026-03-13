@@ -8,6 +8,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.util.Size
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
@@ -17,9 +18,7 @@ import com.nafanya.mp3world.core.coroutines.DispatchersProvider
 import com.nafanya.mp3world.core.wrappers.song.local.LocalSong
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.player.Song
-import java.io.FileNotFoundException
 import java.lang.Exception
-import java.lang.NullPointerException
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlinx.coroutines.launch
@@ -30,7 +29,7 @@ import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import okio.IOException
+import androidx.core.net.toUri
 
 @Suppress("TooGenericExceptionCaught")
 class SongImageBitmapFactoryImpl @Inject constructor(
@@ -41,6 +40,7 @@ class SongImageBitmapFactoryImpl @Inject constructor(
 
     companion object {
         private const val ART_DIMENSION = 500
+        private const val TAG = "_SongImageBitmapFactoryImpl"
     }
 
     private val defaultBitmap: Bitmap
@@ -79,7 +79,7 @@ class SongImageBitmapFactoryImpl @Inject constructor(
                         override fun onResponse(call: Call, response: Response) {
                             launch {
                                 withContext(dispatchersProvider.default) {
-                                    val bitmap = BitmapFactory.decodeStream(response.body?.byteStream())
+                                    val bitmap = BitmapFactory.decodeStream(response.body.byteStream())
                                     continuation.resume(bitmap)
                                 }
                             }
@@ -109,19 +109,14 @@ class SongImageBitmapFactoryImpl @Inject constructor(
                         null
                     )!!
                 bitmap
-            } catch (exception: IOException) {
-                defaultBitmap
-            } catch (exception: NullPointerException) {
-                defaultBitmap
-            } catch (exception: FileNotFoundException) {
-                defaultBitmap
             } catch (exception: Exception) {
+                Log.d(TAG, "getBitmapForLocalSongFromQ - error while obtaining song bitmap $exception")
                 defaultBitmap
             }
         }
 
     private suspend fun getBitmapForLocalSongPreQ(song: LocalSong): Bitmap {
-        val artworkUri = Uri.parse("content://media/external/audio/albumart")
+        val artworkUri = "content://media/external/audio/albumart".toUri()
         val albumUri = ContentUris.withAppendedId(artworkUri, song.albumId)
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             getBitmapForLocalSongP(albumUri)
@@ -139,9 +134,8 @@ class SongImageBitmapFactoryImpl @Inject constructor(
             )
             val bitmap = ImageDecoder.decodeBitmap(source)
             bitmap
-        } catch (exception: IOException) {
-            defaultBitmap
         } catch (exception: Exception) {
+            Log.d(TAG, "getBitmapForLocalSongP - error while obtaining song bitmap $exception")
             defaultBitmap
         }
     }
@@ -153,9 +147,8 @@ class SongImageBitmapFactoryImpl @Inject constructor(
                 albumUri
             )
             bitmap
-        } catch (exception: IOException) {
-            defaultBitmap
         } catch (exception: Exception) {
+            Log.d(TAG, "getBitmapForLocalSongPreP - error while obtaining song bitmap $exception")
             defaultBitmap
         }
     }

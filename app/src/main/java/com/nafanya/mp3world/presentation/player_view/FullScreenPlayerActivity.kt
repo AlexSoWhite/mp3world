@@ -20,6 +20,7 @@ class FullScreenPlayerActivity : BaseActivity<ActivityFullScreenPlayerBinding>()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    // todo(New API)
     override fun onBackPressed() {
         super.onBackPressed()
         findViewById<ConstraintLayout>(R.id.controls_wrapper).visibility = View.INVISIBLE

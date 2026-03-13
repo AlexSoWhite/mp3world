@@ -14,6 +14,7 @@ import com.nafanya.mp3world.databinding.MainMenuItemViewBinding
 import java.lang.IllegalArgumentException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import androidx.core.content.withStyledAttributes
 
 // todo: it causes crashes sometimes
 // Caused by: android.view.InflateException: Binary XML file line #24 in com.nafanya.mp3world.full:layout/activity_main_layout: Binary XML
@@ -39,31 +40,31 @@ class MainMenuOptionView @JvmOverloads constructor(
     )
 
     init {
-        val attrs = context.obtainStyledAttributes(
+        context.withStyledAttributes(
             attributeSet,
             R.styleable.MainMenuOptionView,
             defStyle,
             0
-        )
-        val iconDrawable = attrs.getDrawable(R.styleable.MainMenuOptionView_icon)
-        val text = attrs.getString(R.styleable.MainMenuOptionView_description)
-        val starterBuilder = ActivityStarter.Builder()
-            .with(context)
-        when (val option = attrs.getInt(R.styleable.MainMenuOptionView_option, -1)) {
-            ALL_SONGS -> starterBuilder.createIntentToAllSongsActivity()
-            ALL_PLAYLISTS -> starterBuilder.createIntentToAllPlaylistsActivity()
-            ARTISTS -> starterBuilder.createIntentToArtistListActivity()
-            ALBUMS -> starterBuilder.createIntentToAlbumListActivity()
-            FAVOURITES -> starterBuilder.createIntentToFavouritesActivity()
-            else -> throw IllegalArgumentException(
-                "Unexpected option $option. Did you forget to specify option in the layout file?"
-            )
+        ) {
+            val iconDrawable = getDrawable(R.styleable.MainMenuOptionView_icon)
+            val text = getString(R.styleable.MainMenuOptionView_description)
+            val starterBuilder = ActivityStarter.Builder()
+                .with(context)
+            when (val option = getInt(R.styleable.MainMenuOptionView_option, -1)) {
+                ALL_SONGS -> starterBuilder.createIntentToAllSongsActivity()
+                ALL_PLAYLISTS -> starterBuilder.createIntentToAllPlaylistsActivity()
+                ARTISTS -> starterBuilder.createIntentToArtistListActivity()
+                ALBUMS -> starterBuilder.createIntentToAlbumListActivity()
+                FAVOURITES -> starterBuilder.createIntentToFavouritesActivity()
+                else -> throw IllegalArgumentException(
+                    "Unexpected option $option. Did you forget to specify option in the layout file?"
+                )
+            }
+            val activityStarter = starterBuilder.build()
+            binding.root.setOnClickListener { activityStarter.startActivity() }
+            binding.menuItemIcon.setImageDrawable(iconDrawable)
+            binding.description.text = text
         }
-        val activityStarter = starterBuilder.build()
-        binding.root.setOnClickListener { activityStarter.startActivity() }
-        binding.menuItemIcon.setImageDrawable(iconDrawable)
-        binding.description.text = text
-        attrs.recycle()
     }
 
     fun bindDataSource(

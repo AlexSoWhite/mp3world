@@ -27,11 +27,11 @@ class InitialActivity : BaseActivity<SplashScreenBinding>() {
                     finish()
                 }
             },
-            startDelay
+            STARTUP_DELAY
         )
     }
 
     companion object {
-        private const val startDelay = 1500L
+        private const val STARTUP_DELAY = 1500L
     }
 }

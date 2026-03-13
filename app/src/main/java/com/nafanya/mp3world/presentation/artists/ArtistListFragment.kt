@@ -63,6 +63,7 @@ class ArtistListFragment : StatedListFragmentBaseLayout<Artist, ArtistListItem>(
         }
     }
 
+    // todo(New API)
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         viewModel.attachToTopBar().invoke(menu, inflater)
     }

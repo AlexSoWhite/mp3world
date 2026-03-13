@@ -1,4 +1,4 @@
-package com.nafanya.mp3world.presentation.favourites.di
+package com.nafanya.mp3world.domain.favourites.di
 
 import com.nafanya.mp3world.core.list_managers.FAVOURITE_LIST_MANAGER_KEY
 import com.nafanya.mp3world.core.list_managers.PlaylistProvider

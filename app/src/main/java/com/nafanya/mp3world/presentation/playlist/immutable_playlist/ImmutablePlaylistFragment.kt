@@ -62,6 +62,7 @@ class ImmutablePlaylistFragment : StatedPlaylistFragmentBaseLayout() {
         }
     }
 
+    // todo(New API)
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         viewModel.attachToTopBar().invoke(menu, inflater)
     }

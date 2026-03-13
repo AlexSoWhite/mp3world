@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.presentation.core.images.glide
 
 import android.graphics.Bitmap
+import android.util.Log
 import android.util.Size
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
@@ -21,7 +22,10 @@ class BitmapFlowModelDataFetcherImpl(
     private val songImageBitmapFactory: SongImageBitmapFactory,
 ) : DataFetcher<InputStream> {
 
-    // todo: maybe Job, not SupervisorJob
+    private companion object {
+        const val TAG = "_BitmapFlowModelDataFetcherImpl"
+    }
+
     private val bitmapDataFetcherScope = CoroutineScope(SupervisorJob())
     private var jobs = mutableListOf<Job>()
 
@@ -37,7 +41,7 @@ class BitmapFlowModelDataFetcherImpl(
                     val data = stream.toByteArray()
                     callback.onDataReady(ByteArrayInputStream(data))
                 } catch (e: IllegalStateException) {
-                    // TODO error cathing
+                    Log.d(TAG, "error while fetching song bitmap: $e")
                 }
             }
         )
@@ -47,7 +51,6 @@ class BitmapFlowModelDataFetcherImpl(
         // nothing to do
     }
 
-    // todo: maybe cancel the whole scope?
     override fun cancel() {
         jobs.forEach { it.cancel() }
         jobs.clear()
