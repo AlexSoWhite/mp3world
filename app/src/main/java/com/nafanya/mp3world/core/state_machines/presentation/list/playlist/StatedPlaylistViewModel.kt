@@ -47,12 +47,11 @@ abstract class StatedPlaylistViewModel : StatedListViewModel<SongWrapper, SongLi
         }
     }
 
-    // todo: toggle song playing
     fun onSongClick(song: Song) {
         viewModelScope.launch {
             val playlistWrapper = playlistFlow.first()
             playerInteractor.setPlaylist(playlistWrapper)
-            playerInteractor.setSong(song)
+            playerInteractor.toggleSong(song)
         }
     }
 }

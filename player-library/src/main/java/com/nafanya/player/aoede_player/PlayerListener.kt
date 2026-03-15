@@ -25,11 +25,21 @@ internal class PlayerListener(
     private val _currentSong = MutableStateFlow<Song?>(null)
     internal val currentSong: StateFlow<Song?> = _currentSong.asStateFlow()
 
+    private fun Int.toMediaItemTransitionReason(): String {
+        return when (this) {
+            Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT -> "repeat"
+            Player.MEDIA_ITEM_TRANSITION_REASON_AUTO -> "auto"
+            Player.MEDIA_ITEM_TRANSITION_REASON_SEEK -> "seek"
+            Player.MEDIA_ITEM_TRANSITION_REASON_PLAYLIST_CHANGED -> "playlist changed"
+            else -> throw IllegalStateException("Unknown media item transition reason: $this")
+        }
+    }
+
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-        Log.d(TAG, "onMediaItemTransition")
         super.onMediaItemTransition(mediaItem, reason)
         mediaItem?.let {
             val song = mediaItemConverter.getSongFromMediaItem(it)
+            Log.d(TAG, "onMediaItemTransition, reason: ${reason.toMediaItemTransitionReason()}, transitionedTo: $song")
             _currentSong.value = song
         }
     }

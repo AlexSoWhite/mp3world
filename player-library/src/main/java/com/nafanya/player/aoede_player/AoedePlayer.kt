@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.IllegalSeekPositionException
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.nafanya.player.Playlist
@@ -59,23 +60,40 @@ internal class AoedePlayer(
         }
     }
 
+    private fun Player.seekToSong(song: Song, seekPosition: Long? = null) {
+        val songIndex = currentPlaylist.value?.songList?.indexOf(song)!!
+        if (seekPosition != null) {
+            seekTo(songIndex, seekPosition)
+        } else {
+            seekToDefaultPosition(songIndex)
+        }
+    }
+
     /**
      * Resets player playlist. Must be called before resetting a song.
      */
     internal fun setPlaylist(playlist: Playlist) {
-        Log.d(TAG, "setPlaylist: $playlist")
-        // creating copy of playlist to continue playing deleted from playlist songs
-        // TODO for what?
-        player.clearMediaItems()
-        _currentPlaylist.value = playlist
-        playlist.songList.forEach {
-            /**
-             * when this method is called for the first time, it ends with
-             * moving player to initialized state
-             */
-            player.addMediaItem(it.toMediaItem())
+        Log.d(TAG, "setPlaylist: $playlist, currentPlaylist: ${_currentPlaylist.value}")
+        if (_currentPlaylist.value?.areSongListsTheSame(playlist) == true) {
+            Log.d(TAG, "songLists are the same, do not update the player")
+            _currentPlaylist.value = playlist
+        } else {
+            Log.d(TAG, "songLists are different, reset the player")
+            player.clearMediaItems()
+            Log.d(TAG, "cleared media items")
+            playlist.songList.forEach {
+                /**
+                 * when this method is called for the first time, it ends with
+                 * moving player to initialized state
+                 */
+                player.addMediaItem(it.toMediaItem())
+            }
+            Log.d(TAG, "updated player media items")
+            _currentPlaylist.value = playlist
+            Log.d(TAG, "updated current playlist value")
+            player.prepare()
+            Log.d(TAG, "player prepared")
         }
-        player.prepare()
     }
 
     /**
@@ -83,16 +101,20 @@ internal class AoedePlayer(
      * @param song must exist in current player playlist.
      * @throws IllegalSeekPositionException if song doesn't appear in playlist.
      */
-    internal fun setSong(song: Song) {
-        Log.d(TAG, "setSong: $song")
-        val idx = currentPlaylist.value?.songList?.indexOf(song)
-        try {
-            if (idx != null) {
-                player.seekToDefaultPosition(idx)
+    internal fun toggleSong(song: Song) {
+        Log.d(TAG, "toggleSong: $song, currentSong: ${currentSong.value}")
+        if (currentSong.value == song) {
+            val isPlaying = isPlaying.value
+            Log.d(TAG, "toggleSong: same song, toggling player. isPlaying: $isPlaying")
+            if (isPlaying) {
+                player.pause()
+            } else {
                 player.play()
             }
-        } catch (e: IllegalSeekPositionException) {
-            throw e
+        } else {
+            Log.d(TAG, "different song, switching to new one")
+            player.seekToSong(song)
+            player.play()
         }
     }
 }

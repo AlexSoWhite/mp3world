@@ -7,7 +7,7 @@ data class PlaylistWrapper(
     override val songList: List<SongWrapper>,
     val id: Long = 0,
     val name: String,
-    val position: Int = 0,
+    val position: Int = 0, // for local db
     var imageSource: SongWrapper? = null
 ) : Playlist {
 
@@ -20,7 +20,14 @@ data class PlaylistWrapper(
         var result = songList.hashCode()
         result = 31 * result + id.hashCode()
         result = 31 * result + name.hashCode()
+        result = 31 * result + imageSource.hashCode()
         result = 31 * result + position
         return result
+    }
+
+    override fun areSongListsTheSame(other: Playlist): Boolean = songList == other.songList
+
+    override fun toString(): String {
+        return "PlaylistWrapper(id=$id, name=$name, songsCount=${songList.size}, songListHash=${songList.hashCode()})"
     }
 }

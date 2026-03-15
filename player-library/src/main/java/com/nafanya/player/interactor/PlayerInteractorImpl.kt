@@ -128,11 +128,11 @@ internal class PlayerInteractorImpl : PlayerInteractor {
         }
     }
 
-    override fun setSong(song: Song) {
-        Log.d(TAG, "setSong")
+    override fun toggleSong(song: Song) {
+        Log.d(TAG, "toggleSong")
         executeWhenPlayerIsPresentAsync {
-            Log.d(TAG, "setSong - player present")
-            _player?.setSong(song)
+            Log.d(TAG, "toggleSong - player present")
+            _player?.toggleSong(song)
         }
     }
 

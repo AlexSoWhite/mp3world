@@ -18,7 +18,7 @@ interface PlayerInteractor {
     fun initializePlayerIfNeeded(context: Context, mediaItemConverter: MediaItemConverter): Player
     fun releasePlayer()
     fun setPlaylist(playlist: Playlist)
-    fun setSong(song: Song)
+    fun toggleSong(song: Song)
     fun suspendPlayer()
 }
 
