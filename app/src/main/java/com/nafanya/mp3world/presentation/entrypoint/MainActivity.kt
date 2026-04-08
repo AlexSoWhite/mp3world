@@ -1,6 +1,7 @@
 package com.nafanya.mp3world.presentation.entrypoint
 
 import android.Manifest
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,6 +13,10 @@ import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar.DISPLAY_SHOW_TITLE
 import androidx.appcompat.widget.SearchView
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -89,11 +94,47 @@ class MainActivity : BaseActivity<ActivityMainLayoutBinding>() {
 
     @Suppress("LongMethod")
     private fun initMainMenu() = binding.apply {
-        allSongs.bindDataSource(viewModel.songModel, lifecycleScope)
-        playlists.bindDataSource(viewModel.playlists, lifecycleScope)
-        artists.bindDataSource(viewModel.artists, lifecycleScope)
-        albums.bindDataSource(viewModel.albums, lifecycleScope)
-        favourites.bindDataSource(viewModel.favourites, lifecycleScope)
+        binding.menuItemsWrapper.setContent {
+            Column(
+                modifier = Modifier,
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                MainMenuOptionWidget(
+                    onClick = { ActivityStarter.Builder().with(this@MainActivity).createIntentToAllSongsActivity().build().startActivity() },
+                    iconRes = R.drawable.icv_song,
+                    textRes = R.string.my_songs,
+                    model = viewModel.songModel,
+                )
+
+                MainMenuOptionWidget(
+                    onClick = { ActivityStarter.Builder().with(this@MainActivity).createIntentToAllPlaylistsActivity().build().startActivity() },
+                    iconRes = R.drawable.playlist_play,
+                    textRes = R.string.my_playlists,
+                    model = viewModel.playlists
+                )
+
+                MainMenuOptionWidget(
+                    onClick = { ActivityStarter.Builder().with(this@MainActivity).createIntentToArtistListActivity().build().startActivity() },
+                    iconRes = R.drawable.icv_artist,
+                    textRes = R.string.artists,
+                    model = viewModel.artists
+                )
+
+                MainMenuOptionWidget(
+                    onClick = { ActivityStarter.Builder().with(this@MainActivity).createIntentToAlbumListActivity().build().startActivity() },
+                    iconRes = R.drawable.icv_album,
+                    textRes = R.string.albums,
+                    model = viewModel.albums
+                )
+
+                MainMenuOptionWidget(
+                    onClick = { ActivityStarter.Builder().with(this@MainActivity).createIntentToFavouritesActivity().build().startActivity() },
+                    iconRes = R.drawable.icv_favorite_filled,
+                    textRes = R.string.favourites,
+                    model = viewModel.favourites
+                )
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
