@@ -2,6 +2,7 @@ package com.nafanya.mp3world.data.downloading.internal
 
 import android.content.Context
 import android.os.Environment
+import android.util.Log
 import com.nafanya.mp3world.core.wrappers.song.joinArtists
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
 import com.nafanya.mp3world.data.downloading.api.DownloadResult
@@ -23,6 +24,8 @@ internal class Downloader(
         private val DOWNLOAD_DIR = Environment
             .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             .absolutePath
+
+        private const val TAG = "_Downloader"
     }
 
     suspend fun download(
@@ -32,12 +35,13 @@ internal class Downloader(
         val fileName = "${song.artists.joinArtists()} - ${song.title}.mp3"
         return try {
             val name = downloadManagerInteractor.downloadFromUrl(url, fileName)
-            if (name!!.isNotEmpty()) {
+            if (name.isNotEmpty()) {
                 scan(name)
             } else {
                 DownloadResult(ResultType.ERROR) // todo: we probably never get here
             }
         } catch (exception: Exception) {
+            Log.e(TAG, "error while downloading $song", exception)
             DownloadResult(ResultType.ERROR)
         }
     }

@@ -1,5 +1,6 @@
 package com.nafanya.mp3world.data.remote_songs
 
+import android.util.Log
 import com.nafanya.mp3world.core.utils.time_converters.TimeConverter
 import com.nafanya.mp3world.core.wrappers.song.ArtistMetadata
 import com.nafanya.mp3world.core.wrappers.song.remote.RemoteSong
@@ -22,6 +23,10 @@ class HitmoTopSongSearcher @Inject constructor(
     client: OkHttpClient,
     private val uriFactory: UriFactory
 ) : SongSearcher(client) {
+
+    private companion object {
+        const val TAG = "_HitmoTopSongSearcher"
+    }
 
     private val baseUrl = "https://rus.hitmotop.com"
 
@@ -63,13 +68,17 @@ class HitmoTopSongSearcher @Inject constructor(
         val downloadUrl = element
             .getElementsByClass("track__download-btn")
             .attr("href")
-            .toString()
-        return RemoteSong(
+            .toString().run {
+                baseUrl + this
+            }
+        val song = RemoteSong(
             uri = uriFactory.getUri(downloadUrl),
             artUrl = artUrl,
             title = title,
             artists = artists,
             duration = duration
         )
+        Log.d(TAG, "song: $song")
+        return song
     }
 }
